@@ -29,6 +29,25 @@ Il faudra donc utiliser un compte Spotify Premium ou trouver une autre solution 
 * Ajouter les morceaux dans la nouvelle playlist
 * Améliorer l'interface utilisateur
 
+## Configuration
+
+Créer un fichier `.env` dans le dossier `backend` :
+
+```env
+PORT=8000
+
+SPOTIFY_CLIENT_ID=ton_client_id
+SPOTIFY_CLIENT_SECRET=ton_client_secret
+SPOTIFY_REDIRECT_URI=http://127.0.0.1:8000/auth/spotify/callback
+```
+
+Dans le Spotify Developer Dashboard, ajouter la Redirect URI suivante :
+
+```txt
+http://127.0.0.1:8000/auth/spotify/callback
+```
+
+
 ## Lancer le projet
 
 Backend :
