@@ -1,38 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
 function App() {
-  const [source, setSource] = useState("spotify");
-  const [destination, setDestination] = useState("youtube");
-  const [playlistUrl, setPlaylistUrl] = useState("");
-  const [result, setResult] = useState(null);
+  const [accessToken, setAccessToken] = useState("");
+  const [playlists, setPlaylists] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const transferPlaylist = async () => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get("spotify_access_token");
+
+    if (tokenFromUrl) {
+      localStorage.setItem("spotify_access_token", tokenFromUrl);
+      setAccessToken(tokenFromUrl);
+
+      window.history.replaceState({}, document.title, "/");
+    } else {
+      const savedToken = localStorage.getItem("spotify_access_token");
+
+      if (savedToken) {
+        setAccessToken(savedToken);
+      }
+    }
+  }, []);
+
+  const loginSpotify = () => {
+    window.location.href = "http://127.0.0.1:8000/auth/spotify";
+  };
+
+  const logoutSpotify = () => {
+    localStorage.removeItem("spotify_access_token");
+    setAccessToken("");
+    setPlaylists([]);
+  };
+
+  const getPlaylists = async () => {
     setError("");
-    setResult(null);
-
-    if (!playlistUrl.trim()) {
-      setError("Colle une URL de playlist.");
-      return;
-    }
-
-    if (source === destination) {
-      setError("La source et la destination doivent être différentes.");
-      return;
-    }
+    setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/transfer", {
-        source,
-        destination,
-        playlistUrl,
+      const response = await axios.get("http://127.0.0.1:8000/api/spotify/playlists", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
-      setResult(response.data);
+      setPlaylists(response.data.playlists);
     } catch (err) {
-      setError(err.response?.data?.message || "Erreur pendant le transfert.");
+      setError(err.response?.data?.message || "Erreur pendant la récupération des playlists.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,53 +61,43 @@ function App() {
         <h1>🎵 SoundSync</h1>
         <p>Transfer playlists between your favorite platforms.</p>
 
-        <div className="selectRow">
-          <div>
-            <label>Source</label>
-            <select value={source} onChange={(e) => setSource(e.target.value)}>
-              <option value="spotify">Spotify</option>
-              <option value="youtube">YouTube Music</option>
-              <option value="apple-music">Apple Music</option>
-              <option value="soundcloud">SoundCloud</option>
-            </select>
-          </div>
+        {!accessToken ? (
+          <button onClick={loginSpotify}>Se connecter avec Spotify</button>
+        ) : (
+          <>
+            <p className="success">✅ Connecté à Spotify</p>
 
-          <span className="arrow">→</span>
+            <div className="buttonRow">
+              <button onClick={getPlaylists}>
+                {loading ? "Chargement..." : "Afficher mes playlists"}
+              </button>
 
-          <div>
-            <label>Destination</label>
-            <select
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-            >
-              <option value="spotify">Spotify</option>
-              <option value="youtube">YouTube Music</option>
-              <option value="apple-music">Apple Music</option>
-              <option value="soundcloud">SoundCloud</option>
-            </select>
-          </div>
-        </div>
+              <button className="secondaryBtn" onClick={logoutSpotify}>
+                Déconnexion
+              </button>
+            </div>
 
-        <input
-          className="playlistInput"
-          type="text"
-          placeholder="Colle l’URL de ta playlist ici..."
-          value={playlistUrl}
-          onChange={(e) => setPlaylistUrl(e.target.value)}
-        />
+            {error && <p className="error">{error}</p>}
 
-        <button onClick={transferPlaylist}>Transférer la playlist</button>
+            <div className="playlistList">
+              {playlists.map((playlist) => (
+                <div className="playlistCard" key={playlist.id}>
+                  <img
+                    src={playlist.images?.[0]?.url || "https://via.placeholder.com/100"}
+                    alt={playlist.name}
+                  />
 
-        {error && <p className="error">{error}</p>}
-
-        {result && (
-          <div className="result">
-            <h2>✅ Transfert lancé</h2>
-            <p>{result.message}</p>
-            <p>
-              {result.transfer.source} → {result.transfer.destination}
-            </p>
-          </div>
+                  <div>
+                    <h3>{playlist.name}</h3>
+                    <p>{playlist.tracks.total} morceaux</p>
+                    <a href={playlist.external_urls.spotify} target="_blank" rel="noreferrer">
+                      Ouvrir sur Spotify
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </section>
     </main>
