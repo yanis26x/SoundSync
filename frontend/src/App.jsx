@@ -3,63 +3,91 @@ import axios from "axios";
 import "./App.css";
 
 function App() {
-  const [url, setUrl] = useState("");
-  const [track, setTrack] = useState(null);
+  const [source, setSource] = useState("spotify");
+  const [destination, setDestination] = useState("youtube");
+  const [playlistUrl, setPlaylistUrl] = useState("");
+  const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
-  const analyzeTrack = async () => {
+  const transferPlaylist = async () => {
     setError("");
-    setTrack(null);
+    setResult(null);
 
-    if (!url.trim()) {
-      setError("Colle une URL SoundCloud.");
+    if (!playlistUrl.trim()) {
+      setError("Colle une URL de playlist.");
+      return;
+    }
+
+    if (source === destination) {
+      setError("La source et la destination doivent être différentes.");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/analyze", {
-        url,
+      const response = await axios.post("http://localhost:8000/api/transfer", {
+        source,
+        destination,
+        playlistUrl,
       });
 
-      setTrack(response.data);
+      setResult(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Erreur pendant l’analyse.");
+      setError(err.response?.data?.message || "Erreur pendant le transfert.");
     }
   };
 
   return (
     <main className="app">
       <section className="card">
-        <h1>🎵 SoundSave26x</h1>
-        <p>Download SoundCloud tracks legally.</p>
+        <h1>🎵 SoundSync</h1>
+        <p>Transfer playlists between your favorite platforms.</p>
 
-        <div className="inputGroup">
-          <input
-            type="text"
-            placeholder="Colle ton lien SoundCloud ici..."
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          <button onClick={analyzeTrack}>Analyser</button>
+        <div className="selectRow">
+          <div>
+            <label>Source</label>
+            <select value={source} onChange={(e) => setSource(e.target.value)}>
+              <option value="spotify">Spotify</option>
+              <option value="youtube">YouTube Music</option>
+              <option value="apple-music">Apple Music</option>
+              <option value="soundcloud">SoundCloud</option>
+            </select>
+          </div>
+
+          <span className="arrow">→</span>
+
+          <div>
+            <label>Destination</label>
+            <select
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            >
+              <option value="spotify">Spotify</option>
+              <option value="youtube">YouTube Music</option>
+              <option value="apple-music">Apple Music</option>
+              <option value="soundcloud">SoundCloud</option>
+            </select>
+          </div>
         </div>
+
+        <input
+          className="playlistInput"
+          type="text"
+          placeholder="Colle l’URL de ta playlist ici..."
+          value={playlistUrl}
+          onChange={(e) => setPlaylistUrl(e.target.value)}
+        />
+
+        <button onClick={transferPlaylist}>Transférer la playlist</button>
 
         {error && <p className="error">{error}</p>}
 
-        {track && (
-          <div className="trackCard">
-            <img src={track.artwork} alt="cover" />
-            <h2>{track.title}</h2>
-            <p>{track.artist}</p>
-
-            {track.downloadable ? (
-              <a className="downloadBtn" href={track.downloadUrl}>
-                Télécharger
-              </a>
-            ) : (
-              <p className="notAvailable">
-                Ce son n’est pas disponible au téléchargement.
-              </p>
-            )}
+        {result && (
+          <div className="result">
+            <h2>✅ Transfert lancé</h2>
+            <p>{result.message}</p>
+            <p>
+              {result.transfer.source} → {result.transfer.destination}
+            </p>
           </div>
         )}
       </section>

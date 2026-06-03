@@ -8,32 +8,73 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ message: "SoundSave26x API is running 🎵" });
+  res.json({
+    message: "SoundSync API is running 🎵",
+  });
 });
 
-app.post("/api/analyze", async (req, res) => {
-  const { url } = req.body;
+app.get("/api/status", (req, res) => {
+  res.json({
+    success: true,
+    app: "SoundSync",
+    description: "Transfer playlists between music platforms.",
+    platforms: ["Spotify", "YouTube Music", "Apple Music", "SoundCloud"],
+    version: "1.0.0",
+  });
+});
 
-  if (!url || !url.includes("soundcloud.com")) {
+app.get("/api/platforms", (req, res) => {
+  res.json({
+    success: true,
+    platforms: [
+      {
+        id: "spotify",
+        name: "Spotify",
+        available: true,
+      },
+      {
+        id: "youtube",
+        name: "YouTube Music",
+        available: true,
+      },
+      {
+        id: "apple-music",
+        name: "Apple Music",
+        available: false,
+      },
+      {
+        id: "soundcloud",
+        name: "SoundCloud",
+        available: false,
+      },
+    ],
+  });
+});
+
+app.post("/api/transfer", (req, res) => {
+  const { source, destination, playlistUrl } = req.body;
+
+  if (!source || !destination || !playlistUrl) {
     return res.status(400).json({
       success: false,
-      message: "URL SoundCloud invalide.",
+      message: "Source, destination et URL de playlist requis.",
     });
   }
 
-  // Version test pour commencer
   res.json({
     success: true,
-    title: "Exemple de musique",
-    artist: "SoundCloud Artist",
-    artwork: "https://via.placeholder.com/300",
-    downloadable: false,
-    message: "Analyse OK. On branchera l’API SoundCloud après.",
+    message: "Simulation du transfert réussie.",
+    transfer: {
+      source,
+      destination,
+      playlistUrl,
+      status: "demo",
+    },
   });
 });
 
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-  console.log(`SoundSave26x backend running on port ${PORT}`);
+  console.log(`🎵 SoundSync backend running on port ${PORT}`);
 });
