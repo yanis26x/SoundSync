@@ -83,44 +83,10 @@ body::after {
   padding: 38px;
   text-align: center;
 
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 28px;
-
-  backdrop-filter: blur(18px) saturate(130%);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
-
-  box-shadow:
-    0 25px 90px rgba(0, 0, 0, 0.42),
-    0 0 40px var(--accent-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-.parentalBanner {
-  position: absolute;
-
-  top: 16px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: calc(100% + 40px);
-
-  pointer-events: none;
-  z-index: 0;
-}
-
-.parentalBanner img {
-  width: 100%;
-  height: 90px;
-
-  object-fit: cover;
-
-  border-radius: 20px;
-
-  opacity: 0.8;
 
 }
+
+
 
 .brand {
   display: flex;
@@ -167,11 +133,19 @@ body::after {
 }
 
 .themeSelector {
+  position: fixed;
+
+  top: 20px;
+  right: 20px;
+
+  z-index: 9999;
+
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+
+  padding: 10px;
+
+
 }
 
 .themeBtn {
@@ -197,11 +171,23 @@ body::after {
   box-shadow: 0 0 20px var(--accent-soft);
 }
 
+
+.subtitle {
+  margin-top: -1px;
+  margin-bottom: 10px;
+
+  color: rgb(230, 220, 220) !important;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .chooseText {
   margin: 28px 0 12px;
   color: color-mix(in srgb, var(--accent) 55%, white 45%) !important;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
+
 }
 
 .spotifyBtn {
@@ -536,4 +522,144 @@ button:hover {
   .platformCard {
     width: 130px;
   }
+}
+
+.futureSection {
+  margin-top: 34px;
+  padding-top: 28px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  border-top: 1px solid var(--border-color);
+}
+
+.futureSection .comingSoon {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.soraInfoCard {
+  position: relative;
+  min-height: 190px;
+
+  overflow: hidden;
+
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.48)
+    ),
+    url("/image/soraMusic.jpg");
+
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: end;
+
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.soraInfoContent {
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+
+  background: linear-gradient(
+    transparent,
+    rgba(0, 0, 0, 0.45)
+  );
+}
+
+.soraInfoContent h2 {
+  margin: 0 0 8px;
+  color: white;
+  font-size: 20px;
+}
+
+.soraInfoContent p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 750px) {
+  .futureSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.soraInfoCard {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 280px;
+
+  margin-top: 35px;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  border: 1px solid var(--border-color);
+
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.15),
+      rgba(0,0,0,.65)
+    ),
+    url("/image/soraMusic.jpg");
+
+  background-size: cover;
+
+  /* IMPORTANT */
+  background-position: center 20%;
+
+  display: flex;
+  align-items: end;
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.3);
+
+    
+}
+.soraInfoContent {
+  width: 100%;
+
+  padding: 24px;
+
+  text-align: left;
+
+  backdrop-filter: blur(2px);
+}
+
+.soraInfoContent h2 {
+  margin: 0 0 10px;
+
+  font-size: 28px;
+  font-weight: 900;
+
+  color: white;
+}
+
+.soraInfoContent p {
+  margin: 0;
+
+  max-width: 500px;
+
+  font-size: 15px;
+  line-height: 1.6;
+
+  color: rgba(255,255,255,.92);
 }

@@ -1,3 +1,4 @@
+import "./Parental.css";
 function Parental() {
   return (
     <div className="parentalBanner">

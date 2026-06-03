@@ -2,9 +2,9 @@ export const themes = {
   tomo: {
     name: "Tomo",
     background: "/image/wallpaper/tomo_yoko03.jpg",
-    cardBg: "rgba(92, 58, 32, 0.42)",
+    cardBg: "rgba(182, 150, 125, 0.27)",
     border: "rgba(255, 210, 150, 0.38)",
-    accent: "#ffb35c",
+    accent: "#ff5e00",
     accentSoft: "rgba(255, 179, 92, 0.18)",
     text: "#fff7ea",
   },

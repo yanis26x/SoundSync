@@ -3,6 +3,7 @@ import axios from "axios";
 import { themes } from "./themes";
 import ThemeSelector from "./components/ThemeSelector";
 import Parental from "./components/Parental";
+import CustomMessage from "./components/CustomMessage";
 import "./App.css";
 
 function App() {
@@ -102,23 +103,29 @@ function App() {
 
   return (
     <main className="app">
+      <CustomMessage />
+        <ThemeSelector
+    themes={themes}
+    currentTheme={currentTheme}
+    setCurrentTheme={setCurrentTheme}
+  />
       <section className="card">
         <Parental />
         <div className="brand">
           <h1>SoundSync</h1>
         </div>
 
-        <p>Transfer playlists between your favorite platforms.</p>
+        <p className="subtitle">
+  Transfer playlists between your favorite platforms.
+</p>
 
-        <ThemeSelector
-          themes={themes}
-          currentTheme={currentTheme}
-          setCurrentTheme={setCurrentTheme}
-        />
 
-        <p className="chooseText">
-          Choose a platform to start syncing your playlists
-        </p>
+
+    {!accessToken && (
+  <p className="chooseText">
+    Choose a platform to start syncing your playlists
+  </p>
+)}
 
         {!accessToken ? (
           <button className="spotifyBtn" onClick={loginSpotify}>
@@ -188,35 +195,46 @@ function App() {
           </>
         )}
 
-        <div className="comingSoon">
-          <h2>Future Platforms</h2>
+ <div className="soraInfoCard">
+  <div className="soraInfoContent">
+    <h2>More freedom 4 your music</h2>
 
-          <div className="platforms">
-            <div className="platformCard">
-              <img
-                src="/image/logo/appleMusic.png"
-                alt="Apple Music"
-              />
-              <span>Apple Music</span>
-            </div>
+    <p>
+      SoundSync aims to become a simple way to transfer
+      your playlists between different music platforms. I listen 2 music all the time n needed a similar tool, it was not free so I had to make one who is, enjoy
+    </p>
+  </div>
+</div>
 
-            <div className="platformCard">
-              <img
-                src="/image/logo/YouTube-Logo.png"
-                alt="YouTube Music"
-              />
-              <span>YouTube Music</span>
-            </div>
+<div className="comingSoon">
+  <h2>Future Platforms</h2>
 
-            <div className="platformCard">
-              <img
-                src="/image/logo/soundcloud-logo.png"
-                alt="SoundCloud"
-              />
-              <span>SoundCloud</span>
-            </div>
-          </div>
-        </div>
+  <div className="platforms">
+    <div className="platformCard">
+      <img
+        src="/image/logo/appleMusic.png"
+        alt="Apple Music"
+      />
+      <span>Apple Music</span>
+    </div>
+
+    <div className="platformCard">
+      <img
+        src="/image/logo/YouTube-Logo.png"
+        alt="YouTube Music"
+      />
+      <span>YouTube Music</span>
+    </div>
+
+    <div className="platformCard">
+      <img
+        src="/image/logo/soundcloud-logo.png"
+        alt="SoundCloud"
+      />
+      <span>SoundCloud</span>
+    </div>
+  </div>
+</div>
       </section>
     </main>
   );
