@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
 import ThemeSelector from "./components/ThemeSelector";
+import Parental from "./components/Parental";
 import "./App.css";
 
 function App() {
@@ -102,8 +103,8 @@ function App() {
   return (
     <main className="app">
       <section className="card">
+        <Parental />
         <div className="brand">
-          <span className="star">𖤐</span>
           <h1>SoundSync</h1>
         </div>
 
