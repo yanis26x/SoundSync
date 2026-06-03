@@ -1,4 +1,4 @@
-# SoundSync
+# SoundSync𖤐
 
 SoundSync est une application web qui a pour objectif de transférer des playlists entre différentes plateformes musicales.
 

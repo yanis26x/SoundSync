@@ -15,7 +15,6 @@ function App() {
     if (tokenFromUrl) {
       localStorage.setItem("spotify_access_token", tokenFromUrl);
       setAccessToken(tokenFromUrl);
-
       window.history.replaceState({}, document.title, "/");
     } else {
       const savedToken = localStorage.getItem("spotify_access_token");
@@ -41,15 +40,21 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/spotify/playlists", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/spotify/playlists",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       setPlaylists(response.data.playlists);
     } catch (err) {
-      setError(err.response?.data?.message || "Erreur pendant la récupération des playlists.");
+      setError(
+        err.response?.data?.message ||
+          "Erreur pendant la récupération des playlists."
+      );
     } finally {
       setLoading(false);
     }
@@ -58,11 +63,22 @@ function App() {
   return (
     <main className="app">
       <section className="card">
-        <h1>🎵 SoundSync</h1>
+ <div className="brand">
+  <span className="star">𖤐</span>
+  <h1>SoundSync</h1>
+</div>
+
         <p>Transfer playlists between your favorite platforms.</p>
 
+<p className="chooseText">Choose a platform to start syncing your playlists</p>
         {!accessToken ? (
-          <button onClick={loginSpotify}>Se connecter avec Spotify</button>
+<button onClick={loginSpotify}>
+  <img
+    src="/image/logo/Spotify-Black-Logo.png"
+    alt="Spotify"
+    className="spotifyBigLogo"
+  />
+</button>
         ) : (
           <>
             <p className="success">✅ Connecté à Spotify</p>
@@ -83,14 +99,21 @@ function App() {
               {playlists.map((playlist) => (
                 <div className="playlistCard" key={playlist.id}>
                   <img
-                    src={playlist.images?.[0]?.url || "https://via.placeholder.com/100"}
+                    src={
+                      playlist.images?.[0]?.url ||
+                      "https://via.placeholder.com/100"
+                    }
                     alt={playlist.name}
                   />
 
                   <div>
                     <h3>{playlist.name}</h3>
                     <p>{playlist.tracks.total} morceaux</p>
-                    <a href={playlist.external_urls.spotify} target="_blank" rel="noreferrer">
+                    <a
+                      href={playlist.external_urls.spotify}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       Ouvrir sur Spotify
                     </a>
                   </div>
@@ -99,6 +122,28 @@ function App() {
             </div>
           </>
         )}
+
+<div className="comingSoon">
+  <h2>Coming Soon</h2>
+
+  <div className="platforms">
+    <div className="platformCard">
+      <img src="/image/logo/appleMusic.png" alt="Apple Music" />
+      <span>Apple Music</span>
+    </div>
+
+    <div className="platformCard">
+      <img src="/image/logo/YouTube-Logo.png" alt="YouTube Music" />
+      <span>YouTube Music</span>
+    </div>
+
+    <div className="platformCard">
+      <img src="/image/logo/soundcloud-logo.png" alt="SoundCloud" />
+      <span>SoundCloud</span>
+    </div>
+  </div>
+</div>
+
       </section>
     </main>
   );
