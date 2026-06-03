@@ -1,0 +1,104 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.card {
+  width: 100%;
+  max-width: 650px;
+  background: #181818;
+  border: 1px solid #2b2b2b;
+  border-radius: 24px;
+  padding: 35px;
+  text-align: center;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+}
+
+.card h1 {
+  font-size: 42px;
+  margin: 0 0 10px;
+}
+
+.card p {
+  color: #b5b5b5;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.inputGroup input {
+  flex: 1;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #333;
+  background: #0d0d0d;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.inputGroup button,
+.downloadBtn {
+  padding: 16px 22px;
+  border: none;
+  border-radius: 14px;
+  background: #ff5500;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.trackCard {
+  margin-top: 30px;
+  background: #101010;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+.trackCard img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #222;
+}
+
+.trackCard h2 {
+  margin-bottom: 5px;
+}
+
+.error {
+  color: #ff4d4d !important;
+}
+
+.notAvailable {
+  color: #ffb86c !important;
+}
+
+@media (max-width: 600px) {
+  .inputGroup {
+    flex-direction: column;
+  }
+
+  .card h1 {
+    font-size: 32px;
+  }
+}
