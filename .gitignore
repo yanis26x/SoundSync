@@ -4,6 +4,8 @@ node_modules/
 client_secret*.json
 .env
 
+*.p8
+
 # Environment variables
 .env
 .env.local

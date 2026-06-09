@@ -19,6 +19,7 @@ const copy = {
     videos: "videos",
     openSpotify: "Open on Spotify",
     openYoutube: "Open on YouTube",
+    openApple: "Open in Apple Music",
     unknownArtist: "Unknown artist",
     unknownTitle: "Unknown title",
     showTracks: "Show tracks",
@@ -28,6 +29,8 @@ const copy = {
     unavailable: "Unavailable",
     playlistError: "Error while loading playlists.",
     youtubePlaylistError: "Error while loading YouTube playlists.",
+    applePlaylistError: "Error while loading Apple Music playlists.",
+    appleLoginError: "Unable to connect to Apple Music.",
     trackError: "Unable to load tracks.",
   },
   fr: {
@@ -40,6 +43,7 @@ const copy = {
     videos: "videos",
     openSpotify: "Ouvrir sur Spotify",
     openYoutube: "Ouvrir sur YouTube",
+    openApple: "Ouvrir dans Apple Music",
     unknownArtist: "Artiste inconnu",
     unknownTitle: "Titre inconnu",
     showTracks: "Afficher les musiques",
@@ -49,6 +53,8 @@ const copy = {
     unavailable: "Indisponible",
     playlistError: "Erreur pendant la recuperation des playlists.",
     youtubePlaylistError: "Erreur pendant la recuperation des playlists YouTube.",
+    applePlaylistError: "Erreur pendant la recuperation des playlists Apple Music.",
+    appleLoginError: "Impossible de se connecter a Apple Music.",
     trackError: "Impossible de recuperer les musiques.",
   },
 };
@@ -60,26 +66,35 @@ function App() {
     const youtubeTokenFromUrl = params.get("youtube_access_token");
     const savedSpotifyToken = localStorage.getItem("spotify_access_token");
     const savedYoutubeToken = localStorage.getItem("youtube_access_token");
+    const savedAppleMusicUserToken = localStorage.getItem("apple_music_user_token");
 
     return {
       spotifyToken: spotifyTokenFromUrl || savedSpotifyToken || "",
       youtubeToken: youtubeTokenFromUrl || savedYoutubeToken || "",
+      appleMusicUserToken: savedAppleMusicUserToken || "",
       spotifyTokenFromUrl,
       youtubeTokenFromUrl,
       savedSpotifyToken,
       savedYoutubeToken,
+      savedAppleMusicUserToken,
     };
   });
   const [accessToken, setAccessToken] = useState(initialConnection.spotifyToken);
   const [youtubeAccessToken, setYoutubeAccessToken] = useState(
     initialConnection.youtubeToken
   );
+  const [appleMusicUserToken, setAppleMusicUserToken] = useState(
+    initialConnection.appleMusicUserToken
+  );
   const [playlists, setPlaylists] = useState([]);
   const [youtubePlaylists, setYoutubePlaylists] = useState([]);
+  const [applePlaylists, setApplePlaylists] = useState([]);
   const [error, setError] = useState("");
   const [youtubeError, setYoutubeError] = useState("");
+  const [appleError, setAppleError] = useState("");
   const [loading, setLoading] = useState(false);
   const [youtubeLoading, setYoutubeLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
   const [expandedPlaylists, setExpandedPlaylists] = useState({});
   const [playlistTracks, setPlaylistTracks] = useState({});
   const [trackLoading, setTrackLoading] = useState({});
@@ -111,6 +126,12 @@ function App() {
       name: "YouTube",
       logo: "/logo/mini/youtube-mini.png",
       logoClassName: "youtubeStepLogo",
+    },
+    apple: appleMusicUserToken && {
+      id: "apple",
+      name: "Apple Music",
+      logo: "/logo/appleMusic.png",
+      logoClassName: "appleStepLogo",
     },
   };
   const connectedPlatforms = [
@@ -196,7 +217,8 @@ function App() {
       };
     }
 
-    return {
+    if (platformId === "youtube") {
+      return {
       error: youtubeError,
       loading: youtubeLoading,
         playlists: youtubePlaylists,
@@ -244,6 +266,59 @@ function App() {
             {renderTrackPanel("youtube", playlist.id)}
         </div>
       ),
+      };
+    }
+
+    return {
+      error: appleError,
+      loading: appleLoading,
+      playlists: applePlaylists,
+      logout: logoutAppleMusic,
+      logoutLabel: `${text.disconnect} Apple Music`,
+      renderPlaylist: (playlist) => {
+        const artworkUrl = getAppleArtworkUrl(playlist.attributes?.artwork);
+        const appleTrackCount =
+          playlist.attributes?.trackCount ??
+          playlist.relationships?.tracks?.data?.length ??
+          0;
+
+        return (
+          <div
+            className="playlistCard"
+            key={playlist.id}
+            style={{
+              "--playlist-image": `url(${artworkUrl})`,
+            }}
+          >
+            <div className="playlistCardMain">
+              <img
+                src={artworkUrl}
+                alt={playlist.attributes?.name || "Apple Music playlist"}
+              />
+
+              <div className="playlistInfo">
+                <h3>{playlist.attributes?.name || text.unknownTitle}</h3>
+
+                <p>
+                  {appleTrackCount} {text.tracks}
+                </p>
+
+                {playlist.attributes?.playParams?.catalogId && (
+                  <a
+                    href={`https://music.apple.com/playlist/${playlist.attributes.playParams.catalogId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {text.openApple}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {renderTrackPanel("apple", playlist.id)}
+          </div>
+        );
+      },
     };
   };
 
@@ -273,6 +348,7 @@ function App() {
       initialConnection.savedYoutubeToken &&
         !initialConnection.youtubeTokenFromUrl &&
         "youtube",
+      initialConnection.savedAppleMusicUserToken && "apple",
       initialConnection.spotifyTokenFromUrl && "spotify",
       initialConnection.youtubeTokenFromUrl && "youtube",
     ]
@@ -326,6 +402,57 @@ function App() {
     window.location.href = "http://127.0.0.1:8000/auth/google";
   };
 
+  const loadMusicKit = () =>
+    new Promise((resolve, reject) => {
+      if (window.MusicKit) {
+        resolve(window.MusicKit);
+        return;
+      }
+
+      const existingScript = document.querySelector("script[data-musickit]");
+
+      if (existingScript) {
+        existingScript.addEventListener("load", () => resolve(window.MusicKit));
+        existingScript.addEventListener("error", reject);
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://js-cdn.music.apple.com/musickit/v1/musickit.js";
+      script.async = true;
+      script.dataset.musickit = "true";
+      script.addEventListener("load", () => resolve(window.MusicKit));
+      script.addEventListener("error", reject);
+      document.body.appendChild(script);
+    });
+
+  const loginAppleMusic = async () => {
+    setAppleError("");
+
+    try {
+      const tokenResponse = await axios.get("http://127.0.0.1:8000/api/apple/token");
+      const MusicKit = await loadMusicKit();
+
+      MusicKit.configure({
+        developerToken: tokenResponse.data.token,
+        app: {
+          name: "SoundSync",
+          build: "1.0.0",
+        },
+      });
+
+      const music = MusicKit.getInstance();
+      await music.unauthorize().catch(() => {});
+      const userToken = await music.authorize();
+
+      localStorage.setItem("apple_music_user_token", userToken);
+      setAppleMusicUserToken(userToken);
+      addPlatformToOrder("apple");
+    } catch (err) {
+      setAppleError(err.response?.data?.message || text.appleLoginError);
+    }
+  };
+
   const logoutSpotify = () => {
     localStorage.removeItem("spotify_access_token");
     setAccessToken("");
@@ -348,6 +475,45 @@ function App() {
 
       return nextOrder;
     });
+  };
+
+  const logoutAppleMusic = async () => {
+    localStorage.removeItem("apple_music_user_token");
+    setAppleMusicUserToken("");
+    setApplePlaylists([]);
+    setPlaylistTracks((currentTracks) =>
+      Object.fromEntries(
+        Object.entries(currentTracks).filter(([trackKey]) => !trackKey.startsWith("apple:"))
+      )
+    );
+    setExpandedPlaylists((currentExpanded) =>
+      Object.fromEntries(
+        Object.entries(currentExpanded).filter(([trackKey]) => !trackKey.startsWith("apple:"))
+      )
+    );
+    setPlatformOrder((currentOrder) => {
+      const nextOrder = currentOrder.filter((platformId) => platformId !== "apple");
+      localStorage.setItem("platform_order", JSON.stringify(nextOrder));
+
+      return nextOrder;
+    });
+
+    try {
+      const tokenResponse = await axios.get("http://127.0.0.1:8000/api/apple/token");
+      const MusicKit = await loadMusicKit();
+
+      MusicKit.configure({
+        developerToken: tokenResponse.data.token,
+        app: {
+          name: "SoundSync",
+          build: "1.0.0",
+        },
+      });
+
+      await MusicKit.getInstance().unauthorize();
+    } catch (err) {
+      console.warn("Apple Music logout local only:", err);
+    }
   };
 
   const getPlaylists = useCallback(async () => {
@@ -400,10 +566,40 @@ function App() {
     }
   }, [youtubeAccessToken, text.youtubePlaylistError]);
 
+  const getApplePlaylists = useCallback(async () => {
+    setAppleError("");
+    setAppleLoading(true);
+
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/apple/playlists",
+        {
+          headers: {
+            Authorization: `Bearer ${appleMusicUserToken}`,
+          },
+        }
+      );
+
+      setApplePlaylists(response.data.playlists);
+    } catch (err) {
+      setAppleError(
+        err.response?.data?.message ||
+          text.applePlaylistError
+      );
+    } finally {
+      setAppleLoading(false);
+    }
+  }, [appleMusicUserToken, text.applePlaylistError]);
+
   const getPlaylistTracks = useCallback(
     async (platformId, playlistId) => {
       const trackKey = `${platformId}:${playlistId}`;
-      const token = platformId === "spotify" ? accessToken : youtubeAccessToken;
+      const token =
+        platformId === "spotify"
+          ? accessToken
+          : platformId === "youtube"
+            ? youtubeAccessToken
+            : appleMusicUserToken;
 
       setTrackErrors((currentErrors) => ({
         ...currentErrors,
@@ -442,8 +638,16 @@ function App() {
         }));
       }
     },
-    [accessToken, text.trackError, youtubeAccessToken]
+    [accessToken, appleMusicUserToken, text.trackError, youtubeAccessToken]
   );
+
+  const getAppleArtworkUrl = (artwork) => {
+    if (!artwork?.url) {
+      return "https://via.placeholder.com/100";
+    }
+
+    return artwork.url.replace("{w}", "300").replace("{h}", "300");
+  };
 
   const togglePlaylist = (platformId, playlistId) => {
     const trackKey = `${platformId}:${playlistId}`;
@@ -466,6 +670,13 @@ function App() {
         text.unknownArtist;
 
       return `${track?.name || text.unknownTitle} - ${artistNames}`;
+    }
+
+    if (platformId === "apple") {
+      const artistName = item.attributes?.artistName;
+      const trackName = item.attributes?.name || text.unknownTitle;
+
+      return artistName ? `${trackName} - ${artistName}` : trackName;
     }
 
     return item.snippet?.title || text.unknownTitle;
@@ -527,6 +738,14 @@ function App() {
     }
   }, [youtubeAccessToken, getYoutubePlaylists]);
 
+  useEffect(() => {
+    if (appleMusicUserToken) {
+      const timeout = window.setTimeout(getApplePlaylists, 0);
+
+      return () => window.clearTimeout(timeout);
+    }
+  }, [appleMusicUserToken, getApplePlaylists]);
+
   return (
     <main className="app">
       <MusicParticles />
@@ -539,7 +758,11 @@ function App() {
         setLanguage={setLanguage}
       />
       <section className="card">
-        <Parental />
+        {/* <Parental /> */}
+        <div className="heroTopLogo" aria-hidden="true">
+          <img src="/SoundSyncLogoNoBG.png" alt="" />
+        </div>
+
         <div className="brand">
           <h1>SoundSync</h1>
         </div>
@@ -566,7 +789,7 @@ function App() {
             )}
           </div>
 
-          <div className="transferArrow">→</div>
+          <div className="transferArrow"></div>
 
           <div className="transferSlot">
             {sourcePlatform && !destinationPlatform && (
@@ -590,7 +813,7 @@ function App() {
           <p className="chooseText">{chooseText}</p>
         )}
 
-        {(!accessToken || !youtubeAccessToken) && (
+        {(!accessToken || !youtubeAccessToken || !appleMusicUserToken) && (
           <div className="platformLoginRow">
             {!accessToken && (
               <button className="spotifyBtn" onClick={loginSpotify}>
@@ -612,32 +835,19 @@ function App() {
               </button>
             )}
 
-            <button className="unavailablePlatformBtn" disabled>
-              <img
-                src="/logo/appleMusic.png"
-                alt="Apple Music"
-                className="appleMusicLogo"
-              />
-              <span>{text.unavailable}</span>
-            </button>
+            {!appleMusicUserToken && (
+              <button className="appleBtn" onClick={loginAppleMusic}>
+                <img
+                  src="/logo/appleMusic.png"
+                  alt="Apple Music"
+                  className="appleMusicLogo"
+                />
+              </button>
+            )}
 
-            <button className="unavailablePlatformBtn" disabled>
-              <img
-                src="/logo/soundcloud-logo.png"
-                alt="SoundCloud"
-                className="soundCloudLogo"
-              />
-              <span>{text.unavailable}</span>
-            </button>
 
-            <button className="unavailablePlatformBtn" disabled>
-              <img
-                src="/logo/deezerLogo.png"
-                alt="Deezer"
-                className="deezerLogo"
-              />
-              <span>{text.unavailable}</span>
-            </button>
+
+
           </div>
         )}
 
@@ -679,7 +889,7 @@ function App() {
         )}
       </section>
 
-      <WhySoundSync />
+      {/* <WhySoundSync /> */}
     </main>
   );
 }

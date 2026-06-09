@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const querystring = require("querystring");
+const generateAppleDeveloperToken = require("./appleToken");
 require("dotenv").config();
 
 const app = express();
@@ -10,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 8000;
-
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
@@ -22,19 +22,160 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 app.get("/", (req, res) => {
-  res.json({
-    message: "SoundSync API is running 🎵",
-  });
+  res.json({ message: "SoundSync API is running 🎵" });
 });
 
 app.get("/api/status", (req, res) => {
   res.json({
     success: true,
     app: "SoundSync",
-    description: "Transfer playlists between music platforms.",
     platforms: ["Spotify", "YouTube Music", "Apple Music", "SoundCloud"],
     version: "1.0.0",
   });
+});
+
+/* =========================
+   APPLE MUSIC
+========================= */
+
+app.get("/api/apple/token", (req, res) => {
+  try {
+    const token = generateAppleDeveloperToken();
+
+    res.json({
+      success: true,
+      token,
+    });
+  } catch (error) {
+    console.error("Erreur Apple Music :", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Impossible de générer le token Apple Music.",
+    });
+  }
+});
+
+app.get("/api/apple/playlists", async (req, res) => {
+  const musicUserToken = req.headers.authorization?.replace("Bearer ", "");
+
+  if (!musicUserToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Apple Music manquant.",
+    });
+  }
+
+  try {
+    const developerToken = generateAppleDeveloperToken();
+    const response = await axios.get(
+      "https://api.music.apple.com/v1/me/library/playlists",
+      {
+        headers: {
+          Authorization: `Bearer ${developerToken}`,
+          "Music-User-Token": musicUserToken,
+        },
+        params: {
+          limit: 25,
+        },
+      }
+    );
+    const playlists = await Promise.all(
+      response.data.data.map(async (playlist) => {
+        try {
+          const tracksResponse = await axios.get(
+            `https://api.music.apple.com/v1/me/library/playlists/${playlist.id}/tracks`,
+            {
+              headers: {
+                Authorization: `Bearer ${developerToken}`,
+                "Music-User-Token": musicUserToken,
+              },
+              params: {
+                limit: 100,
+              },
+            }
+          );
+          const tracks = tracksResponse.data.data || [];
+
+          return {
+            ...playlist,
+            attributes: {
+              ...playlist.attributes,
+              trackCount: tracks.length,
+            },
+            relationships: {
+              ...playlist.relationships,
+              tracks: {
+                data: tracks,
+              },
+            },
+          };
+        } catch (trackError) {
+          console.error(
+            "Erreur count playlist Apple Music :",
+            trackError.response?.data || trackError.message
+          );
+
+          return playlist;
+        }
+      })
+    );
+
+    res.json({
+      success: true,
+      playlists,
+    });
+  } catch (error) {
+    console.error("Erreur playlists Apple Music :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.errors?.[0]?.detail ||
+        error.response?.data?.errors?.[0]?.title ||
+        "Impossible de récupérer les playlists Apple Music.",
+    });
+  }
+});
+
+app.get("/api/apple/playlists/:playlistId/tracks", async (req, res) => {
+  const musicUserToken = req.headers.authorization?.replace("Bearer ", "");
+  const { playlistId } = req.params;
+
+  if (!musicUserToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Apple Music manquant.",
+    });
+  }
+
+  try {
+    const developerToken = generateAppleDeveloperToken();
+    const response = await axios.get(
+      `https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`,
+      {
+        headers: {
+          Authorization: `Bearer ${developerToken}`,
+          "Music-User-Token": musicUserToken,
+        },
+        params: {
+          limit: 50,
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      tracks: response.data.data,
+    });
+  } catch (error) {
+    console.error("Erreur musiques Apple Music :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Impossible de récupérer les musiques Apple Music.",
+    });
+  }
 });
 
 /* =========================
@@ -43,10 +184,7 @@ app.get("/api/status", (req, res) => {
 
 app.get("/auth/spotify", (req, res) => {
   if (!SPOTIFY_CLIENT_ID || !SPOTIFY_CLIENT_SECRET || !SPOTIFY_REDIRECT_URI) {
-    return res.status(500).send(`
-      <h1>Erreur configuration Spotify</h1>
-      <p>Vérifie ton fichier .env.</p>
-    `);
+    return res.status(500).send("Erreur configuration Spotify.");
   }
 
   const scope = [
@@ -75,20 +213,8 @@ app.get("/auth/spotify/callback", async (req, res) => {
   const code = req.query.code;
   const error = req.query.error;
 
-  if (error) {
-    return res.send(`
-      <h1>Erreur Spotify</h1>
-      <p>${error}</p>
-    `);
-  }
-
-  if (!code) {
-    return res.send(`
-      <h1>Erreur</h1>
-      <p>Aucun code reçu de Spotify.</p>
-      <p>Retourne sur <a href="/auth/spotify">/auth/spotify</a> pour réessayer.</p>
-    `);
-  }
+  if (error) return res.send(`<h1>Erreur Spotify</h1><p>${error}</p>`);
+  if (!code) return res.send("Aucun code reçu de Spotify.");
 
   try {
     const tokenResponse = await axios.post(
@@ -102,9 +228,9 @@ app.get("/auth/spotify/callback", async (req, res) => {
         headers: {
           Authorization:
             "Basic " +
-            Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString(
-              "base64"
-            ),
+            Buffer.from(
+              `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
+            ).toString("base64"),
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
@@ -117,11 +243,7 @@ app.get("/auth/spotify/callback", async (req, res) => {
     );
   } catch (error) {
     console.error("Erreur token Spotify :", error.response?.data || error.message);
-
-    res.send(`
-      <h1>Erreur pendant la connexion Spotify</h1>
-      <p>Regarde le terminal backend pour voir le détail.</p>
-    `);
+    res.send("Erreur pendant la connexion Spotify.");
   }
 });
 
@@ -131,16 +253,7 @@ app.get("/auth/spotify/callback", async (req, res) => {
 
 app.get("/auth/google", (req, res) => {
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REDIRECT_URI) {
-    return res.status(500).send(`
-      <h1>Erreur configuration Google</h1>
-      <p>Vérifie ton fichier .env.</p>
-      <p>Il faut :</p>
-      <ul>
-        <li>GOOGLE_CLIENT_ID</li>
-        <li>GOOGLE_CLIENT_SECRET</li>
-        <li>GOOGLE_REDIRECT_URI</li>
-      </ul>
-    `);
+    return res.status(500).send("Erreur configuration Google.");
   }
 
   const scope = [
@@ -159,9 +272,6 @@ app.get("/auth/google", (req, res) => {
       prompt: "consent",
     });
 
-  console.log("Google Redirect URI utilisé :", GOOGLE_REDIRECT_URI);
-  console.log("URL Google :", authUrl);
-
   res.redirect(authUrl);
 });
 
@@ -169,22 +279,8 @@ app.get("/auth/google/callback", async (req, res) => {
   const code = req.query.code;
   const error = req.query.error;
 
-  console.log("Google callback reçu :", req.query);
-
-  if (error) {
-    return res.send(`
-      <h1>Erreur Google</h1>
-      <p>${error}</p>
-    `);
-  }
-
-  if (!code) {
-    return res.send(`
-      <h1>Erreur</h1>
-      <p>Aucun code reçu de Google.</p>
-      <p>Retourne sur <a href="/auth/google">/auth/google</a> pour réessayer.</p>
-    `);
-  }
+  if (error) return res.send(`<h1>Erreur Google</h1><p>${error}</p>`);
+  if (!code) return res.send("Aucun code reçu de Google.");
 
   try {
     const tokenResponse = await axios.post(
@@ -210,13 +306,13 @@ app.get("/auth/google/callback", async (req, res) => {
     );
   } catch (error) {
     console.error("Erreur token Google :", error.response?.data || error.message);
-
-    res.send(`
-      <h1>Erreur pendant la connexion Google / YouTube</h1>
-      <p>Regarde le terminal backend pour voir le détail.</p>
-    `);
+    res.send("Erreur pendant la connexion Google / YouTube.");
   }
 });
+
+/* =========================
+   YOUTUBE API
+========================= */
 
 app.get("/api/youtube/me", async (req, res) => {
   const accessToken = req.headers.authorization?.replace("Bearer ", "");
@@ -479,6 +575,5 @@ app.listen(PORT, () => {
   console.log(`🎵 SoundSync backend running on port ${PORT}`);
   console.log(`Spotify login: http://127.0.0.1:${PORT}/auth/spotify`);
   console.log(`YouTube login: http://127.0.0.1:${PORT}/auth/google`);
-  console.log(`Spotify Redirect URI: ${SPOTIFY_REDIRECT_URI}`);
-  console.log(`Google Redirect URI: ${GOOGLE_REDIRECT_URI}`);
+  console.log(`Apple token: http://127.0.0.1:${PORT}/api/apple/token`);
 });

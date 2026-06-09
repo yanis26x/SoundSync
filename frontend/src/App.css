@@ -152,6 +152,27 @@ body::after {
   animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 
+.heroTopLogo {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(980px, 86vw);
+  height: clamp(170px, 24vw, 310px);
+  margin: -42px auto -78px;
+  pointer-events: none;
+
+  animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+.heroTopLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.24));
+}
+
 .chooseText,
 .transferProgress,
 .topRightActionBtn,
@@ -299,7 +320,7 @@ body::after {
   border: 1px solid var(--border-color);
   border-radius: 16px;
 
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(23, 4, 4, 0.08);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -334,7 +355,7 @@ body::after {
   width: 320px;
   height: 320px;
 
-  background-image: url("/logo/mini/SoundSync-mini-logo-noBG.png");
+  background-image: url("/arrow-noBg.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -391,7 +412,8 @@ body::after {
 }
 
 .spotifyStepLogo,
-.youtubeStepLogo {
+.youtubeStepLogo,
+.appleStepLogo {
   max-width: 70%;
   max-height: 44px;
   object-fit: contain;
@@ -401,6 +423,11 @@ body::after {
 
 .youtubeStepLogo {
   max-width: 78%;
+}
+
+.appleStepLogo {
+  max-width: 82%;
+  max-height: 46px;
 }
 
 .platformLoginRow {
@@ -438,6 +465,7 @@ body::after {
 
 .spotifyBtn,
 .youtubeBtn,
+.appleBtn,
 .unavailablePlatformBtn {
   width: 230px;
   height: 72px;
@@ -482,7 +510,7 @@ body::after {
 }
 
 .youtubeBtn {
-  background: rgba(255, 0, 0, 0.18);
+  background: rgba(213, 112, 112, 0.18);
 }
 
 .youtubeBtn:hover {
@@ -493,6 +521,20 @@ body::after {
   box-shadow:
     0 0 32px rgba(255, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.appleBtn {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.appleBtn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.76);
+
+  box-shadow:
+    0 0 32px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .unavailablePlatformBtn {
@@ -531,9 +573,7 @@ body::after {
 
 .spotifyBigLogo,
 .youtubeBigLogo,
-.appleMusicLogo,
-.soundCloudLogo,
-.deezerLogo {
+.appleMusicLogo{
   width: 130px;
   height: auto;
   object-fit: contain;
@@ -560,7 +600,8 @@ body::after {
 }
 
 .spotifyBtn:hover .spotifyBigLogo,
-.youtubeBtn:hover .youtubeBigLogo {
+.youtubeBtn:hover .youtubeBigLogo,
+.appleBtn:hover .appleMusicLogo {
   transform: scale(1.05);
 }
 
@@ -868,6 +909,7 @@ button:hover {
 
   .spotifyBtn,
   .youtubeBtn,
+  .appleBtn,
   .unavailablePlatformBtn {
     width: 100%;
   }
