@@ -915,6 +915,7 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 14px;
+  margin-top: 16px;
 }
 
 .sourcePlaylistChoice {
@@ -977,6 +978,7 @@ button:hover {
   font-weight: 700;
 }
 
+.destinationSetup,
 .transferSetup {
   margin-top: 20px;
   padding: 18px;
@@ -985,6 +987,10 @@ button:hover {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+}
+
+.destinationSetup {
+  margin-bottom: 18px;
 }
 
 .transferModeRow {
@@ -1034,6 +1040,64 @@ button:hover {
   transform: none;
 }
 
+.transferLimit {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.76) !important;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.transferLiveStatus {
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.18);
+  text-align: left;
+}
+
+.transferProgressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 900;
+}
+
+.transferProgressBar {
+  overflow: hidden;
+  height: 10px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.transferProgressBar span {
+  display: block;
+  height: 100%;
+  min-width: 8%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10f060, var(--accent));
+  box-shadow: 0 0 18px rgba(16, 240, 96, 0.34);
+  transition: width 0.28s ease;
+}
+
+.transferLiveStatus p {
+  margin: 12px 0 0;
+}
+
+.transferLiveColumns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.transferLiveColumns h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+
 .transferResult {
   margin-top: 18px;
   text-align: left;
@@ -1046,6 +1110,10 @@ button:hover {
 
 .failedList {
   border-color: rgba(243, 27, 45, 0.32);
+}
+
+.alreadyList {
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .playlistCardMain {

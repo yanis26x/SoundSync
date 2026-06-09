@@ -51,7 +51,12 @@ const copy = {
     transferDone: "Transfer done",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
+    alreadyTracks: "tracks already in playlist",
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
+    transferLimit: "Current limit: 25 tracks per transfer.",
+    nowTransferring: "Now transferring",
+    preparingTransfer: "Preparing transfer...",
+    transferProgress: "Progress",
   },
   fr: {
     subtitle: "Transfere tes playlists entre tes plateformes preferees",
@@ -96,7 +101,12 @@ const copy = {
     transferDone: "Transfert termine",
     addedTracks: "musiques ajoutees",
     failedTracks: "musiques introuvables ou en erreur",
+    alreadyTracks: "musiques deja presentes",
     unsupportedTransfer: "Le transfert est dispo pour Spotify et YouTube pour le moment.",
+    transferLimit: "Limite actuelle : 25 musiques par transfert.",
+    nowTransferring: "Transfert en cours",
+    preparingTransfer: "Preparation du transfert...",
+    transferProgress: "Progression",
   },
 };
 
@@ -148,6 +158,14 @@ function App() {
   const [transferLoading, setTransferLoading] = useState(false);
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
+  const [transferProgress, setTransferProgress] = useState({
+    total: 0,
+    done: 0,
+    current: "",
+    added: [],
+    failed: [],
+    already: [],
+  });
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
   const [language, setLanguageState] = useState(
@@ -840,6 +858,14 @@ function App() {
     setTransferLoading(true);
     setTransferError("");
     setTransferResult(null);
+    setTransferProgress({
+      total: 0,
+      done: 0,
+      current: text.preparingTransfer,
+      added: [],
+      failed: [],
+      already: [],
+    });
 
     const sourceTrackKey = `${sourcePlatform.id}:${selectedSourcePlaylist.id}`;
 
@@ -867,6 +893,14 @@ function App() {
         .slice(0, 25)
         .map((track) => getTrackLabel(sourcePlatform.id, track))
         .filter(Boolean);
+      setTransferProgress({
+        total: trackLabels.length,
+        done: 0,
+        current: trackLabels[0] || text.preparingTransfer,
+        added: [],
+        failed: [],
+        already: [],
+      });
 
       let targetPlaylistId = destinationPlaylistId;
 
@@ -902,13 +936,66 @@ function App() {
         throw new Error(text.destinationPlaylist);
       }
 
+      let existingDestinationTrackIds = new Set();
+
+      if (destinationMode === "existing") {
+        const destinationTrackResponse = await axios.get(
+          `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists/${targetPlaylistId}/tracks`,
+          {
+            headers: {
+              Authorization: `Bearer ${getPlatformToken(destinationPlatform.id)}`,
+            },
+          }
+        );
+
+        existingDestinationTrackIds = new Set(
+          destinationTrackResponse.data.tracks
+            .map((item) => {
+              if (destinationPlatform.id === "spotify") {
+                return item.track?.uri || item.track?.id;
+              }
+
+              if (destinationPlatform.id === "youtube") {
+                return item.contentDetails?.videoId || item.snippet?.resourceId?.videoId;
+              }
+
+              return item.id;
+            })
+            .filter(Boolean)
+        );
+      }
+
       const added = [];
       const failed = [];
+      const already = [];
+      const pushProgress = (label, status) => {
+        if (status === "added") {
+          added.push(label);
+        } else if (status === "already") {
+          already.push(label);
+        } else {
+          failed.push(label);
+        }
+
+        setTransferProgress({
+          total: trackLabels.length,
+          done: added.length + failed.length + already.length,
+          current: label,
+          added: [...added],
+          failed: [...failed],
+          already: [...already],
+        });
+      };
 
       if (destinationPlatform.id === "spotify") {
         const uris = [];
 
         for (const label of trackLabels) {
+          setTransferProgress((currentProgress) => ({
+            ...currentProgress,
+            current: label,
+          }));
+
           try {
             const searchResponse = await axios.get(
               "http://127.0.0.1:8000/api/spotify/search",
@@ -923,17 +1010,27 @@ function App() {
             );
 
             if (searchResponse.data.track?.uri) {
-              uris.push(searchResponse.data.track.uri);
-              added.push(label);
+              if (existingDestinationTrackIds.has(searchResponse.data.track.uri)) {
+                pushProgress(label, "already");
+              } else {
+                uris.push(searchResponse.data.track.uri);
+                existingDestinationTrackIds.add(searchResponse.data.track.uri);
+                pushProgress(label, "added");
+              }
             } else {
-              failed.push(label);
+              pushProgress(label, "failed");
             }
           } catch {
-            failed.push(label);
+            pushProgress(label, "failed");
           }
         }
 
         if (uris.length > 0) {
+          setTransferProgress((currentProgress) => ({
+            ...currentProgress,
+            current: `${text.nowTransferring} ${uris.length} ${text.tracks}`,
+          }));
+
           await axios.post(
             `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
             {
@@ -950,6 +1047,11 @@ function App() {
 
       if (destinationPlatform.id === "youtube") {
         for (const label of trackLabels) {
+          setTransferProgress((currentProgress) => ({
+            ...currentProgress,
+            current: label,
+          }));
+
           try {
             const searchResponse = await axios.get(
               "http://127.0.0.1:8000/api/youtube/search",
@@ -965,7 +1067,12 @@ function App() {
             const videoId = searchResponse.data.item?.id?.videoId;
 
             if (!videoId) {
-              failed.push(label);
+              pushProgress(label, "failed");
+              continue;
+            }
+
+            if (existingDestinationTrackIds.has(videoId)) {
+              pushProgress(label, "already");
               continue;
             }
 
@@ -980,9 +1087,10 @@ function App() {
                 },
               }
             );
-            added.push(label);
+            existingDestinationTrackIds.add(videoId);
+            pushProgress(label, "added");
           } catch {
-            failed.push(label);
+            pushProgress(label, "failed");
           }
         }
       }
@@ -990,6 +1098,7 @@ function App() {
       setTransferResult({
         added,
         failed,
+        already,
       });
     } catch (err) {
       setTransferError(err.response?.data?.message || err.message || text.trackError);
@@ -1069,6 +1178,14 @@ function App() {
     setDestinationPlaylistId("");
     setTransferResult(null);
     setTransferError("");
+    setTransferProgress({
+      total: 0,
+      done: 0,
+      current: "",
+      added: [],
+      failed: [],
+      already: [],
+    });
   }, [sourcePlatform?.id, destinationPlatform?.id]);
 
   return (
@@ -1263,6 +1380,157 @@ function App() {
               <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
             )}
 
+            <div className="destinationSetup">
+              <div className="transferModeRow">
+                <button
+                  className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+                  onClick={() => setDestinationMode("new")}
+                >
+                  {text.transferToNew}
+                </button>
+
+                <button
+                  className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+                  onClick={() => setDestinationMode("existing")}
+                >
+                  {text.transferToExisting}
+                </button>
+              </div>
+
+              {destinationMode === "new" ? (
+                <input
+                  className="playlistNameInput"
+                  value={newPlaylistName}
+                  onChange={(event) => setNewPlaylistName(event.target.value)}
+                  placeholder={text.playlistName}
+                />
+              ) : (
+                <select
+                  className="playlistNameInput"
+                  value={destinationPlaylistId}
+                  onChange={(event) => setDestinationPlaylistId(event.target.value)}
+                >
+                  <option value="">{text.destinationPlaylist}</option>
+                  {destinationPlaylists.map((playlist) => (
+                    <option value={playlist.id} key={playlist.id}>
+                      {getPlaylistName(destinationPlatform.id, playlist)}
+                    </option>
+                  ))}
+                </select>
+              )}
+
+              {transferError && (
+                <p className="error">{transferError}</p>
+              )}
+
+              <p className="transferLimit">{text.transferLimit}</p>
+
+              <button
+                className="startTransferBtn"
+                onClick={startPlaylistTransfer}
+                disabled={
+                  !selectedSourcePlaylist ||
+                  transferLoading ||
+                  (destinationMode === "existing" && !destinationPlaylistId)
+                }
+              >
+                {transferLoading ? text.transferLoading : text.startTransfer}
+              </button>
+
+              {transferLoading && (
+                <div className="transferLiveStatus">
+                  <div className="transferProgressHeader">
+                    <span>{text.transferProgress}</span>
+                    <strong>
+                      {transferProgress.done}/{transferProgress.total || 25}
+                    </strong>
+                  </div>
+
+                  <div className="transferProgressBar">
+                    <span
+                      style={{
+                        width: `${transferProgress.total
+                          ? (transferProgress.done / transferProgress.total) * 100
+                          : 8}%`,
+                      }}
+                    />
+                  </div>
+
+                  <p>
+                    {text.nowTransferring}: <strong>{transferProgress.current}</strong>
+                  </p>
+
+                  <div className="transferLiveColumns">
+                    <div>
+                      <h4>{transferProgress.added.length} {text.addedTracks}</h4>
+                      <ol className="trackList">
+                        {transferProgress.added.map((track, index) => (
+                          <li key={`live-added-${track}-${index}`}>{track}</li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h4>{transferProgress.failed.length} {text.failedTracks}</h4>
+                      <ol className="trackList failedList">
+                        {transferProgress.failed.map((track, index) => (
+                          <li key={`live-failed-${track}-${index}`}>{track}</li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    <div>
+                      <h4>{transferProgress.already.length} {text.alreadyTracks}</h4>
+                      <ol className="trackList alreadyList">
+                        {transferProgress.already.map((track, index) => (
+                          <li key={`live-already-${track}-${index}`}>{track}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {transferResult && (
+                <div className="transferResult">
+                  <h3>{text.transferDone}</h3>
+                  <p className="success">
+                    {transferResult.added.length} {text.addedTracks}
+                  </p>
+                  <p className={transferResult.failed.length ? "error" : "success"}>
+                    {transferResult.failed.length} {text.failedTracks}
+                  </p>
+                  <p>
+                    {transferResult.already.length} {text.alreadyTracks}
+                  </p>
+
+                  {transferResult.added.length > 0 && (
+                    <ol className="trackList">
+                      {transferResult.added.map((track, index) => (
+                        <li key={`added-${track}-${index}`}>{track}</li>
+                      ))}
+                    </ol>
+                  )}
+
+                  {transferResult.failed.length > 0 && (
+                    <ol className="trackList failedList">
+                      {transferResult.failed.map((track, index) => (
+                        <li key={`failed-${track}-${index}`}>{track}</li>
+                      ))}
+                    </ol>
+                  )}
+
+                  {transferResult.already.length > 0 && (
+                    <ol className="trackList alreadyList">
+                      {transferResult.already.map((track, index) => (
+                        <li key={`already-${track}-${index}`}>{track}</li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+              )}
+            </div>
+
             <div className="sourcePlaylistGrid">
               {getPlatformPlaylists(sourcePlatform.id).map((playlist) => {
                 const isSelected = selectedSourcePlaylistId === playlist.id;
@@ -1294,90 +1562,6 @@ function App() {
               })}
             </div>
 
-            {selectedSourcePlaylist && (
-              <div className="transferSetup">
-                <div className="transferModeRow">
-                  <button
-                    className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-                    onClick={() => setDestinationMode("new")}
-                  >
-                    {text.transferToNew}
-                  </button>
-
-                  <button
-                    className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-                    onClick={() => setDestinationMode("existing")}
-                  >
-                    {text.transferToExisting}
-                  </button>
-                </div>
-
-                {destinationMode === "new" ? (
-                  <input
-                    className="playlistNameInput"
-                    value={newPlaylistName}
-                    onChange={(event) => setNewPlaylistName(event.target.value)}
-                    placeholder={text.playlistName}
-                  />
-                ) : (
-                  <select
-                    className="playlistNameInput"
-                    value={destinationPlaylistId}
-                    onChange={(event) => setDestinationPlaylistId(event.target.value)}
-                  >
-                    <option value="">{text.destinationPlaylist}</option>
-                    {destinationPlaylists.map((playlist) => (
-                      <option value={playlist.id} key={playlist.id}>
-                        {getPlaylistName(destinationPlatform.id, playlist)}
-                      </option>
-                    ))}
-                  </select>
-                )}
-
-                {transferError && (
-                  <p className="error">{transferError}</p>
-                )}
-
-                <button
-                  className="startTransferBtn"
-                  onClick={startPlaylistTransfer}
-                  disabled={
-                    transferLoading ||
-                    (destinationMode === "existing" && !destinationPlaylistId)
-                  }
-                >
-                  {transferLoading ? text.transferLoading : text.startTransfer}
-                </button>
-
-                {transferResult && (
-                  <div className="transferResult">
-                    <h3>{text.transferDone}</h3>
-                    <p className="success">
-                      {transferResult.added.length} {text.addedTracks}
-                    </p>
-                    <p className={transferResult.failed.length ? "error" : "success"}>
-                      {transferResult.failed.length} {text.failedTracks}
-                    </p>
-
-                    {transferResult.added.length > 0 && (
-                      <ol className="trackList">
-                        {transferResult.added.map((track, index) => (
-                          <li key={`added-${track}-${index}`}>{track}</li>
-                        ))}
-                      </ol>
-                    )}
-
-                    {transferResult.failed.length > 0 && (
-                      <ol className="trackList failedList">
-                        {transferResult.failed.map((track, index) => (
-                          <li key={`failed-${track}-${index}`}>{track}</li>
-                        ))}
-                      </ol>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         )}
           </>
