@@ -451,6 +451,111 @@ app.get("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
   }
 });
 
+app.post("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { playlistId } = req.params;
+  const { videoId } = req.body;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token YouTube manquant.",
+    });
+  }
+
+  if (!videoId) {
+    return res.status(400).json({
+      success: false,
+      message: "Video YouTube requise.",
+    });
+  }
+
+  try {
+    const response = await axios.post(
+      "https://www.googleapis.com/youtube/v3/playlistItems",
+      {
+        snippet: {
+          playlistId,
+          resourceId: {
+            kind: "youtube#video",
+            videoId,
+          },
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        params: {
+          part: "snippet",
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      item: response.data,
+    });
+  } catch (error) {
+    console.error("Erreur ajout YouTube :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible d'ajouter la video YouTube.",
+    });
+  }
+});
+
+app.get("/api/youtube/search", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { q } = req.query;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token YouTube manquant.",
+    });
+  }
+
+  if (!q) {
+    return res.status(400).json({
+      success: false,
+      message: "Recherche YouTube requise.",
+    });
+  }
+
+  try {
+    const response = await axios.get("https://www.googleapis.com/youtube/v3/search", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        part: "snippet",
+        q,
+        type: "video",
+        maxResults: 1,
+      },
+    });
+
+    res.json({
+      success: true,
+      item: response.data.items?.[0] || null,
+    });
+  } catch (error) {
+    console.error("Erreur recherche YouTube :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible de rechercher sur YouTube.",
+    });
+  }
+});
+
 /* =========================
    SPOTIFY API
 ========================= */
@@ -554,6 +659,157 @@ app.get("/api/spotify/playlists/:playlistId/tracks", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Impossible de récupérer les musiques Spotify.",
+    });
+  }
+});
+
+app.post("/api/spotify/playlists", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { name, description, public: isPublic } = req.body;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Spotify manquant.",
+    });
+  }
+
+  if (!name) {
+    return res.status(400).json({
+      success: false,
+      message: "Nom de playlist requis.",
+    });
+  }
+
+  try {
+    const meResponse = await axios.get("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const response = await axios.post(
+      `https://api.spotify.com/v1/users/${meResponse.data.id}/playlists`,
+      {
+        name,
+        description: description || "Playlist creee avec SoundSync.",
+        public: Boolean(isPublic),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      playlist: response.data,
+    });
+  } catch (error) {
+    console.error("Erreur création Spotify :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible de créer la playlist Spotify.",
+    });
+  }
+});
+
+app.post("/api/spotify/playlists/:playlistId/tracks", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { playlistId } = req.params;
+  const { uris } = req.body;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Spotify manquant.",
+    });
+  }
+
+  if (!Array.isArray(uris) || uris.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Musiques Spotify requises.",
+    });
+  }
+
+  try {
+    const response = await axios.post(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      {
+        uris: uris.slice(0, 100),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      snapshotId: response.data.snapshot_id,
+    });
+  } catch (error) {
+    console.error("Erreur ajout Spotify :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible d'ajouter les musiques Spotify.",
+    });
+  }
+});
+
+app.get("/api/spotify/search", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { q } = req.query;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Spotify manquant.",
+    });
+  }
+
+  if (!q) {
+    return res.status(400).json({
+      success: false,
+      message: "Recherche Spotify requise.",
+    });
+  }
+
+  try {
+    const response = await axios.get("https://api.spotify.com/v1/search", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        q,
+        type: "track",
+        limit: 1,
+      },
+    });
+
+    res.json({
+      success: true,
+      track: response.data.tracks?.items?.[0] || null,
+    });
+  } catch (error) {
+    console.error("Erreur recherche Spotify :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible de rechercher sur Spotify.",
     });
   }
 });

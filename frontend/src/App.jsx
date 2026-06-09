@@ -3,7 +3,6 @@ import axios from "axios";
 import { themes } from "./themes";
 import TopRightActionBtn from "./components/TopRightActionBtn";
 import TopLeftBtn from "./components/TopLeftBtn";
-import Parental from "./components/Parental";
 import MusicParticles from "./components/Particles/MusicParticles";
 import WhySoundSync from "./components/WhySoundSync";
 import "./App.css";
@@ -42,6 +41,17 @@ const copy = {
     removeChoice: "Remove platform choice",
     changePlatform: "Change platform",
     logged: "Logged",
+    pickPlaylist: "Choose one playlist to transfer",
+    transferToNew: "Transfer into a new playlist",
+    transferToExisting: "Add to an existing playlist",
+    playlistName: "Playlist name",
+    destinationPlaylist: "Destination playlist",
+    startTransfer: "Start transfer",
+    transferLoading: "Transfer in progress...",
+    transferDone: "Transfer done",
+    addedTracks: "tracks added",
+    failedTracks: "tracks not found or failed",
+    unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
   },
   fr: {
     subtitle: "Transfere tes playlists entre tes plateformes preferees",
@@ -76,6 +86,17 @@ const copy = {
     removeChoice: "Retirer le choix de plateforme",
     changePlatform: "Changer de plateforme",
     logged: "Logged",
+    pickPlaylist: "Choisis une playlist a transferer",
+    transferToNew: "Transferer dans une nouvelle playlist",
+    transferToExisting: "Ajouter a une playlist existante",
+    playlistName: "Nom de la playlist",
+    destinationPlaylist: "Playlist destination",
+    startTransfer: "Demarrer le transfert",
+    transferLoading: "Transfert en cours...",
+    transferDone: "Transfert termine",
+    addedTracks: "musiques ajoutees",
+    failedTracks: "musiques introuvables ou en erreur",
+    unsupportedTransfer: "Le transfert est dispo pour Spotify et YouTube pour le moment.",
   },
 };
 
@@ -120,6 +141,13 @@ function App() {
   const [trackLoading, setTrackLoading] = useState({});
   const [trackErrors, setTrackErrors] = useState({});
   const [currentPage, setCurrentPage] = useState("home");
+  const [selectedSourcePlaylistId, setSelectedSourcePlaylistId] = useState("");
+  const [destinationMode, setDestinationMode] = useState("new");
+  const [newPlaylistName, setNewPlaylistName] = useState("");
+  const [destinationPlaylistId, setDestinationPlaylistId] = useState("");
+  const [transferLoading, setTransferLoading] = useState(false);
+  const [transferResult, setTransferResult] = useState(null);
+  const [transferError, setTransferError] = useState("");
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
   const [language, setLanguageState] = useState(
@@ -746,6 +774,230 @@ function App() {
     return item.snippet?.title || text.unknownTitle;
   };
 
+  const getPlatformToken = (platformId) => {
+    if (platformId === "spotify") return accessToken;
+    if (platformId === "youtube") return youtubeAccessToken;
+    return appleMusicUserToken;
+  };
+
+  const getPlatformPlaylists = (platformId) => {
+    if (platformId === "spotify") return playlists;
+    if (platformId === "youtube") return youtubePlaylists;
+    if (platformId === "apple") return applePlaylists;
+    return [];
+  };
+
+  const getPlaylistName = (platformId, playlist) => {
+    if (platformId === "spotify") return playlist.name;
+    if (platformId === "youtube") return playlist.snippet?.title || text.unknownTitle;
+    return playlist.attributes?.name || text.unknownTitle;
+  };
+
+  const getPlaylistImage = (platformId, playlist) => {
+    if (platformId === "spotify") {
+      return playlist.images?.[0]?.url || "https://via.placeholder.com/100";
+    }
+
+    if (platformId === "youtube") {
+      return (
+        playlist.snippet?.thumbnails?.medium?.url ||
+        playlist.snippet?.thumbnails?.default?.url ||
+        "https://via.placeholder.com/100"
+      );
+    }
+
+    return getAppleArtworkUrl(playlist.attributes?.artwork);
+  };
+
+  const getPlaylistCount = (platformId, playlist) => {
+    if (platformId === "spotify") return playlist.tracks?.total || 0;
+    if (platformId === "youtube") return playlist.contentDetails?.itemCount || 0;
+
+    return (
+      playlist.attributes?.trackCount ??
+      playlist.relationships?.tracks?.data?.length ??
+      0
+    );
+  };
+
+  const selectedSourcePlaylist = sourcePlatform
+    ? getPlatformPlaylists(sourcePlatform.id).find(
+      (playlist) => playlist.id === selectedSourcePlaylistId
+    )
+    : null;
+  const destinationPlaylists = destinationPlatform
+    ? getPlatformPlaylists(destinationPlatform.id)
+    : [];
+
+  const startPlaylistTransfer = async () => {
+    if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
+
+    if (!["spotify", "youtube"].includes(destinationPlatform.id)) {
+      setTransferError(text.unsupportedTransfer);
+      return;
+    }
+
+    setTransferLoading(true);
+    setTransferError("");
+    setTransferResult(null);
+
+    const sourceTrackKey = `${sourcePlatform.id}:${selectedSourcePlaylist.id}`;
+
+    try {
+      let tracks = playlistTracks[sourceTrackKey];
+
+      if (!tracks) {
+        const tracksResponse = await axios.get(
+          `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
+          {
+            headers: {
+              Authorization: `Bearer ${getPlatformToken(sourcePlatform.id)}`,
+            },
+          }
+        );
+
+        tracks = tracksResponse.data.tracks;
+        setPlaylistTracks((currentTracks) => ({
+          ...currentTracks,
+          [sourceTrackKey]: tracks,
+        }));
+      }
+
+      const trackLabels = tracks
+        .slice(0, 25)
+        .map((track) => getTrackLabel(sourcePlatform.id, track))
+        .filter(Boolean);
+
+      let targetPlaylistId = destinationPlaylistId;
+
+      if (destinationMode === "new") {
+        const createUrl =
+          destinationPlatform.id === "spotify"
+            ? "http://127.0.0.1:8000/api/spotify/playlists"
+            : "http://127.0.0.1:8000/api/youtube/playlists";
+        const createResponse = await axios.post(
+          createUrl,
+          destinationPlatform.id === "spotify"
+            ? {
+              name:
+                newPlaylistName.trim() ||
+                getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
+            }
+            : {
+              title:
+                newPlaylistName.trim() ||
+                getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
+            },
+          {
+            headers: {
+              Authorization: `Bearer ${getPlatformToken(destinationPlatform.id)}`,
+            },
+          }
+        );
+
+        targetPlaylistId = createResponse.data.playlist.id;
+      }
+
+      if (!targetPlaylistId) {
+        throw new Error(text.destinationPlaylist);
+      }
+
+      const added = [];
+      const failed = [];
+
+      if (destinationPlatform.id === "spotify") {
+        const uris = [];
+
+        for (const label of trackLabels) {
+          try {
+            const searchResponse = await axios.get(
+              "http://127.0.0.1:8000/api/spotify/search",
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+                params: {
+                  q: label,
+                },
+              }
+            );
+
+            if (searchResponse.data.track?.uri) {
+              uris.push(searchResponse.data.track.uri);
+              added.push(label);
+            } else {
+              failed.push(label);
+            }
+          } catch {
+            failed.push(label);
+          }
+        }
+
+        if (uris.length > 0) {
+          await axios.post(
+            `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
+            {
+              uris,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        }
+      }
+
+      if (destinationPlatform.id === "youtube") {
+        for (const label of trackLabels) {
+          try {
+            const searchResponse = await axios.get(
+              "http://127.0.0.1:8000/api/youtube/search",
+              {
+                headers: {
+                  Authorization: `Bearer ${youtubeAccessToken}`,
+                },
+                params: {
+                  q: label,
+                },
+              }
+            );
+            const videoId = searchResponse.data.item?.id?.videoId;
+
+            if (!videoId) {
+              failed.push(label);
+              continue;
+            }
+
+            await axios.post(
+              `http://127.0.0.1:8000/api/youtube/playlists/${targetPlaylistId}/tracks`,
+              {
+                videoId,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${youtubeAccessToken}`,
+                },
+              }
+            );
+            added.push(label);
+          } catch {
+            failed.push(label);
+          }
+        }
+      }
+
+      setTransferResult({
+        added,
+        failed,
+      });
+    } catch (err) {
+      setTransferError(err.response?.data?.message || err.message || text.trackError);
+    } finally {
+      setTransferLoading(false);
+    }
+  };
+
   const renderTrackPanel = (platformId, playlistId) => {
     const trackKey = `${platformId}:${playlistId}`;
     const isExpanded = expandedPlaylists[trackKey];
@@ -809,6 +1061,15 @@ function App() {
       return () => window.clearTimeout(timeout);
     }
   }, [appleMusicUserToken, getApplePlaylists]);
+
+  useEffect(() => {
+    setSelectedSourcePlaylistId("");
+    setDestinationMode("new");
+    setNewPlaylistName("");
+    setDestinationPlaylistId("");
+    setTransferResult(null);
+    setTransferError("");
+  }, [sourcePlatform?.id, destinationPlatform?.id]);
 
   return (
     <main className="app">
@@ -990,31 +1251,133 @@ function App() {
           </div>
         )}
 
-        {selectedPlatforms.length > 0 && (
-          <div className="playlistColumns">
-            {selectedPlatforms.map((platform) => {
-              const details = getPlatformDetails(platform.id);
+        {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
+          <div className="transferFlow">
+            <h2>{text.pickPlaylist}</h2>
 
-              return (
-                <section className="playlistColumn" key={platform.id}>
-                  <div className="playlistColumnHeader">
-                    <h2>{platform.name}</h2>
+            {getPlatformDetails(sourcePlatform.id).error && (
+              <p className="error">{getPlatformDetails(sourcePlatform.id).error}</p>
+            )}
+
+            {getPlatformDetails(sourcePlatform.id).loading && (
+              <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
+            )}
+
+            <div className="sourcePlaylistGrid">
+              {getPlatformPlaylists(sourcePlatform.id).map((playlist) => {
+                const isSelected = selectedSourcePlaylistId === playlist.id;
+
+                return (
+                  <button
+                    className={`sourcePlaylistChoice${isSelected ? " selected" : ""}`}
+                    key={playlist.id}
+                    onClick={() => {
+                      setSelectedSourcePlaylistId(playlist.id);
+                      setTransferResult(null);
+                      setTransferError("");
+                      if (!newPlaylistName) {
+                        setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
+                      }
+                    }}
+                    style={{
+                      "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
+                    }}
+                  >
+                    <img
+                      src={getPlaylistImage(sourcePlatform.id, playlist)}
+                      alt={getPlaylistName(sourcePlatform.id, playlist)}
+                    />
+                    <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
+                    <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
+                  </button>
+                );
+              })}
+            </div>
+
+            {selectedSourcePlaylist && (
+              <div className="transferSetup">
+                <div className="transferModeRow">
+                  <button
+                    className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+                    onClick={() => setDestinationMode("new")}
+                  >
+                    {text.transferToNew}
+                  </button>
+
+                  <button
+                    className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+                    onClick={() => setDestinationMode("existing")}
+                  >
+                    {text.transferToExisting}
+                  </button>
+                </div>
+
+                {destinationMode === "new" ? (
+                  <input
+                    className="playlistNameInput"
+                    value={newPlaylistName}
+                    onChange={(event) => setNewPlaylistName(event.target.value)}
+                    placeholder={text.playlistName}
+                  />
+                ) : (
+                  <select
+                    className="playlistNameInput"
+                    value={destinationPlaylistId}
+                    onChange={(event) => setDestinationPlaylistId(event.target.value)}
+                  >
+                    <option value="">{text.destinationPlaylist}</option>
+                    {destinationPlaylists.map((playlist) => (
+                      <option value={playlist.id} key={playlist.id}>
+                        {getPlaylistName(destinationPlatform.id, playlist)}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                {transferError && (
+                  <p className="error">{transferError}</p>
+                )}
+
+                <button
+                  className="startTransferBtn"
+                  onClick={startPlaylistTransfer}
+                  disabled={
+                    transferLoading ||
+                    (destinationMode === "existing" && !destinationPlaylistId)
+                  }
+                >
+                  {transferLoading ? text.transferLoading : text.startTransfer}
+                </button>
+
+                {transferResult && (
+                  <div className="transferResult">
+                    <h3>{text.transferDone}</h3>
+                    <p className="success">
+                      {transferResult.added.length} {text.addedTracks}
+                    </p>
+                    <p className={transferResult.failed.length ? "error" : "success"}>
+                      {transferResult.failed.length} {text.failedTracks}
+                    </p>
+
+                    {transferResult.added.length > 0 && (
+                      <ol className="trackList">
+                        {transferResult.added.map((track, index) => (
+                          <li key={`added-${track}-${index}`}>{track}</li>
+                        ))}
+                      </ol>
+                    )}
+
+                    {transferResult.failed.length > 0 && (
+                      <ol className="trackList failedList">
+                        {transferResult.failed.map((track, index) => (
+                          <li key={`failed-${track}-${index}`}>{track}</li>
+                        ))}
+                      </ol>
+                    )}
                   </div>
-
-                  {details.error && (
-                    <p className="error">{details.error}</p>
-                  )}
-
-                  {details.loading && (
-                    <p>{text.loadingPlaylists} {platform.name}...</p>
-                  )}
-
-                  <div className="playlistList">
-                    {details.playlists.map(details.renderPlaylist)}
-                  </div>
-                </section>
-              );
-            })}
+                )}
+              </div>
+            )}
           </div>
         )}
           </>

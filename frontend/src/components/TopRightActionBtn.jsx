@@ -31,6 +31,14 @@ function TopRightActionBtn({
   return (
     <>
       <div className="topRightActionBtn">
+
+          <button
+          className="profileBtn"
+          onClick={onOpenProfile}
+        >
+          {profileLabel}
+        </button>
+
         <button
           className="themeBtn"
           onClick={openThemeModal}
@@ -45,12 +53,6 @@ function TopRightActionBtn({
           {language.toUpperCase()}
         </button>
 
-        <button
-          className="profileBtn"
-          onClick={onOpenProfile}
-        >
-          {profileLabel}
-        </button>
       </div>
 
       <ThemeModal
