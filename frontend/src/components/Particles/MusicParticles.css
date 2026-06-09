@@ -1,7 +1,7 @@
 .musicParticles {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 2147483647;
   pointer-events: none;
   overflow: hidden;
 }
@@ -9,11 +9,12 @@
 .musicParticles span {
   position: absolute;
   bottom: -40px;
-  font-size: 24px;
+  font-size: 28px;
   color: var(--accent);
-  opacity: 0.25;
+  opacity: 0.38;
+  font-weight: 900;
   animation: musicFloat linear infinite;
-  text-shadow: 0 0 12px var(--accent);
+  text-shadow: none;
 }
 
 @keyframes musicFloat {
@@ -23,11 +24,15 @@
   }
 
   15% {
-    opacity: 0.25;
+    opacity: 0.42;
+  }
+
+  70% {
+    opacity: 0.34;
   }
 
   100% {
-    transform: translateY(-110vh) rotate(360deg);
+    transform: translateY(-55vh) rotate(260deg);
     opacity: 0;
   }
 }

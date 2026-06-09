@@ -124,7 +124,7 @@ body::after {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 26px 30px 42px;
+  padding: 26px 30px 0;
 
   animation: pageFadeIn 0.45s ease both;
 }
@@ -198,7 +198,6 @@ body::after {
 }
 
 .chooseText,
-.transferProgress,
 .changePlatformBtn,
 .topRightActionBtn,
 .spotifyBtn,
@@ -230,7 +229,8 @@ body::after {
 
 .themeBtn,
 .profileBtn,
-.infoBtn {
+.infoBtn,
+.returnBtn {
   width: auto;
   margin: 0;
   padding: 10px 14px;
@@ -249,6 +249,7 @@ body::after {
 .themeBtn:hover,
 .profileBtn:hover,
 .infoBtn:hover,
+.returnBtn:hover,
 .languageBtn:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
@@ -381,10 +382,9 @@ body::after {
 }
 
 .choosePanel,
-.progressPanel,
-.transferStatusPanel,
 .playlistPickPanel,
 .destinationSetup,
+.emptyPanel,
 .homeInfoBanner {
   border: 1px solid var(--border-color);
   border-radius: 18px;
@@ -402,57 +402,24 @@ body::after {
 }
 
 .choosePanel,
-.progressPanel,
-.transferStatusPanel,
+.emptyPanel,
 .playlistPickPanel {
   padding: 22px;
 }
 
-.progressPanel {
+.emptyPanel {
   height: 100%;
   min-height: 184px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 18px;
+}
+
+.transferWorkspace .emptyPanel {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .choosePanel {
   height: 100%;
   min-height: 184px;
-}
-
-.progressPanelFooter {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.progressPanelFooter p {
-  max-width: 350px;
-  margin: 0;
-  color: color-mix(in srgb, var(--text-color) 86%, transparent) !important;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.35;
-  text-shadow: 0 0 12px rgba(0, 0, 0, 0.34);
-}
-
-.progressPanelFooter .changePlatformBtn {
-  margin: 0;
-  flex-shrink: 0;
-}
-
-.transferStatusPanel {
-  grid-column: 2;
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .transferWorkspace .playlistPickPanel {
@@ -463,16 +430,6 @@ body::after {
 .transferWorkspace .destinationSetup {
   grid-column: 2;
   grid-row: 2;
-}
-
-.transferStatusPanel .transferProgress {
-  width: 100%;
-  margin: 0;
-}
-
-.transferStatusPanel .changePlatformBtn {
-  margin: 0;
-  flex-shrink: 0;
 }
 
 .homeInfoBanner {
@@ -519,128 +476,6 @@ body::after {
   object-fit: cover;
   justify-self: stretch;
   filter: saturate(1.08) contrast(1.04);
-}
-
-.transferProgress {
-  width: 100%;
-  margin: 0 auto;
-
-  display: grid;
-  grid-template-columns: 88px 1fr 88px;
-  align-items: center;
-  gap: 14px;
-
-  animation: riseIn 0.52s ease 0.38s both;
-}
-
-.transferSlot {
-  position: relative;
-  aspect-ratio: 1;
-  overflow: visible;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.2)),
-      rgba(255, 255, 255, 0.16)
-    );
-
-  backdrop-filter: blur(5px) saturate(1.12);
-  -webkit-backdrop-filter: blur(5px) saturate(1.12);
-
-  box-shadow:
-    0 0 26px color-mix(in srgb, var(--accent) 34%, transparent),
-    0 0 42px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
-
-  animation: popIn 0.48s ease 0.5s both;
-}
-
-.transferSlot:nth-child(3) {
-  animation-delay: 0.62s;
-}
-
-.transferArrow {
-  position: relative;
-
-  color: color-mix(in srgb, var(--accent) 70%, white 30%);
-  font-size: 56px;
-  font-weight: 900;
-  line-height: 1;
-  text-shadow: 0 0 16px var(--accent-soft);
-}
-
-.transferArrow::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-
-  width: 320px;
-  height: 320px;
-
-  background-image: url("/SoundSync/arrow-noBg.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  opacity: 1;
-  transform: translate(-50%, -50%);
-
-  z-index: -1;
-  pointer-events: none;
-}
-
-.slotAlert {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #000000;
-  color: white;
-
-  font-size: 19px;
-  font-weight: 900;
-
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 18px rgb(255, 0, 30);
-}
-
-
-
-.spotifyStepLogo,
-.youtubeStepLogo,
-.appleStepLogo {
-  max-width: 70%;
-  max-height: 44px;
-  object-fit: contain;
-
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.14));
-}
-
-.youtubeStepLogo {
-  max-width: 78%;
-}
-
-.appleStepLogo {
-  max-width: 82%;
-  max-height: 46px;
 }
 
 .platformLoginRow {
@@ -1162,57 +997,6 @@ button:hover {
   font-weight: 800;
 }
 
-.transferLiveStatus {
-  margin-top: 18px;
-  padding: 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.18);
-  text-align: left;
-}
-
-.transferProgressHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-weight: 900;
-}
-
-.transferProgressBar {
-  overflow: hidden;
-  height: 10px;
-  margin-top: 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.transferProgressBar span {
-  display: block;
-  height: 100%;
-  min-width: 8%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #10f060, var(--accent));
-  box-shadow: 0 0 18px rgba(16, 240, 96, 0.34);
-  transition: width 0.28s ease;
-}
-
-.transferLiveStatus p {
-  margin: 12px 0 0;
-}
-
-.transferLiveColumns {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.transferLiveColumns h4 {
-  margin: 0 0 8px;
-  font-size: 13px;
-}
-
 .transferResult {
   margin-top: 18px;
   text-align: left;
@@ -1367,26 +1151,12 @@ button:hover {
     gap: 8px;
   }
 
-  .choosePanel,
-  .progressPanel {
+  .choosePanel {
     min-height: 178px;
   }
 
-  .transferProgress {
-    grid-template-columns: 76px 1fr 76px;
-    gap: 10px;
-  }
-
-  .progressPanel {
-    height: auto;
-  }
-
-  .progressPanelFooter {
-    align-items: flex-start;
-  }
-
-  .progressPanelFooter p {
-    max-width: none;
+  .emptyPanel {
+    min-height: 178px;
   }
 
   .homeInfoBannerImages {
@@ -1397,34 +1167,16 @@ button:hover {
     justify-self: stretch;
   }
 
-  .transferArrow {
-    font-size: 42px;
-  }
-
   .destinationSetup {
     position: relative;
     top: auto;
   }
 
-  .transferStatusPanel {
-    align-items: stretch;
-    flex-direction: column;
-    grid-column: auto;
-    grid-row: auto;
-  }
-
   .transferWorkspace .playlistPickPanel,
-  .transferWorkspace .destinationSetup {
+  .transferWorkspace .destinationSetup,
+  .transferWorkspace .emptyPanel {
     grid-column: auto;
     grid-row: auto;
-  }
-
-  .transferStatusPanel .transferProgress {
-    width: 100%;
-  }
-
-  .transferLiveColumns {
-    grid-template-columns: 1fr;
   }
 
   .spotifyBigLogo {

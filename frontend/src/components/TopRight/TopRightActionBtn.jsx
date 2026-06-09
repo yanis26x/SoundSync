@@ -11,6 +11,9 @@ function TopRightActionBtn({
   profileLabel = "Profile",
   onOpenInfo,
   infoLabel = "Info",
+  onReturn,
+  returnLabel = "Return",
+  showReturn = false,
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -33,6 +36,15 @@ function TopRightActionBtn({
   return (
     <>
       <div className="topRightActionBtn">
+
+        {showReturn && (
+          <button
+            className="returnBtn"
+            onClick={onReturn}
+          >
+            {returnLabel}
+          </button>
+        )}
 
         <button
           className="profileBtn"

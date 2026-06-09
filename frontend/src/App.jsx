@@ -4,14 +4,15 @@ import { themes } from "./themes";
 import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
 import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
 import MusicParticles from "./components/Particles/MusicParticles";
+import Footer from "./components/Footer/Footer";
 import "./App.css";
 
 
 const copy = {
   en: {
     subtitle: "Transfer playlists between your favorite platforms.",
-    chooseSource: "Choose a platform 2 start 𖤐 ",
-    chooseDestination: "Where 2 u want to move ur musics 𖤐",
+    chooseSource: "Select a platform source 𖤐 ",
+    chooseDestination: "Select Destination 𖤐",
     connected: "Connected",
     disconnect: "Disconnect",
     tracks: "tracks",
@@ -55,9 +56,6 @@ const copy = {
     alreadyTracks: "tracks already in playlist",
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
     transferLimit: "Current limit: 25 tracks per transfer.",
-    nowTransferring: "Now transferring",
-    preparingTransfer: "Preparing transfer...",
-    transferProgress: "Progress",
     homeBannerTitle: "Run Me Yo Blood",
     homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
   },
@@ -108,9 +106,6 @@ const copy = {
     alreadyTracks: "musiques deja presentes",
     unsupportedTransfer: "Le transfert est dispo pour Spotify et YouTube pour le moment.",
     transferLimit: "Limite actuelle : 25 musiques par transfert.",
-    nowTransferring: "Transfert en cours",
-    preparingTransfer: "Preparation du transfert...",
-    transferProgress: "Progression",
     homeBannerTitle: "Run Me Yo Blood",
     homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
   },
@@ -164,15 +159,6 @@ function App() {
   const [transferLoading, setTransferLoading] = useState(false);
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
-  const [transferProgress, setTransferProgress] = useState({
-    total: 0,
-    done: 0,
-    current: "",
-    added: [],
-    failed: [],
-    already: [],
-  });
-
   const [currentTheme, setCurrentTheme] = useState("tomo");
   const [language, setLanguageState] = useState(
     () => localStorage.getItem("language") || "en"
@@ -192,19 +178,16 @@ function App() {
       id: "spotify",
       name: "Spotify",
       logo: "/logo/mini/spotify-mini.png",
-      logoClassName: "spotifyStepLogo",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
       logo: "/logo/YouTube-Logo.png",
-      logoClassName: "youtubeStepLogo",
     },
     apple: appleMusicUserToken && {
       id: "apple",
       name: "Apple Music",
       logo: "/logo/appleMusic.png",
-      logoClassName: "appleStepLogo",
     },
   };
   const selectedPlatforms = platformOrder
@@ -857,14 +840,6 @@ function App() {
     setTransferLoading(true);
     setTransferError("");
     setTransferResult(null);
-    setTransferProgress({
-      total: 0,
-      done: 0,
-      current: text.preparingTransfer,
-      added: [],
-      failed: [],
-      already: [],
-    });
 
     const sourceTrackKey = `${sourcePlatform.id}:${selectedSourcePlaylist.id}`;
 
@@ -892,14 +867,6 @@ function App() {
         .slice(0, 25)
         .map((track) => getTrackLabel(sourcePlatform.id, track))
         .filter(Boolean);
-      setTransferProgress({
-        total: trackLabels.length,
-        done: 0,
-        current: trackLabels[0] || text.preparingTransfer,
-        added: [],
-        failed: [],
-        already: [],
-      });
 
       let targetPlaylistId = destinationPlaylistId;
 
@@ -967,7 +934,7 @@ function App() {
       const added = [];
       const failed = [];
       const already = [];
-      const pushProgress = (label, status) => {
+      const pushTransferResult = (label, status) => {
         if (status === "added") {
           added.push(label);
         } else if (status === "already") {
@@ -975,26 +942,12 @@ function App() {
         } else {
           failed.push(label);
         }
-
-        setTransferProgress({
-          total: trackLabels.length,
-          done: added.length + failed.length + already.length,
-          current: label,
-          added: [...added],
-          failed: [...failed],
-          already: [...already],
-        });
       };
 
       if (destinationPlatform.id === "spotify") {
         const uris = [];
 
         for (const label of trackLabels) {
-          setTransferProgress((currentProgress) => ({
-            ...currentProgress,
-            current: label,
-          }));
-
           try {
             const searchResponse = await axios.get(
               "http://127.0.0.1:8000/api/spotify/search",
@@ -1010,26 +963,21 @@ function App() {
 
             if (searchResponse.data.track?.uri) {
               if (existingDestinationTrackIds.has(searchResponse.data.track.uri)) {
-                pushProgress(label, "already");
+                pushTransferResult(label, "already");
               } else {
                 uris.push(searchResponse.data.track.uri);
                 existingDestinationTrackIds.add(searchResponse.data.track.uri);
-                pushProgress(label, "added");
+                pushTransferResult(label, "added");
               }
             } else {
-              pushProgress(label, "failed");
+              pushTransferResult(label, "failed");
             }
           } catch {
-            pushProgress(label, "failed");
+            pushTransferResult(label, "failed");
           }
         }
 
         if (uris.length > 0) {
-          setTransferProgress((currentProgress) => ({
-            ...currentProgress,
-            current: `${text.nowTransferring} ${uris.length} ${text.tracks}`,
-          }));
-
           await axios.post(
             `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
             {
@@ -1046,11 +994,6 @@ function App() {
 
       if (destinationPlatform.id === "youtube") {
         for (const label of trackLabels) {
-          setTransferProgress((currentProgress) => ({
-            ...currentProgress,
-            current: label,
-          }));
-
           try {
             const searchResponse = await axios.get(
               "http://127.0.0.1:8000/api/youtube/search",
@@ -1066,12 +1009,12 @@ function App() {
             const videoId = searchResponse.data.item?.id?.videoId;
 
             if (!videoId) {
-              pushProgress(label, "failed");
+              pushTransferResult(label, "failed");
               continue;
             }
 
             if (existingDestinationTrackIds.has(videoId)) {
-              pushProgress(label, "already");
+              pushTransferResult(label, "already");
               continue;
             }
 
@@ -1087,9 +1030,9 @@ function App() {
               }
             );
             existingDestinationTrackIds.add(videoId);
-            pushProgress(label, "added");
+            pushTransferResult(label, "added");
           } catch {
-            pushProgress(label, "failed");
+            pushTransferResult(label, "failed");
           }
         }
       }
@@ -1177,14 +1120,6 @@ function App() {
     setDestinationPlaylistId("");
     setTransferResult(null);
     setTransferError("");
-    setTransferProgress({
-      total: 0,
-      done: 0,
-      current: "",
-      added: [],
-      failed: [],
-      already: [],
-    });
   }, [sourcePlatform?.id, destinationPlatform?.id]);
 
   return (
@@ -1204,6 +1139,9 @@ function App() {
         onOpenInfo={() => {
           window.location.href = "/info";
         }}
+        onReturn={goBackPlatformChoice}
+        returnLabel={text.changePlatform}
+        showReturn={selectedPlatforms.length > 0}
       />
       <section className="card">
         {/* <Parental /> */}
@@ -1316,85 +1254,13 @@ function App() {
                   </div>
                 </section>
 
-                <section className="progressPanel">
-                  <div className="transferProgress">
-                    <div className="transferSlot">
-                      {!sourcePlatform && (
-                        <span className="slotAlert">𖤐</span>
-                      )}
-
-                      {sourcePlatform && (
-                        <img
-                          src={sourcePlatform.logo}
-                          alt={sourcePlatform.name}
-                          className={sourcePlatform.logoClassName}
-                        />
-                      )}
-                    </div>
-
-                    <div className="transferArrow"></div>
-
-                    <div className="transferSlot">
-                      {!destinationPlatform && (
-                        sourcePlatform && <span className="slotAlert">𖤐</span>
-                      )}
-
-                      {destinationPlatform && (
-                        <img
-                          src={destinationPlatform.logo}
-                          alt={destinationPlatform.name}
-                          className={destinationPlatform.logoClassName}
-                        />
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="progressPanelFooter">
-                    <p>{text.disconnectHint}</p>
-
-                    {selectedPlatforms.length > 0 && (
-                      <button
-                        className="changePlatformBtn secondaryBtn"
-                        onClick={goBackPlatformChoice}
-                      >
-                        {text.changePlatform}
-                      </button>
-                    )}
-                  </div>
-                </section>
+                <section className="emptyPanel" aria-hidden="true"></section>
               </div>
             )}
 
             {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
               <div className="transferWorkspace">
-                <section className="transferStatusPanel">
-                  <div className="transferProgress">
-                    <div className="transferSlot">
-                      <img
-                        src={sourcePlatform.logo}
-                        alt={sourcePlatform.name}
-                        className={sourcePlatform.logoClassName}
-                      />
-                    </div>
-
-                    <div className="transferArrow"></div>
-
-                    <div className="transferSlot">
-                      <img
-                        src={destinationPlatform.logo}
-                        alt={destinationPlatform.name}
-                        className={destinationPlatform.logoClassName}
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    className="changePlatformBtn secondaryBtn"
-                    onClick={goBackPlatformChoice}
-                  >
-                    {text.changePlatform}
-                  </button>
-                </section>
+                <section className="emptyPanel" aria-hidden="true"></section>
 
                 <section className="playlistPickPanel">
                   <h2>{text.pickPlaylist}</h2>
@@ -1496,60 +1362,6 @@ function App() {
                 {transferLoading ? text.transferLoading : text.startTransfer}
               </button>
 
-              {transferLoading && (
-                <div className="transferLiveStatus">
-                  <div className="transferProgressHeader">
-                    <span>{text.transferProgress}</span>
-                    <strong>
-                      {transferProgress.done}/{transferProgress.total || 25}
-                    </strong>
-                  </div>
-
-                  <div className="transferProgressBar">
-                    <span
-                      style={{
-                        width: `${transferProgress.total
-                          ? (transferProgress.done / transferProgress.total) * 100
-                          : 8}%`,
-                      }}
-                    />
-                  </div>
-
-                  <p>
-                    {text.nowTransferring}: <strong>{transferProgress.current}</strong>
-                  </p>
-
-                  <div className="transferLiveColumns">
-                    <div>
-                      <h4>{transferProgress.added.length} {text.addedTracks}</h4>
-                      <ol className="trackList">
-                        {transferProgress.added.map((track, index) => (
-                          <li key={`live-added-${track}-${index}`}>{track}</li>
-                        ))}
-                      </ol>
-                    </div>
-
-                    <div>
-                      <h4>{transferProgress.failed.length} {text.failedTracks}</h4>
-                      <ol className="trackList failedList">
-                        {transferProgress.failed.map((track, index) => (
-                          <li key={`live-failed-${track}-${index}`}>{track}</li>
-                        ))}
-                      </ol>
-                    </div>
-
-                    <div>
-                      <h4>{transferProgress.already.length} {text.alreadyTracks}</h4>
-                      <ol className="trackList alreadyList">
-                        {transferProgress.already.map((track, index) => (
-                          <li key={`live-already-${track}-${index}`}>{track}</li>
-                        ))}
-                      </ol>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {transferResult && (
                 <div className="transferResult">
                   <h3>{text.transferDone}</h3>
@@ -1607,6 +1419,7 @@ function App() {
 
 
       </section>
+      <Footer />
     </main>
   );
 }
