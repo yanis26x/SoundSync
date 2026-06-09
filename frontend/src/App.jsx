@@ -32,6 +32,16 @@ const copy = {
     applePlaylistError: "Error while loading Apple Music playlists.",
     appleLoginError: "Unable to connect to Apple Music.",
     trackError: "Unable to load tracks.",
+    profile: "Profile",
+    home: "Home",
+    profileTitle: "Profile",
+    online: "Connected",
+    offline: "Offline",
+    connect: "Connect",
+    switchAccount: "Switch account",
+    removeChoice: "Remove platform choice",
+    changePlatform: "Change platform",
+    logged: "Logged",
   },
   fr: {
     subtitle: "Transfere tes playlists entre tes plateformes preferees",
@@ -56,6 +66,16 @@ const copy = {
     applePlaylistError: "Erreur pendant la recuperation des playlists Apple Music.",
     appleLoginError: "Impossible de se connecter a Apple Music.",
     trackError: "Impossible de recuperer les musiques.",
+    profile: "Profil",
+    home: "Accueil",
+    profileTitle: "Profil",
+    online: "Connecte",
+    offline: "Offline",
+    connect: "Se connecter",
+    switchAccount: "Changer de compte",
+    removeChoice: "Retirer le choix de plateforme",
+    changePlatform: "Changer de plateforme",
+    logged: "Logged",
   },
 };
 
@@ -99,6 +119,7 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState({});
   const [trackLoading, setTrackLoading] = useState({});
   const [trackErrors, setTrackErrors] = useState({});
+  const [currentPage, setCurrentPage] = useState("home");
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
   const [language, setLanguageState] = useState(
@@ -134,16 +155,11 @@ function App() {
       logoClassName: "appleStepLogo",
     },
   };
-  const connectedPlatforms = [
-    ...platformOrder
-      .map((platformId) => platformData[platformId])
-      .filter(Boolean),
-    ...Object.values(platformData).filter(
-      (platform) => platform && !platformOrder.includes(platform.id)
-    ),
-  ];
-  const sourcePlatform = connectedPlatforms[0];
-  const destinationPlatform = connectedPlatforms[1];
+  const selectedPlatforms = platformOrder
+    .map((platformId) => platformData[platformId])
+    .filter(Boolean);
+  const sourcePlatform = selectedPlatforms[0];
+  const destinationPlatform = selectedPlatforms[1];
   const chooseText = sourcePlatform
     ? text.chooseDestination
     : text.chooseSource;
@@ -160,6 +176,15 @@ function App() {
       }
 
       const nextOrder = [...currentOrder, platformId];
+      localStorage.setItem("platform_order", JSON.stringify(nextOrder));
+
+      return nextOrder;
+    });
+  };
+
+  const goBackPlatformChoice = () => {
+    setPlatformOrder((currentOrder) => {
+      const nextOrder = currentOrder.slice(0, -1);
       localStorage.setItem("platform_order", JSON.stringify(nextOrder));
 
       return nextOrder;
@@ -516,6 +541,45 @@ function App() {
     }
   };
 
+  const accountPlatforms = [
+    {
+      id: "spotify",
+      name: "Spotify",
+      logo: "/logo/mini/spotify-mini.png",
+      isConnected: Boolean(accessToken),
+      login: loginSpotify,
+      switchAccount: () => {
+        logoutSpotify();
+        loginSpotify();
+      },
+      logout: logoutSpotify,
+    },
+    {
+      id: "youtube",
+      name: "YouTube",
+      logo: "/logo/mini/youtube-mini.png",
+      isConnected: Boolean(youtubeAccessToken),
+      login: loginYoutube,
+      switchAccount: () => {
+        logoutYoutube();
+        loginYoutube();
+      },
+      logout: logoutYoutube,
+    },
+    {
+      id: "apple",
+      name: "Apple Music",
+      logo: "/logo/appleMusic.png",
+      isConnected: Boolean(appleMusicUserToken),
+      login: loginAppleMusic,
+      switchAccount: async () => {
+        await logoutAppleMusic();
+        loginAppleMusic();
+      },
+      logout: logoutAppleMusic,
+    },
+  ];
+
   const getPlaylists = useCallback(async () => {
     setError("");
     setLoading(true);
@@ -756,6 +820,10 @@ function App() {
         setCurrentTheme={setCurrentTheme}
         language={language}
         setLanguage={setLanguage}
+        onOpenProfile={() =>
+          setCurrentPage((page) => (page === "profile" ? "home" : "profile"))
+        }
+        profileLabel={currentPage === "profile" ? text.home : text.profile}
       />
       <section className="card">
         {/* <Parental /> */}
@@ -770,6 +838,56 @@ function App() {
         <p className="subtitle">
           {text.subtitle}
         </p>
+
+        {currentPage === "profile" && (
+          <div className="profilePage">
+            <h2>{text.profileTitle}</h2>
+
+            <div className="profileAccountList">
+              {accountPlatforms.map((platform) => (
+                <article className="profileAccountCard" key={platform.id}>
+                  <div className="profileAccountMain">
+                    <img src={platform.logo} alt={platform.name} />
+
+                    <div>
+                      <h3>{platform.name}</h3>
+                      <p className={platform.isConnected ? "success" : "offlineText"}>
+                        {platform.isConnected ? text.online : text.offline}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="profileAccountActions">
+                    {platform.isConnected ? (
+                      <>
+                        <button
+                          className="secondaryBtn"
+                          onClick={platform.switchAccount}
+                        >
+                          {text.switchAccount}
+                        </button>
+
+                        <button
+                          className="dangerBtn"
+                          onClick={platform.logout}
+                        >
+                          {text.disconnect}
+                        </button>
+                      </>
+                    ) : (
+                      <button onClick={platform.login}>
+                        {text.connect}
+                      </button>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {currentPage === "home" && (
+          <>
 
         <div className="transferProgress">
           <div className="transferSlot">
@@ -809,14 +927,27 @@ function App() {
           </div>
         </div>
 
+        {selectedPlatforms.length > 0 && (
+          <button
+            className="changePlatformBtn secondaryBtn"
+            onClick={goBackPlatformChoice}
+          >
+            {text.changePlatform}
+          </button>
+        )}
+
         {(!sourcePlatform || !destinationPlatform) && (
           <p className="chooseText">{chooseText}</p>
         )}
 
-        {(!accessToken || !youtubeAccessToken || !appleMusicUserToken) && (
+        {selectedPlatforms.length < 2 && (
           <div className="platformLoginRow">
-            {!accessToken && (
-              <button className="spotifyBtn" onClick={loginSpotify}>
+            {!platformOrder.includes("spotify") && (
+              <button
+                className="spotifyBtn platformChoiceBtn"
+                onClick={accessToken ? () => addPlatformToOrder("spotify") : loginSpotify}
+              >
+                {accessToken && <span className="loggedBadge">{text.logged}</span>}
                 <img
                   src="/logo/Spotify-Black-Logo.png"
                   alt="Spotify"
@@ -825,8 +956,12 @@ function App() {
               </button>
             )}
 
-            {!youtubeAccessToken && (
-              <button className="youtubeBtn" onClick={loginYoutube}>
+            {!platformOrder.includes("youtube") && (
+              <button
+                className="youtubeBtn platformChoiceBtn"
+                onClick={youtubeAccessToken ? () => addPlatformToOrder("youtube") : loginYoutube}
+              >
+                {youtubeAccessToken && <span className="loggedBadge">{text.logged}</span>}
                 <img
                   src="/logo/YouTube-Logo.png"
                   alt="YouTube"
@@ -835,8 +970,12 @@ function App() {
               </button>
             )}
 
-            {!appleMusicUserToken && (
-              <button className="appleBtn" onClick={loginAppleMusic}>
+            {!platformOrder.includes("apple") && (
+              <button
+                className="appleBtn platformChoiceBtn"
+                onClick={appleMusicUserToken ? () => addPlatformToOrder("apple") : loginAppleMusic}
+              >
+                {appleMusicUserToken && <span className="loggedBadge">{text.logged}</span>}
                 <img
                   src="/logo/appleMusic.png"
                   alt="Apple Music"
@@ -851,24 +990,15 @@ function App() {
           </div>
         )}
 
-        {connectedPlatforms.length > 0 && (
+        {selectedPlatforms.length > 0 && (
           <div className="playlistColumns">
-            {connectedPlatforms.map((platform) => {
+            {selectedPlatforms.map((platform) => {
               const details = getPlatformDetails(platform.id);
 
               return (
                 <section className="playlistColumn" key={platform.id}>
                   <div className="playlistColumnHeader">
                     <h2>{platform.name}</h2>
-
-                    <button
-                      className="dangerBtn"
-                      onClick={details.logout}
-                      aria-label={details.logoutLabel}
-                      title={details.logoutLabel}
-                    >
-                      ⏻
-                    </button>
                   </div>
 
                   {details.error && (
@@ -886,6 +1016,8 @@ function App() {
               );
             })}
           </div>
+        )}
+          </>
         )}
       </section>
 

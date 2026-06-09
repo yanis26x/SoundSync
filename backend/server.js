@@ -68,6 +68,7 @@ app.get("/api/apple/playlists", async (req, res) => {
 
   try {
     const developerToken = generateAppleDeveloperToken();
+
     const response = await axios.get(
       "https://api.music.apple.com/v1/me/library/playlists",
       {
@@ -80,50 +81,10 @@ app.get("/api/apple/playlists", async (req, res) => {
         },
       }
     );
-    const playlists = await Promise.all(
-      response.data.data.map(async (playlist) => {
-        try {
-          const tracksResponse = await axios.get(
-            `https://api.music.apple.com/v1/me/library/playlists/${playlist.id}/tracks`,
-            {
-              headers: {
-                Authorization: `Bearer ${developerToken}`,
-                "Music-User-Token": musicUserToken,
-              },
-              params: {
-                limit: 100,
-              },
-            }
-          );
-          const tracks = tracksResponse.data.data || [];
-
-          return {
-            ...playlist,
-            attributes: {
-              ...playlist.attributes,
-              trackCount: tracks.length,
-            },
-            relationships: {
-              ...playlist.relationships,
-              tracks: {
-                data: tracks,
-              },
-            },
-          };
-        } catch (trackError) {
-          console.error(
-            "Erreur count playlist Apple Music :",
-            trackError.response?.data || trackError.message
-          );
-
-          return playlist;
-        }
-      })
-    );
 
     res.json({
       success: true,
-      playlists,
+      playlists: response.data.data,
     });
   } catch (error) {
     console.error("Erreur playlists Apple Music :", error.response?.data || error.message);
@@ -151,6 +112,7 @@ app.get("/api/apple/playlists/:playlistId/tracks", async (req, res) => {
 
   try {
     const developerToken = generateAppleDeveloperToken();
+
     const response = await axios.get(
       `https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`,
       {
@@ -228,9 +190,9 @@ app.get("/auth/spotify/callback", async (req, res) => {
         headers: {
           Authorization:
             "Basic " +
-            Buffer.from(
-              `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
-            ).toString("base64"),
+            Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString(
+              "base64"
+            ),
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
@@ -387,6 +349,64 @@ app.get("/api/youtube/playlists", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Impossible de récupérer les playlists YouTube.",
+    });
+  }
+});
+
+app.post("/api/youtube/playlists", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { title, description, privacyStatus } = req.body;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token YouTube manquant.",
+    });
+  }
+
+  if (!title) {
+    return res.status(400).json({
+      success: false,
+      message: "Titre de playlist requis.",
+    });
+  }
+
+  try {
+    const response = await axios.post(
+      "https://www.googleapis.com/youtube/v3/playlists",
+      {
+        snippet: {
+          title,
+          description: description || "Playlist créée avec SoundSync.",
+        },
+        status: {
+          privacyStatus: privacyStatus || "private",
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        params: {
+          part: "snippet,status",
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Playlist YouTube créée avec succès.",
+      playlist: response.data,
+    });
+  } catch (error) {
+    console.error("Erreur création playlist YouTube :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.response?.data?.error?.message ||
+        "Impossible de créer la playlist YouTube.",
     });
   }
 });

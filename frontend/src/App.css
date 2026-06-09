@@ -175,6 +175,7 @@ body::after {
 
 .chooseText,
 .transferProgress,
+.changePlatformBtn,
 .topRightActionBtn,
 .spotifyBtn,
 .youtubeBtn,
@@ -227,7 +228,8 @@ body::after {
 
 }
 
-.themeBtn {
+.themeBtn,
+.profileBtn {
   width: auto;
   margin: 0;
   padding: 10px 14px;
@@ -264,6 +266,81 @@ body::after {
   font-size: 13px;
   font-weight: 900;
   cursor: pointer;
+}
+
+.profilePage {
+  position: relative;
+  z-index: 5;
+  width: min(820px, 100%);
+  margin: 34px auto 0;
+  text-align: left;
+  animation: riseIn 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.profilePage h2 {
+  margin: 0 0 18px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.profileAccountList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profileAccountCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.profileAccountMain {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.profileAccountMain img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.profileAccountMain h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.profileAccountMain p {
+  margin: 0;
+}
+
+.profileAccountActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profileAccountActions button {
+  width: auto;
+  margin: 0;
+  padding: 10px 14px;
+}
+
+.offlineText {
+  color: rgba(255, 255, 255, 0.62) !important;
+  font-weight: 700;
 }
 
 
@@ -467,6 +544,7 @@ body::after {
 .youtubeBtn,
 .appleBtn,
 .unavailablePlatformBtn {
+  position: relative;
   width: 230px;
   height: 72px;
   margin: 0;
@@ -497,6 +575,26 @@ body::after {
     background 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
+}
+
+.platformChoiceBtn {
+  overflow: visible;
+}
+
+.loggedBadge {
+  position: absolute;
+  top: -11px;
+  right: -9px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  background: #10f060;
+  color: #06240f;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 0 16px rgba(16, 240, 96, 0.58);
 }
 
 .spotifyBtn:hover {
@@ -661,6 +759,14 @@ button:hover {
 .secondaryBtn:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: var(--border-color);
+}
+
+.changePlatformBtn {
+  width: auto;
+  margin: 12px auto 0;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
 }
 
 .dangerBtn {
