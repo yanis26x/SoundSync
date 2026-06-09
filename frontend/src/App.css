@@ -201,10 +201,18 @@ body::after {
 }
 
 .chooseText {
-  margin: 18px 0 12px;
-  color: color-mix(in srgb, var(--accent) 55%, white 45%) !important;
-  font-size: 20px;
-  font-weight: 800;
+  width: fit-content;
+  max-width: 100%;
+  margin: 18px auto 12px;
+  padding: 0;
+
+  color: color-mix(in srgb, var(--accent) 35%, white 65%) !important;
+
+  font-size: 21px;
+  font-weight: 900;
+  text-shadow:
+    0 0 10px var(--accent),
+    0 0 24px var(--accent-soft);
 
 }
 

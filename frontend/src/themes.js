@@ -1,7 +1,7 @@
 export const themes = {
   tomo: {
     name: "Tomo",
-    description: "Warm orange glow with a soft anime wallpaper.",
+    description: "Two girls looking at each other and smiling.",
     background: "/wallpaper/tomo_yoko03.jpg",
     cardBg: "rgba(182, 150, 125, 0.27)",
     border: "rgba(255, 210, 150, 0.38)",
@@ -12,7 +12,7 @@ export const themes = {
 
   ichigo: {
     name: "Ichigo",
-    description: "Deep contrast with sharp red highlights.",
+    description: "5 classmates having fun at school!!",
     background: "/wallpaper/ichigo50.jpg",
     cardBg: "rgba(20, 20, 20, 0.42)",
     border: "rgba(255, 255, 255, 0.2)",
@@ -23,7 +23,7 @@ export const themes = {
 
   sora: {
     name: "Sora",
-    description: "Cool blue music mood with a cinematic cover.",
+    description: "Sora from Kingdom Hearts feeling the music flowing through his body.",
     background: "/soraMusic.jpg",
     cardBg: "rgba(18, 28, 45, 0.34)",
     border: "rgba(185, 220, 255, 0.32)",
