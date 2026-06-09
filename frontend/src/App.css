@@ -297,10 +297,7 @@ body::after {
   max-height: 44px;
   object-fit: contain;
 
-  filter:
-    brightness(0)
-    invert(1)
-    drop-shadow(0 0 8px rgba(255, 255, 255, 0.14));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.14));
 }
 
 .youtubeStepLogo {
@@ -378,10 +375,7 @@ body::after {
   height: auto;
   object-fit: contain;
 
-  filter:
-    brightness(0)
-    invert(1)
-    drop-shadow(0 0 8px rgba(255, 255, 255, 0.16));
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.16));
 
   transition: transform 0.25s ease;
 }

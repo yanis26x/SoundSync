@@ -1,7 +1,7 @@
 # TODO - SoundSync 𖤐
 
 - [ ] Changer l’image de fond des cards playlist pour une image moins floue.
-- [ ] Arranger le logo YouTube pour qu’on voie bien le triangle.
+- [ ] aggrandire mini logo de Youtube
 - [ ] Grossir la flèche.
 - [ ] Changer la couleur d’accent pour une couleur plus vive :
   - `.chooseText`

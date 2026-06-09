@@ -98,13 +98,13 @@ function App() {
     spotify: accessToken && {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/Spotify-Black-Logo.png",
+      logo: "/logo/mini/spotify-mini.png",
       logoClassName: "spotifyStepLogo",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/YouTube-Logo.png",
+      logo: "/logo/mini/youtube-mini.png",
       logoClassName: "youtubeStepLogo",
     },
   };
