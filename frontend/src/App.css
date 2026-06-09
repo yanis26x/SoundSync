@@ -317,11 +317,34 @@ body::after {
 }
 
 .transferArrow {
+  position: relative;
+
   color: color-mix(in srgb, var(--accent) 70%, white 30%);
   font-size: 56px;
   font-weight: 900;
   line-height: 1;
   text-shadow: 0 0 16px var(--accent-soft);
+}
+
+.transferArrow::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 320px;
+  height: 320px;
+
+  background-image: url("/SoundSyncLogoNoBG.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 1;
+  transform: translate(-50%, -50%);
+
+  z-index: -1;
+  pointer-events: none;
 }
 
 .slotAlert {

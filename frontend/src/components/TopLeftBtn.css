@@ -1,0 +1,128 @@
+.topLeftBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+
+  z-index: 9999;
+
+  min-width: 220px;
+  height: 64px;
+  padding: 8px 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  text-decoration: none;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 0 18px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  animation:
+    slideLeftIn 0.46s ease 0.18s both,
+    topLeftSwap 5s ease-in-out infinite;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.topLeftBtn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow:
+    0 0 24px var(--accent-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.topLeftProfileImg {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.topLeftProfileText {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.topLeftProfileText strong {
+  font-size: 16px;
+}
+
+.topLeftProfileText span {
+  color: color-mix(in srgb, var(--text-color) 74%, transparent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.topLeftLogoImg {
+  width: 170px;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+.topLeftStatement {
+  max-width: 220px;
+
+  color: color-mix(in srgb, var(--accent) 35%, white 65%);
+  font-size: 17px;
+  font-weight: 900;
+  text-align: center;
+  text-shadow:
+    0 0 10px var(--accent),
+    0 0 24px var(--accent-soft);
+}
+
+@keyframes slideLeftIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes topLeftSwap {
+  0%,
+  88% {
+    opacity: 1;
+  }
+
+  94% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 650px) {
+  .topLeftBtn {
+    left: 12px;
+    right: 12px;
+    top: 76px;
+
+    min-width: 0;
+    width: auto;
+  }
+}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
 import TopRightActionBtn from "./components/TopRightActionBtn";
+import TopLeftBtn from "./components/TopLeftBtn";
 import Parental from "./components/Parental";
 import MusicParticles from "./components/Particles/MusicParticles";
 import "./App.css";
@@ -528,6 +529,7 @@ function App() {
   return (
     <main className="app">
       <MusicParticles />
+      <TopLeftBtn />
       <TopRightActionBtn
         themes={themes}
         currentTheme={currentTheme}
