@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ThemeModal from "./ThemeModal";
+import ThemeModal from "../ThemeModal/ThemeModal";
 
 function TopRightActionBtn({
   themes,

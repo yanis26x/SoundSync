@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
-import TopRightActionBtn from "./components/TopRightActionBtn";
-import TopLeftBtn from "./components/TopLeftBtn";
+import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
+import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
 import MusicParticles from "./components/Particles/MusicParticles";
 import WhySoundSync from "./components/WhySoundSync";
 import "./App.css";
@@ -39,9 +39,9 @@ const copy = {
     connect: "Connect",
     switchAccount: "Switch account",
     removeChoice: "Remove platform choice",
-    changePlatform: "Change platform",
+    changePlatform: "Return",
     logged: "Logged",
-    pickPlaylist: "Choose one playlist to transfer",
+    pickPlaylist: "Select a playlist to sync",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
     playlistName: "Playlist name",
@@ -89,9 +89,9 @@ const copy = {
     connect: "Se connecter",
     switchAccount: "Changer de compte",
     removeChoice: "Retirer le choix de plateforme",
-    changePlatform: "Changer de plateforme",
+    changePlatform: "Retour",
     logged: "Logged",
-    pickPlaylist: "Choisis une playlist a transferer",
+    pickPlaylist: "Choisissez une liste de lecture à synchroniser",
     transferToNew: "Transferer dans une nouvelle playlist",
     transferToExisting: "Ajouter a une playlist existante",
     playlistName: "Nom de la playlist",
@@ -191,7 +191,7 @@ function App() {
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/youtube-mini.png",
+      logo: "/logo/YouTube-Logo.png",
       logoClassName: "youtubeStepLogo",
     },
     apple: appleMusicUserToken && {
@@ -603,7 +603,7 @@ function App() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/youtube-mini.png",
+      logo: "/logo/YouTube-Logo.png",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -1205,10 +1205,6 @@ function App() {
       />
       <section className="card">
         {/* <Parental /> */}
-        <div className="heroTopLogo" aria-hidden="true">
-          <img src="/SoundSyncLogoNoBG.png" alt="" />
-        </div>
-
         <div className="brand">
           <h1>SoundSync</h1>
         </div>
@@ -1275,7 +1271,7 @@ function App() {
 
             {sourcePlatform && (
               <>
-                <span className="connectedBadge">{text.connected}</span>
+          
                 <img
                   src={sourcePlatform.logo}
                   alt={sourcePlatform.name}
@@ -1294,7 +1290,7 @@ function App() {
 
             {destinationPlatform && (
               <>
-                <span className="connectedBadge">{text.connected}</span>
+
                 <img
                   src={destinationPlatform.logo}
                   alt={destinationPlatform.name}
@@ -1566,6 +1562,10 @@ function App() {
         )}
           </>
         )}
+
+        <div className="heroTopLogo" aria-hidden="true">
+          <img src="/SoundSyncLogoNoBG.png" alt="" />
+        </div>
       </section>
 
       {/* <WhySoundSync /> */}

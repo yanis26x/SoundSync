@@ -16,9 +16,9 @@
   color: var(--text-color);
   text-decoration: none;
 
-  animation: slideLeftIn 0.46s ease 0.18s both;
-
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
 }
 
 .topLeftBtn::before {
@@ -39,6 +39,14 @@
 
 .topLeftBtn:hover {
   transform: translateY(-2px);
+}
+
+.topLeftBtn.entering {
+  animation: messageFadeIn 0.45s ease both;
+}
+
+.topLeftBtn.leaving {
+  animation: messageRunLeft 0.45s ease both;
 }
 
 .profileWrapper {
@@ -113,15 +121,27 @@
   }
 }
 
-@keyframes slideLeftIn {
+@keyframes messageFadeIn {
   from {
     opacity: 0;
-    transform: translateX(-16px);
+    transform: translateX(18px) scale(0.96);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes messageRunLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-140px) scale(0.92) rotate(-4deg);
   }
 }
 
