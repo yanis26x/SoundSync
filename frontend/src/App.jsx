@@ -115,7 +115,9 @@ function App() {
   const [initialConnection] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const spotifyTokenFromUrl = params.get("spotify_access_token");
+    const spotifyRefreshTokenFromUrl = params.get("spotify_refresh_token");
     const youtubeTokenFromUrl = params.get("youtube_access_token");
+    const youtubeRefreshTokenFromUrl = params.get("youtube_refresh_token");
     const savedSpotifyToken = localStorage.getItem("spotify_access_token");
     const savedYoutubeToken = localStorage.getItem("youtube_access_token");
     const savedAppleMusicUserToken = localStorage.getItem("apple_music_user_token");
@@ -125,7 +127,9 @@ function App() {
       youtubeToken: youtubeTokenFromUrl || savedYoutubeToken || "",
       appleMusicUserToken: savedAppleMusicUserToken || "",
       spotifyTokenFromUrl,
+      spotifyRefreshTokenFromUrl,
       youtubeTokenFromUrl,
+      youtubeRefreshTokenFromUrl,
       savedSpotifyToken,
       savedYoutubeToken,
       savedAppleMusicUserToken,
@@ -393,10 +397,26 @@ function App() {
       shouldCleanUrl = true;
     }
 
+    if (initialConnection.spotifyRefreshTokenFromUrl) {
+      localStorage.setItem(
+        "spotify_refresh_token",
+        initialConnection.spotifyRefreshTokenFromUrl
+      );
+      shouldCleanUrl = true;
+    }
+
     if (initialConnection.youtubeTokenFromUrl) {
       localStorage.setItem(
         "youtube_access_token",
         initialConnection.youtubeTokenFromUrl
+      );
+      shouldCleanUrl = true;
+    }
+
+    if (initialConnection.youtubeRefreshTokenFromUrl) {
+      localStorage.setItem(
+        "youtube_refresh_token",
+        initialConnection.youtubeRefreshTokenFromUrl
       );
       shouldCleanUrl = true;
     }
@@ -508,6 +528,7 @@ function App() {
 
   const logoutSpotify = () => {
     localStorage.removeItem("spotify_access_token");
+    localStorage.removeItem("spotify_refresh_token");
     setAccessToken("");
     setPlaylists([]);
     setPlatformOrder((currentOrder) => {
@@ -520,6 +541,7 @@ function App() {
 
   const logoutYoutube = () => {
     localStorage.removeItem("youtube_access_token");
+    localStorage.removeItem("youtube_refresh_token");
     setYoutubeAccessToken("");
     setYoutubePlaylists([]);
     setPlatformOrder((currentOrder) => {
@@ -613,14 +635,10 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/spotify/playlists",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await authorizedRequest("spotify", {
+        method: "get",
+        url: "http://127.0.0.1:8000/api/spotify/playlists",
+      });
 
       setPlaylists(response.data.playlists);
     } catch (err) {
@@ -638,14 +656,10 @@ function App() {
     setYoutubeLoading(true);
 
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/youtube/playlists",
-        {
-          headers: {
-            Authorization: `Bearer ${youtubeAccessToken}`,
-          },
-        }
-      );
+      const response = await authorizedRequest("youtube", {
+        method: "get",
+        url: "http://127.0.0.1:8000/api/youtube/playlists",
+      });
 
       setYoutubePlaylists(response.data.playlists);
     } catch (err) {
@@ -686,13 +700,6 @@ function App() {
   const getPlaylistTracks = useCallback(
     async (platformId, playlistId) => {
       const trackKey = `${platformId}:${playlistId}`;
-      const token =
-        platformId === "spotify"
-          ? accessToken
-          : platformId === "youtube"
-            ? youtubeAccessToken
-            : appleMusicUserToken;
-
       setTrackErrors((currentErrors) => ({
         ...currentErrors,
         [trackKey]: "",
@@ -703,14 +710,10 @@ function App() {
       }));
 
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/${platformId}/playlists/${playlistId}/tracks`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await authorizedRequest(platformId, {
+          method: "get",
+          url: `http://127.0.0.1:8000/api/${platformId}/playlists/${playlistId}/tracks`,
+        });
 
         setPlaylistTracks((currentTracks) => ({
           ...currentTracks,
@@ -774,11 +777,138 @@ function App() {
     return item.snippet?.title || text.unknownTitle;
   };
 
+  const normalizeTrackText = (value) =>
+    (value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\([^)]*(official|video|audio|lyrics?|visualizer|clip)[^)]*\)/gi, " ")
+      .replace(/\[[^\]]*(official|video|audio|lyrics?|visualizer|clip)[^\]]*\]/gi, " ")
+      .replace(/\b(official|music|video|audio|lyrics?|visualizer|clip|hd|hq|4k)\b/gi, " ")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+
+  const parseTrackLabel = (label) => {
+    const cleanedLabel = label
+      .replace(/\([^)]*(official|video|audio|lyrics?|visualizer|clip)[^)]*\)/gi, " ")
+      .replace(/\[[^\]]*(official|video|audio|lyrics?|visualizer|clip)[^\]]*\]/gi, " ")
+      .trim();
+    const parts = cleanedLabel.split(/\s+-\s+|\s+–\s+|\s+—\s+/);
+
+    if (parts.length >= 2) {
+      return {
+        artist: parts[0].trim(),
+        title: parts.slice(1).join(" ").trim(),
+      };
+    }
+
+    return {
+      artist: "",
+      title: cleanedLabel,
+    };
+  };
+
+  const getAppleSongMatch = (label, songs) => {
+    const parsed = parseTrackLabel(label);
+    const wantedTitle = normalizeTrackText(parsed.title);
+    const wantedArtist = normalizeTrackText(parsed.artist);
+
+    if (!wantedTitle) return null;
+
+    const scoredSongs = songs.map((song) => {
+      const songTitle = normalizeTrackText(song.attributes?.name);
+      const songArtist = normalizeTrackText(song.attributes?.artistName);
+      let score = 0;
+
+      if (songTitle === wantedTitle) score += 6;
+      if (songTitle.includes(wantedTitle) || wantedTitle.includes(songTitle)) score += 3;
+      if (wantedArtist && songArtist.includes(wantedArtist)) score += 4;
+
+      return { song, score };
+    });
+
+    const bestMatch = scoredSongs.sort((a, b) => b.score - a.score)[0];
+
+    return bestMatch?.score >= (wantedArtist ? 7 : 6) ? bestMatch.song : null;
+  };
+
   const getPlatformToken = (platformId) => {
     if (platformId === "spotify") return accessToken;
     if (platformId === "youtube") return youtubeAccessToken;
     return appleMusicUserToken;
   };
+
+  const setPlatformToken = useCallback((platformId, nextToken) => {
+    if (platformId === "spotify") {
+      localStorage.setItem("spotify_access_token", nextToken);
+      setAccessToken(nextToken);
+      return;
+    }
+
+    if (platformId === "youtube") {
+      localStorage.setItem("youtube_access_token", nextToken);
+      setYoutubeAccessToken(nextToken);
+    }
+  }, []);
+
+  const refreshPlatformToken = useCallback(async (platformId) => {
+    if (!["spotify", "youtube"].includes(platformId)) {
+      throw new Error("Refresh non disponible pour cette plateforme.");
+    }
+
+    const refreshTokenKey =
+      platformId === "spotify" ? "spotify_refresh_token" : "youtube_refresh_token";
+    const refreshToken = localStorage.getItem(refreshTokenKey);
+
+    if (!refreshToken) {
+      throw new Error("Refresh token manquant. Reconnecte le compte.");
+    }
+
+    const refreshUrl =
+      platformId === "spotify"
+        ? "http://127.0.0.1:8000/auth/spotify/refresh"
+        : "http://127.0.0.1:8000/auth/google/refresh";
+
+    const response = await axios.post(refreshUrl, { refreshToken });
+    const nextToken = response.data.access_token;
+
+    if (!nextToken) {
+      throw new Error("Nouveau token manquant.");
+    }
+
+    setPlatformToken(platformId, nextToken);
+
+    if (response.data.refresh_token) {
+      localStorage.setItem(refreshTokenKey, response.data.refresh_token);
+    }
+
+    return nextToken;
+  }, [setPlatformToken]);
+
+  const authorizedRequest = useCallback(
+    async (platformId, config) => {
+      const runRequest = (token) =>
+        axios({
+          ...config,
+          headers: {
+            ...(config.headers || {}),
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+      try {
+        return await runRequest(getPlatformToken(platformId));
+      } catch (err) {
+        if (err.response?.status !== 401 || !["spotify", "youtube"].includes(platformId)) {
+          throw err;
+        }
+
+        const nextToken = await refreshPlatformToken(platformId);
+        return runRequest(nextToken);
+      }
+    },
+    [accessToken, appleMusicUserToken, refreshPlatformToken, youtubeAccessToken]
+  );
 
   const getPlatformPlaylists = (platformId) => {
     if (platformId === "spotify") return playlists;
@@ -832,10 +962,12 @@ function App() {
   const startPlaylistTransfer = async () => {
     if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
 
-    if (!["spotify", "youtube"].includes(destinationPlatform.id)) {
-      setTransferError(text.unsupportedTransfer);
-      return;
-    }
+if (
+  !["spotify", "youtube", "apple"].includes(destinationPlatform.id)
+) {
+  setTransferError(text.unsupportedTransfer);
+  return;
+}
 
     setTransferLoading(true);
     setTransferError("");
@@ -847,14 +979,10 @@ function App() {
       let tracks = playlistTracks[sourceTrackKey];
 
       if (!tracks) {
-        const tracksResponse = await axios.get(
-          `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
-          {
-            headers: {
-              Authorization: `Bearer ${getPlatformToken(sourcePlatform.id)}`,
-            },
-          }
-        );
+        const tracksResponse = await authorizedRequest(sourcePlatform.id, {
+          method: "get",
+          url: `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
+        });
 
         tracks = tracksResponse.data.tracks;
         setPlaylistTracks((currentTracks) => ({
@@ -871,29 +999,22 @@ function App() {
       let targetPlaylistId = destinationPlaylistId;
 
       if (destinationMode === "new") {
-        const createUrl =
-          destinationPlatform.id === "spotify"
-            ? "http://127.0.0.1:8000/api/spotify/playlists"
-            : "http://127.0.0.1:8000/api/youtube/playlists";
-        const createResponse = await axios.post(
-          createUrl,
-          destinationPlatform.id === "spotify"
-            ? {
-              name:
-                newPlaylistName.trim() ||
-                getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
-            }
-            : {
-              title:
-                newPlaylistName.trim() ||
-                getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
-            },
-          {
-            headers: {
-              Authorization: `Bearer ${getPlatformToken(destinationPlatform.id)}`,
-            },
-          }
-        );
+        const createUrl = `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists`;
+        const playlistTitle =
+          newPlaylistName.trim() ||
+          getPlaylistName(sourcePlatform.id, selectedSourcePlaylist);
+        const createResponse = await authorizedRequest(destinationPlatform.id, {
+          method: "post",
+          url: createUrl,
+          data:
+            destinationPlatform.id === "youtube"
+              ? {
+                title: playlistTitle,
+              }
+              : {
+                name: playlistTitle,
+              },
+        });
 
         targetPlaylistId = createResponse.data.playlist.id;
       }
@@ -905,14 +1026,10 @@ function App() {
       let existingDestinationTrackIds = new Set();
 
       if (destinationMode === "existing") {
-        const destinationTrackResponse = await axios.get(
-          `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists/${targetPlaylistId}/tracks`,
-          {
-            headers: {
-              Authorization: `Bearer ${getPlatformToken(destinationPlatform.id)}`,
-            },
-          }
-        );
+        const destinationTrackResponse = await authorizedRequest(destinationPlatform.id, {
+          method: "get",
+          url: `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists/${targetPlaylistId}/tracks`,
+        });
 
         existingDestinationTrackIds = new Set(
           destinationTrackResponse.data.tracks
@@ -949,17 +1066,13 @@ function App() {
 
         for (const label of trackLabels) {
           try {
-            const searchResponse = await axios.get(
-              "http://127.0.0.1:8000/api/spotify/search",
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                params: {
-                  q: label,
-                },
-              }
-            );
+            const searchResponse = await authorizedRequest("spotify", {
+              method: "get",
+              url: "http://127.0.0.1:8000/api/spotify/search",
+              params: {
+                q: label,
+              },
+            });
 
             if (searchResponse.data.track?.uri) {
               if (existingDestinationTrackIds.has(searchResponse.data.track.uri)) {
@@ -978,34 +1091,26 @@ function App() {
         }
 
         if (uris.length > 0) {
-          await axios.post(
-            `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
-            {
+          await authorizedRequest("spotify", {
+            method: "post",
+            url: `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
+            data: {
               uris,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
+          });
         }
       }
 
       if (destinationPlatform.id === "youtube") {
         for (const label of trackLabels) {
           try {
-            const searchResponse = await axios.get(
-              "http://127.0.0.1:8000/api/youtube/search",
-              {
-                headers: {
-                  Authorization: `Bearer ${youtubeAccessToken}`,
-                },
-                params: {
-                  q: label,
-                },
-              }
-            );
+            const searchResponse = await authorizedRequest("youtube", {
+              method: "get",
+              url: "http://127.0.0.1:8000/api/youtube/search",
+              params: {
+                q: label,
+              },
+            });
             const videoId = searchResponse.data.item?.id?.videoId;
 
             if (!videoId) {
@@ -1018,22 +1123,62 @@ function App() {
               continue;
             }
 
-            await axios.post(
-              `http://127.0.0.1:8000/api/youtube/playlists/${targetPlaylistId}/tracks`,
-              {
+            await authorizedRequest("youtube", {
+              method: "post",
+              url: `http://127.0.0.1:8000/api/youtube/playlists/${targetPlaylistId}/tracks`,
+              data: {
                 videoId,
               },
-              {
-                headers: {
-                  Authorization: `Bearer ${youtubeAccessToken}`,
-                },
-              }
-            );
+            });
             existingDestinationTrackIds.add(videoId);
             pushTransferResult(label, "added");
           } catch {
             pushTransferResult(label, "failed");
           }
+        }
+      }
+
+      if (destinationPlatform.id === "apple") {
+        const songs = [];
+
+        for (const label of trackLabels) {
+          try {
+            const searchResponse = await authorizedRequest("apple", {
+              method: "get",
+              url: "http://127.0.0.1:8000/api/apple/search",
+              params: {
+                q: label,
+              },
+            });
+            const appleSong = getAppleSongMatch(label, searchResponse.data.songs || []);
+            const songId = appleSong?.id;
+
+            if (!songId) {
+              pushTransferResult(label, "failed");
+              continue;
+            }
+
+            if (existingDestinationTrackIds.has(songId)) {
+              pushTransferResult(label, "already");
+              continue;
+            }
+
+            songs.push(songId);
+            existingDestinationTrackIds.add(songId);
+            pushTransferResult(label, "added");
+          } catch {
+            pushTransferResult(label, "failed");
+          }
+        }
+
+        if (songs.length > 0) {
+          await authorizedRequest("apple", {
+            method: "post",
+            url: `http://127.0.0.1:8000/api/apple/playlists/${targetPlaylistId}/tracks`,
+            data: {
+              songs,
+            },
+          });
         }
       }
 

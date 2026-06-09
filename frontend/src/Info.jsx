@@ -78,10 +78,9 @@ function Info() {
 
         <article className="infoCard">
           <img src="/logo/mini/youtube-mini.png" alt="YouTube" />
-          <h2>YouTube</h2>
+          <h2>Spotify2Ytb</h2>
           <p>
-            Use YouTube playlists as a source or destination while SoundSync
-            searches matching videos for each song.
+            https://youtu.be/sBKze5G8eKU
           </p>
         </article>
 
