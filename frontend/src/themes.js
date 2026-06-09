@@ -9,16 +9,6 @@ export const themes = {
     text: "#fff7ea",
   },
 
-  confetti: {
-    name: "Confetti",
-    background: "/image/wallpaper/confetti.jpg",
-    cardBg: "rgba(255, 255, 255, 0.12)",
-    border: "rgba(255, 255, 255, 0.22)",
-    accent: "#4da3ff",
-    accentSoft: "rgba(80, 160, 255, 0.18)",
-    text: "#ffffff",
-  },
-
   ichigo: {
     name: "Ichigo",
     background: "/image/wallpaper/ichigo50.jpg",

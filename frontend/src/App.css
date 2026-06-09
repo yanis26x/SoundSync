@@ -79,7 +79,7 @@ body::after {
     position: relative;
   overflow: visible;
   width: 100%;
-  max-width: 720px;
+  max-width: 1120px;
   padding: 38px;
   text-align: center;
 
@@ -98,6 +98,7 @@ body::after {
 }
 
 .chooseText,
+.transferProgress,
 .themeSelector,
 .spotifyBtn,
 .youtubeBtn {
@@ -183,11 +184,110 @@ body::after {
 }
 
 .chooseText {
-  margin: 28px 0 12px;
+  margin: 18px 0 12px;
   color: color-mix(in srgb, var(--accent) 55%, white 45%) !important;
   font-size: 20px;
   font-weight: 800;
 
+}
+
+.transferProgress {
+  width: min(360px, 100%);
+  margin: 28px auto 0;
+
+  display: grid;
+  grid-template-columns: 88px 1fr 88px;
+  align-items: center;
+  gap: 14px;
+}
+
+.transferSlot {
+  position: relative;
+  aspect-ratio: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.transferArrow {
+  color: color-mix(in srgb, var(--accent) 70%, white 30%);
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 16px var(--accent-soft);
+}
+
+.slotAlert {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+
+  background: #ff2b45;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 900;
+
+  box-shadow: 0 0 18px rgba(255, 43, 69, 0.45);
+}
+
+.connectedBadge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+
+  padding: 5px 8px;
+
+  border: 2px solid rgba(255, 255, 255, 0.86);
+  border-radius: 999px;
+
+  background: #21c55d;
+  color: white;
+
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+
+  box-shadow: 0 0 18px rgba(33, 197, 93, 0.45);
+}
+
+.spotifyStepLogo,
+.youtubeStepLogo {
+  max-width: 70%;
+  max-height: 44px;
+  object-fit: contain;
+
+  filter:
+    brightness(0)
+    invert(1)
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.14));
+}
+
+.youtubeStepLogo {
+  max-width: 78%;
 }
 
 .platformLoginRow {
@@ -322,11 +422,6 @@ button:hover {
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.buttonRow {
-  display: flex;
-  gap: 12px;
-}
-
 .secondaryBtn {
   background: rgba(255, 255, 255, 0.08);
   border-color: var(--border-color);
@@ -339,6 +434,25 @@ button:hover {
 .secondaryBtn:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: var(--border-color);
+}
+
+.dangerBtn {
+  background: rgba(255, 43, 69, 0.14);
+  border-color: rgba(255, 43, 69, 0.45);
+  color: #ffd6dc;
+
+  box-shadow:
+    0 0 16px rgba(255, 43, 69, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.dangerBtn:hover {
+  background: rgba(255, 43, 69, 0.24);
+  border-color: #ff2b45;
+
+  box-shadow:
+    0 0 24px rgba(255, 43, 69, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .success {
@@ -355,7 +469,41 @@ button:hover {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 25px;
+  margin-top: 16px;
+}
+
+.playlistColumns {
+  margin-top: 26px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.playlistColumn {
+  min-width: 0;
+}
+
+.playlistColumnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.playlistColumnHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+.playlistColumnHeader .dangerBtn {
+  width: auto;
+  min-width: 148px;
+  margin-top: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
 }
 
 .playlistCard {
@@ -410,10 +558,6 @@ button:hover {
   text-decoration: underline;
 }
 
-.youtubeConnected {
-  margin-top: 18px;
-}
-
 @media (max-width: 650px) {
   .app {
     padding: 20px;
@@ -441,6 +585,15 @@ button:hover {
     width: 100%;
   }
 
+  .transferProgress {
+    grid-template-columns: 76px 1fr 76px;
+    gap: 10px;
+  }
+
+  .transferArrow {
+    font-size: 42px;
+  }
+
   .spotifyBigLogo {
     width: 120px;
   }
@@ -449,12 +602,21 @@ button:hover {
     width: 140px;
   }
 
-  .buttonRow {
+  .playlistCard {
+    align-items: flex-start;
+  }
+
+  .playlistColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .playlistColumnHeader {
+    align-items: flex-start;
     flex-direction: column;
   }
 
-  .playlistCard {
-    align-items: flex-start;
+  .playlistColumnHeader .dangerBtn {
+    width: 100%;
   }
 
 }
