@@ -1451,100 +1451,127 @@ if (
                 </section>
 
                 <section className="destinationSetup">
-              <div className="transferModeRow">
-                <button
-                  className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-                  onClick={() => setDestinationMode("new")}
-                >
-                  {text.transferToNew}
-                </button>
+                  <div className="transferModeRow">
+                    <button
+                      className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+                      onClick={() => setDestinationMode("new")}
+                    >
+                      {text.transferToNew}
+                    </button>
 
-                <button
-                  className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-                  onClick={() => setDestinationMode("existing")}
-                >
-                  {text.transferToExisting}
-                </button>
-              </div>
+                    <button
+                      className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+                      onClick={() => setDestinationMode("existing")}
+                    >
+                      {text.transferToExisting}
+                    </button>
+                  </div>
 
-              {destinationMode === "new" ? (
-                <input
-                  className="playlistNameInput"
-                  value={newPlaylistName}
-                  onChange={(event) => setNewPlaylistName(event.target.value)}
-                  placeholder={text.playlistName}
-                />
-              ) : (
-                <select
-                  className="playlistNameInput"
-                  value={destinationPlaylistId}
-                  onChange={(event) => setDestinationPlaylistId(event.target.value)}
-                >
-                  <option value="">{text.destinationPlaylist}</option>
-                  {destinationPlaylists.map((playlist) => (
-                    <option value={playlist.id} key={playlist.id}>
-                      {getPlaylistName(destinationPlatform.id, playlist)}
-                    </option>
-                  ))}
-                </select>
-              )}
-
-              {transferError && (
-                <p className="error">{transferError}</p>
-              )}
-
-              <p className="transferLimit">{text.transferLimit}</p>
-
-              <button
-                className="startTransferBtn"
-                onClick={startPlaylistTransfer}
-                disabled={
-                  !selectedSourcePlaylist ||
-                  transferLoading ||
-                  (destinationMode === "existing" && !destinationPlaylistId)
-                }
-              >
-                {transferLoading ? text.transferLoading : text.startTransfer}
-              </button>
-
-              {transferResult && (
-                <div className="transferResult">
-                  <h3>{text.transferDone}</h3>
-                  <p className="success">
-                    {transferResult.added.length} {text.addedTracks}
-                  </p>
-                  <p className={transferResult.failed.length ? "error" : "success"}>
-                    {transferResult.failed.length} {text.failedTracks}
-                  </p>
-                  <p>
-                    {transferResult.already.length} {text.alreadyTracks}
-                  </p>
-
-                  {transferResult.added.length > 0 && (
-                    <ol className="trackList">
-                      {transferResult.added.map((track, index) => (
-                        <li key={`added-${track}-${index}`}>{track}</li>
+                  {destinationMode === "new" ? (
+                    <input
+                      className="playlistNameInput"
+                      value={newPlaylistName}
+                      onChange={(event) => setNewPlaylistName(event.target.value)}
+                      placeholder={text.playlistName}
+                    />
+                  ) : (
+                    <select
+                      className="playlistNameInput"
+                      value={destinationPlaylistId}
+                      onChange={(event) => setDestinationPlaylistId(event.target.value)}
+                    >
+                      <option value="">{text.destinationPlaylist}</option>
+                      {destinationPlaylists.map((playlist) => (
+                        <option value={playlist.id} key={playlist.id}>
+                          {getPlaylistName(destinationPlatform.id, playlist)}
+                        </option>
                       ))}
-                    </ol>
+                    </select>
                   )}
 
-                  {transferResult.failed.length > 0 && (
-                    <ol className="trackList failedList">
-                      {transferResult.failed.map((track, index) => (
-                        <li key={`failed-${track}-${index}`}>{track}</li>
-                      ))}
-                    </ol>
+                  {transferError && (
+                    <p className="error transferError">{transferError}</p>
                   )}
 
-                  {transferResult.already.length > 0 && (
-                    <ol className="trackList alreadyList">
-                      {transferResult.already.map((track, index) => (
-                        <li key={`already-${track}-${index}`}>{track}</li>
-                      ))}
-                    </ol>
+                  <p className="transferLimit">{text.transferLimit}</p>
+
+                  <button
+                    className="startTransferBtn"
+                    onClick={startPlaylistTransfer}
+                    disabled={
+                      !selectedSourcePlaylist ||
+                      transferLoading ||
+                      (destinationMode === "existing" && !destinationPlaylistId)
+                    }
+                  >
+                    {transferLoading ? text.transferLoading : text.startTransfer}
+                  </button>
+
+                  {transferResult && (
+                    <div className="transferResult">
+                      <div className="transferResultHeader">
+                        <h3>{text.transferDone}</h3>
+                      </div>
+
+                      <div className="transferResultSummary">
+                        <div className="resultStat addedStat">
+                          <strong>{transferResult.added.length}</strong>
+                          <span>{text.addedTracks}</span>
+                        </div>
+
+                        <div className="resultStat failedStat">
+                          <strong>{transferResult.failed.length}</strong>
+                          <span>{text.failedTracks}</span>
+                        </div>
+
+                        <div className="resultStat alreadyStat">
+                          <strong>{transferResult.already.length}</strong>
+                          <span>{text.alreadyTracks}</span>
+                        </div>
+                      </div>
+
+                      <div className="transferResultLists">
+                        <section className="resultListGroup addedGroup">
+                          <h4>Added</h4>
+                          {transferResult.added.length > 0 ? (
+                            <ol>
+                              {transferResult.added.map((track, index) => (
+                                <li key={`added-${track}-${index}`}>{track}</li>
+                              ))}
+                            </ol>
+                          ) : (
+                            <p>None</p>
+                          )}
+                        </section>
+
+                        <section className="resultListGroup failedGroup">
+                          <h4>Failed</h4>
+                          {transferResult.failed.length > 0 ? (
+                            <ol>
+                              {transferResult.failed.map((track, index) => (
+                                <li key={`failed-${track}-${index}`}>{track}</li>
+                              ))}
+                            </ol>
+                          ) : (
+                            <p>None</p>
+                          )}
+                        </section>
+
+                        <section className="resultListGroup alreadyGroup">
+                          <h4>Already There</h4>
+                          {transferResult.already.length > 0 ? (
+                            <ol>
+                              {transferResult.already.map((track, index) => (
+                                <li key={`already-${track}-${index}`}>{track}</li>
+                              ))}
+                            </ol>
+                          ) : (
+                            <p>None</p>
+                          )}
+                        </section>
+                      </div>
+                    </div>
                   )}
-                </div>
-              )}
                 </section>
               </div>
             )}

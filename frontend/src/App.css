@@ -938,40 +938,57 @@ button:hover {
 }
 
 .destinationSetup {
-  padding: 22px;
+  padding: 24px;
   position: sticky;
   top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .transferModeRow {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.22);
 }
 
 .transferModeRow button,
 .startTransferBtn {
-  width: auto;
+  width: 100%;
   margin: 0;
-  padding: 11px 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 900;
 }
 
 .selectedMode {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 70%, white 30%);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 38%, transparent),
+      rgba(255, 255, 255, 0.12)
+    );
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--accent) 24%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
 .playlistNameInput {
-  width: min(520px, 100%);
-  margin: 16px auto 0;
-  padding: 13px 14px;
+  width: 100%;
+  margin: 0;
+  padding: 14px 15px;
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.24);
+  background: rgba(0, 0, 0, 0.3);
   color: var(--text-color);
   font: inherit;
-  font-weight: 700;
+  font-weight: 800;
   outline: none;
 }
 
@@ -981,7 +998,15 @@ button:hover {
 }
 
 .startTransferBtn {
-  margin-top: 16px;
+  margin-top: 0;
+  min-height: 48px;
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--border-color));
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.12)),
+      rgba(0, 0, 0, 0.24)
+    );
 }
 
 .startTransferBtn:disabled {
@@ -991,28 +1016,134 @@ button:hover {
 }
 
 .transferLimit {
-  margin: 14px 0 0;
-  color: rgba(255, 255, 255, 0.76) !important;
-  font-size: 13px;
+  margin: 0;
+  color: color-mix(in srgb, var(--text-color) 72%, transparent) !important;
+  font-size: 12px;
   font-weight: 800;
+  line-height: 1.35;
+}
+
+.transferError {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(243, 27, 45, 0.34);
+  border-radius: 12px;
+  background: rgba(243, 27, 45, 0.1);
 }
 
 .transferResult {
-  margin-top: 18px;
+  margin-top: 2px;
   text-align: left;
 }
 
+.transferResultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .transferResult h3 {
-  margin: 0 0 10px;
-  text-align: center;
+  margin: 0;
+  font-size: 20px;
 }
 
-.failedList {
-  border-color: rgba(243, 27, 45, 0.32);
+.transferResultSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.alreadyList {
-  border-color: rgba(255, 255, 255, 0.24);
+.resultStat {
+  min-height: 66px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.resultStat strong,
+.resultStat span {
+  display: block;
+}
+
+.resultStat strong {
+  font-size: 24px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.resultStat span {
+  margin-top: 7px;
+  color: color-mix(in srgb, var(--text-color) 72%, transparent);
+  font-size: 10px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.addedStat strong {
+  color: #75ff9a;
+}
+
+.failedStat strong {
+  color: #ff4f68;
+}
+
+.alreadyStat strong {
+  color: color-mix(in srgb, var(--text-color) 86%, transparent);
+}
+
+.transferResultLists {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.resultListGroup {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.resultListGroup h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.resultListGroup ol {
+  max-height: 150px;
+  margin: 0;
+  padding-left: 20px;
+  overflow: auto;
+}
+
+.resultListGroup li,
+.resultListGroup p {
+  color: color-mix(in srgb, var(--text-color) 84%, transparent);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.resultListGroup p {
+  margin: 0;
+}
+
+.addedGroup {
+  border-color: rgba(117, 255, 154, 0.28);
+}
+
+.failedGroup {
+  border-color: rgba(243, 27, 45, 0.34);
+}
+
+.alreadyGroup {
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .playlistCardMain {
@@ -1170,6 +1301,11 @@ button:hover {
   .destinationSetup {
     position: relative;
     top: auto;
+  }
+
+  .transferModeRow,
+  .transferResultSummary {
+    grid-template-columns: 1fr;
   }
 
   .transferWorkspace .playlistPickPanel,
