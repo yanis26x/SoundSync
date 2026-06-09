@@ -24,7 +24,7 @@ export const themes = {
   sora: {
     name: "Sora",
     description: "Sora from Kingdom Hearts feeling the music flowing through his body.",
-    background: "/soraMusic.jpg",
+    background: "/wallpaper/soraMusic.jpg",
     cardBg: "rgba(18, 28, 45, 0.34)",
     border: "rgba(185, 220, 255, 0.32)",
     accent: "#5fc7ff",
