@@ -9,7 +9,7 @@ import "./App.css";
 
 const copy = {
   en: {
-    subtitle: "Transfer playlists between your favorite platforms.",
+    subtitle: "Transfer playlists between your favorite platforms",
     chooseSource: "Choose a platform to start syncing your playlists",
     chooseDestination: "Choose where u want to move ur music",
     connected: "Connected",
@@ -30,7 +30,7 @@ const copy = {
     trackError: "Unable to load tracks.",
   },
   fr: {
-    subtitle: "Transfere tes playlists entre tes plateformes preferees.",
+    subtitle: "Transfere tes playlists entre tes plateformes preferees",
     chooseSource: "Choisis une plateforme pour commencer a synchroniser tes playlists",
     chooseDestination: "Choisis ou tu veux deplacer ta musique",
     connected: "Connecte",
