@@ -1,20 +1,27 @@
 import "./MusicParticles.css";
 
-export default function MusicParticles() {
-  const notes = ["♪", "♫", "♬", "♩", "♭", "♯"];
+const notes = ["♪", "♫", "♬", "♩", "♭", "♯"];
+const particles = Array.from({ length: 24 }).map((_, index) => ({
+  id: index,
+  note: notes[index % notes.length],
+  left: `${(index * 37) % 100}%`,
+  animationDelay: `${(index * 0.7) % 8}s`,
+  animationDuration: `${8 + ((index * 1.3) % 10)}s`,
+}));
 
+export default function MusicParticles() {
   return (
     <div className="musicParticles">
-      {Array.from({ length: 24 }).map((_, index) => (
+      {particles.map((particle) => (
         <span
-          key={index}
+          key={particle.id}
           style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 8}s`,
-            animationDuration: `${8 + Math.random() * 10}s`,
+            left: particle.left,
+            animationDelay: particle.animationDelay,
+            animationDuration: particle.animationDuration,
           }}
         >
-          {notes[index % notes.length]}
+          {particle.note}
         </span>
       ))}
     </div>

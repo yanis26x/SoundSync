@@ -10,5 +10,4 @@
 - [ ] Ajouter un composant `TopLeftBtn` avec :
   - message perso `@yanis26x`
   - photo de profil
-- [ ] Ajouter la connexion par SoundCloud.
 - [ ] Ajouter une section `Why SoundSync`.
