@@ -4,8 +4,8 @@ import { themes } from "./themes";
 import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
 import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
 import MusicParticles from "./components/Particles/MusicParticles";
-import WhySoundSync from "./components/WhySoundSync";
 import "./App.css";
+
 
 const copy = {
   en: {
@@ -1198,10 +1198,13 @@ function App() {
         setCurrentTheme={setCurrentTheme}
         language={language}
         setLanguage={setLanguage}
-        onOpenProfile={() =>
-          setCurrentPage((page) => (page === "profile" ? "home" : "profile"))
-        }
-        profileLabel={currentPage === "profile" ? text.home : text.profile}
+        onOpenProfile={() => {
+          window.location.href = "/Profil";
+        }}
+        profileLabel={text.profile}
+        onOpenInfo={() => {
+          window.location.href = "/info";
+        }}
       />
       <section className="card">
         {/* <Parental /> */}
@@ -1564,11 +1567,9 @@ function App() {
         )}
 
         <div className="heroTopLogo" aria-hidden="true">
-          <img src="/SoundSyncLogoNoBG.png" alt="" />
+          <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" />
         </div>
       </section>
-
-      {/* <WhySoundSync /> */}
     </main>
   );
 }

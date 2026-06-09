@@ -178,24 +178,9 @@ body::after {
 .changePlatformBtn,
 .topRightActionBtn,
 .spotifyBtn,
-.youtubeBtn,
-.unavailablePlatformBtn {
+.youtubeBtn {
   position: relative;
   z-index: 5;
-}
-
-@keyframes starFloat {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-4px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
 }
 
 .brand h1 {
@@ -229,7 +214,8 @@ body::after {
 }
 
 .themeBtn,
-.profileBtn {
+.profileBtn,
+.infoBtn {
   width: auto;
   margin: 0;
   padding: 10px 14px;
@@ -246,6 +232,8 @@ body::after {
 }
 
 .themeBtn:hover,
+.profileBtn:hover,
+.infoBtn:hover,
 .languageBtn:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
@@ -432,7 +420,7 @@ body::after {
   width: 320px;
   height: 320px;
 
-  background-image: url("/arrow-noBg.png");
+  background-image: url("/SoundSync/arrow-noBg.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -524,8 +512,7 @@ body::after {
 
 .spotifyBtn,
 .youtubeBtn,
-.appleBtn,
-.unavailablePlatformBtn {
+.appleBtn {
   position: relative;
   width: 230px;
   height: 72px;
@@ -617,40 +604,6 @@ body::after {
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
-.unavailablePlatformBtn {
-  position: relative;
-
-  background: rgba(140, 140, 140, 0.13);
-  border-color: rgba(255, 255, 255, 0.14);
-  cursor: not-allowed;
-  opacity: 0.58;
-
-  filter: grayscale(1);
-  box-shadow:
-    0 0 16px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.unavailablePlatformBtn:hover {
-  transform: none;
-  background: rgba(140, 140, 140, 0.13);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow:
-    0 0 16px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.unavailablePlatformBtn span {
-  position: absolute;
-  right: 12px;
-  bottom: 8px;
-
-  color: rgba(255, 255, 255, 0.74);
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
 .spotifyBigLogo,
 .youtubeBigLogo,
 .appleMusicLogo{
@@ -669,14 +622,6 @@ body::after {
 
 .appleMusicLogo {
   width: 118px;
-}
-
-.soundCloudLogo {
-  width: 142px;
-}
-
-.deezerLogo {
-  width: 126px;
 }
 
 .spotifyBtn:hover .spotifyBigLogo,
@@ -778,49 +723,6 @@ button:hover {
 .error {
   color: #f31b2d !important;
   font-weight: 700;
-}
-
-.playlistList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 16px;
-}
-
-.playlistColumns {
-  margin-top: 26px;
-
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.playlistColumn {
-  min-width: 0;
-}
-
-.playlistColumnHeader {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-}
-
-.playlistColumnHeader h2 {
-  margin: 0;
-  font-size: 18px;
-  text-align: left;
-}
-
-.playlistColumnHeader .dangerBtn {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  margin-top: 0;
-  padding: 0;
-  border-radius: 50%;
-  font-size: 18px;
-  line-height: 1;
 }
 
 .playlistCard {
@@ -960,8 +862,7 @@ button:hover {
   font-weight: 700;
 }
 
-.destinationSetup,
-.transferSetup {
+.destinationSetup {
   margin-top: 20px;
   padding: 18px;
   border: 1px solid var(--border-color);
@@ -969,10 +870,6 @@ button:hover {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-}
-
-.destinationSetup {
-  margin-bottom: 18px;
 }
 
 .transferModeRow {
@@ -1210,14 +1107,9 @@ button:hover {
     font-size: 36px;
   }
 
-  .star {
-    font-size: 44px;
-  }
-
   .spotifyBtn,
   .youtubeBtn,
-  .appleBtn,
-  .unavailablePlatformBtn {
+  .appleBtn {
     width: 100%;
   }
 
@@ -1240,19 +1132,6 @@ button:hover {
 
   .playlistCard {
     align-items: flex-start;
-  }
-
-  .playlistColumns {
-    grid-template-columns: 1fr;
-  }
-
-  .playlistColumnHeader {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .playlistColumnHeader .dangerBtn {
-    width: 34px;
   }
 
 }

@@ -9,6 +9,8 @@ function TopRightActionBtn({
   setLanguage,
   onOpenProfile,
   profileLabel = "Profile",
+  onOpenInfo,
+  infoLabel = "Info",
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -32,11 +34,22 @@ function TopRightActionBtn({
     <>
       <div className="topRightActionBtn">
 
-          <button
+        <button
           className="profileBtn"
-          onClick={onOpenProfile}
+          onClick={onOpenProfile || (() => {
+            window.location.href = "/Profil";
+          })}
         >
           {profileLabel}
+        </button>
+
+        <button
+          className="infoBtn"
+          onClick={onOpenInfo || (() => {
+            window.location.href = "/info";
+          })}
+        >
+          {infoLabel}
         </button>
 
         <button
