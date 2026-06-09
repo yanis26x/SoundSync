@@ -1,0 +1,33 @@
+.musicParticles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.musicParticles span {
+  position: absolute;
+  bottom: -40px;
+  font-size: 24px;
+  color: var(--accent);
+  opacity: 0.25;
+  animation: musicFloat linear infinite;
+  text-shadow: 0 0 12px var(--accent);
+}
+
+@keyframes musicFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.25;
+  }
+
+  100% {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}

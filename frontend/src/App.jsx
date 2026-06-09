@@ -3,6 +3,7 @@ import axios from "axios";
 import { themes } from "./themes";
 import TopRightActionBtn from "./components/TopRightActionBtn";
 import Parental from "./components/Parental";
+import MusicParticles from "./components/Particles/MusicParticles";
 import "./App.css";
 
 const copy = {
@@ -526,6 +527,7 @@ function App() {
 
   return (
     <main className="app">
+      <MusicParticles />
       <TopRightActionBtn
         themes={themes}
         currentTheme={currentTheme}
