@@ -22,6 +22,7 @@ const copy = {
     hideTracks: "Hide tracks",
     loadingTracks: "Loading tracks...",
     loadingPlaylists: "Loading playlists",
+    unavailable: "Unavailable",
     playlistError: "Error while loading playlists.",
     youtubePlaylistError: "Error while loading YouTube playlists.",
     trackError: "Unable to load tracks.",
@@ -42,6 +43,7 @@ const copy = {
     hideTracks: "Ranger les musiques",
     loadingTracks: "Chargement des musiques...",
     loadingPlaylists: "Chargement des playlists",
+    unavailable: "Indisponible",
     playlistError: "Erreur pendant la recuperation des playlists.",
     youtubePlaylistError: "Erreur pendant la recuperation des playlists YouTube.",
     trackError: "Impossible de recuperer les musiques.",
@@ -604,6 +606,33 @@ function App() {
                 />
               </button>
             )}
+
+            <button className="unavailablePlatformBtn" disabled>
+              <img
+                src="/logo/appleMusic.png"
+                alt="Apple Music"
+                className="appleMusicLogo"
+              />
+              <span>{text.unavailable}</span>
+            </button>
+
+            <button className="unavailablePlatformBtn" disabled>
+              <img
+                src="/logo/soundcloud-logo.png"
+                alt="SoundCloud"
+                className="soundCloudLogo"
+              />
+              <span>{text.unavailable}</span>
+            </button>
+
+            <button className="unavailablePlatformBtn" disabled>
+              <img
+                src="/logo/deezerLogo.png"
+                alt="Deezer"
+                className="deezerLogo"
+              />
+              <span>{text.unavailable}</span>
+            </button>
           </div>
         )}
 

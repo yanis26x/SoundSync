@@ -12,7 +12,3 @@
   - photo de profil
 - [ ] Ajouter la connexion par SoundCloud.
 - [ ] Ajouter une section `Why SoundSync`.
-- [ ] Dans `TopRightActionBtn.jsx`, remplacer les 3 boutons de thème par un seul bouton.
-  - Lors du clic, afficher une fenêtre/modale au centre de l’écran (fond flou).
-  - Permettre de choisir le thème depuis cette fenêtre.
-  - Ajouter une animation d’ouverture/fermeture fluide.
