@@ -295,6 +295,46 @@ app.get("/api/youtube/playlists", async (req, res) => {
   }
 });
 
+app.get("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { playlistId } = req.params;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token YouTube manquant.",
+    });
+  }
+
+  try {
+    const response = await axios.get(
+      "https://www.googleapis.com/youtube/v3/playlistItems",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          part: "snippet,contentDetails",
+          playlistId,
+          maxResults: 50,
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      tracks: response.data.items,
+    });
+  } catch (error) {
+    console.error("Erreur musiques YouTube :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Impossible de récupérer les musiques YouTube.",
+    });
+  }
+});
+
 /* =========================
    SPOTIFY API
 ========================= */
@@ -360,6 +400,44 @@ app.get("/api/spotify/playlists", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Impossible de récupérer les playlists Spotify.",
+    });
+  }
+});
+
+app.get("/api/spotify/playlists/:playlistId/tracks", async (req, res) => {
+  const accessToken = req.headers.authorization?.replace("Bearer ", "");
+  const { playlistId } = req.params;
+
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      message: "Token Spotify manquant.",
+    });
+  }
+
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          limit: 50,
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      tracks: response.data.items,
+    });
+  } catch (error) {
+    console.error("Erreur musiques Spotify :", error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Impossible de récupérer les musiques Spotify.",
     });
   }
 });

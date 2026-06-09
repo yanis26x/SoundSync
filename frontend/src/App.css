@@ -437,21 +437,21 @@ button:hover {
 }
 
 .dangerBtn {
-  background: rgba(255, 43, 69, 0.14);
-  border-color: rgba(255, 43, 69, 0.45);
-  color: #ffd6dc;
+  background: #ff0033;
+  border-color: rgba(255, 255, 255, 0.26);
+  color: white;
 
   box-shadow:
-    0 0 16px rgba(255, 43, 69, 0.12),
+    0 0 18px rgba(255, 0, 51, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .dangerBtn:hover {
-  background: rgba(255, 43, 69, 0.24);
-  border-color: #ff2b45;
+  background: #ff1744;
+  border-color: rgba(255, 255, 255, 0.42);
 
   box-shadow:
-    0 0 24px rgba(255, 43, 69, 0.24),
+    0 0 28px rgba(255, 0, 51, 0.46),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
@@ -487,8 +487,8 @@ button:hover {
 .playlistColumnHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 .playlistColumnHeader h2 {
@@ -498,24 +498,29 @@ button:hover {
 }
 
 .playlistColumnHeader .dangerBtn {
-  width: auto;
-  min-width: 148px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
   margin-top: 0;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 13px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .playlistCard {
+  position: relative;
+  overflow: hidden;
+
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   text-align: left;
 
   padding: 14px;
   border-radius: 20px;
 
-  background: rgba(255, 255, 255, 0.09);
   border: 1px solid var(--border-color);
 
   backdrop-filter: blur(12px);
@@ -527,10 +532,47 @@ button:hover {
     border-color 0.25s ease;
 }
 
+.playlistCard::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.58)),
+    var(--playlist-image);
+  background-size: cover;
+  background-position: center;
+
+  filter: blur(14px);
+  transform: scale(1.08);
+
+  z-index: -2;
+}
+
+.playlistCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  z-index: -1;
+}
+
 .playlistCard:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.13);
   border-color: var(--accent);
+}
+
+.playlistCardMain {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+
+  padding-right: 48px;
 }
 
 .playlistCard img {
@@ -540,8 +582,13 @@ button:hover {
   object-fit: cover;
 }
 
+.playlistInfo {
+  min-width: 0;
+}
+
 .playlistCard h3 {
   margin: 0 0 5px;
+  overflow-wrap: anywhere;
 }
 
 .playlistCard p {
@@ -556,6 +603,59 @@ button:hover {
 
 .playlistCard a:hover {
   text-decoration: underline;
+}
+
+.playlistActions {
+  width: 100%;
+}
+
+.expandBtn {
+  position: absolute;
+  top: 30px;
+  right: 14px;
+
+  width: 38px;
+  height: 38px;
+  margin-top: 0;
+  padding: 0;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+
+  font-size: 22px;
+  line-height: 1;
+}
+
+.trackPanel {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.trackPanel p {
+  margin: 0;
+}
+
+.trackList {
+  max-height: 240px;
+  margin: 0;
+  padding-left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  overflow: auto;
+}
+
+.trackList li {
+  color: color-mix(in srgb, var(--text-color) 88%, transparent);
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 @media (max-width: 650px) {
@@ -616,7 +716,7 @@ button:hover {
   }
 
   .playlistColumnHeader .dangerBtn {
-    width: 100%;
+    width: 34px;
   }
 
 }

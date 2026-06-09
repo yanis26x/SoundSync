@@ -32,6 +32,10 @@ function App() {
   const [youtubeError, setYoutubeError] = useState("");
   const [loading, setLoading] = useState(false);
   const [youtubeLoading, setYoutubeLoading] = useState(false);
+  const [expandedPlaylists, setExpandedPlaylists] = useState({});
+  const [playlistTracks, setPlaylistTracks] = useState({});
+  const [trackLoading, setTrackLoading] = useState({});
+  const [trackErrors, setTrackErrors] = useState({});
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
   const [platformOrder, setPlatformOrder] = useState(() => {
@@ -96,30 +100,40 @@ function App() {
           <div
             className="playlistCard"
             key={playlist.id}
-          >
-            <img
-              src={
+            style={{
+              "--playlist-image": `url(${
                 playlist.images?.[0]?.url ||
                 "https://via.placeholder.com/100"
-              }
-              alt={playlist.name}
-            />
+              })`,
+            }}
+          >
+            <div className="playlistCardMain">
+              <img
+                src={
+                  playlist.images?.[0]?.url ||
+                  "https://via.placeholder.com/100"
+                }
+                alt={playlist.name}
+              />
 
-            <div>
-              <h3>{playlist.name}</h3>
+              <div className="playlistInfo">
+                <h3>{playlist.name}</h3>
 
-              <p>
-                {playlist.tracks.total} morceaux
-              </p>
+                <p>
+                  {playlist.tracks.total} morceaux
+                </p>
 
-              <a
-                href={playlist.external_urls.spotify}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Ouvrir sur Spotify
-              </a>
+                <a
+                  href={playlist.external_urls.spotify}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ouvrir sur Spotify
+                </a>
+              </div>
             </div>
+
+            {renderTrackPanel("spotify", playlist.id)}
           </div>
         ),
       };
@@ -129,37 +143,48 @@ function App() {
       error: youtubeError,
       loading: youtubeLoading,
       playlists: youtubePlaylists,
-      logout: logoutYoutube,
-      logoutLabel: "Déconnexion YouTube",
-      renderPlaylist: (playlist) => (
-        <div
-          className="playlistCard"
-          key={playlist.id}
-        >
-          <img
-            src={
-              playlist.snippet.thumbnails?.medium?.url ||
-              playlist.snippet.thumbnails?.default?.url ||
-              "https://via.placeholder.com/100"
-            }
-            alt={playlist.snippet.title}
-          />
+        logout: logoutYoutube,
+        logoutLabel: "Déconnexion YouTube",
+        renderPlaylist: (playlist) => (
+          <div
+            className="playlistCard"
+            key={playlist.id}
+            style={{
+              "--playlist-image": `url(${
+                playlist.snippet.thumbnails?.medium?.url ||
+                playlist.snippet.thumbnails?.default?.url ||
+                "https://via.placeholder.com/100"
+              })`,
+            }}
+          >
+            <div className="playlistCardMain">
+              <img
+                src={
+                  playlist.snippet.thumbnails?.medium?.url ||
+                  playlist.snippet.thumbnails?.default?.url ||
+                  "https://via.placeholder.com/100"
+                }
+                alt={playlist.snippet.title}
+              />
 
-          <div>
-            <h3>{playlist.snippet.title}</h3>
+              <div className="playlistInfo">
+                <h3>{playlist.snippet.title}</h3>
 
-            <p>
-              {playlist.contentDetails.itemCount} videos
-            </p>
+                <p>
+                  {playlist.contentDetails.itemCount} videos
+                </p>
 
-            <a
-              href={`https://www.youtube.com/playlist?list=${playlist.id}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Ouvrir sur YouTube
-            </a>
-          </div>
+                <a
+                  href={`https://www.youtube.com/playlist?list=${playlist.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ouvrir sur YouTube
+                </a>
+              </div>
+            </div>
+
+            {renderTrackPanel("youtube", playlist.id)}
         </div>
       ),
     };
@@ -318,6 +343,116 @@ function App() {
     }
   }, [youtubeAccessToken]);
 
+  const getPlaylistTracks = useCallback(
+    async (platformId, playlistId) => {
+      const trackKey = `${platformId}:${playlistId}`;
+      const token = platformId === "spotify" ? accessToken : youtubeAccessToken;
+
+      setTrackErrors((currentErrors) => ({
+        ...currentErrors,
+        [trackKey]: "",
+      }));
+      setTrackLoading((currentLoading) => ({
+        ...currentLoading,
+        [trackKey]: true,
+      }));
+
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/${platformId}/playlists/${playlistId}/tracks`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setPlaylistTracks((currentTracks) => ({
+          ...currentTracks,
+          [trackKey]: response.data.tracks,
+        }));
+      } catch (err) {
+        setTrackErrors((currentErrors) => ({
+          ...currentErrors,
+          [trackKey]:
+            err.response?.data?.message ||
+            "Impossible de récupérer les musiques.",
+        }));
+      } finally {
+        setTrackLoading((currentLoading) => ({
+          ...currentLoading,
+          [trackKey]: false,
+        }));
+      }
+    },
+    [accessToken, youtubeAccessToken]
+  );
+
+  const togglePlaylist = (platformId, playlistId) => {
+    const trackKey = `${platformId}:${playlistId}`;
+
+    setExpandedPlaylists((currentExpanded) => ({
+      ...currentExpanded,
+      [trackKey]: !currentExpanded[trackKey],
+    }));
+
+    if (!playlistTracks[trackKey] && !trackLoading[trackKey]) {
+      getPlaylistTracks(platformId, playlistId);
+    }
+  };
+
+  const getTrackLabel = (platformId, item) => {
+    if (platformId === "spotify") {
+      const track = item.track;
+      const artistNames =
+        track?.artists?.map((artist) => artist.name).join(", ") || "Artiste inconnu";
+
+      return `${track?.name || "Titre inconnu"} - ${artistNames}`;
+    }
+
+    return item.snippet?.title || "Titre inconnu";
+  };
+
+  const renderTrackPanel = (platformId, playlistId) => {
+    const trackKey = `${platformId}:${playlistId}`;
+    const isExpanded = expandedPlaylists[trackKey];
+
+    return (
+      <div className="playlistActions">
+        <button
+          className="expandBtn"
+          onClick={() => togglePlaylist(platformId, playlistId)}
+          type="button"
+          aria-label={isExpanded ? "Ranger les musiques" : "Afficher les musiques"}
+        >
+          {isExpanded ? "⌃" : "⌄"}
+        </button>
+
+        {isExpanded && (
+          <div className="trackPanel">
+            {trackLoading[trackKey] && (
+              <p>Chargement des musiques...</p>
+            )}
+
+            {trackErrors[trackKey] && (
+              <p className="error">{trackErrors[trackKey]}</p>
+            )}
+
+            {playlistTracks[trackKey]?.length > 0 && (
+              <ol className="trackList">
+                {playlistTracks[trackKey].map((item, index) => (
+                  <li key={item.track?.id || item.id || index}>
+                    {getTrackLabel(platformId, item)}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (accessToken) {
       const timeout = window.setTimeout(getPlaylists, 0);
@@ -430,8 +565,10 @@ function App() {
                     <button
                       className="dangerBtn"
                       onClick={details.logout}
+                      aria-label={details.logoutLabel}
+                      title={details.logoutLabel}
                     >
-                      {details.logoutLabel}
+                      ⏻
                     </button>
                   </div>
 
