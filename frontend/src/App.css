@@ -121,6 +121,7 @@ body::after {
 .app {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 30px;
@@ -133,11 +134,31 @@ body::after {
   overflow: visible;
   width: 100%;
   max-width: 1120px;
-  padding: 38px;
+  padding: 38px 38px 8px;
   text-align: center;
 
   animation: riseIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 
+}
+
+.bottomLogoSection {
+  margin-top: -86px;
+
+  display: flex;
+  justify-content: center;
+
+  position: relative;
+  z-index: 5;
+
+  animation: riseIn 0.55s ease 0.7s both;
+}
+
+.bottomLogoSection img {
+  width: min(620px, 92vw);
+  height: auto;
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 24px var(--accent-soft));
 }
 
 
@@ -335,7 +356,7 @@ body::after {
   width: 320px;
   height: 320px;
 
-  background-image: url("/SoundSyncLogoNoBG.png");
+  background-image: url("/logo/mini/SoundSync-mini-logo-noBG.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

@@ -677,6 +677,10 @@ function App() {
           </div>
         )}
       </section>
+
+      <section className="bottomLogoSection" aria-label="SoundSync logo">
+        <img src="/SoundSyncLogoNoBG.png" alt="SoundSync" />
+      </section>
     </main>
   );
 }

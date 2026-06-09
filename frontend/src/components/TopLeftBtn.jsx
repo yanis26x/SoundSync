@@ -51,11 +51,7 @@ function TopLeftBtn() {
       )}
 
       {activeItem.type === "logo" && (
-        <img
-          src="/SoundSyncLogo.png"
-          alt="SoundSync"
-          className="topLeftLogoImg"
-        />
+        <span className="topLeftStatement">SoundSync</span>
       )}
 
       {activeItem.type === "text" && (
