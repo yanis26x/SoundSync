@@ -5,6 +5,7 @@ import TopRightActionBtn from "./components/TopRightActionBtn";
 import TopLeftBtn from "./components/TopLeftBtn";
 import Parental from "./components/Parental";
 import MusicParticles from "./components/Particles/MusicParticles";
+import WhySoundSync from "./components/WhySoundSync";
 import "./App.css";
 
 const copy = {
@@ -678,9 +679,7 @@ function App() {
         )}
       </section>
 
-      <section className="bottomLogoSection" aria-label="SoundSync logo">
-        <img src="/SoundSyncLogoNoBG.png" alt="SoundSync" />
-      </section>
+      <WhySoundSync />
     </main>
   );
 }

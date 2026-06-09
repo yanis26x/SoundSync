@@ -141,28 +141,6 @@ body::after {
 
 }
 
-.bottomLogoSection {
-  margin-top: -86px;
-
-  display: flex;
-  justify-content: center;
-
-  position: relative;
-  z-index: 5;
-
-  animation: riseIn 0.55s ease 0.7s both;
-}
-
-.bottomLogoSection img {
-  width: min(620px, 92vw);
-  height: auto;
-  object-fit: contain;
-
-  filter: drop-shadow(0 0 24px var(--accent-soft));
-}
-
-
-
 .brand {
   display: flex;
   align-items: center;
