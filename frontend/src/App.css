@@ -166,7 +166,6 @@ body::after {
 }
 
 .themeBtn:hover,
-.activeTheme,
 .languageBtn:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
