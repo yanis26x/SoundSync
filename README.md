@@ -2,32 +2,33 @@
 
 SoundSync est une application web qui a pour objectif de transférer des playlists entre différentes plateformes musicales.
 
-Exemples :
-
 ```txt
 Spotify → YouTube Music
 YouTube Music → Spotify
 Apple Music → Spotify
 ```
 
-## Problème actuel
+## Lancer le projet
 
-La récupération des playlists Spotify est actuellement bloquée par Spotify :
+Backend & Frontend :
 
-```txt
-Active premium subscription required for the owner of the app.
+```bash
+cd backend
+npm install
+npm run dev
 ```
 
-Il faudra donc utiliser un compte Spotify Premium ou trouver une autre solution avant de continuer l'intégration Spotify.
+Backend :
 
-## Prochaines étapes
+```txt
+http://127.0.0.1:8000
+```
 
-* Récupérer les playlists Spotify
-* Permettre la sélection d'une playlist
-* Ajouter l'authentification YouTube
-* Créer automatiquement une playlist sur la plateforme de destination
-* Ajouter les morceaux dans la nouvelle playlist
-* Améliorer l'interface utilisateur
+Frontend :
+
+```txt
+http://localhost:5173
+```
 
 ## Configuration
 
@@ -48,32 +49,21 @@ http://127.0.0.1:8000/auth/spotify/callback
 ```
 
 
-## Lancer le projet
+## Problème actuel
 
-Backend :
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-Frontend :
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Backend :
+La récupération des playlists Spotify est actuellement bloquée par Spotify :
 
 ```txt
-http://127.0.0.1:8000
+Active premium subscription required for the owner of the app.
 ```
 
-Frontend :
+Il faudra donc utiliser un compte Spotify Premium ou trouver une autre solution avant de continuer l'intégration Spotify.
 
-```txt
-http://localhost:5173
-```
+## Prochaines étapes
+
+* Récupérer les playlists Spotify
+* Permettre la sélection d'une playlist
+* Ajouter l'authentification YouTube
+* Créer automatiquement une playlist sur la plateforme de destination
+* Ajouter les morceaux dans la nouvelle playlist
+* Améliorer l'interface utilisateur

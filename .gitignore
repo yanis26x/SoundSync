@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+client_secret*.json
+.env
+
 # Environment variables
 .env
 .env.local

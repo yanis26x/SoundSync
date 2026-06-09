@@ -3,32 +3,46 @@ import axios from "axios";
 import { themes } from "./themes";
 import ThemeSelector from "./components/ThemeSelector";
 import Parental from "./components/Parental";
-import CustomMessage from "./components/CustomMessage";
 import "./App.css";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
+  const [youtubeAccessToken, setYoutubeAccessToken] = useState("");
   const [playlists, setPlaylists] = useState([]);
+  const [youtubePlaylists, setYoutubePlaylists] = useState([]);
   const [error, setError] = useState("");
+  const [youtubeError, setYoutubeError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [youtubeLoading, setYoutubeLoading] = useState(false);
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tokenFromUrl = params.get("spotify_access_token");
+    const spotifyTokenFromUrl = params.get("spotify_access_token");
+    const youtubeTokenFromUrl = params.get("youtube_access_token");
+    const savedSpotifyToken = localStorage.getItem("spotify_access_token");
+    const savedYoutubeToken = localStorage.getItem("youtube_access_token");
+    let shouldCleanUrl = false;
 
-    if (tokenFromUrl) {
-      localStorage.setItem("spotify_access_token", tokenFromUrl);
-      setAccessToken(tokenFromUrl);
+    if (spotifyTokenFromUrl) {
+      localStorage.setItem("spotify_access_token", spotifyTokenFromUrl);
+      setAccessToken(spotifyTokenFromUrl);
+      shouldCleanUrl = true;
+    } else if (savedSpotifyToken) {
+      setAccessToken(savedSpotifyToken);
+    }
 
+    if (youtubeTokenFromUrl) {
+      localStorage.setItem("youtube_access_token", youtubeTokenFromUrl);
+      setYoutubeAccessToken(youtubeTokenFromUrl);
+      shouldCleanUrl = true;
+    } else if (savedYoutubeToken) {
+      setYoutubeAccessToken(savedYoutubeToken);
+    }
+
+    if (shouldCleanUrl) {
       window.history.replaceState({}, document.title, "/");
-    } else {
-      const savedToken = localStorage.getItem("spotify_access_token");
-
-      if (savedToken) {
-        setAccessToken(savedToken);
-      }
     }
   }, []);
 
@@ -70,10 +84,20 @@ function App() {
     window.location.href = "http://127.0.0.1:8000/auth/spotify";
   };
 
+  const loginYoutube = () => {
+    window.location.href = "http://127.0.0.1:8000/auth/google";
+  };
+
   const logoutSpotify = () => {
     localStorage.removeItem("spotify_access_token");
     setAccessToken("");
     setPlaylists([]);
+  };
+
+  const logoutYoutube = () => {
+    localStorage.removeItem("youtube_access_token");
+    setYoutubeAccessToken("");
+    setYoutubePlaylists([]);
   };
 
   const getPlaylists = async () => {
@@ -101,14 +125,38 @@ function App() {
     }
   };
 
+  const getYoutubePlaylists = async () => {
+    setYoutubeError("");
+    setYoutubeLoading(true);
+
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/youtube/playlists",
+        {
+          headers: {
+            Authorization: `Bearer ${youtubeAccessToken}`,
+          },
+        }
+      );
+
+      setYoutubePlaylists(response.data.playlists);
+    } catch (err) {
+      setYoutubeError(
+        err.response?.data?.message ||
+          "Erreur pendant la récupération des playlists YouTube."
+      );
+    } finally {
+      setYoutubeLoading(false);
+    }
+  };
+
   return (
     <main className="app">
-      <CustomMessage />
-        <ThemeSelector
-    themes={themes}
-    currentTheme={currentTheme}
-    setCurrentTheme={setCurrentTheme}
-  />
+      <ThemeSelector
+        themes={themes}
+        currentTheme={currentTheme}
+        setCurrentTheme={setCurrentTheme}
+      />
       <section className="card">
         <Parental />
         <div className="brand">
@@ -116,26 +164,40 @@ function App() {
         </div>
 
         <p className="subtitle">
-  Transfer playlists between your favorite platforms.
-</p>
+          Transfer playlists between your favorite platforms.
+        </p>
 
+        {!accessToken && !youtubeAccessToken && (
+          <p className="chooseText">
+            Choose a platform to start syncing your playlists
+          </p>
+        )}
 
+        {(!accessToken || !youtubeAccessToken) && (
+          <div className="platformLoginRow">
+            {!accessToken && (
+              <button className="spotifyBtn" onClick={loginSpotify}>
+                <img
+                  src="/image/logo/Spotify-Black-Logo.png"
+                  alt="Spotify"
+                  className="spotifyBigLogo"
+                />
+              </button>
+            )}
 
-    {!accessToken && (
-  <p className="chooseText">
-    Choose a platform to start syncing your playlists
-  </p>
-)}
+            {!youtubeAccessToken && (
+              <button className="youtubeBtn" onClick={loginYoutube}>
+                <img
+                  src="/image/logo/YouTube-Logo.png"
+                  alt="YouTube"
+                  className="youtubeBigLogo"
+                />
+              </button>
+            )}
+          </div>
+        )}
 
-        {!accessToken ? (
-          <button className="spotifyBtn" onClick={loginSpotify}>
-            <img
-              src="/image/logo/Spotify-Black-Logo.png"
-              alt="Spotify"
-              className="spotifyBigLogo"
-            />
-          </button>
-        ) : (
+        {accessToken && (
           <>
             <p className="success">✅ Connecté à Spotify</p>
 
@@ -195,46 +257,64 @@ function App() {
           </>
         )}
 
- <div className="soraInfoCard">
-  <div className="soraInfoContent">
-    <h2>More freedom 4 your music</h2>
+        {youtubeAccessToken && (
+          <div className="youtubeConnected">
+            <p className="success">✅ Connecté à YouTube</p>
 
-    <p>
-      SoundSync aims to become a simple way to transfer
-      your playlists between different music platforms. I listen 2 music all the time n needed a similar tool, it was not free so I had to make one who is, enjoy
-    </p>
-  </div>
-</div>
+            <div className="buttonRow">
+              <button onClick={getYoutubePlaylists}>
+                {youtubeLoading
+                  ? "Chargement..."
+                  : "Afficher mes playlists YouTube"}
+              </button>
 
-<div className="comingSoon">
-  <h2>Future Platforms</h2>
+              <button
+                className="secondaryBtn"
+                onClick={logoutYoutube}
+              >
+                Déconnexion YouTube
+              </button>
+            </div>
 
-  <div className="platforms">
-    <div className="platformCard">
-      <img
-        src="/image/logo/appleMusic.png"
-        alt="Apple Music"
-      />
-      <span>Apple Music</span>
-    </div>
+            {youtubeError && (
+              <p className="error">{youtubeError}</p>
+            )}
 
-    <div className="platformCard">
-      <img
-        src="/image/logo/YouTube-Logo.png"
-        alt="YouTube Music"
-      />
-      <span>YouTube Music</span>
-    </div>
+            <div className="playlistList">
+              {youtubePlaylists.map((playlist) => (
+                <div
+                  className="playlistCard"
+                  key={playlist.id}
+                >
+                  <img
+                    src={
+                      playlist.snippet.thumbnails?.medium?.url ||
+                      playlist.snippet.thumbnails?.default?.url ||
+                      "https://via.placeholder.com/100"
+                    }
+                    alt={playlist.snippet.title}
+                  />
 
-    <div className="platformCard">
-      <img
-        src="/image/logo/soundcloud-logo.png"
-        alt="SoundCloud"
-      />
-      <span>SoundCloud</span>
-    </div>
-  </div>
-</div>
+                  <div>
+                    <h3>{playlist.snippet.title}</h3>
+
+                    <p>
+                      {playlist.contentDetails.itemCount} videos
+                    </p>
+
+                    <a
+                      href={`https://www.youtube.com/playlist?list=${playlist.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Ouvrir sur YouTube
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
