@@ -3,7 +3,7 @@ function Parental() {
   return (
     <div className="parentalBanner">
       <img
-        src="/image/Remover.png"
+        src="/Remover.png"
         alt="Parental Advisory"
       />
     </div>

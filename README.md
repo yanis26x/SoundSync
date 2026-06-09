@@ -1,16 +1,27 @@
 # SoundSync𖤐
 
-SoundSync est une application web qui a pour objectif de transférer des playlists entre différentes plateformes musicales.
+SoundSync est une application web qui permet de transférer des playlists entre différentes plateformes musicales.
 
-```txt
-Spotify → YouTube Music
-YouTube Music → Spotify
-Apple Music → Spotify
-```
+
+## Fonctionnalités actuelles
+
+✅ Connexion avec Spotify
+
+✅ Récupération des playlists Spotify
+
+✅ Connexion avec YouTube
+
+✅ Système de thèmes personnalisés
+
+✅ Interface moderne avec plusieurs thèmes visuels
+
+🚧 Transfert de playlists (en développement)
+
+---
 
 ## Lancer le projet
 
-Backend & Frontend :
+### Backend
 
 ```bash
 cd backend
@@ -24,11 +35,21 @@ Backend :
 http://127.0.0.1:8000
 ```
 
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
 Frontend :
 
 ```txt
 http://localhost:5173
 ```
+
+---
 
 ## Configuration
 
@@ -37,33 +58,93 @@ Créer un fichier `.env` dans le dossier `backend` :
 ```env
 PORT=8000
 
+# Spotify
 SPOTIFY_CLIENT_ID=ton_client_id
 SPOTIFY_CLIENT_SECRET=ton_client_secret
 SPOTIFY_REDIRECT_URI=http://127.0.0.1:8000/auth/spotify/callback
+
+# Google / YouTube
+GOOGLE_CLIENT_ID=ton_google_client_id
+GOOGLE_CLIENT_SECRET=ton_google_client_secret
+GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
 
-Dans le Spotify Developer Dashboard, ajouter la Redirect URI suivante :
+---
+
+## Spotify
+
+Dans le Spotify Developer Dashboard, ajouter :
 
 ```txt
 http://127.0.0.1:8000/auth/spotify/callback
 ```
 
+comme Redirect URI.
 
-## Problème actuel
+---
 
-La récupération des playlists Spotify est actuellement bloquée par Spotify :
+## YouTube / Google OAuth
+
+Dans Google Cloud Console, ajouter :
 
 ```txt
-Active premium subscription required for the owner of the app.
+http://127.0.0.1:8000/auth/google/callback
 ```
 
-Il faudra donc utiliser un compte Spotify Premium ou trouver une autre solution avant de continuer l'intégration Spotify.
+dans les URI de redirection autorisées.
+
+### Utilisateurs de test
+
+Actuellement, l'application Google est en mode test.
+
+Par défaut, seul :
+
+```txt
+yanis26x@gmail.com
+```
+
+peut se connecter.
+
+Pour ajouter d'autres utilisateurs :
+
+```txt
+Google Cloud Console
+↓
+Google Auth Platform
+↓
+Audience
+↓
+Utilisateurs tests
+↓
+Ajouter des utilisateurs
+```
+
+Ajoutez ensuite les adresses Gmail souhaitées.
+
+---
+
+## Plateformes prévues
+
+🚧 YouTube Music
+
+🚧 Apple Music
+
+🚧 SoundCloud
+
+🚧 Deezer
+
+---
 
 ## Prochaines étapes
 
-* Récupérer les playlists Spotify
-* Permettre la sélection d'une playlist
-* Ajouter l'authentification YouTube
-* Créer automatiquement une playlist sur la plateforme de destination
-* Ajouter les morceaux dans la nouvelle playlist
-* Améliorer l'interface utilisateur
+- Sélection d'une playlist Spotify
+- Création automatique d'une playlist YouTube
+- Importation des morceaux Spotify vers YouTube
+- Support Apple Music
+- Support SoundCloud
+- Historique des transferts
+- Améliorations de l'interface utilisateur
+
+---
+
+Développé par Yanis26x.

@@ -1,9 +1,52 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
-import ThemeSelector from "./components/ThemeSelector";
+import TopRightActionBtn from "./components/TopRightActionBtn";
 import Parental from "./components/Parental";
 import "./App.css";
+
+const copy = {
+  en: {
+    subtitle: "Transfer playlists between your favorite platforms.",
+    chooseSource: "Choose a platform to start syncing your playlists",
+    chooseDestination: "Choose where u want to move ur music",
+    connected: "Connected",
+    disconnect: "Disconnect",
+    tracks: "tracks",
+    videos: "videos",
+    openSpotify: "Open on Spotify",
+    openYoutube: "Open on YouTube",
+    unknownArtist: "Unknown artist",
+    unknownTitle: "Unknown title",
+    showTracks: "Show tracks",
+    hideTracks: "Hide tracks",
+    loadingTracks: "Loading tracks...",
+    loadingPlaylists: "Loading playlists",
+    playlistError: "Error while loading playlists.",
+    youtubePlaylistError: "Error while loading YouTube playlists.",
+    trackError: "Unable to load tracks.",
+  },
+  fr: {
+    subtitle: "Transfere tes playlists entre tes plateformes preferees.",
+    chooseSource: "Choisis une plateforme pour commencer a synchroniser tes playlists",
+    chooseDestination: "Choisis ou tu veux deplacer ta musique",
+    connected: "Connecte",
+    disconnect: "Deconnecter",
+    tracks: "morceaux",
+    videos: "videos",
+    openSpotify: "Ouvrir sur Spotify",
+    openYoutube: "Ouvrir sur YouTube",
+    unknownArtist: "Artiste inconnu",
+    unknownTitle: "Titre inconnu",
+    showTracks: "Afficher les musiques",
+    hideTracks: "Ranger les musiques",
+    loadingTracks: "Chargement des musiques...",
+    loadingPlaylists: "Chargement des playlists",
+    playlistError: "Erreur pendant la recuperation des playlists.",
+    youtubePlaylistError: "Erreur pendant la recuperation des playlists YouTube.",
+    trackError: "Impossible de recuperer les musiques.",
+  },
+};
 
 function App() {
   const [initialConnection] = useState(() => {
@@ -38,6 +81,10 @@ function App() {
   const [trackErrors, setTrackErrors] = useState({});
 
   const [currentTheme, setCurrentTheme] = useState("tomo");
+  const [language, setLanguageState] = useState(
+    () => localStorage.getItem("language") || "en"
+  );
+  const text = copy[language];
   const [platformOrder, setPlatformOrder] = useState(() => {
     const savedOrder = localStorage.getItem("platform_order");
 
@@ -51,13 +98,13 @@ function App() {
     spotify: accessToken && {
       id: "spotify",
       name: "Spotify",
-      logo: "/image/logo/Spotify-Black-Logo.png",
+      logo: "/logo/Spotify-Black-Logo.png",
       logoClassName: "spotifyStepLogo",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/image/logo/YouTube-Logo.png",
+      logo: "/logo/YouTube-Logo.png",
       logoClassName: "youtubeStepLogo",
     },
   };
@@ -72,8 +119,13 @@ function App() {
   const sourcePlatform = connectedPlatforms[0];
   const destinationPlatform = connectedPlatforms[1];
   const chooseText = sourcePlatform
-    ? "Choose where u want to move ur music"
-    : "Choose a platform to start syncing your playlists";
+    ? text.chooseDestination
+    : text.chooseSource;
+
+  const setLanguage = (nextLanguage) => {
+    localStorage.setItem("language", nextLanguage);
+    setLanguageState(nextLanguage);
+  };
 
   const addPlatformToOrder = (platformId) => {
     setPlatformOrder((currentOrder) => {
@@ -95,7 +147,7 @@ function App() {
         loading,
         playlists,
         logout: logoutSpotify,
-        logoutLabel: "Déconnexion Spotify",
+        logoutLabel: `${text.disconnect} Spotify`,
         renderPlaylist: (playlist) => (
           <div
             className="playlistCard"
@@ -120,7 +172,7 @@ function App() {
                 <h3>{playlist.name}</h3>
 
                 <p>
-                  {playlist.tracks.total} morceaux
+                  {playlist.tracks.total} {text.tracks}
                 </p>
 
                 <a
@@ -128,7 +180,7 @@ function App() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Ouvrir sur Spotify
+                  {text.openSpotify}
                 </a>
               </div>
             </div>
@@ -142,9 +194,9 @@ function App() {
     return {
       error: youtubeError,
       loading: youtubeLoading,
-      playlists: youtubePlaylists,
+        playlists: youtubePlaylists,
         logout: logoutYoutube,
-        logoutLabel: "Déconnexion YouTube",
+        logoutLabel: `${text.disconnect} YouTube`,
         renderPlaylist: (playlist) => (
           <div
             className="playlistCard"
@@ -171,7 +223,7 @@ function App() {
                 <h3>{playlist.snippet.title}</h3>
 
                 <p>
-                  {playlist.contentDetails.itemCount} videos
+                  {playlist.contentDetails.itemCount} {text.videos}
                 </p>
 
                 <a
@@ -179,7 +231,7 @@ function App() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Ouvrir sur YouTube
+                  {text.openYoutube}
                 </a>
               </div>
             </div>
@@ -311,12 +363,12 @@ function App() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Erreur pendant la récupération des playlists."
+          text.playlistError
       );
     } finally {
       setLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, text.playlistError]);
 
   const getYoutubePlaylists = useCallback(async () => {
     setYoutubeError("");
@@ -336,12 +388,12 @@ function App() {
     } catch (err) {
       setYoutubeError(
         err.response?.data?.message ||
-          "Erreur pendant la récupération des playlists YouTube."
+          text.youtubePlaylistError
       );
     } finally {
       setYoutubeLoading(false);
     }
-  }, [youtubeAccessToken]);
+  }, [youtubeAccessToken, text.youtubePlaylistError]);
 
   const getPlaylistTracks = useCallback(
     async (platformId, playlistId) => {
@@ -376,7 +428,7 @@ function App() {
           ...currentErrors,
           [trackKey]:
             err.response?.data?.message ||
-            "Impossible de récupérer les musiques.",
+            text.trackError,
         }));
       } finally {
         setTrackLoading((currentLoading) => ({
@@ -385,7 +437,7 @@ function App() {
         }));
       }
     },
-    [accessToken, youtubeAccessToken]
+    [accessToken, text.trackError, youtubeAccessToken]
   );
 
   const togglePlaylist = (platformId, playlistId) => {
@@ -405,12 +457,13 @@ function App() {
     if (platformId === "spotify") {
       const track = item.track;
       const artistNames =
-        track?.artists?.map((artist) => artist.name).join(", ") || "Artiste inconnu";
+        track?.artists?.map((artist) => artist.name).join(", ") ||
+        text.unknownArtist;
 
-      return `${track?.name || "Titre inconnu"} - ${artistNames}`;
+      return `${track?.name || text.unknownTitle} - ${artistNames}`;
     }
 
-    return item.snippet?.title || "Titre inconnu";
+    return item.snippet?.title || text.unknownTitle;
   };
 
   const renderTrackPanel = (platformId, playlistId) => {
@@ -423,7 +476,7 @@ function App() {
           className="expandBtn"
           onClick={() => togglePlaylist(platformId, playlistId)}
           type="button"
-          aria-label={isExpanded ? "Ranger les musiques" : "Afficher les musiques"}
+          aria-label={isExpanded ? text.hideTracks : text.showTracks}
         >
           {isExpanded ? "⌃" : "⌄"}
         </button>
@@ -431,7 +484,7 @@ function App() {
         {isExpanded && (
           <div className="trackPanel">
             {trackLoading[trackKey] && (
-              <p>Chargement des musiques...</p>
+              <p>{text.loadingTracks}</p>
             )}
 
             {trackErrors[trackKey] && (
@@ -471,10 +524,12 @@ function App() {
 
   return (
     <main className="app">
-      <ThemeSelector
+      <TopRightActionBtn
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
+        language={language}
+        setLanguage={setLanguage}
       />
       <section className="card">
         <Parental />
@@ -483,7 +538,7 @@ function App() {
         </div>
 
         <p className="subtitle">
-          Transfer playlists between your favorite platforms.
+          {text.subtitle}
         </p>
 
         <div className="transferProgress">
@@ -494,7 +549,7 @@ function App() {
 
             {sourcePlatform && (
               <>
-                <span className="connectedBadge">Connecter</span>
+                <span className="connectedBadge">{text.connected}</span>
                 <img
                   src={sourcePlatform.logo}
                   alt={sourcePlatform.name}
@@ -513,7 +568,7 @@ function App() {
 
             {destinationPlatform && (
               <>
-                <span className="connectedBadge">Connecter</span>
+                <span className="connectedBadge">{text.connected}</span>
                 <img
                   src={destinationPlatform.logo}
                   alt={destinationPlatform.name}
@@ -533,7 +588,7 @@ function App() {
             {!accessToken && (
               <button className="spotifyBtn" onClick={loginSpotify}>
                 <img
-                  src="/image/logo/Spotify-Black-Logo.png"
+                  src="/logo/Spotify-Black-Logo.png"
                   alt="Spotify"
                   className="spotifyBigLogo"
                 />
@@ -543,7 +598,7 @@ function App() {
             {!youtubeAccessToken && (
               <button className="youtubeBtn" onClick={loginYoutube}>
                 <img
-                  src="/image/logo/YouTube-Logo.png"
+                  src="/logo/YouTube-Logo.png"
                   alt="YouTube"
                   className="youtubeBigLogo"
                 />
@@ -577,7 +632,7 @@ function App() {
                   )}
 
                   {details.loading && (
-                    <p>Chargement des playlists {platform.name}...</p>
+                    <p>{text.loadingPlaylists} {platform.name}...</p>
                   )}
 
                   <div className="playlistList">
