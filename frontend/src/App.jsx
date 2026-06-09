@@ -9,9 +9,9 @@ import "./App.css";
 
 const copy = {
   en: {
-    subtitle: "Transfer playlists between your favorite platforms",
-    chooseSource: "Choose a platform to start syncing your playlists",
-    chooseDestination: "Choose where u want to move ur music",
+    subtitle: "Transfer playlists between your favorite platforms.",
+    chooseSource: "Choose a platform 2 start 𖤐 ",
+    chooseDestination: "Where 2 u want to move ur musics 𖤐",
     connected: "Connected",
     disconnect: "Disconnect",
     tracks: "tracks",
@@ -40,6 +40,7 @@ const copy = {
     switchAccount: "Switch account",
     removeChoice: "Remove platform choice",
     changePlatform: "Return",
+    disconnectHint: "2 disconnect an account, go to Profile.",
     logged: "Logged",
     pickPlaylist: "Select a playlist to sync",
     transferToNew: "Transfer into a new playlist",
@@ -57,11 +58,13 @@ const copy = {
     nowTransferring: "Now transferring",
     preparingTransfer: "Preparing transfer...",
     transferProgress: "Progress",
+    homeBannerTitle: "Run Me Yo Blood",
+    homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
   },
   fr: {
     subtitle: "Transfere tes playlists entre tes plateformes preferees",
-    chooseSource: "Choisis une plateforme pour commencer a synchroniser tes playlists",
-    chooseDestination: "Choisis ou tu veux deplacer ta musique",
+    chooseSource: "Choisis une plateforme 𖤐",
+    chooseDestination: "Ou veux tu transferer tes playlistes 𖤐",
     connected: "Connecte",
     disconnect: "Deconnecter",
     tracks: "morceaux",
@@ -90,6 +93,7 @@ const copy = {
     switchAccount: "Changer de compte",
     removeChoice: "Retirer le choix de plateforme",
     changePlatform: "Retour",
+    disconnectHint: "Pour se deconnecter d'un compte, allez dans Profil.",
     logged: "Logged",
     pickPlaylist: "Choisissez une liste de lecture à synchroniser",
     transferToNew: "Transferer dans une nouvelle playlist",
@@ -107,6 +111,8 @@ const copy = {
     nowTransferring: "Transfert en cours",
     preparingTransfer: "Preparation du transfert...",
     transferProgress: "Progression",
+    homeBannerTitle: "Run Me Yo Blood",
+    homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
   },
 };
 
@@ -413,13 +419,6 @@ function App() {
     }
 
     [
-      initialConnection.savedSpotifyToken &&
-        !initialConnection.spotifyTokenFromUrl &&
-        "spotify",
-      initialConnection.savedYoutubeToken &&
-        !initialConnection.youtubeTokenFromUrl &&
-        "youtube",
-      initialConnection.savedAppleMusicUserToken && "apple",
       initialConnection.spotifyTokenFromUrl && "spotify",
       initialConnection.youtubeTokenFromUrl && "youtube",
     ]
@@ -1208,13 +1207,18 @@ function App() {
       />
       <section className="card">
         {/* <Parental /> */}
-        <div className="brand">
-          <h1>SoundSync</h1>
-        </div>
+        <section className="mainHero">
+          <img
+            src="/SoundSync/SoundSyncLogoNoBG.png"
+            alt="SoundSync"
+            className="mainHeroLogo"
+          />
 
-        <p className="subtitle">
-          {text.subtitle}
-        </p>
+          <div className="mainHeroText">
+            <h1>SoundSync</h1>
+            <p>{text.subtitle}</p>
+          </div>
+        </section>
 
         {currentPage === "profile" && (
           <div className="profilePage">
@@ -1265,121 +1269,177 @@ function App() {
 
         {currentPage === "home" && (
           <>
+            {selectedPlatforms.length < 2 && (
+              <div className="homeSetupGrid">
+                <section className="choosePanel">
+                  <p className="chooseText">{chooseText}</p>
 
-        <div className="transferProgress">
-          <div className="transferSlot">
-            {!sourcePlatform && (
-              <span className="slotAlert">?</span>
+                  <div className="platformLoginRow">
+                    <button
+                      className={`spotifyBtn platformChoiceBtn${platformOrder.includes("spotify") ? " selectedPlatformBtn" : ""}`}
+                      onClick={accessToken ? () => addPlatformToOrder("spotify") : loginSpotify}
+                      disabled={platformOrder.includes("spotify")}
+                    >
+                      {accessToken && <span className="loggedBadge">{text.logged}</span>}
+                      <img
+                        src="/logo/Spotify-Black-Logo.png"
+                        alt="Spotify"
+                        className="spotifyBigLogo"
+                      />
+                    </button>
+
+                    <button
+                      className={`youtubeBtn platformChoiceBtn${platformOrder.includes("youtube") ? " selectedPlatformBtn" : ""}`}
+                      onClick={youtubeAccessToken ? () => addPlatformToOrder("youtube") : loginYoutube}
+                      disabled={platformOrder.includes("youtube")}
+                    >
+                      {youtubeAccessToken && <span className="loggedBadge">{text.logged}</span>}
+                      <img
+                        src="/logo/YouTube-Logo.png"
+                        alt="YouTube"
+                        className="youtubeBigLogo"
+                      />
+                    </button>
+
+                    <button
+                      className={`appleBtn platformChoiceBtn${platformOrder.includes("apple") ? " selectedPlatformBtn" : ""}`}
+                      onClick={appleMusicUserToken ? () => addPlatformToOrder("apple") : loginAppleMusic}
+                      disabled={platformOrder.includes("apple")}
+                    >
+                      {appleMusicUserToken && <span className="loggedBadge">{text.logged}</span>}
+                      <img
+                        src="/logo/appleMusic.png"
+                        alt="Apple Music"
+                        className="appleMusicLogo"
+                      />
+                    </button>
+                  </div>
+                </section>
+
+                <section className="progressPanel">
+                  <div className="transferProgress">
+                    <div className="transferSlot">
+                      {!sourcePlatform && (
+                        <span className="slotAlert">𖤐</span>
+                      )}
+
+                      {sourcePlatform && (
+                        <img
+                          src={sourcePlatform.logo}
+                          alt={sourcePlatform.name}
+                          className={sourcePlatform.logoClassName}
+                        />
+                      )}
+                    </div>
+
+                    <div className="transferArrow"></div>
+
+                    <div className="transferSlot">
+                      {!destinationPlatform && (
+                        sourcePlatform && <span className="slotAlert">𖤐</span>
+                      )}
+
+                      {destinationPlatform && (
+                        <img
+                          src={destinationPlatform.logo}
+                          alt={destinationPlatform.name}
+                          className={destinationPlatform.logoClassName}
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="progressPanelFooter">
+                    <p>{text.disconnectHint}</p>
+
+                    {selectedPlatforms.length > 0 && (
+                      <button
+                        className="changePlatformBtn secondaryBtn"
+                        onClick={goBackPlatformChoice}
+                      >
+                        {text.changePlatform}
+                      </button>
+                    )}
+                  </div>
+                </section>
+              </div>
             )}
 
-            {sourcePlatform && (
-              <>
-          
-                <img
-                  src={sourcePlatform.logo}
-                  alt={sourcePlatform.name}
-                  className={sourcePlatform.logoClassName}
-                />
-              </>
-            )}
-          </div>
+            {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
+              <div className="transferWorkspace">
+                <section className="transferStatusPanel">
+                  <div className="transferProgress">
+                    <div className="transferSlot">
+                      <img
+                        src={sourcePlatform.logo}
+                        alt={sourcePlatform.name}
+                        className={sourcePlatform.logoClassName}
+                      />
+                    </div>
 
-          <div className="transferArrow"></div>
+                    <div className="transferArrow"></div>
 
-          <div className="transferSlot">
-            {sourcePlatform && !destinationPlatform && (
-              <span className="slotAlert">?</span>
-            )}
+                    <div className="transferSlot">
+                      <img
+                        src={destinationPlatform.logo}
+                        alt={destinationPlatform.name}
+                        className={destinationPlatform.logoClassName}
+                      />
+                    </div>
+                  </div>
 
-            {destinationPlatform && (
-              <>
+                  <button
+                    className="changePlatformBtn secondaryBtn"
+                    onClick={goBackPlatformChoice}
+                  >
+                    {text.changePlatform}
+                  </button>
+                </section>
 
-                <img
-                  src={destinationPlatform.logo}
-                  alt={destinationPlatform.name}
-                  className={destinationPlatform.logoClassName}
-                />
-              </>
-            )}
-          </div>
-        </div>
+                <section className="playlistPickPanel">
+                  <h2>{text.pickPlaylist}</h2>
 
-        {selectedPlatforms.length > 0 && (
-          <button
-            className="changePlatformBtn secondaryBtn"
-            onClick={goBackPlatformChoice}
-          >
-            {text.changePlatform}
-          </button>
-        )}
+                  {getPlatformDetails(sourcePlatform.id).error && (
+                    <p className="error">{getPlatformDetails(sourcePlatform.id).error}</p>
+                  )}
 
-        {(!sourcePlatform || !destinationPlatform) && (
-          <p className="chooseText">{chooseText}</p>
-        )}
+                  {getPlatformDetails(sourcePlatform.id).loading && (
+                    <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
+                  )}
 
-        {selectedPlatforms.length < 2 && (
-          <div className="platformLoginRow">
-            {!platformOrder.includes("spotify") && (
-              <button
-                className="spotifyBtn platformChoiceBtn"
-                onClick={accessToken ? () => addPlatformToOrder("spotify") : loginSpotify}
-              >
-                {accessToken && <span className="loggedBadge">{text.logged}</span>}
-                <img
-                  src="/logo/Spotify-Black-Logo.png"
-                  alt="Spotify"
-                  className="spotifyBigLogo"
-                />
-              </button>
-            )}
+                  <div className="sourcePlaylistGrid">
+                    {getPlatformPlaylists(sourcePlatform.id).map((playlist) => {
+                      const isSelected = selectedSourcePlaylistId === playlist.id;
 
-            {!platformOrder.includes("youtube") && (
-              <button
-                className="youtubeBtn platformChoiceBtn"
-                onClick={youtubeAccessToken ? () => addPlatformToOrder("youtube") : loginYoutube}
-              >
-                {youtubeAccessToken && <span className="loggedBadge">{text.logged}</span>}
-                <img
-                  src="/logo/YouTube-Logo.png"
-                  alt="YouTube"
-                  className="youtubeBigLogo"
-                />
-              </button>
-            )}
+                      return (
+                        <button
+                          className={`sourcePlaylistChoice${isSelected ? " selected" : ""}`}
+                          key={playlist.id}
+                          onClick={() => {
+                            setSelectedSourcePlaylistId(playlist.id);
+                            setTransferResult(null);
+                            setTransferError("");
+                            if (!newPlaylistName) {
+                              setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
+                            }
+                          }}
+                          style={{
+                            "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
+                          }}
+                        >
+                          <img
+                            src={getPlaylistImage(sourcePlatform.id, playlist)}
+                            alt={getPlaylistName(sourcePlatform.id, playlist)}
+                          />
+                          <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
+                          <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
 
-            {!platformOrder.includes("apple") && (
-              <button
-                className="appleBtn platformChoiceBtn"
-                onClick={appleMusicUserToken ? () => addPlatformToOrder("apple") : loginAppleMusic}
-              >
-                {appleMusicUserToken && <span className="loggedBadge">{text.logged}</span>}
-                <img
-                  src="/logo/appleMusic.png"
-                  alt="Apple Music"
-                  className="appleMusicLogo"
-                />
-              </button>
-            )}
-
-
-
-
-          </div>
-        )}
-
-        {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
-          <div className="transferFlow">
-            <h2>{text.pickPlaylist}</h2>
-
-            {getPlatformDetails(sourcePlatform.id).error && (
-              <p className="error">{getPlatformDetails(sourcePlatform.id).error}</p>
-            )}
-
-            {getPlatformDetails(sourcePlatform.id).loading && (
-              <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
-            )}
-
-            <div className="destinationSetup">
+                <section className="destinationSetup">
               <div className="transferModeRow">
                 <button
                   className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
@@ -1528,47 +1588,24 @@ function App() {
                   )}
                 </div>
               )}
-            </div>
+                </section>
+              </div>
+            )}
 
-            <div className="sourcePlaylistGrid">
-              {getPlatformPlaylists(sourcePlatform.id).map((playlist) => {
-                const isSelected = selectedSourcePlaylistId === playlist.id;
-
-                return (
-                  <button
-                    className={`sourcePlaylistChoice${isSelected ? " selected" : ""}`}
-                    key={playlist.id}
-                    onClick={() => {
-                      setSelectedSourcePlaylistId(playlist.id);
-                      setTransferResult(null);
-                      setTransferError("");
-                      if (!newPlaylistName) {
-                        setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
-                      }
-                    }}
-                    style={{
-                      "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
-                    }}
-                  >
-                    <img
-                      src={getPlaylistImage(sourcePlatform.id, playlist)}
-                      alt={getPlaylistName(sourcePlatform.id, playlist)}
-                    />
-                    <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
-                    <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
-                  </button>
-                );
-              })}
-            </div>
-
-          </div>
-        )}
+            <section className="homeInfoBanner">
+              <div>
+                <h2>{text.homeBannerTitle}</h2>
+                <p>{text.homeBannerText}</p>
+              </div>
+              <div className="homeInfoBannerImages">
+                <img src="/sleep.jpg" alt="" />
+                <img src="/confetti.jpg" alt="" />
+              </div>
+            </section>
           </>
         )}
 
-        <div className="heroTopLogo" aria-hidden="true">
-          <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" />
-        </div>
+
       </section>
     </main>
   );

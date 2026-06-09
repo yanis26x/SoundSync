@@ -106,6 +106,7 @@ function Info() {
         </div>
         <img src="/logo/mini/SoundSync-mini-logo-noBG.png" alt="" />
       </section>
+
     </main>
   );
 }
