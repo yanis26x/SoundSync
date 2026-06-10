@@ -11,7 +11,7 @@ import "./App.css";
 const copy = {
   en: {
     subtitle: "Transfer Anywhere, Sync Everthing",
-    chooseSource: "Select the source platform𖤐 ",
+    chooseSource: "Select the source platform𖤐",
     chooseDestination: "Select the destination𖤐",
     connected: "Connected", 
     disconnect: "Disconnect",
@@ -40,16 +40,22 @@ const copy = {
     connect: "Connect",
     switchAccount: "Switch account",
     removeChoice: "Remove platform choice",
-    changePlatform: "Return",
+    changePlatform: "Reset",
     disconnectHint: "To Unlink an account, go to Profile.",
     logged: "✓ LINKED",
-    pickPlaylist: "Select a playlist to sync",
+    pickPlaylist: "Select a playlist to sync𖤐",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
     playlistName: "Playlist name",
     destinationPlaylist: "Destination playlist",
     startTransfer: "Start transfer",
     transferLoading: "Transfer in progress...",
+    transferPreparing: "Loading source tracks...",
+    transferCreatingPlaylist: "Creating destination playlist...",
+    transferCheckingDestination: "Checking destination playlist...",
+    transferSearchingTrack: "Searching",
+    transferAddingTracks: "Adding tracks...",
+    transferFinalizing: "Finalizing transfer...",
     transferDone: "Transfer done",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
@@ -90,7 +96,7 @@ const copy = {
     connect: "Se connecter",
     switchAccount: "Changer de compte",
     removeChoice: "Retirer le choix de plateforme",
-    changePlatform: "Retour",
+    changePlatform: "Reset",
     disconnectHint: "Pour se deconnecter d'un compte, allez dans Profil.",
     logged: "Online",
     pickPlaylist: "Choisissez une liste de lecture à synchroniser",
@@ -100,6 +106,12 @@ const copy = {
     destinationPlaylist: "Playlist destination",
     startTransfer: "Demarrer le transfert",
     transferLoading: "Transfert en cours...",
+    transferPreparing: "Chargement des musiques source...",
+    transferCreatingPlaylist: "Creation de la playlist destination...",
+    transferCheckingDestination: "Verification de la playlist destination...",
+    transferSearchingTrack: "Recherche",
+    transferAddingTracks: "Ajout des musiques...",
+    transferFinalizing: "Finalisation du transfert...",
     transferDone: "Transfert termine",
     addedTracks: "musiques ajoutees",
     failedTracks: "musiques introuvables ou en erreur",
@@ -161,6 +173,7 @@ function App() {
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [destinationPlaylistId, setDestinationPlaylistId] = useState("");
   const [transferLoading, setTransferLoading] = useState(false);
+  const [transferStatus, setTransferStatus] = useState("");
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
   const [currentTheme, setCurrentTheme] = useState("tomo");
@@ -221,13 +234,9 @@ function App() {
     });
   };
 
-  const goBackPlatformChoice = () => {
-    setPlatformOrder((currentOrder) => {
-      const nextOrder = currentOrder.slice(0, -1);
-      localStorage.setItem("platform_order", JSON.stringify(nextOrder));
-
-      return nextOrder;
-    });
+  const resetPlatformChoice = () => {
+    localStorage.setItem("platform_order", JSON.stringify([]));
+    setPlatformOrder([]);
   };
 
   const getPlatformDetails = (platformId) => {
@@ -975,6 +984,7 @@ if (
 }
 
     setTransferLoading(true);
+    setTransferStatus(text.transferPreparing);
     setTransferError("");
     setTransferResult(null);
 
@@ -984,6 +994,7 @@ if (
       let tracks = playlistTracks[sourceTrackKey];
 
       if (!tracks) {
+        setTransferStatus(text.transferPreparing);
         const tracksResponse = await authorizedRequest(sourcePlatform.id, {
           method: "get",
           url: `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
@@ -1004,6 +1015,7 @@ if (
       let targetPlaylistId = destinationPlaylistId;
 
       if (destinationMode === "new") {
+        setTransferStatus(text.transferCreatingPlaylist);
         const createUrl = `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists`;
         const playlistTitle =
           newPlaylistName.trim() ||
@@ -1031,6 +1043,7 @@ if (
       let existingDestinationTrackIds = new Set();
 
       if (destinationMode === "existing") {
+        setTransferStatus(text.transferCheckingDestination);
         const destinationTrackResponse = await authorizedRequest(destinationPlatform.id, {
           method: "get",
           url: `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists/${targetPlaylistId}/tracks`,
@@ -1069,7 +1082,8 @@ if (
       if (destinationPlatform.id === "spotify") {
         const uris = [];
 
-        for (const label of trackLabels) {
+        for (const [index, label] of trackLabels.entries()) {
+          setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("spotify", {
               method: "get",
@@ -1096,6 +1110,7 @@ if (
         }
 
         if (uris.length > 0) {
+          setTransferStatus(text.transferAddingTracks);
           await authorizedRequest("spotify", {
             method: "post",
             url: `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
@@ -1107,7 +1122,8 @@ if (
       }
 
       if (destinationPlatform.id === "youtube") {
-        for (const label of trackLabels) {
+        for (const [index, label] of trackLabels.entries()) {
+          setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("youtube", {
               method: "get",
@@ -1146,7 +1162,8 @@ if (
       if (destinationPlatform.id === "apple") {
         const songs = [];
 
-        for (const label of trackLabels) {
+        for (const [index, label] of trackLabels.entries()) {
+          setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("apple", {
               method: "get",
@@ -1177,6 +1194,7 @@ if (
         }
 
         if (songs.length > 0) {
+          setTransferStatus(text.transferAddingTracks);
           await authorizedRequest("apple", {
             method: "post",
             url: `http://127.0.0.1:8000/api/apple/playlists/${targetPlaylistId}/tracks`,
@@ -1187,6 +1205,7 @@ if (
         }
       }
 
+      setTransferStatus(text.transferFinalizing);
       setTransferResult({
         added,
         failed,
@@ -1196,6 +1215,7 @@ if (
       setTransferError(err.response?.data?.message || err.message || text.trackError);
     } finally {
       setTransferLoading(false);
+      setTransferStatus("");
     }
   };
 
@@ -1306,7 +1326,7 @@ if (
         {selectedPlatforms.length > 0 && (
           <button
             className="changePlatformBtn secondaryBtn"
-            onClick={goBackPlatformChoice}
+            onClick={resetPlatformChoice}
           >
             {text.changePlatform}
           </button>
@@ -1535,6 +1555,16 @@ if (
                     <p className="error transferError">{transferError}</p>
                   )}
 
+                  {transferLoading && (
+                    <div className="transferProgress" role="status" aria-live="polite">
+                      <span className="transferProgressPulse" aria-hidden="true"></span>
+                      <div>
+                        <strong>{text.transferLoading}</strong>
+                        <p>{transferStatus}</p>
+                      </div>
+                    </div>
+                  )}
+
                   <p className="transferLimit">{text.transferLimit}</p>
 
                   <button
@@ -1622,6 +1652,7 @@ if (
               <div>
                 <h2>{text.homeBannerTitle}</h2>
                 <p>{text.homeBannerText}</p>
+                <p >Originaly it was a projected a stared 1 year ago (Spotify2Ytb), but never finished it.... Check out the demo of it</p>
               </div>
               <div className="homeInfoBannerImages">
                 <img src="/sleep.jpg" alt="" />

@@ -118,6 +118,19 @@ body::after {
   }
 }
 
+@keyframes transferPulse {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -562,6 +575,7 @@ body::after {
 }
 
 .homeInfoBannerImages {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   height: 100%;
@@ -1023,8 +1037,8 @@ button:hover {
 }
 
 .appleSourcePlaylistChoice img {
-  transform: translateY(10px);
-  margin-bottom: 18px;
+  transform: translateY(22px);
+  margin-bottom: 4px;
 }
 
 .sourcePlaylistChoice span,
@@ -1042,6 +1056,11 @@ button:hover {
   margin-top: 4px;
   color: rgba(255, 255, 255, 0.74);
   font-weight: 700;
+}
+
+.appleSourcePlaylistChoice span,
+.appleSourcePlaylistChoice small {
+  transform: translateY(12px);
 }
 
 .destinationSetup {
@@ -1095,6 +1114,54 @@ button:hover {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+}
+
+.transferProgress {
+  width: min(520px, 100%);
+  margin: 16px auto 0;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 72%, white 10%);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 28%, rgba(0, 0, 0, 0.36)),
+      rgba(0, 0, 0, 0.28)
+    );
+  box-shadow:
+    0 0 22px var(--accent-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: var(--text-color);
+  text-align: left;
+}
+
+.transferProgressPulse {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 18px var(--accent);
+  animation: transferPulse 0.95s ease-in-out infinite;
+}
+
+.transferProgress strong {
+  display: block;
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.transferProgress p {
+  margin: 3px 0 0;
+  color: color-mix(in srgb, var(--text-color) 82%, var(--accent));
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .transferLimit {
@@ -1285,6 +1352,7 @@ button:hover {
   .homeInfoBannerImages img {
     justify-self: stretch;
   }
+
 
   .destinationSetup {
     position: relative;
