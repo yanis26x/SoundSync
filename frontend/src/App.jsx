@@ -41,7 +41,7 @@ const copy = {
     switchAccount: "Switch account",
     removeChoice: "Remove platform choice",
     changePlatform: "Return",
-    disconnectHint: "2 disconnect an account, go to Profile.",
+    disconnectHint: "To disconnect an account, go to Profile.",
     logged: "Logged",
     pickPlaylist: "Select a playlist to sync",
     transferToNew: "Transfer into a new playlist",
@@ -56,15 +56,15 @@ const copy = {
     alreadyTracks: "tracks already in playlist",
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
     transferLimit: "Current limit: 25 tracks per transfer.",
-    homeBannerTitle: "Run Me Yo Blood",
-    homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
+    homeBannerTitle: "Want sum more?!",
+    homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive. Hope you like it ;)",
   },
   fr: {
-    subtitle: "Transfere tes playlists entre tes plateformes preferees",
+    subtitle: "Transfere tes playlistes entre tes plateformes preferees",
     chooseSource: "Choisis une plateforme 𖤐",
-    chooseDestination: "Ou veux tu transferer tes playlistes 𖤐",
+    chooseDestination: "Select Destination 𖤐",
     connected: "Connecte",
-    disconnect: "Deconnecter",
+    disconnect: "Deconnecter",  
     tracks: "morceaux",
     videos: "videos",
     openSpotify: "Ouvrir sur Spotify",
@@ -107,7 +107,7 @@ const copy = {
     unsupportedTransfer: "Le transfert est dispo pour Spotify et YouTube pour le moment.",
     transferLimit: "Limite actuelle : 25 musiques par transfert.",
     homeBannerTitle: "Run Me Yo Blood",
-    homeBannerText: "it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
+    homeBannerText: "I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
   },
 };
 
@@ -1324,9 +1324,6 @@ if (
           window.location.href = "/Profil";
         }}
         profileLabel={text.profile}
-        onOpenInfo={() => {
-          window.location.href = "/info";
-        }}
       />
       <section className="card">
         {/* <Parental /> */}

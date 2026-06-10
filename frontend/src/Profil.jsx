@@ -220,9 +220,6 @@ function Profil() {
           window.location.href = "/";
         }}
         profileLabel="Home"
-        onOpenInfo={() => {
-          window.location.href = "/info";
-        }}
       />
 
       <section className="profilPanel">
