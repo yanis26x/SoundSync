@@ -42,7 +42,7 @@ const copy = {
     removeChoice: "Remove platform choice",
     changePlatform: "Return",
     disconnectHint: "To disconnect an account, go to Profile.",
-    logged: "Logged",
+    logged: "Online",
     pickPlaylist: "Select a playlist to sync",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
@@ -92,7 +92,7 @@ const copy = {
     removeChoice: "Retirer le choix de plateforme",
     changePlatform: "Retour",
     disconnectHint: "Pour se deconnecter d'un compte, allez dans Profil.",
-    logged: "Logged",
+    logged: "Online",
     pickPlaylist: "Choisissez une liste de lecture à synchroniser",
     transferToNew: "Transferer dans une nouvelle playlist",
     transferToExisting: "Ajouter a une playlist existante",
@@ -181,7 +181,7 @@ function App() {
     spotify: accessToken && {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/logo/spotify-mini.png",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
