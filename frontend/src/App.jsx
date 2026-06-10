@@ -341,10 +341,7 @@ function App() {
       logoutLabel: `${text.disconnect} Apple Music`,
       renderPlaylist: (playlist) => {
         const artworkUrl = getAppleArtworkUrl(playlist.attributes?.artwork);
-        const appleTrackCount =
-          playlist.attributes?.trackCount ??
-          playlist.relationships?.tracks?.data?.length ??
-          0;
+        const appleTrackCount = getApplePlaylistTrackCount(playlist);
 
         return (
           <div
@@ -744,6 +741,18 @@ function App() {
     return artwork.url.replace("{w}", "300").replace("{h}", "300");
   };
 
+  const getApplePlaylistTrackCount = (playlist) => {
+    return (
+      playlist.attributes?.trackCount ??
+      playlist.attributes?.trackCountString ??
+      playlist.relationships?.tracks?.meta?.total ??
+      playlist.relationships?.tracks?.data?.length ??
+      playlist.tracks?.total ??
+      playlist.trackCount ??
+      0
+    );
+  };
+
   const togglePlaylist = (platformId, playlistId) => {
     const trackKey = `${platformId}:${playlistId}`;
 
@@ -943,11 +952,7 @@ function App() {
     if (platformId === "spotify") return playlist.tracks?.total || 0;
     if (platformId === "youtube") return playlist.contentDetails?.itemCount || 0;
 
-    return (
-      playlist.attributes?.trackCount ??
-      playlist.relationships?.tracks?.data?.length ??
-      0
-    );
+    return getApplePlaylistTrackCount(playlist);
   };
 
   const selectedSourcePlaylist = sourcePlatform
@@ -1461,7 +1466,7 @@ if (
 
                       return (
                         <button
-                          className={`sourcePlaylistChoice${isSelected ? " selected" : ""}`}
+                          className={`sourcePlaylistChoice${sourcePlatform.id === "apple" ? " appleSourcePlaylistChoice" : ""}${isSelected ? " selected" : ""}`}
                           key={playlist.id}
                           onClick={() => {
                             setSelectedSourcePlaylistId(playlist.id);

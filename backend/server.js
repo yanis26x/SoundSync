@@ -176,6 +176,34 @@ app.get("/api/apple/token", (req, res) => {
   }
 });
 
+const countAppleLibraryPlaylistTracks = async (
+  developerToken,
+  musicUserToken,
+  playlistId
+) => {
+  let trackCount = 0;
+  let nextUrl = `https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`;
+  let params = { limit: 100 };
+
+  while (nextUrl) {
+    const response = await axios.get(nextUrl, {
+      headers: {
+        Authorization: `Bearer ${developerToken}`,
+        "Music-User-Token": musicUserToken,
+      },
+      params,
+    });
+
+    trackCount += response.data.data?.length || 0;
+    nextUrl = response.data.next
+      ? new URL(response.data.next, "https://api.music.apple.com").toString()
+      : "";
+    params = undefined;
+  }
+
+  return trackCount;
+};
+
 app.get("/api/apple/playlists", async (req, res) => {
   const musicUserToken = req.headers.authorization?.replace("Bearer ", "");
 
@@ -202,9 +230,34 @@ app.get("/api/apple/playlists", async (req, res) => {
       }
     );
 
+    const playlists = await Promise.all(
+      response.data.data.map(async (playlist) => {
+        const includedTrackCount =
+          playlist.attributes?.trackCount ??
+          playlist.relationships?.tracks?.meta?.total ??
+          playlist.relationships?.tracks?.data?.length;
+
+        const trackCount =
+          includedTrackCount ??
+          (await countAppleLibraryPlaylistTracks(
+            developerToken,
+            musicUserToken,
+            playlist.id
+          ));
+
+        return {
+          ...playlist,
+          attributes: {
+            ...playlist.attributes,
+            trackCount,
+          },
+        };
+      })
+    );
+
     res.json({
       success: true,
-      playlists: response.data.data,
+      playlists,
     });
   } catch (error) {
     console.error("Erreur playlists Apple Music :", error.response?.data || error.message);
