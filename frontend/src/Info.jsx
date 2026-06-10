@@ -86,10 +86,9 @@ function Info() {
 
         <article className="infoCard">
           <img src="/logo/appleMusic.png" alt="Apple Music" />
-          <h2>Apple Music</h2>
+          <h2>Run Me Yo Blood</h2>
           <p>
-            Apple Music login and playlist reading are included, with transfer
-            support expanding as platform APIs allow it.
+it keep my eyes low, I'm looking chinky -- Do—dope sick, I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving
           </p>
         </article>
       </section>

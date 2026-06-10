@@ -229,8 +229,7 @@ body::after {
 
 .themeBtn,
 .profileBtn,
-.infoBtn,
-.returnBtn {
+.infoBtn {
   width: auto;
   margin: 0;
   padding: 10px 14px;
@@ -249,7 +248,6 @@ body::after {
 .themeBtn:hover,
 .profileBtn:hover,
 .infoBtn:hover,
-.returnBtn:hover,
 .languageBtn:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
@@ -410,11 +408,105 @@ body::after {
 .emptyPanel {
   height: 100%;
   min-height: 184px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
 }
 
 .transferWorkspace .emptyPanel {
   grid-column: 2;
   grid-row: 1;
+}
+
+.emptyPanelFlow {
+  display: grid;
+  grid-template-columns: minmax(82px, 1fr) 64px minmax(82px, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.emptyPlatformSlot {
+  min-height: 92px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.12)),
+      rgba(0, 0, 0, 0.2)
+    );
+}
+
+.emptyPlatformSlot img {
+  max-width: 78px;
+  max-height: 46px;
+  object-fit: contain;
+}
+
+.emptyPlatformSlot span {
+  color: var(--text-color);
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.emptySlotLabel {
+  color: color-mix(in srgb, var(--text-color) 62%, transparent) !important;
+  text-transform: uppercase;
+}
+
+.emptyFlowArrow {
+  position: relative;
+  height: 32px;
+}
+
+.emptyFlowArrow::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  background: color-mix(in srgb, var(--accent) 60%, white 20%);
+  transform: translateY(-50%);
+}
+
+.emptyFlowArrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid color-mix(in srgb, var(--accent) 60%, white 20%);
+  border-right: 2px solid color-mix(in srgb, var(--accent) 60%, white 20%);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.emptyPanelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emptyPanelFooter p {
+  max-width: 340px;
+  margin: 0;
+  color: color-mix(in srgb, var(--text-color) 84%, transparent) !important;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.emptyPanelFooter .changePlatformBtn {
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .choosePanel {
@@ -938,57 +1030,40 @@ button:hover {
 }
 
 .destinationSetup {
-  padding: 24px;
+  padding: 22px;
   position: sticky;
   top: 96px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 
 .transferModeRow {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.22);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .transferModeRow button,
 .startTransferBtn {
-  width: 100%;
+  width: auto;
   margin: 0;
-  padding: 12px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 900;
+  padding: 11px 16px;
 }
 
 .selectedMode {
-  border-color: color-mix(in srgb, var(--accent) 70%, white 30%);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 38%, transparent),
-      rgba(255, 255, 255, 0.12)
-    );
-  box-shadow:
-    0 0 20px color-mix(in srgb, var(--accent) 24%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .playlistNameInput {
-  width: 100%;
-  margin: 0;
-  padding: 14px 15px;
+  width: min(520px, 100%);
+  margin: 16px auto 0;
+  padding: 13px 14px;
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.24);
   color: var(--text-color);
   font: inherit;
-  font-weight: 800;
+  font-weight: 700;
   outline: none;
 }
 
@@ -998,15 +1073,7 @@ button:hover {
 }
 
 .startTransferBtn {
-  margin-top: 0;
-  min-height: 48px;
-  border-color: color-mix(in srgb, var(--accent) 52%, var(--border-color));
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 34%, rgba(255, 255, 255, 0.12)),
-      rgba(0, 0, 0, 0.24)
-    );
+  margin-top: 16px;
 }
 
 .startTransferBtn:disabled {
@@ -1016,134 +1083,28 @@ button:hover {
 }
 
 .transferLimit {
-  margin: 0;
-  color: color-mix(in srgb, var(--text-color) 72%, transparent) !important;
-  font-size: 12px;
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.76) !important;
+  font-size: 13px;
   font-weight: 800;
-  line-height: 1.35;
-}
-
-.transferError {
-  margin: 0;
-  padding: 10px 12px;
-  border: 1px solid rgba(243, 27, 45, 0.34);
-  border-radius: 12px;
-  background: rgba(243, 27, 45, 0.1);
 }
 
 .transferResult {
-  margin-top: 2px;
+  margin-top: 18px;
   text-align: left;
 }
 
-.transferResultHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
 .transferResult h3 {
-  margin: 0;
-  font-size: 20px;
+  margin: 0 0 10px;
+  text-align: center;
 }
 
-.transferResultSummary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 12px;
+.failedList {
+  border-color: rgba(243, 27, 45, 0.32);
 }
 
-.resultStat {
-  min-height: 66px;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.22);
-}
-
-.resultStat strong,
-.resultStat span {
-  display: block;
-}
-
-.resultStat strong {
-  font-size: 24px;
-  font-weight: 950;
-  line-height: 1;
-}
-
-.resultStat span {
-  margin-top: 7px;
-  color: color-mix(in srgb, var(--text-color) 72%, transparent);
-  font-size: 10px;
-  font-weight: 850;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.addedStat strong {
-  color: #75ff9a;
-}
-
-.failedStat strong {
-  color: #ff4f68;
-}
-
-.alreadyStat strong {
-  color: color-mix(in srgb, var(--text-color) 86%, transparent);
-}
-
-.transferResultLists {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.resultListGroup {
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.resultListGroup h4 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 950;
-  text-transform: uppercase;
-}
-
-.resultListGroup ol {
-  max-height: 150px;
-  margin: 0;
-  padding-left: 20px;
-  overflow: auto;
-}
-
-.resultListGroup li,
-.resultListGroup p {
-  color: color-mix(in srgb, var(--text-color) 84%, transparent);
-  font-size: 13px;
-  line-height: 1.35;
-}
-
-.resultListGroup p {
-  margin: 0;
-}
-
-.addedGroup {
-  border-color: rgba(117, 255, 154, 0.28);
-}
-
-.failedGroup {
-  border-color: rgba(243, 27, 45, 0.34);
-}
-
-.alreadyGroup {
-  border-color: rgba(255, 255, 255, 0.18);
+.alreadyList {
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .playlistCardMain {
@@ -1290,6 +1251,18 @@ button:hover {
     min-height: 178px;
   }
 
+  .emptyPanelFlow {
+    grid-template-columns: 1fr;
+  }
+
+  .emptyFlowArrow {
+    display: none;
+  }
+
+  .emptyPanelFooter {
+    align-items: flex-start;
+  }
+
   .homeInfoBannerImages {
     height: 180px;
   }
@@ -1301,11 +1274,6 @@ button:hover {
   .destinationSetup {
     position: relative;
     top: auto;
-  }
-
-  .transferModeRow,
-  .transferResultSummary {
-    grid-template-columns: 1fr;
   }
 
   .transferWorkspace .playlistPickPanel,

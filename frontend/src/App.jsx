@@ -1267,6 +1267,49 @@ if (
     setTransferError("");
   }, [sourcePlatform?.id, destinationPlatform?.id]);
 
+  const renderEmptyPanel = () => (
+    <section className="emptyPanel">
+      <div className="emptyPanelFlow">
+        <div className="emptyPlatformSlot">
+          {sourcePlatform ? (
+            <>
+              <img src={sourcePlatform.logo} alt={sourcePlatform.name} />
+              <span>{sourcePlatform.name}</span>
+            </>
+          ) : (
+            <span className="emptySlotLabel">Source</span>
+          )}
+        </div>
+
+        <div className="emptyFlowArrow" aria-hidden="true"></div>
+
+        <div className="emptyPlatformSlot">
+          {destinationPlatform ? (
+            <>
+              <img src={destinationPlatform.logo} alt={destinationPlatform.name} />
+              <span>{destinationPlatform.name}</span>
+            </>
+          ) : (
+            <span className="emptySlotLabel">Destination</span>
+          )}
+        </div>
+      </div>
+
+      <div className="emptyPanelFooter">
+        <p>{text.disconnectHint}</p>
+
+        {selectedPlatforms.length > 0 && (
+          <button
+            className="changePlatformBtn secondaryBtn"
+            onClick={goBackPlatformChoice}
+          >
+            {text.changePlatform}
+          </button>
+        )}
+      </div>
+    </section>
+  );
+
   return (
     <main className="app">
       <MusicParticles />
@@ -1284,9 +1327,6 @@ if (
         onOpenInfo={() => {
           window.location.href = "/info";
         }}
-        onReturn={goBackPlatformChoice}
-        returnLabel={text.changePlatform}
-        showReturn={selectedPlatforms.length > 0}
       />
       <section className="card">
         {/* <Parental /> */}
@@ -1399,13 +1439,13 @@ if (
                   </div>
                 </section>
 
-                <section className="emptyPanel" aria-hidden="true"></section>
+                {renderEmptyPanel()}
               </div>
             )}
 
             {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
               <div className="transferWorkspace">
-                <section className="emptyPanel" aria-hidden="true"></section>
+                {renderEmptyPanel()}
 
                 <section className="playlistPickPanel">
                   <h2>{text.pickPlaylist}</h2>
