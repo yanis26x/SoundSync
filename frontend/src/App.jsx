@@ -10,10 +10,10 @@ import "./App.css";
 
 const copy = {
   en: {
-    subtitle: "Transfer playlists between your favorite platforms.",
-    chooseSource: "Select a platform source 𖤐 ",
-    chooseDestination: "Select Destination 𖤐",
-    connected: "Connected",
+    subtitle: "Transfer Anywhere, Sync Everthing",
+    chooseSource: "Select the source platform𖤐 ",
+    chooseDestination: "Select the destination𖤐",
+    connected: "Connected", 
     disconnect: "Disconnect",
     tracks: "tracks",
     videos: "videos",
@@ -60,7 +60,7 @@ const copy = {
     homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive. Hope you like it ;)",
   },
   fr: {
-    subtitle: "Transfere tes playlistes entre tes plateformes preferees",
+    subtitle: "Transfer Anywhere, Sync Everthing",
     chooseSource: "Choisis une plateforme 𖤐",
     chooseDestination: "Select Destination 𖤐",
     connected: "Connecte",
