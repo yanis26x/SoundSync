@@ -180,7 +180,7 @@ body::after {
   overflow: visible;
   width: 100%;
   max-width: 1180px;
-  padding: 56px 30px 8px;
+  padding: 78px 30px 8px;
   text-align: left;
 
   animation: riseIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
@@ -190,36 +190,18 @@ body::after {
 .mainHero {
   position: relative;
   z-index: 5;
-  display: grid;
-  grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1fr);
+  display: flex;
   align-items: center;
-  gap: 28px;
-  min-height: 240px;
+  justify-content: center;
+  min-height: 250px;
   animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 
 .mainHeroLogo {
-  width: 100%;
-  max-height: 250px;
+  width: min(680px, 100%);
+  max-height: 310px;
   object-fit: contain;
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.36));
-}
-
-.mainHeroText h1 {
-  margin: 0 0 12px;
-  color: var(--text-color);
-  font-size: clamp(46px, 7vw, 82px);
-  line-height: 0.95;
-  text-shadow: 0 0 16px var(--accent-soft);
-}
-
-.mainHeroText p {
-  max-width: 580px;
-  margin: 0;
-  color: color-mix(in srgb, var(--text-color) 84%, transparent) !important;
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.5;
 }
 
 .heroTopLogo {

@@ -2,8 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { themes } from "./themes";
 import MusicParticles from "./components/Particles/MusicParticles";
-import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
-import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
+import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import "./Profil.css";
 
@@ -209,8 +208,7 @@ function Profil() {
   return (
     <main className="profilPage">
       <MusicParticles />
-      <TopLeftBtn />
-      <TopRightActionBtn
+      <Navbar
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}

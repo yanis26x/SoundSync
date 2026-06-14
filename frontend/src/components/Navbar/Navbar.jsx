@@ -1,0 +1,81 @@
+import { useState } from "react";
+import ThemeModal from "../ThemeModal/ThemeModal";
+import "./Navbar.css";
+
+function Navbar({
+  themes,
+  currentTheme,
+  setCurrentTheme,
+  language,
+  setLanguage,
+  onOpenProfile,
+  profileLabel = "Profile",
+}) {
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+  const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
+  const nextLanguage = language === "en" ? "fr" : "en";
+
+  const openThemeModal = () => {
+    setIsThemeModalClosing(false);
+    setIsThemeModalOpen(true);
+  };
+
+  const closeThemeModal = () => {
+    setIsThemeModalClosing(true);
+
+    window.setTimeout(() => {
+      setIsThemeModalOpen(false);
+      setIsThemeModalClosing(false);
+    }, 200);
+  };
+
+  return (
+    <>
+      <nav className="siteNavbar" aria-label="Main navigation">
+        <a className="siteNavbarBrand" href="/">
+          <span className="siteNavbarTitle">SoundSync</span>
+          <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
+        </a>
+
+        <div className="siteNavbarActions">
+          <button
+            type="button"
+            className="siteNavbarBtn"
+            onClick={onOpenProfile || (() => {
+              window.location.href = "/Profil";
+            })}
+          >
+            {profileLabel}
+          </button>
+
+          <button
+            type="button"
+            className="siteNavbarBtn"
+            onClick={openThemeModal}
+          >
+            Theme
+          </button>
+
+          <button
+            type="button"
+            className="siteNavbarBtn languageNavbarBtn"
+            onClick={() => setLanguage(nextLanguage)}
+          >
+            {language.toUpperCase()}
+          </button>
+        </div>
+      </nav>
+
+      <ThemeModal
+        themes={themes}
+        currentTheme={currentTheme}
+        setCurrentTheme={setCurrentTheme}
+        isOpen={isThemeModalOpen}
+        isClosing={isThemeModalClosing}
+        onClose={closeThemeModal}
+      />
+    </>
+  );
+}
+
+export default Navbar;

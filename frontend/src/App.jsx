@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
-import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
-import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
 import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
+import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
 
@@ -1346,7 +1345,7 @@ if (
     <main className="app">
       <MusicParticles />
 
-      <TopRightActionBtn
+      <Navbar
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
@@ -1365,11 +1364,6 @@ if (
             alt="SoundSync"
             className="mainHeroLogo"
           />
-
-          <div className="mainHeroText">
-            <h1>SoundSync</h1>
-            <p>{text.subtitle}</p>
-          </div>
         </section>
 
         {currentPage === "profile" && (
