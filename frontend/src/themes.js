@@ -10,17 +10,6 @@ export const themes = {
     text: "#fff7ea",
   },
 
-  ichigo: {
-    name: "Ichigo",
-    description: "5 classmates having fun at school!!",
-    background: "/wallpaper/ichigo50.jpg",
-    cardBg: "rgba(8, 8, 10, 0.62)",
-    border: "rgba(255, 255, 255, 0.2)",
-    accent: "#ff4d5f",
-    accentSoft: "rgba(255, 77, 95, 0.18)",
-    text: "#ffffff",
-  },
-
   sora: {
     name: "Sora",
     description: "Sora from Kingdom Hearts feeling the music flowing through his body.",

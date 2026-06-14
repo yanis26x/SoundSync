@@ -1650,14 +1650,38 @@ if (
             )}
 
             <section className="homeInfoBanner">
-              <div>
-                <h2>{text.homeBannerTitle}</h2>
+              <div className="homeInfoBannerContent">
+                <h2>About SoundSync!*</h2>
                 <p>{text.homeBannerText}</p>
-                <p >Originaly it was a projected a stared 1 year ago (Spotify2Ytb), but never finished it.... Check out the demo of it</p>
+                <p>Originaly it was a projected a stared 1 year ago (Spotify2Ytb), but never finished it.... Check out the demo of it</p>
+
+                <div className="homeInfoFeatureGrid">
+                  <article className="homeInfoFeatureCard">
+                    <img src="/confetti.jpg" alt="" />
+                    <strong>Simple et cool</strong>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
+                    <img src="/ichigo_20.jpg" alt="" />
+                    <strong>Transfer Anywhere, Sync Everthing</strong>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
+                    <img src="/yanis26xPFP.jpg" alt="" />
+                    <strong>em0cha0666xd</strong>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
+                    <img src="/yanis26xPFP2.jpg" alt="" />
+                    <div className="homeInfoDemoActions">
+                      <button type="button">video demo</button>
+                      <button type="button" className="oldDemoBtn">Old demo</button>
+                    </div>
+                  </article>
+                </div>
               </div>
-              <div className="homeInfoBannerImages">
-                <img src="/sleep.jpg" alt="" />
-                <img src="/confetti.jpg" alt="" />
+              <div className="homeInfoBannerImage">
+                <img src="/wallpaper/ichigo50.jpg" alt="" />
               </div>
             </section>
 
