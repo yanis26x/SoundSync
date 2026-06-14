@@ -3,7 +3,8 @@
   height: 220px;
   min-height: 220px;
   padding: 22px 26px;
-  display: flex;
+  display: grid;
+  place-items: center;
   overflow: hidden;
   border: 1px solid var(--border-color);
   border-radius: 18px;
@@ -13,69 +14,166 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-.commentLoopContent {
-  width: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
-  animation: commentFadeIn 0.46s ease both;
+.commentLoopPanel::before {
+  content: "";
+  position: absolute;
+  inset: -76px;
+  background-image: url("/SoundSync/SoundSync-mini-logo-noBG.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.72;
+  pointer-events: none;
 }
 
-.commentLoopContent p {
-  margin: 0;
-  color: white !important;
-  font: inherit;
-  font-size: clamp(22px, 2.4vw, 31px);
-  font-weight: 760;
-  line-height: 1.22;
+.commentLoopPanel.entering::before {
+  animation: commentBackgroundFadeIn 0.45s ease both;
 }
 
-.commentAuthor {
+.commentLoopPanel.leaving::before {
+  animation: commentBackgroundRunLeft 0.45s ease both;
+}
+
+.commentProfileCard {
+  position: relative;
+  z-index: 1;
+  min-width: min(420px, 100%);
+  min-height: 88px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16px;
+  border-radius: 18px;
+
+  color: var(--text-color);
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
-.commentAvatar {
-  width: 54px;
-  height: 54px;
+.commentProfileCard:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 48%, rgba(255, 255, 255, 0.2));
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.commentProfileCard.entering {
+  animation: commentMessageFadeIn 0.45s ease both;
+}
+
+.commentProfileCard.leaving {
+  animation: commentMessageRunLeft 0.45s ease both;
+}
+
+.commentProfileWrapper {
+  position: relative;
+  display: flex;
   flex: 0 0 auto;
+}
+
+.commentProfileImg {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
 }
 
-.commentAuthor strong,
-.commentAuthor span {
-  display: block;
+.commentOnlineIndicator {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3cff4f;
+  border: 2px solid white;
+  animation: commentOnlinePulse 1.8s infinite;
 }
 
-.commentAuthor strong {
+.commentProfileText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.commentProfileText strong {
   color: white;
-  font: inherit;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: 26px;
+  font-weight: 900;
 }
 
-.commentAuthor span {
-  margin-top: 4px;
-  color: rgba(231, 237, 248, 0.78);
-  font-size: 17px;
+.commentProfileText span {
+  min-height: 18px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 15px;
   font-weight: 700;
 }
 
-@keyframes commentFadeIn {
+@keyframes commentOnlinePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(60, 255, 79, 0.85);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(60, 255, 79, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(60, 255, 79, 0);
+  }
+}
+
+@keyframes commentMessageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateX(18px) scale(0.96);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes commentMessageRunLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-140px) scale(0.92) rotate(-4deg);
+  }
+}
+
+@keyframes commentBackgroundFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(18px) scale(0.94) rotate(3deg);
+  }
+
+  to {
+    opacity: 0.72;
+    transform: translateX(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes commentBackgroundRunLeft {
+  from {
+    opacity: 0.72;
+    transform: translateX(0) scale(1) rotate(0deg);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-140px) scale(0.9) rotate(-5deg);
   }
 }
 
@@ -86,7 +184,15 @@
     padding: 22px;
   }
 
-  .commentLoopContent p {
-    font-size: 23px;
+  .commentProfileCard {
+    min-width: 100%;
+  }
+
+  .commentProfileText strong {
+    font-size: 22px;
+  }
+
+  .commentProfileText span {
+    font-size: 13px;
   }
 }

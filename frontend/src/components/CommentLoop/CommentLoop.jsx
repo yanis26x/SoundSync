@@ -1,58 +1,66 @@
 import { useEffect, useState } from "react";
 import "./CommentLoop.css";
 
-const comments = [
+const messages = [
   {
-    quote: "super facile, j'ai pu transférer mes playlists en quelques clics !",
-    name: "Nassim Djenadi",
-    role: "Professional DJ",
-    avatar: "/yanis26xPFP.jpg",
+    href: "https://www.instagram.com/yanis26x",
+    image: "/yanis26xPFP.jpg",
+    title: "@yanis26x",
+    subtitle: "",
   },
   {
-    quote: "NaNa 0 HaTch1",
-    name: "Hi-c",
-    role: "em0cha0666xd",
-    avatar: "/yanis26xPFP2.jpg",
-  },
-  {
-    quote: "idk",
-    name: "name",
-    role: "Music lover",
-    avatar: "/yanis26xPFP.jpg",
+    href: "https://yanis26x.github.io/yanis26x/",
+    image: "/yanis26xPFP2.jpg",
+    title: "Want sum more?!",
+    subtitle: "visit my website",
   },
 ];
 
 function CommentLoop() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeComment = comments[activeIndex];
+  const [isLeaving, setIsLeaving] = useState(false);
+  const activeMessage = messages[activeIndex];
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
-      setActiveIndex((currentIndex) => (currentIndex + 1) % comments.length);
-    }, 4200);
+      setIsLeaving(true);
+
+      window.setTimeout(() => {
+        setActiveIndex((currentIndex) => (currentIndex + 1) % messages.length);
+        setIsLeaving(false);
+      }, 450);
+    }, 8000);
 
     return () => window.clearInterval(intervalId);
   }, []);
 
   return (
-    <section className="commentLoopPanel" aria-label="User comments">
-      <div className="commentLoopContent" key={activeComment.name}>
-        <p>{activeComment.quote}</p>
-
-        <div className="commentAuthor">
+    <section
+      className={`commentLoopPanel ${isLeaving ? "leaving" : "entering"}`}
+      aria-label="Profile links"
+    >
+      <a
+        className={`commentProfileCard ${isLeaving ? "leaving" : "entering"}`}
+        href={activeMessage.href}
+        target="_blank"
+        rel="noreferrer"
+        key={activeMessage.title}
+      >
+        <div className="commentProfileWrapper">
           <img
-            className="commentAvatar"
-            src={activeComment.avatar}
-            alt=""
-            aria-hidden="true"
+            src={activeMessage.image}
+            alt={activeMessage.title}
+            className="commentProfileImg"
           />
 
-          <div>
-            <strong>{activeComment.name}</strong>
-            <span>{activeComment.role}</span>
-          </div>
+          <span className="commentOnlineIndicator"></span>
         </div>
-      </div>
+
+        <div className="commentProfileText">
+          <strong>{activeMessage.title}</strong>
+          <span>{activeMessage.subtitle}</span>
+        </div>
+      </a>
     </section>
   );
 }

@@ -1345,7 +1345,7 @@ if (
   return (
     <main className="app">
       <MusicParticles />
-      <TopLeftBtn />
+
       <TopRightActionBtn
         themes={themes}
         currentTheme={currentTheme}
