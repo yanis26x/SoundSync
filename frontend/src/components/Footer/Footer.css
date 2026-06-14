@@ -140,9 +140,9 @@
 }
 
 @media (max-width: 650px) {
-  .siteFooter {
-    padding: 24px 20px;
-  }
+.siteFooter {
+  margin-top: auto;
+}
 
   .footerTop {
     grid-template-columns: 1fr;

@@ -25,6 +25,10 @@ body {
   overflow-x: hidden;
 }
 
+.card {
+  flex: 1;
+}
+
 body::before {
   content: "";
   position: fixed;
