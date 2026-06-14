@@ -1,0 +1,180 @@
+.personalMusicPanel {
+  height: 220px;
+  min-height: 220px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 20%, rgba(4, 9, 20, 0.82)),
+      rgba(4, 9, 20, 0.72)
+    );
+  box-shadow:
+    0 0 26px var(--accent-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.personalMusicBody {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+}
+
+.personalMusicPlayer,
+.personalMusicLinks,
+.personalMusicMiku {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.personalMusicPlayer {
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 16px;
+}
+
+.personalMusicMiku img {
+  width: 100%;
+  min-height: 0;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.personalMusicCover {
+  width: 124px;
+  height: 124px;
+  min-width: 0;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.personalMusicTrackInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.personalMusicMiku img {
+  height: 124px;
+}
+
+.personalMusicControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.personalMusicTabs button,
+.personalMusicLinks a {
+  min-width: 0;
+  margin: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-color);
+  font: inherit;
+  font-weight: 900;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.personalMusicControls button {
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-color);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 950;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.personalMusicPlayer h2,
+.personalMusicLinks h2 {
+  margin: 0 0 4px;
+  color: white;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.personalMusicPlayer p,
+.personalMusicMiku p {
+  margin: 0;
+  color: color-mix(in srgb, var(--text-color) 76%, transparent);
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.personalMusicLinks {
+  justify-content: center;
+  gap: 12px;
+}
+
+.personalMusicLinks a {
+  display: block;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.14)),
+      rgba(255, 255, 255, 0.12)
+    );
+}
+
+.personalMusicMiku {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.personalMusicTabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.personalMusicTabs button {
+  text-transform: capitalize;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.personalMusicTabs .activePersonalTab {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 28%, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 0 18px var(--accent-soft);
+}
+
+@media (max-width: 650px) {
+  .personalMusicPanel {
+    height: 220px;
+    min-height: 220px;
+  }
+
+  .personalMusicPlayer {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .personalMusicCover {
+    width: 104px;
+    height: 124px;
+  }
+}

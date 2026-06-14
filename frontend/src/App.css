@@ -7,6 +7,12 @@
   --text-color: #ffffff;
 }
 
+@property --guide-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -132,6 +138,29 @@ body::after {
   50% {
     opacity: 1;
     transform: scale(1.12);
+  }
+}
+
+@keyframes guideBorderSpin {
+  to {
+    --guide-angle: 360deg;
+  }
+}
+
+@keyframes guidePanelGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 26px var(--accent-soft),
+      0 0 0 rgba(255, 255, 255, 0),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px color-mix(in srgb, var(--accent) 44%, transparent),
+      0 0 46px rgba(255, 255, 255, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -403,6 +432,7 @@ body::after {
 .destinationSetup,
 .emptyPanel,
 .homeInfoBanner {
+  position: relative;
   border: 1px solid var(--border-color);
   border-radius: 18px;
   background:
@@ -416,6 +446,40 @@ body::after {
   box-shadow:
     0 0 26px var(--accent-soft),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.guidedPanel {
+  isolation: isolate;
+  animation: guidePanelGlow 1.8s ease-in-out infinite;
+}
+
+.guidedPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border-radius: inherit;
+  background:
+    conic-gradient(
+      from var(--guide-angle),
+      transparent 0deg,
+      transparent 82deg,
+      rgba(255, 255, 255, 0.98) 118deg,
+      var(--accent) 146deg,
+      transparent 190deg,
+      transparent 360deg
+    );
+  pointer-events: none;
+  z-index: 2;
+  animation: guideBorderSpin 1.35s linear infinite;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
 }
 
 .choosePanel,
@@ -593,6 +657,16 @@ body::after {
   object-fit: cover;
   justify-self: stretch;
   filter: saturate(1.08) contrast(1.04);
+}
+
+.homePersonalGrid {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.62fr) minmax(0, 1.38fr);
+  align-items: stretch;
+  gap: 18px;
+  margin-top: 18px;
 }
 
 .platformLoginRow {
@@ -1299,7 +1373,8 @@ button:hover {
   .mainHero,
   .homeSetupGrid,
   .transferWorkspace,
-  .homeInfoBanner {
+  .homeInfoBanner,
+  .homePersonalGrid {
     grid-template-columns: 1fr;
   }
 

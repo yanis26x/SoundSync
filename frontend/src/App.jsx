@@ -5,6 +5,8 @@ import TopRightActionBtn from "./components/TopRight/TopRightActionBtn";
 import TopLeftBtn from "./components/TopLeft/TopLeftBtn";
 import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
+import CommentLoop from "./components/CommentLoop/CommentLoop";
+import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import "./App.css";
 
 
@@ -215,6 +217,11 @@ function App() {
   const chooseText = sourcePlatform
     ? text.chooseDestination
     : text.chooseSource;
+  const activeGuideStep = selectedPlatforms.length < 2
+    ? "platforms"
+    : selectedSourcePlaylistId
+      ? "destination"
+      : "playlist";
 
   const setLanguage = (nextLanguage) => {
     localStorage.setItem("language", nextLanguage);
@@ -1416,7 +1423,7 @@ if (
           <>
             {selectedPlatforms.length < 2 && (
               <div className="homeSetupGrid">
-                <section className="choosePanel">
+                <section className={`choosePanel${activeGuideStep === "platforms" ? " guidedPanel" : ""}`}>
                   <p className="chooseText">{chooseText}</p>
 
                   <div className="platformLoginRow">
@@ -1469,7 +1476,7 @@ if (
               <div className="transferWorkspace">
                 {renderEmptyPanel()}
 
-                <section className="playlistPickPanel">
+                <section className={`playlistPickPanel${activeGuideStep === "playlist" ? " guidedPanel" : ""}`}>
                   <h2>{text.pickPlaylist}</h2>
 
                   {getPlatformDetails(sourcePlatform.id).error && (
@@ -1512,7 +1519,7 @@ if (
                   </div>
                 </section>
 
-                <section className="destinationSetup">
+                <section className={`destinationSetup${activeGuideStep === "destination" ? " guidedPanel" : ""}`}>
                   <div className="transferModeRow">
                     <button
                       className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
@@ -1659,6 +1666,11 @@ if (
                 <img src="/confetti.jpg" alt="" />
               </div>
             </section>
+
+            <div className="homePersonalGrid">
+              <MyPersonalMusic />
+              <CommentLoop />
+            </div>
           </>
         )}
 
