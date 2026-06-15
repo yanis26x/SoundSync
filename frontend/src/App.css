@@ -477,6 +477,7 @@ body::after {
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
+  background: black;
 }
 
 .transferWorkspace .emptyPanel {
@@ -667,12 +668,13 @@ body::after {
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255, 255, 255, 0.12));
   border-radius: 22px;
-  background:
+  background: black;
+  /* background:
     linear-gradient(
       180deg,
       color-mix(in srgb, var(--accent) 24%, rgba(0, 0, 0, 0.28)),
-      rgba(0, 0, 0, 0.24)
-    );
+      rgb(0, 0, 0)
+    ); */
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 14%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);

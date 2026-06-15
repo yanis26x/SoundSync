@@ -1685,7 +1685,7 @@ if (
                     <img src="/confetti.jpg" alt="" />
                     <div>
                       <strong>Made by me</strong>
-                      <span>Built from an old Spotify2Ytb idea.</span>
+                      <span>Built from an old project.</span>
                     </div>
                   </article>
                 </div>
