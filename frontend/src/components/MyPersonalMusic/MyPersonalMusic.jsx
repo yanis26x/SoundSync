@@ -79,7 +79,7 @@ function MyPersonalMusic() {
           target="_blank"
           rel="noreferrer"
         >
-          <img src="/ichigo/ok.jpg" alt="" />
+          <img src="/ichigo/confetti.jpg" alt="" />
           <div>
             <strong>Spotify</strong>
             <span>Follow my playlists.</span>

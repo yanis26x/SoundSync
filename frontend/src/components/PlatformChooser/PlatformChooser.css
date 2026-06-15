@@ -214,7 +214,14 @@
 }
 
 .youtubeBigLogo {
-  width: 140px;
+  width: 170px;
+}
+
+.appleMusicLogo {
+  filter:
+    brightness(0) invert(1)
+    drop-shadow(0 0 8px rgba(255,255,255,.12))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 18%, transparent));
 }
 
 .appleMusicLogo {
@@ -226,6 +233,13 @@
 .platformChoiceBtn:hover .appleMusicLogo {
   transform: scale(1.06);
   filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.18))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 34%, transparent));
+}
+
+.platformChoiceBtn:hover .appleMusicLogo {
+  filter:
+    brightness(0) invert(1)
     drop-shadow(0 0 10px rgba(255,255,255,.18))
     drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 34%, transparent));
 }

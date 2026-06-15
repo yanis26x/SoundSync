@@ -1,26 +1,40 @@
+import { useEffect, useState } from "react";
 import "./EmptyPanel.css";
 
+const wavePhrases = [
+  "Money—money, I gotta have it, its so intriguing",
+  "Guap gives me satisfaction, it just completes me",
+  "Money—money, I keep it 'round me, I'm very clingy",
+  "Mantr—mantras, I'm chanting mantras, praying to watch me",
+  "@yanis26x",
+];
+
 function EmptyPanel({
-  sourcePlatform,
-  destinationPlatform,
   selectedPlatformsCount,
   resetLabel,
   disconnectHint,
   onReset,
 }) {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setPhraseIndex((currentIndex) => (currentIndex + 1) % wavePhrases.length);
+    }, 3000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   return (
     <section className="emptyPanel">
-      <div className="emptyDivaButtons" aria-hidden="true">
-        <span>X</span>
-        <span>O</span>
-        <span>×</span>
-        <span>□</span>
+      <h2 className="emptyPanelTitle">huh..?</h2>
+
+      <div className="wavePhrase" key={phraseIndex}>
+        {wavePhrases[phraseIndex]}
       </div>
 
-      <h2 className="emptyPanelTitle">Keep your playlists alive</h2>
-
       <div className="emptyPanelWave" aria-hidden="true">
-        {Array.from({ length: 24 }).map((_, index) => (
+        {Array.from({ length: 42 }).map((_, index) => (
           <span key={index} />
         ))}
       </div>
