@@ -16,7 +16,7 @@ export const themes = {
     background: "/wallpaper/soraMusic.jpg",
     cardBg: "rgba(0, 8, 42, 0.78)",
     border: "rgba(0, 122, 255, 0.62)",
-    accent: "#0048ff",
+    accent: "#007bff",
     accentSoft: "rgba(0, 80, 255, 0.38)",
     text: "#eaf6ff",
   },

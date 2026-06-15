@@ -482,7 +482,7 @@ body::after {
   flex-direction: column;
   justify-content: flex-end;
   gap: 18px;
-  background:none;
+  background:black;
 }
 
 .transferWorkspace .emptyPanel {
