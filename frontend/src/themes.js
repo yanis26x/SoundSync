@@ -31,4 +31,5 @@ export const themes = {
   accentSoft: "rgba(0, 255, 217, 0.34)",
   text: "#f2fdff",
 },
+
 };
