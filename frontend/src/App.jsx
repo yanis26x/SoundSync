@@ -9,6 +9,7 @@ import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
 import PlaylistChooser from "./components/PlaylistChooser/PlaylistChooser";
 import StartTransfer from "./components/StartTransfer/StartTransfer";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
+import EmptyPanel from "./components/EmptyPanel/EmptyPanel";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
@@ -16,8 +17,8 @@ import "./App.css";
 const copy = {
   en: {
     subtitle: "Transfer Anywhere, Sync Everthing",
-    chooseSource: "Select the source platform𖤐",
-    chooseDestination: "Select the destination𖤐",
+    chooseSource: "Select the source platform",
+    chooseDestination: "Select the destination",
     connected: "Connected", 
     disconnect: "Disconnect",
     tracks: "tracks",
@@ -1307,49 +1308,6 @@ if (
     setTransferError("");
   }, [sourcePlatform?.id, destinationPlatform?.id]);
 
-  const renderEmptyPanel = () => (
-    <section className="emptyPanel">
-      <div className="emptyPanelFlow">
-        <div className="emptyPlatformSlot">
-          {sourcePlatform ? (
-            <>
-              <img src={sourcePlatform.logo} alt={sourcePlatform.name} />
-              <span>{sourcePlatform.name}</span>
-            </>
-          ) : (
-            <span className="emptySlotLabel">?!</span>
-          )}
-        </div>
-
-        <div className="emptyFlowArrow" aria-hidden="true"></div>
-
-        <div className="emptyPlatformSlot">
-          {destinationPlatform ? (
-            <>
-              <img src={destinationPlatform.logo} alt={destinationPlatform.name} />
-              <span>{destinationPlatform.name}</span>
-            </>
-          ) : (
-            <span className="emptySlotLabel">?!</span>
-          )}
-        </div>
-      </div>
-
-      <div className="emptyPanelFooter">
-        <p>{text.disconnectHint}</p>
-
-        {selectedPlatforms.length > 0 && (
-          <button
-            className="changePlatformBtn secondaryBtn"
-            onClick={resetPlatformChoice}
-          >
-            {text.changePlatform}
-          </button>
-        )}
-      </div>
-    </section>
-  );
-
   return (
     <main className="app">
       <MusicParticles />
@@ -1482,7 +1440,14 @@ if (
                   </div>
                 </section>
 
-                {renderEmptyPanel()}
+                <EmptyPanel
+                  sourcePlatform={sourcePlatform}
+                  destinationPlatform={destinationPlatform}
+                  selectedPlatformsCount={selectedPlatforms.length}
+                  resetLabel={text.changePlatform}
+                  disconnectHint={text.disconnectHint}
+                  onReset={resetPlatformChoice}
+                />
               </div>
             )}
 

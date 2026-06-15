@@ -1,0 +1,231 @@
+.emptyPanel {
+  position: relative;
+  height: 100%;
+  min-height: 210px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+
+  overflow: hidden;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.12));
+  border-radius: 18px;
+
+  background:
+    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42%),
+    linear-gradient(135deg, rgba(0,0,0,.98), rgba(0,0,0,.78));
+
+  box-shadow:
+    0 0 34px color-mix(in srgb, var(--accent) 36%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.emptyPanelTitle {
+  position: relative;
+  z-index: 3;
+
+  margin: 0;
+
+  color: var(--text-color);
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: -0.6px;
+  text-align: center;
+
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 65%, transparent),
+    0 2px 14px rgba(0,0,0,.8);
+}
+
+.emptyPanelWave {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  z-index: 1;
+
+  width: min(82%, 500px);
+  height: 120px;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  opacity: 0.92;
+
+  filter:
+    drop-shadow(0 0 8px var(--accent))
+    drop-shadow(0 0 22px color-mix(in srgb, var(--accent) 45%, transparent));
+}
+
+.emptyPanelWave::before {
+  content: "";
+  position: absolute;
+  inset: 8px -12px;
+
+  border-radius: 999px;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 2px,
+      transparent 7px
+    );
+
+  opacity: 0.28;
+}
+
+.emptyPanelWave::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+
+  height: 2px;
+
+  background: var(--accent);
+
+  box-shadow:
+    0 0 12px var(--accent),
+    0 0 28px color-mix(in srgb, var(--accent) 60%, transparent);
+
+  opacity: 0.75;
+}
+
+.emptyPanelWave span {
+  position: relative;
+  z-index: 2;
+
+  width: 3px;
+  height: 18px;
+
+  border-radius: 999px;
+
+  background: var(--accent);
+
+  box-shadow:
+    0 0 8px var(--accent),
+    0 0 18px color-mix(in srgb, var(--accent) 55%, transparent);
+
+  animation: oldRadioWave 1.45s steps(4, end) infinite;
+}
+
+.emptyPanelWave span:nth-child(1) { height: 10px; animation-delay: 0s; opacity: .45; }
+.emptyPanelWave span:nth-child(2) { height: 16px; animation-delay: .04s; opacity: .55; }
+.emptyPanelWave span:nth-child(3) { height: 24px; animation-delay: .08s; opacity: .65; }
+.emptyPanelWave span:nth-child(4) { height: 36px; animation-delay: .12s; opacity: .8; }
+.emptyPanelWave span:nth-child(5) { height: 52px; animation-delay: .16s; opacity: .95; }
+.emptyPanelWave span:nth-child(6) { height: 76px; animation-delay: .2s; opacity: 1; }
+.emptyPanelWave span:nth-child(7) { height: 58px; animation-delay: .24s; opacity: .9; }
+.emptyPanelWave span:nth-child(8) { height: 42px; animation-delay: .28s; opacity: .76; }
+.emptyPanelWave span:nth-child(9) { height: 28px; animation-delay: .32s; opacity: .62; }
+.emptyPanelWave span:nth-child(10) { height: 18px; animation-delay: .36s; opacity: .5; }
+.emptyPanelWave span:nth-child(11) { height: 30px; animation-delay: .4s; opacity: .7; }
+.emptyPanelWave span:nth-child(12) { height: 46px; animation-delay: .44s; opacity: .85; }
+.emptyPanelWave span:nth-child(13) { height: 64px; animation-delay: .48s; opacity: .95; }
+.emptyPanelWave span:nth-child(14) { height: 88px; animation-delay: .52s; opacity: 1; }
+.emptyPanelWave span:nth-child(15) { height: 70px; animation-delay: .56s; opacity: .9; }
+.emptyPanelWave span:nth-child(16) { height: 50px; animation-delay: .6s; opacity: .78; }
+.emptyPanelWave span:nth-child(17) { height: 34px; animation-delay: .64s; opacity: .68; }
+.emptyPanelWave span:nth-child(18) { height: 22px; animation-delay: .68s; opacity: .56; }
+.emptyPanelWave span:nth-child(19) { height: 12px; animation-delay: .72s; opacity: .44; }
+.emptyPanelWave span:nth-child(20) { height: 20px; animation-delay: .76s; opacity: .55; }
+.emptyPanelWave span:nth-child(21) { height: 38px; animation-delay: .8s; opacity: .75; }
+.emptyPanelWave span:nth-child(22) { height: 56px; animation-delay: .84s; opacity: .92; }
+.emptyPanelWave span:nth-child(23) { height: 82px; animation-delay: .88s; opacity: 1; }
+.emptyPanelWave span:nth-child(24) { height: 62px; animation-delay: .92s; opacity: .88; }
+.emptyPanelWave span:nth-child(25) { height: 44px; animation-delay: .96s; opacity: .74; }
+.emptyPanelWave span:nth-child(26) { height: 30px; animation-delay: 1s; opacity: .62; }
+.emptyPanelWave span:nth-child(27) { height: 18px; animation-delay: 1.04s; opacity: .52; }
+.emptyPanelWave span:nth-child(28) { height: 26px; animation-delay: 1.08s; opacity: .64; }
+.emptyPanelWave span:nth-child(29) { height: 40px; animation-delay: 1.12s; opacity: .78; }
+.emptyPanelWave span:nth-child(30) { height: 56px; animation-delay: 1.16s; opacity: .9; }
+.emptyPanelWave span:nth-child(31) { height: 42px; animation-delay: 1.2s; opacity: .72; }
+.emptyPanelWave span:nth-child(32) { height: 24px; animation-delay: 1.24s; opacity: .58; }
+.emptyPanelWave span:nth-child(33) { height: 12px; animation-delay: 1.28s; opacity: .45; }
+
+@keyframes oldRadioWave {
+  0% {
+    transform: scaleY(.65);
+  }
+
+  25% {
+    transform: scaleY(1.15);
+  }
+
+  50% {
+    transform: scaleY(.82);
+  }
+
+  75% {
+    transform: scaleY(1.35);
+  }
+
+  100% {
+    transform: scaleY(.65);
+  }
+}
+
+.emptyPanelFooter {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emptyPanelFooter p {
+  max-width: 340px;
+  margin: 0;
+
+  color: rgba(255,255,255,.62);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.emptyPanelFooter .changePlatformBtn {
+  margin: 0;
+  padding: 8px 12px;
+
+  flex-shrink: 0;
+
+  font-size: 11px;
+  border-radius: 999px;
+}
+
+@media (max-width: 650px) {
+  .emptyPanel {
+    min-height: 220px;
+    padding: 20px;
+  }
+
+  .emptyPanelTitle {
+    font-size: 20px;
+  }
+
+  .emptyPanelWave {
+    width: 86%;
+    gap: 3px;
+  }
+
+  .emptyPanelWave span {
+    width: 2px;
+  }
+
+  .emptyPanelFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
