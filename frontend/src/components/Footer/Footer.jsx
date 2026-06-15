@@ -18,29 +18,24 @@ export default function Footer() {
 
   return (
     <footer className="siteFooter">
+      <div className="footerGlow" aria-hidden="true"></div>
+
       <div className="footerTop">
         <div className="footerBrand">
-          <span>SoundSync</span>
-          <small>Transfer Anywhere, Sync Everything</small>
+          <p>SoundSync</p>
+          <span>Transfer Anywhere, Sync Everything</span>
         </div>
 
         <div className="footerCenter">
-          <nav className="footerLinks">
+          <nav className="footerLinks" aria-label="Footer links">
             {footerLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <span className="footerSocialTag">
-            @yanis26x on all socials
-          </span>
+          <span className="footerSocialTag">@yanis26x on all socials</span>
         </div>
 
         <div className="footerCopyright">
@@ -49,8 +44,14 @@ export default function Footer() {
         </div>
       </div>
 
+      <div className="footerDivider">
+        <span></span>
+      </div>
+
       <div className="footerBottom">
-        <p>BL00d + F13nD & V@mP+ N1t3MaR3! </p>
+        <p>BL00d + F13nD & V@mP+ N1t3MaR3!</p>
+
+        <span className="footerStar">𖤐</span>
 
         <a
           href="https://apps.apple.com/us/app/qibla/id6754793667"
