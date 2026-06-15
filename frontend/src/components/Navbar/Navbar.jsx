@@ -10,6 +10,8 @@ function Navbar({
   setLanguage,
   onOpenProfile,
   profileLabel = "Profile",
+  onResetPlatformChoice,
+  resetLabel = "Reset",
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -38,6 +40,16 @@ function Navbar({
         </a>
 
         <div className="siteNavbarActions">
+          {onResetPlatformChoice && (
+            <button
+              type="button"
+              className="siteNavbarBtn resetHeaderBtn"
+              onClick={onResetPlatformChoice}
+            >
+              {resetLabel}
+            </button>
+          )}
+
           <button
             type="button"
             className="siteNavbarBtn"

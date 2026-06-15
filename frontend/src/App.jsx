@@ -6,6 +6,9 @@ import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
+import PlaylistChooser from "./components/PlaylistChooser/PlaylistChooser";
+import StartTransfer from "./components/StartTransfer/StartTransfer";
+import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
@@ -217,6 +220,11 @@ function App() {
   const chooseText = sourcePlatform
     ? text.chooseDestination
     : text.chooseSource;
+  const platformDisplayLogos = {
+    spotify: "/logo/spotify-mini.png",
+    youtube: "/logo/YouTube-Logo.png",
+    apple: "/logo/appleMusic.png",
+  };
   const activeGuideStep = selectedPlatforms.length < 2
     ? "platforms"
     : selectedSourcePlaylistId
@@ -1356,7 +1364,18 @@ if (
           window.location.href = "/Profil";
         }}
         profileLabel={text.profile}
+        onResetPlatformChoice={selectedPlatforms.length > 0 ? resetPlatformChoice : undefined}
+        resetLabel={text.changePlatform}
       />
+
+      {currentPage === "home" &&
+        selectedPlatforms.length === 2 &&
+        sourcePlatform &&
+        destinationPlatform &&
+        !selectedSourcePlaylistId && (
+          <DialoguePersona texte={text.pickPlaylist} />
+        )}
+
       <section className="card">
         {/* <Parental /> */}
         {/* <section className="mainHero">
@@ -1469,184 +1488,47 @@ if (
 
             {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
               <div className="transferWorkspace">
-                {renderEmptyPanel()}
-
-                <section className={`playlistPickPanel${activeGuideStep === "playlist" ? " guidedPanel" : ""}`}>
-                  <h2>{text.pickPlaylist}</h2>
-
-                  {getPlatformDetails(sourcePlatform.id).error && (
-                    <p className="error">{getPlatformDetails(sourcePlatform.id).error}</p>
-                  )}
-
-                  {getPlatformDetails(sourcePlatform.id).loading && (
-                    <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
-                  )}
-
-                  <div className="sourcePlaylistGrid">
-                    {getPlatformPlaylists(sourcePlatform.id).map((playlist) => {
-                      const isSelected = selectedSourcePlaylistId === playlist.id;
-
-                      return (
-                        <button
-                          className={`sourcePlaylistChoice${sourcePlatform.id === "apple" ? " appleSourcePlaylistChoice" : ""}${isSelected ? " selected" : ""}`}
-                          key={playlist.id}
-                          onClick={() => {
-                            setSelectedSourcePlaylistId(playlist.id);
-                            setTransferResult(null);
-                            setTransferError("");
-                            if (!newPlaylistName) {
-                              setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
-                            }
-                          }}
-                          style={{
-                            "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
-                          }}
-                        >
-                          <img
-                            src={getPlaylistImage(sourcePlatform.id, playlist)}
-                            alt={getPlaylistName(sourcePlatform.id, playlist)}
-                          />
-                          <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
-                          <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-
-                <section className={`destinationSetup${activeGuideStep === "destination" ? " guidedPanel" : ""}`}>
-                  <div className="transferModeRow">
-                    <button
-                      className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-                      onClick={() => setDestinationMode("new")}
-                    >
-                      {text.transferToNew}
-                    </button>
-
-                    <button
-                      className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-                      onClick={() => setDestinationMode("existing")}
-                    >
-                      {text.transferToExisting}
-                    </button>
-                  </div>
-
-                  {destinationMode === "new" ? (
-                    <input
-                      className="playlistNameInput"
-                      value={newPlaylistName}
-                      onChange={(event) => setNewPlaylistName(event.target.value)}
-                      placeholder={text.playlistName}
-                    />
-                  ) : (
-                    <select
-                      className="playlistNameInput"
-                      value={destinationPlaylistId}
-                      onChange={(event) => setDestinationPlaylistId(event.target.value)}
-                    >
-                      <option value="">{text.destinationPlaylist}</option>
-                      {destinationPlaylists.map((playlist) => (
-                        <option value={playlist.id} key={playlist.id}>
-                          {getPlaylistName(destinationPlatform.id, playlist)}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-
-                  {transferError && (
-                    <p className="error transferError">{transferError}</p>
-                  )}
-
-                  {transferLoading && (
-                    <div className="transferProgress" role="status" aria-live="polite">
-                      <span className="transferProgressPulse" aria-hidden="true"></span>
-                      <div>
-                        <strong>{text.transferLoading}</strong>
-                        <p>{transferStatus}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  <p className="transferLimit">{text.transferLimit}</p>
-
-                  <button
-                    className="startTransferBtn"
-                    onClick={startPlaylistTransfer}
-                    disabled={
-                      !selectedSourcePlaylist ||
-                      transferLoading ||
-                      (destinationMode === "existing" && !destinationPlaylistId)
-                    }
-                  >
-                    {transferLoading ? text.transferLoading : text.startTransfer}
-                  </button>
-
-                  {transferResult && (
-                    <div className="transferResult">
-                      <div className="transferResultHeader">
-                        <h3>{text.transferDone}</h3>
-                      </div>
-
-                      <div className="transferResultSummary">
-                        <div className="resultStat addedStat">
-                          <strong>{transferResult.added.length}</strong>
-                          <span>{text.addedTracks}</span>
-                        </div>
-
-                        <div className="resultStat failedStat">
-                          <strong>{transferResult.failed.length}</strong>
-                          <span>{text.failedTracks}</span>
-                        </div>
-
-                        <div className="resultStat alreadyStat">
-                          <strong>{transferResult.already.length}</strong>
-                          <span>{text.alreadyTracks}</span>
-                        </div>
-                      </div>
-
-                      <div className="transferResultLists">
-                        <section className="resultListGroup addedGroup">
-                          <h4>Added</h4>
-                          {transferResult.added.length > 0 ? (
-                            <ol>
-                              {transferResult.added.map((track, index) => (
-                                <li key={`added-${track}-${index}`}>{track}</li>
-                              ))}
-                            </ol>
-                          ) : (
-                            <p>None</p>
-                          )}
-                        </section>
-
-                        <section className="resultListGroup failedGroup">
-                          <h4>Failed</h4>
-                          {transferResult.failed.length > 0 ? (
-                            <ol>
-                              {transferResult.failed.map((track, index) => (
-                                <li key={`failed-${track}-${index}`}>{track}</li>
-                              ))}
-                            </ol>
-                          ) : (
-                            <p>None</p>
-                          )}
-                        </section>
-
-                        <section className="resultListGroup alreadyGroup">
-                          <h4>Already There</h4>
-                          {transferResult.already.length > 0 ? (
-                            <ol>
-                              {transferResult.already.map((track, index) => (
-                                <li key={`already-${track}-${index}`}>{track}</li>
-                              ))}
-                            </ol>
-                          ) : (
-                            <p>None</p>
-                          )}
-                        </section>
-                      </div>
-                    </div>
-                  )}
-                </section>
+                {!selectedSourcePlaylistId ? (
+                  <PlaylistChooser
+                    text={text}
+                    sourcePlatform={sourcePlatform}
+                    sourcePlatformLogo={platformDisplayLogos[sourcePlatform.id]}
+                    platformDetails={getPlatformDetails(sourcePlatform.id)}
+                    playlists={getPlatformPlaylists(sourcePlatform.id)}
+                    selectedPlaylistId={selectedSourcePlaylistId}
+                    getPlaylistImage={getPlaylistImage}
+                    getPlaylistName={getPlaylistName}
+                    getPlaylistCount={getPlaylistCount}
+                    onSelectPlaylist={(playlist) => {
+                      setSelectedSourcePlaylistId(playlist.id);
+                      setTransferResult(null);
+                      setTransferError("");
+                      if (!newPlaylistName) {
+                        setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
+                      }
+                    }}
+                  />
+                ) : (
+                  <StartTransfer
+                    text={text}
+                    destinationMode={destinationMode}
+                    setDestinationMode={setDestinationMode}
+                    newPlaylistName={newPlaylistName}
+                    setNewPlaylistName={setNewPlaylistName}
+                    destinationPlaylistId={destinationPlaylistId}
+                    setDestinationPlaylistId={setDestinationPlaylistId}
+                    destinationPlaylists={destinationPlaylists}
+                    destinationPlatform={destinationPlatform}
+                    getPlaylistName={getPlaylistName}
+                    transferError={transferError}
+                    transferLoading={transferLoading}
+                    transferStatus={transferStatus}
+                    transferLimit={text.transferLimit}
+                    selectedSourcePlaylist={selectedSourcePlaylist}
+                    startPlaylistTransfer={startPlaylistTransfer}
+                    transferResult={transferResult}
+                  />
+                )}
               </div>
             )}
 
