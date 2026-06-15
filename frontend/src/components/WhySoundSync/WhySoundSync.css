@@ -1,269 +1,326 @@
 .homeInfoBanner {
   position: relative;
-  z-index: 5;
-  display: block;
-  margin-top: 18px;
-  padding: 28px;
+  width: 100%;
+  padding: 28px 32px 34px;
+  margin-top: 28px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.12));
+  border-radius: 22px;
   overflow: hidden;
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
+
   background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 42%, var(--card-bg)),
-      color-mix(in srgb, var(--accent) 22%, var(--card-bg))
-    );
-  backdrop-filter: blur(24px) saturate(1.34);
-  -webkit-backdrop-filter: blur(24px) saturate(1.34);
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 38%),
+    linear-gradient(135deg, rgba(0,0,0,.58), rgba(0,0,0,.28));
+
   box-shadow:
-    0 0 34px color-mix(in srgb, var(--accent) 42%, transparent),
-    0 0 58px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 34px color-mix(in srgb, var(--accent) 32%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.14);
 }
 
 .homeInfoBannerContent {
-  display: grid;
-  gap: 22px;
+  position: relative;
+  z-index: 2;
 }
 
 .homeInfoHeader {
-  max-width: 860px;
+  max-width: 760px;
+  margin: 0 0 26px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
-.homeInfoBanner h2 {
-  margin: 0 0 10px;
-  font-size: clamp(28px, 3vw, 42px);
-}
-
-.homeInfoBanner h2::after {
-  content: "";
-  display: block;
-  width: min(360px, 100%);
-  height: 2px;
-  margin-top: 14px;
-}
-
-.homeInfoBanner p {
+.homeInfoHeader h2 {
   margin: 0;
-  color: rgba(255, 255, 255, 0.96) !important;
-  font-size: 18px;
-  font-weight: 850;
-  line-height: 1.42;
+  font-size: clamp(30px, 3vw, 48px);
+  line-height: .95;
+  font-weight: 1000;
+  letter-spacing: -1.8px;
+  color: var(--text-color);
+
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 4px 18px rgba(0,0,0,.65);
+
+  animation: textPopIn .8s cubic-bezier(.22,1,.36,1) both;
+}
+
+.homeInfoHeader p {
+  max-width: 720px;
+  margin: 0;
+
+  color: rgba(255,255,255,.78);
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 800;
+
+  animation: textSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
 }
 
 .homeInfoFeatureGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  gap: 22px;
 }
 
 .homeInfoFeatureCard {
-  position: relative;
-  min-height: 330px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255, 255, 255, 0.12));
-  border-radius: 22px;
-  background: black;
-  box-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 14%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-  animation:
-    featureCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both,
-    featureBreathe 6s ease-in-out infinite;
-}
 
-.homeInfoFeatureCard::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: inherit;
-  background:
-    linear-gradient(
-      110deg,
-      transparent 0%,
-      transparent 35%,
-      color-mix(in srgb, var(--accent) 75%, white 25%) 50%,
-      transparent 65%,
-      transparent 100%
-    );
-  opacity: 0;
-  transform: translateX(-140%);
-  animation: accentShine 8s ease-in-out infinite;
+  border-radius: 22px;
+  border: 10px solid rgba(0,0,0,.92);
+  background: rgba(0,0,0,.88);
+
+  box-shadow:
+    0 16px 32px rgba(0,0,0,.35),
+    0 0 22px color-mix(in srgb, var(--accent) 16%, transparent);
+
+  animation: cardRiseIn .85s cubic-bezier(.22,1,.36,1) both;
+  animation:
+  cardRiseIn .9s cubic-bezier(.22,1,.36,1) both,
+  cardBreath 7s ease-in-out infinite;
+
+  transition:
+    transform .24s ease,
+    box-shadow .24s ease,
+    border-color .24s ease;
+}
+@keyframes cardBreath {
+
+  0% {
+
+    transform:
+      scale(1);
+
+  }
+
+  50% {
+
+    transform:
+      scale(1.018);
+
+  }
+
+  100% {
+
+    transform:
+      scale(1);
+
+  }
+
 }
 
 .homeInfoFeatureCard:nth-child(1) {
-  animation-delay: 0.04s, 0s;
+  animation-delay: .18s;
 }
 
 .homeInfoFeatureCard:nth-child(2) {
-  animation-delay: 0.1s, 0.8s;
+  animation-delay: .28s;
 }
 
 .homeInfoFeatureCard:nth-child(3) {
-  animation-delay: 0.16s, 1.6s;
+  animation-delay: .38s;
 }
 
 .homeInfoFeatureCard:nth-child(4) {
-  animation-delay: 0.22s, 2.4s;
-}
-
-.homeInfoFeatureCard:nth-child(1)::before {
-  animation-delay: 0s;
-}
-
-.homeInfoFeatureCard:nth-child(2)::before {
-  animation-delay: 2s;
-}
-
-.homeInfoFeatureCard:nth-child(3)::before {
-  animation-delay: 4s;
-}
-
-.homeInfoFeatureCard:nth-child(4)::before {
-  animation-delay: 6s;
+  animation-delay: .48s;
 }
 
 .homeInfoFeatureCard:hover {
-  transform: translateY(-6px) scale(1.03);
-  border-color: color-mix(in srgb, var(--accent) 68%, rgba(255, 255, 255, 0.18));
+  transform: translateY(-8px) scale(1.025);
+  border-color: color-mix(in srgb, var(--accent) 32%, black);
+
   box-shadow:
-    0 16px 30px rgba(0, 0, 0, 0.24),
-    0 0 36px color-mix(in srgb, var(--accent) 30%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    0 22px 42px rgba(0,0,0,.48),
+    0 0 32px color-mix(in srgb, var(--accent) 38%, transparent);
 }
 
 .homeInfoFeatureCard img {
   width: 100%;
-  height: 190px;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 18px;
-  background:
-    radial-gradient(
-      circle at center,
-      color-mix(in srgb, var(--accent) 16%, rgba(255, 255, 255, 0.12)),
-      rgba(0, 0, 0, 0.18)
-    );
-  filter: saturate(1.08) contrast(1.04);
+  height: 210px;
   display: block;
-  transition: transform 0.28s ease;
+  object-fit: cover;
+  border-radius: 13px 13px 0 0;
+
+  transition:
+    transform .35s ease,
+    filter .35s ease;
 }
 
 .homeInfoFeatureCard:hover img {
-  transform: scale(1.04);
+  transform: scale(1.045);
+  filter: saturate(1.12) contrast(1.05);
 }
 
 .homeInfoFeatureCard div {
-  min-height: 104px;
-  margin-top: auto;
-  padding: 18px 14px;
+  min-height: 112px;
+  padding: 20px 18px;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  border-radius: 18px;
+
+  text-align: center;
+
   background:
     linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.72),
-      color-mix(in srgb, var(--accent) 14%, rgba(0, 0, 0, 0.62))
+      to bottom,
+      rgba(0,0,0,.92),
+      color-mix(in srgb, var(--accent) 14%, rgba(0,0,0,.92))
     );
-  text-align: center;
 }
 
 .homeInfoFeatureCard strong {
-  color: white;
+  color: #fff;
   font-size: 20px;
-  font-weight: 950;
-  line-height: 1.1;
+  line-height: 1.05;
+  font-weight: 1000;
 }
 
 .homeInfoFeatureCard span {
-  margin-top: 5px;
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 14px;
-  font-weight: 800;
+  margin-top: 8px;
+
+  color: rgba(255,255,255,.72);
+  font-size: 13px;
   line-height: 1.25;
+  font-weight: 800;
 }
 
-@keyframes featureCardIn {
-  from {
-    opacity: 0;
-    transform: translateY(18px) scale(0.97);
-  }
+@keyframes textPopIn {
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes featureBreathe {
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow:
-      0 0 18px color-mix(in srgb, var(--accent) 14%, transparent),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  }
-
-  50% {
-    transform: scale(1.018);
-    box-shadow:
-      0 0 32px color-mix(in srgb, var(--accent) 28%, transparent),
-      inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  }
-}
-
-@keyframes accentShine {
   0% {
+
     opacity: 0;
-    transform: translateX(-140%);
+
+    transform:
+      translateY(38px)
+      scale(.88);
+
   }
 
-  10% {
-    opacity: 0.2;
+  60% {
+
+    opacity: 1;
+
+    transform:
+      translateY(-5px)
+      scale(1.04);
+
   }
 
-  25% {
-    opacity: 0.45;
-  }
-
-  40%,
   100% {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+@keyframes textSlideIn {
+
+  0% {
+
     opacity: 0;
-    transform: translateX(140%);
+
+    transform:
+      translateX(-42px);
+
+  }
+
+  70% {
+
+    opacity: 1;
+
+    transform:
+      translateX(6px);
+
+  }
+
+  100% {
+
+    opacity: 1;
+
+    transform:
+      translateX(0);
+
+  }
+
+}
+
+@keyframes cardRiseIn {
+
+  0% {
+
+    opacity: 0;
+
+    transform:
+      translateY(80px)
+      scale(.82);
+
+  }
+
+  45% {
+
+    opacity: .75;
+
+    transform:
+      translateY(-10px)
+      scale(1.04);
+
+  }
+
+  70% {
+
+    opacity: 1;
+
+    transform:
+      translateY(4px)
+      scale(.99);
+
+  }
+
+  100% {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+@media (max-width: 1000px) {
+  .homeInfoFeatureGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 650px) {
   .homeInfoBanner {
-    padding: 20px;
+    padding: 24px 18px;
+  }
+
+  .homeInfoHeader {
+    margin-bottom: 20px;
+  }
+
+  .homeInfoHeader h2 {
+    font-size: 34px;
   }
 
   .homeInfoFeatureGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .homeInfoFeatureCard {
-    min-height: 300px;
+    grid-template-columns: 1fr;
   }
 
   .homeInfoFeatureCard img {
-    height: 165px;
-  }
-
-  .homeInfoFeatureCard strong {
-    font-size: 18px;
+    height: 190px;
   }
 }

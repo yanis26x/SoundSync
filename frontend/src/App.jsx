@@ -10,6 +10,7 @@ import PlaylistChooser from "./components/PlaylistChooser/PlaylistChooser";
 import StartTransfer from "./components/StartTransfer/StartTransfer";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
 import EmptyPanel from "./components/EmptyPanel/EmptyPanel";
+import PlatformChooser from "./components/PlatformChooser/PlatformChooser";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
@@ -1395,50 +1396,18 @@ if (
           <>
             {selectedPlatforms.length < 2 && (
               <div className="homeSetupGrid">
-                <section className={`choosePanel${activeGuideStep === "platforms" ? " guidedPanel" : ""}`}>
-                  <p className="chooseText">{chooseText}</p>
-
-                  <div className="platformLoginRow">
-                    <button
-                      className={`spotifyBtn platformChoiceBtn${platformOrder.includes("spotify") ? " selectedPlatformBtn" : ""}`}
-                      onClick={accessToken ? () => addPlatformToOrder("spotify") : loginSpotify}
-                      disabled={platformOrder.includes("spotify")}
-                    >
-                      {accessToken && <span className="loggedBadge">{text.logged}</span>}
-                      <img
-                        src="/logo/Spotify-Black-Logo.png"
-                        alt="Spotify"
-                        className="spotifyBigLogo"
-                      />
-                    </button>
-
-                    <button
-                      className={`youtubeBtn platformChoiceBtn${platformOrder.includes("youtube") ? " selectedPlatformBtn" : ""}`}
-                      onClick={youtubeAccessToken ? () => addPlatformToOrder("youtube") : loginYoutube}
-                      disabled={platformOrder.includes("youtube")}
-                    >
-                      {youtubeAccessToken && <span className="loggedBadge">{text.logged}</span>}
-                      <img
-                        src="/logo/YouTube-Logo.png"
-                        alt="YouTube"
-                        className="youtubeBigLogo"
-                      />
-                    </button>
-
-                    <button
-                      className={`appleBtn platformChoiceBtn${platformOrder.includes("apple") ? " selectedPlatformBtn" : ""}`}
-                      onClick={appleMusicUserToken ? () => addPlatformToOrder("apple") : loginAppleMusic}
-                      disabled={platformOrder.includes("apple")}
-                    >
-                      {appleMusicUserToken && <span className="loggedBadge">{text.logged}</span>}
-                      <img
-                        src="/logo/appleMusic.png"
-                        alt="Apple Music"
-                        className="appleMusicLogo"
-                      />
-                    </button>
-                  </div>
-                </section>
+                <PlatformChooser
+                  chooseText={chooseText}
+                  platformOrder={platformOrder}
+                  accessToken={accessToken}
+                  youtubeAccessToken={youtubeAccessToken}
+                  appleMusicUserToken={appleMusicUserToken}
+                  loggedLabel={text.logged}
+                  onAddPlatform={addPlatformToOrder}
+                  onLoginSpotify={loginSpotify}
+                  onLoginYoutube={loginYoutube}
+                  onLoginAppleMusic={loginAppleMusic}
+                />
 
                 <EmptyPanel
                   sourcePlatform={sourcePlatform}

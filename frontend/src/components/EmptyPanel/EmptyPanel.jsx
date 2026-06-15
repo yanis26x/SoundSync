@@ -10,10 +10,17 @@ function EmptyPanel({
 }) {
   return (
     <section className="emptyPanel">
+      <div className="emptyDivaButtons" aria-hidden="true">
+        <span>X</span>
+        <span>O</span>
+        <span>×</span>
+        <span>□</span>
+      </div>
+
       <h2 className="emptyPanelTitle">Keep your playlists alive</h2>
 
       <div className="emptyPanelWave" aria-hidden="true">
-        {Array.from({ length: 33 }).map((_, index) => (
+        {Array.from({ length: 24 }).map((_, index) => (
           <span key={index} />
         ))}
       </div>

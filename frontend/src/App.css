@@ -225,11 +225,8 @@ body::after {
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.24));
 }
 
-.chooseText,
 .changePlatformBtn,
-.topRightActionBtn,
-.spotifyBtn,
-.youtubeBtn {
+.topRightActionBtn {
   position: relative;
   z-index: 5;
 }
@@ -380,23 +377,6 @@ body::after {
 }
 
 
-.chooseText {
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 0 18px;
-  padding: 0;
-
-  color: #ffffff !important;
-
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 900;
-  line-height: 1.08;
-  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
-
-  animation: riseIn 0.5s ease 0.46s both;
-
-}
-
 .homeSetupGrid,
 .transferWorkspace {
   position: relative;
@@ -410,24 +390,6 @@ body::after {
 
 .transferWorkspace {
   align-items: start;
-}
-
-.choosePanel {
-  position: relative;
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 42%, var(--card-bg)),
-      color-mix(in srgb, var(--accent) 22%, var(--card-bg))
-    );
-  backdrop-filter: blur(24px) saturate(1.34);
-  -webkit-backdrop-filter: blur(24px) saturate(1.34);
-  box-shadow:
-    0 0 34px color-mix(in srgb, var(--accent) 42%, transparent),
-    0 0 58px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .guidedPanel {
@@ -464,16 +426,6 @@ body::after {
   -webkit-mask-composite: xor;
 }
 
-.choosePanel {
-  padding: 22px;
-}
-
-.choosePanel {
-  height: 100%;
-  min-height: 184px;
-    background: rgba(0, 0, 0, 0.761);
-}
-
 .transferWorkspace {
   grid-auto-rows: minmax(0, auto);
   grid-template-columns: minmax(0, 1fr);
@@ -493,230 +445,6 @@ body::after {
   align-items: stretch;
   gap: 18px;
   margin-top: 18px;
-}
-
-.platformLoginRow {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-
-  animation: riseIn 0.5s ease 0.56s both;
-}
-
-.platformLoginRow button {
-  animation: popIn 0.42s ease both;
-}
-
-.platformLoginRow button:nth-child(1) {
-  animation-delay: 0.64s;
-}
-
-.platformLoginRow button:nth-child(2) {
-  animation-delay: 0.72s;
-}
-
-.platformLoginRow button:nth-child(3) {
-  animation-delay: 0.8s;
-}
-
-.platformLoginRow button:nth-child(4) {
-  animation-delay: 0.88s;
-}
-
-.platformLoginRow button:nth-child(5) {
-  animation-delay: 0.96s;
-}
-
-.spotifyBtn,
-.youtubeBtn,
-.appleBtn {
-  position: relative;
-  width: 100%;
-  min-width: 0;
-  height: 72px;
-  margin: 0;
-  margin-top: 14px;
-  padding: 14px 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.22)),
-      color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, 0.18))
-    );
-  color: white;
-
-  cursor: pointer;
-
-  backdrop-filter: blur(5px) saturate(1.12);
-  -webkit-backdrop-filter: blur(5px) saturate(1.12);
-
-  box-shadow:
-    0 0 32px color-mix(in srgb, var(--accent) 48%, transparent),
-    0 0 52px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
-
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.choosePanel .spotifyBtn,
-.choosePanel .youtubeBtn,
-.choosePanel .appleBtn {
-  width: 100%;
-}
-
-.platformChoiceBtn {
-  overflow: visible;
-}
-
-.platformChoiceBtn:disabled,
-.platformChoiceBtn.selectedPlatformBtn {
-  cursor: not-allowed;
-  opacity: 0.72;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.58),
-      rgba(0, 0, 0, 0.34)
-    );
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 0 12px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  filter: grayscale(0.35);
-}
-
-.platformChoiceBtn:disabled:hover,
-.platformChoiceBtn.selectedPlatformBtn:hover {
-  transform: none;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.58),
-      rgba(0, 0, 0, 0.34)
-    );
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 0 12px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.loggedBadge {
-  position: absolute;
-  top: -11px;
-  right: -9px;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: #000000;
-  color: #fbfffc;
-  font-size: 11px;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-  box-shadow: 0 0 16px rgb(0, 0, 0);
-}
-
-.spotifyBtn:hover {
-  transform: translateY(-2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 64%, rgba(255, 255, 255, 0.24)),
-      color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.2))
-    );
-  border-color: var(--accent);
-
-  box-shadow:
-    0 0 40px color-mix(in srgb, var(--accent) 58%, transparent),
-    0 0 64px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.38);
-}
-
-.youtubeBtn {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.22)),
-      color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, 0.18))
-    );
-}
-
-.youtubeBtn:hover {
-  transform: translateY(-2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 64%, rgba(255, 255, 255, 0.24)),
-      color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.2))
-    );
-  border-color: var(--accent);
-
-  box-shadow:
-    0 0 40px color-mix(in srgb, var(--accent) 58%, transparent),
-    0 0 64px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.38);
-}
-
-.appleBtn {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.22)),
-      color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, 0.18))
-    );
-}
-
-.appleBtn:hover {
-  transform: translateY(-2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 64%, rgba(255, 255, 255, 0.24)),
-      color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.2))
-    );
-  border-color: var(--accent);
-
-  box-shadow:
-    0 0 40px color-mix(in srgb, var(--accent) 58%, transparent),
-    0 0 64px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.38);
-}
-
-.spotifyBigLogo,
-.youtubeBigLogo,
-.appleMusicLogo{
-  width: 130px;
-  height: auto;
-  object-fit: contain;
-
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.16));
-
-  transition: transform 0.25s ease;
-}
-
-.youtubeBigLogo {
-  width: 150px;
-}
-
-.appleMusicLogo {
-  width: 118px;
-}
-
-.spotifyBtn:hover .spotifyBigLogo,
-.youtubeBtn:hover .youtubeBigLogo,
-.appleBtn:hover .appleMusicLogo {
-  transform: scale(1.05);
 }
 
 button {
@@ -1004,36 +732,12 @@ button:hover {
     margin-inline: auto;
   }
 
-  .spotifyBtn,
-  .youtubeBtn,
-  .appleBtn {
-    width: 100%;
-    height: 62px;
-    padding: 10px;
-  }
-
-  .platformLoginRow {
-    gap: 8px;
-  }
-
-  .choosePanel {
-    min-height: 178px;
-  }
-
   .transferFocusPanel {
     width: 100%;
   }
 
   .transferFocusPanel {
     min-height: 420px;
-  }
-
-  .spotifyBigLogo {
-    width: 120px;
-  }
-
-  .youtubeBigLogo {
-    width: 140px;
   }
 
   .playlistCard {

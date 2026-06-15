@@ -1,86 +1,149 @@
 .playlistPickPanel {
   position: relative;
   width: 100%;
-  padding: 42px 48px 46px;
+  padding: 30px 34px 34px;
+
   display: flex;
   flex-direction: column;
-  gap: 34px;
+  gap: 24px;
+
   overflow: hidden;
 
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 56%, rgba(255,255,255,.14));
+  border-radius: 22px;
 
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 38%, var(--card-bg)),
-    color-mix(in srgb, var(--accent) 18%, var(--card-bg))
-  );
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
+    linear-gradient(135deg, rgba(0,0,0,.82), rgba(0,0,0,.48));
 
-  backdrop-filter: blur(24px) saturate(1.34);
-  -webkit-backdrop-filter: blur(24px) saturate(1.34);
+  backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
 
   box-shadow:
-    0 0 34px color-mix(in srgb, var(--accent) 42%, transparent),
-    0 0 58px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 36px color-mix(in srgb, var(--accent) 34%, transparent),
+    0 18px 42px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  animation: playlistPanelIn .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+.playlistPickPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+
+  transform: translateX(-120%);
+  animation: playlistShine 5.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .playlistChooserHeader {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
+
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 18px;
 }
 
-.playlistChooserHeader span {
-  color: var(--text-color);
-  font-size: clamp(36px, 4vw, 64px);
-  line-height: 0.9;
+.playlistChooserHeader p {
+  margin: 0 0 8px;
+
+  color: color-mix(in srgb, var(--accent) 78%, white);
+  font-size: 12px;
   font-weight: 1000;
-  letter-spacing: -2.5px;
-  text-transform: none;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+.playlistChooserHeader h2 {
+  margin: 0;
+
+  color: var(--text-color);
+  font-size: clamp(36px, 4vw, 58px);
+  line-height: .88;
+  font-weight: 1000;
+  letter-spacing: -2.4px;
 
   text-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 45%, transparent),
-    0 3px 18px rgba(0, 0, 0, 0.45);
+    0 0 18px color-mix(in srgb, var(--accent) 50%, transparent),
+    0 4px 18px rgba(0,0,0,.65);
 }
 
 .playlistChooserHeader img {
-  max-width: 170px;
-  max-height: 58px;
+  max-width: 150px;
+  max-height: 52px;
   object-fit: contain;
 
-  filter: drop-shadow(
-    0 0 16px color-mix(in srgb, var(--accent) 42%, transparent)
-  );
+  filter:
+    drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 38%, transparent));
 }
 
 .error {
+  position: relative;
+  z-index: 2;
+
   margin: 0;
-  color: #ff6b6b;
-  font-weight: 900;
+  padding: 12px 14px;
+
+  border: 1px solid rgba(255, 92, 92, .36);
+  border-radius: 14px;
+
+  background: rgba(80,0,0,.28);
+  color: #ffb4b4;
+
+  font-size: 13px;
+  font-weight: 850;
 }
 
-.playlistPickPanel > p {
+.playlistPickPanel > p:not(.error) {
+  position: relative;
+  z-index: 2;
+
   margin: 0;
-  font-weight: 800;
-  color: var(--text-color);
+
+  color: rgba(255,255,255,.72);
+  font-size: 13px;
+  font-weight: 850;
 }
 
 .sourcePlaylistGrid {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
+
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
   gap: 16px;
 
   justify-content: stretch;
   align-content: start;
 
   overflow-y: auto;
-  max-height: 360px;
+  max-height: 380px;
 
-  padding: 0 4px 4px 0;
+  padding: 2px 4px 6px 0;
+}
+
+.sourcePlaylistGrid::-webkit-scrollbar {
+  width: 7px;
+}
+
+.sourcePlaylistGrid::-webkit-scrollbar-track {
+  background: rgba(0,0,0,.26);
+  border-radius: 999px;
+}
+
+.sourcePlaylistGrid::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 60%, rgba(255,255,255,.16));
+  border-radius: 999px;
 }
 
 .sourcePlaylistChoice {
@@ -88,57 +151,80 @@
   overflow: hidden;
 
   width: 100%;
-  min-height: 165px;
+  min-height: 178px;
   margin: 0;
-  padding: 16px;
+  padding: 15px;
 
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 48%, transparent);
-  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, rgba(255,255,255,.12));
+  border-radius: 20px;
 
-  color: white;
+  color: #fff;
   text-align: left;
   cursor: pointer;
 
-  background: rgba(0, 0, 0, 0.24);
+  background: rgba(0,0,0,.42);
 
   box-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 24%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 12px 24px rgba(0,0,0,.24),
+    0 0 18px color-mix(in srgb, var(--accent) 16%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.12);
+
+  animation:
+    playlistCardIn .7s cubic-bezier(.22,1,.36,1) both,
+    playlistCardBreath 7s ease-in-out infinite;
 
   transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
+    transform .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease;
 }
 
+.sourcePlaylistChoice:nth-child(1) { animation-delay: .06s, .06s; }
+.sourcePlaylistChoice:nth-child(2) { animation-delay: .14s, .14s; }
+.sourcePlaylistChoice:nth-child(3) { animation-delay: .22s, .22s; }
+.sourcePlaylistChoice:nth-child(4) { animation-delay: .30s, .30s; }
+.sourcePlaylistChoice:nth-child(5) { animation-delay: .38s, .38s; }
+.sourcePlaylistChoice:nth-child(6) { animation-delay: .46s, .46s; }
+
 .sourcePlaylistChoice:hover {
-  transform: translateY(-4px);
+  animation-play-state: paused;
+
+  transform: translateY(-7px) scale(1.025);
   border-color: var(--accent);
+
   box-shadow:
-    0 0 26px color-mix(in srgb, var(--accent) 42%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 18px 34px rgba(0,0,0,.36),
+    0 0 30px color-mix(in srgb, var(--accent) 36%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
 }
 
 .sourcePlaylistChoice::before {
   content: "";
   position: absolute;
-  inset: -18px;
+  inset: -20px;
 
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.72)),
+    linear-gradient(rgba(0,0,0,.1), rgba(0,0,0,.78)),
     var(--playlist-image);
 
   background-size: cover;
   background-position: center;
 
-  filter: blur(14px);
-  transform: scale(1.1);
+  filter: blur(16px) saturate(1.08);
+  transform: scale(1.12);
   z-index: 0;
+
+  opacity: .88;
+
+  transition:
+    filter .25s ease,
+    transform .25s ease,
+    opacity .25s ease;
 }
 
 .sourcePlaylistChoice::after {
@@ -147,106 +233,202 @@
   inset: 0;
   z-index: 0;
 
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.72),
-    rgba(0, 0, 0, 0.18)
-  );
+  background:
+    linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.14)),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%);
+}
+
+.sourcePlaylistChoice:hover::before {
+  transform: scale(1.18);
+  filter: blur(12px) saturate(1.2);
+  opacity: 1;
 }
 
 .sourcePlaylistChoice.selected {
   border-color: #10f060;
+
   box-shadow:
-    0 0 28px rgba(16, 240, 96, 0.38),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 0 30px rgba(16,240,96,.44),
+    0 16px 32px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.2);
 }
 
-.sourcePlaylistChoice img {
+.sourcePlaylistChoice.selected::after {
+  background:
+    linear-gradient(to top, rgba(0,0,0,.84), rgba(0,0,0,.12)),
+    radial-gradient(circle at top right, rgba(16,240,96,.28), transparent 36%);
+}
+
+.playlistArtworkBox {
   position: relative;
   z-index: 1;
 
-  width: 56px;
-  height: 56px;
+  width: 62px;
+  height: 62px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+  background: rgba(0,0,0,.34);
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.playlistArtworkBox img {
+  width: 54px;
+  height: 54px;
 
   object-fit: cover;
   border-radius: 13px;
-  margin-bottom: 12px;
-
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
 }
 
-.sourcePlaylistChoice span,
-.sourcePlaylistChoice small {
+.playlistText {
   position: relative;
   z-index: 1;
+
+  width: 100%;
 }
 
-.sourcePlaylistChoice span {
+.playlistText span {
   max-width: 100%;
-  font-size: 17px;
-  line-height: 1.08;
-  font-weight: 1000;
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
   overflow: hidden;
+
+  color: #fff;
+  font-size: 17px;
+  line-height: 1.08;
+  font-weight: 1000;
 }
 
-.sourcePlaylistChoice small {
+.playlistText small {
+  display: block;
   margin-top: 8px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 13px;
-  font-weight: 800;
+
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 850;
 }
 
-.appleSourcePlaylistChoice img {
+.appleSourcePlaylistChoice .playlistArtworkBox img {
   transform: none;
-  margin-bottom: 12px;
 }
 
-.appleSourcePlaylistChoice span,
-.appleSourcePlaylistChoice small {
-  transform: none;
+@keyframes playlistPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes playlistCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(.9);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.025);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes playlistCardBreath {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+}
+
+@keyframes playlistShine {
+  0%,
+  60% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  72% {
+    opacity: .45;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 900px) {
   .playlistPickPanel {
-    padding: 30px 24px 34px;
+    padding: 28px 24px 32px;
   }
 
   .sourcePlaylistGrid {
-    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
   }
 }
 
 @media (max-width: 650px) {
   .playlistPickPanel {
     padding: 24px 18px;
-    gap: 24px;
+    gap: 22px;
   }
 
   .playlistChooserHeader {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
   }
 
-  .playlistChooserHeader span {
-    font-size: 36px;
+  .playlistChooserHeader h2 {
+    font-size: 38px;
   }
 
   .playlistChooserHeader img {
-    max-width: 140px;
-    max-height: 46px;
+    max-width: 135px;
+    max-height: 44px;
   }
 
   .sourcePlaylistGrid {
     grid-template-columns: 1fr 1fr;
-    max-height: 420px;
+    max-height: 430px;
   }
 
   .sourcePlaylistChoice {
-    min-height: 150px;
+    min-height: 160px;
+    padding: 13px;
+  }
+
+  .playlistArtworkBox {
+    width: 54px;
+    height: 54px;
+  }
+
+  .playlistArtworkBox img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .playlistText span {
+    font-size: 15px;
   }
 }

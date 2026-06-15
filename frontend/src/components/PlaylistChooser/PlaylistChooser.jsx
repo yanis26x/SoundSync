@@ -15,13 +15,18 @@ function PlaylistChooser({
   return (
     <section className="playlistPickPanel transferFocusPanel">
       <div className="playlistChooserHeader">
-        <span>Playlist from</span>
-        <img src={sourcePlatformLogo || sourcePlatform.logo} alt={sourcePlatform.name} />
+        <div>
+          <p>Source playlist</p>
+          <h2>Playlist from</h2>
+        </div>
+
+        <img
+          src={sourcePlatformLogo || sourcePlatform.logo}
+          alt={sourcePlatform.name}
+        />
       </div>
 
-      {platformDetails.error && (
-        <p className="error">{platformDetails.error}</p>
-      )}
+      {platformDetails.error && <p className="error">{platformDetails.error}</p>}
 
       {platformDetails.loading && (
         <p>{text.loadingPlaylists} {sourcePlatform.name}...</p>
@@ -33,19 +38,26 @@ function PlaylistChooser({
 
           return (
             <button
-              className={`sourcePlaylistChoice${sourcePlatform.id === "apple" ? " appleSourcePlaylistChoice" : ""}${isSelected ? " selected" : ""}`}
+              className={`sourcePlaylistChoice${
+                sourcePlatform.id === "apple" ? " appleSourcePlaylistChoice" : ""
+              }${isSelected ? " selected" : ""}`}
               key={playlist.id}
               onClick={() => onSelectPlaylist(playlist)}
               style={{
                 "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
               }}
             >
-              <img
-                src={getPlaylistImage(sourcePlatform.id, playlist)}
-                alt={getPlaylistName(sourcePlatform.id, playlist)}
-              />
-              <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
-              <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
+              <div className="playlistArtworkBox">
+                <img
+                  src={getPlaylistImage(sourcePlatform.id, playlist)}
+                  alt={getPlaylistName(sourcePlatform.id, playlist)}
+                />
+              </div>
+
+              <div className="playlistText">
+                <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
+                <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>
+              </div>
             </button>
           );
         })}

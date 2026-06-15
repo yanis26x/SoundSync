@@ -25,23 +25,26 @@ function Profil() {
   const copy = {
     en: {
       profileTitle: "Profile",
+      profileSubtitle: "Manage your connected music accounts.",
       online: "Connected",
       offline: "Offline",
       connect: "Connect",
       disconnect: "Disconnect",
-      switchAccount: "Switch account",
+      switchAccount: "Switch",
       appleLoginError: "Unable to connect to Apple Music.",
     },
     fr: {
       profileTitle: "Profil",
+      profileSubtitle: "Gere tes comptes musicaux connectes.",
       online: "Connecte",
-      offline: "Offline",
-      connect: "Se connecter",
+      offline: "Hors ligne",
+      connect: "Connecter",
       disconnect: "Deconnecter",
-      switchAccount: "Changer de compte",
+      switchAccount: "Changer",
       appleLoginError: "Impossible de se connecter a Apple Music.",
     },
   };
+
   const text = copy[language] || copy.en;
 
   const setLanguage = (nextLanguage) => {
@@ -67,6 +70,7 @@ function Profil() {
       const nextOrder = savedOrder
         ? JSON.parse(savedOrder).filter((currentPlatformId) => currentPlatformId !== platformId)
         : [];
+
       localStorage.setItem("platform_order", JSON.stringify(nextOrder));
     } catch {
       localStorage.setItem("platform_order", JSON.stringify([]));
@@ -205,9 +209,12 @@ function Profil() {
     },
   ];
 
+  const connectedCount = accountPlatforms.filter((platform) => platform.isConnected).length;
+
   return (
     <main className="profilPage">
       <MusicParticles />
+
       <Navbar
         themes={themes}
         currentTheme={currentTheme}
@@ -221,21 +228,37 @@ function Profil() {
       />
 
       <section className="profilPanel">
-        <h1>{text.profileTitle}</h1>
+        <div className="profilHeader">
+          <div>
+            <p className="profilEyebrow">SoundSync Account</p>
+            <h1>{text.profileTitle}</h1>
+            <span>{text.profileSubtitle}</span>
+          </div>
 
-        {appleError && (
-          <p className="error">{appleError}</p>
-        )}
+          <div className="profilStatusPill">
+            <strong>{connectedCount}</strong>
+            <span>/ {accountPlatforms.length} linked</span>
+          </div>
+        </div>
+
+        {appleError && <p className="error profilError">{appleError}</p>}
 
         <div className="profileAccountList">
           {accountPlatforms.map((platform) => (
-            <article className="profileAccountCard" key={platform.id}>
+            <article
+              className={`profileAccountCard ${platform.isConnected ? "isConnected" : ""}`}
+              key={platform.id}
+            >
               <div className="profileAccountMain">
-                <img src={platform.logo} alt={platform.name} />
+                <div className="profileLogoBox">
+                  <img src={platform.logo} alt={platform.name} />
+                </div>
 
-                <div>
+                <div className="profileAccountText">
                   <h3>{platform.name}</h3>
+
                   <p className={platform.isConnected ? "success" : "offlineText"}>
+                    <span></span>
                     {platform.isConnected ? text.online : text.offline}
                   </p>
                 </div>
@@ -244,22 +267,16 @@ function Profil() {
               <div className="profileAccountActions">
                 {platform.isConnected ? (
                   <>
-                    <button
-                      className="secondaryBtn"
-                      onClick={platform.switchAccount}
-                    >
+                    <button className="secondaryBtn compactBtn" onClick={platform.switchAccount}>
                       {text.switchAccount}
                     </button>
 
-                    <button
-                      className="dangerBtn"
-                      onClick={platform.logout}
-                    >
+                    <button className="dangerBtn compactBtn" onClick={platform.logout}>
                       {text.disconnect}
                     </button>
                   </>
                 ) : (
-                  <button onClick={platform.login}>
+                  <button className="compactBtn connectBtn" onClick={platform.login}>
                     {text.connect}
                   </button>
                 )}
