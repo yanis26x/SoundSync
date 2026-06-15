@@ -5,6 +5,7 @@ import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
+import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
@@ -1649,48 +1650,7 @@ if (
               </div>
             )}
 
-            <section className="homeInfoBanner">
-              <div className="homeInfoBannerContent">
-                <div className="homeInfoHeader">
-                  <h2>Why SoundSync?!</h2>
-                  <p>{text.homeBannerText}</p>
-                </div>
-
-                <div className="homeInfoFeatureGrid">
-                  <article className="homeInfoFeatureCard">
-                    <img src="/ichigo/ok.jpg" alt="" />
-                    <div>
-                      <strong>Simple & Fast</strong>
-                      <span>Simple, fast and secure 2 use.</span>
-                    </div>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/ichigo/club18.jpg" alt="" />
-                    <div>
-                      <strong>Transfer Anywhere</strong>
-                      <span>Move your playlists across all platforms.</span>
-                    </div>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/ichigo/happy.jpg" alt="" />
-                    <div>
-                      <strong>100% Free</strong>
-                      <span>Free forever. Just sync your playlists n' enjoy!</span>
-                    </div>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/ichigo/hug2.jpg" alt="" />
-                    <div>
-                      <strong>4 Music Lovers</strong>
-                      <span>Made while listening 2 confetti!!</span>
-                    </div>
-                  </article>
-                </div>
-              </div>
-            </section>
+            <WhySoundSync text={text.homeBannerText} />
 
             <div className="homePersonalGrid">
               <MyPersonalMusic />
