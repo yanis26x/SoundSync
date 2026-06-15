@@ -7,7 +7,7 @@ import "./App.css";
 import "./Profil.css";
 
 function Profil() {
-  const [currentTheme, setCurrentTheme] = useState("tomo");
+  const [currentTheme, setCurrentTheme] = useState("sora");
   const [language, setLanguageState] = useState(
     () => localStorage.getItem("language") || "en"
   );
@@ -170,7 +170,7 @@ function Profil() {
     {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/logo/spotify-mini.png",
       isConnected: Boolean(accessToken),
       login: loginSpotify,
       switchAccount: () => {
@@ -182,7 +182,7 @@ function Profil() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/youtube-mini.png",
+      logo: "/logo/YouTube-Logo.png",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {

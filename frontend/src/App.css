@@ -499,7 +499,6 @@ body::after {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
   background:
     linear-gradient(
@@ -579,35 +578,48 @@ body::after {
   min-height: 184px;
 }
 
+.transferWorkspace {
+  grid-auto-rows: minmax(0, auto);
+}
+
+.transferWorkspace .emptyPanel,
+.transferWorkspace .playlistPickPanel,
+.transferWorkspace .destinationSetup {
+  height: min(360px, calc(100vh - 170px));
+  min-height: 260px;
+}
+
 .transferWorkspace .playlistPickPanel {
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
-  max-height: min(620px, calc(100vh - 170px));
-  min-height: 0;
   overflow: hidden;
 }
 
 .transferWorkspace .destinationSetup {
   grid-column: 2;
   grid-row: 2;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .homeInfoBanner {
   position: relative;
   z-index: 5;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.48fr);
-  align-items: stretch;
-  gap: 18px;
+  display: block;
   margin-top: 18px;
   padding: 28px;
   overflow: hidden;
 }
 
 .homeInfoBannerContent {
-  align-self: center;
+  display: grid;
+  gap: 22px;
+}
+
+.homeInfoHeader {
+  max-width: 860px;
 }
 
 .homeInfoBanner h2 {
@@ -642,79 +654,124 @@ body::after {
 .homeInfoFeatureGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 20px;
+  gap: 16px;
 }
 
 .homeInfoFeatureCard {
-  min-height: 150px;
-  padding: 8px;
+  position: relative;
+  min-height: 330px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
+  overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255, 255, 255, 0.12));
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.2);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 24%, rgba(0, 0, 0, 0.28)),
+      rgba(0, 0, 0, 0.24)
+    );
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 14%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: featureCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.homeInfoFeatureCard:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.homeInfoFeatureCard:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.homeInfoFeatureCard:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.homeInfoFeatureCard:nth-child(4) {
+  animation-delay: 0.22s;
+}
+
+.homeInfoFeatureCard:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent) 68%, rgba(255, 255, 255, 0.18));
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.24),
+    0 0 24px color-mix(in srgb, var(--accent) 22%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .homeInfoFeatureCard img {
   width: 100%;
-  height: 150px;
+  height: 190px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  border-radius: 11px;
+  object-position: center;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent) 16%, rgba(255, 255, 255, 0.12)),
+      rgba(0, 0, 0, 0.18)
+    );
   filter: saturate(1.08) contrast(1.04);
+  display: block;
+  transition: transform 0.28s ease;
 }
 
-.homeInfoFeatureCard strong {
-  min-height: 38px;
-  margin: 0;
+.homeInfoFeatureCard:hover img {
+  transform: scale(1.025);
+}
+
+.homeInfoFeatureCard div {
+  min-height: 104px;
+  margin-top: auto;
+  padding: 18px 14px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  color: white;
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1.12;
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.72),
+      color-mix(in srgb, var(--accent) 14%, rgba(0, 0, 0, 0.62))
+    );
   text-align: center;
 }
 
-.homeInfoDemoActions {
-  margin-top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
+.homeInfoFeatureCard strong {
+  color: white;
+  font-size: 20px;
+  font-weight: 950;
+  line-height: 1.1;
 }
 
-.homeInfoDemoActions button {
-  width: 100%;
-  margin: 0;
-  padding: 8px 10px;
-  border-radius: 999px;
-  font-size: 13px;
+.homeInfoFeatureCard span {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.25;
 }
 
-.homeInfoDemoActions .oldDemoBtn {
-  width: 76%;
-  padding: 6px 9px;
-  font-size: 12px;
-  opacity: 0.86;
-}
+@keyframes featureCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
 
-.homeInfoBannerImage {
-  min-height: 100%;
-}
-
-.homeInfoBannerImage img {
-  width: 100%;
-  height: 100%;
-  min-height: 330px;
-  object-fit: cover;
-  border-radius: 16px;
-  filter: saturate(1.06) contrast(1.03);
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .homePersonalGrid {
@@ -1127,6 +1184,7 @@ button:hover {
   overflow-y: auto;
   min-height: 0;
   padding-right: 6px;
+  padding-bottom: 2px;
 }
 
 .sourcePlaylistChoice {
@@ -1490,8 +1548,16 @@ button:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .homeInfoBannerImage img {
-    min-height: 220px;
+  .homeInfoFeatureCard {
+    min-height: 300px;
+  }
+
+  .homeInfoFeatureCard img {
+    height: 165px;
+  }
+
+  .homeInfoFeatureCard strong {
+    font-size: 18px;
   }
 
 
@@ -1505,6 +1571,8 @@ button:hover {
   .transferWorkspace .emptyPanel {
     grid-column: auto;
     grid-row: auto;
+    height: auto;
+    max-height: 420px;
   }
 
   .spotifyBigLogo {

@@ -2,11 +2,17 @@ import { useRef, useState } from "react";
 import "./MyPersonalMusic.css";
 
 const songs = [
-  {
-    title: "When They Cry",
-    subtitle: "yanis26x",
-    src: new URL("../../../music/when-they-cry.mp3", import.meta.url).href,
+    {
+    title: "Strawberry Milkshake",
+    subtitle: "canonconfetti",
+    src: new URL("../../../music/banana.mp3", import.meta.url).href,
     cover: new URL("../../../music/when-they-cryCOVER.jpg", import.meta.url).href,
+  },
+      {
+    title: "laugh",
+    subtitle: "",
+    src: new URL("../../../music/swamp.mp3", import.meta.url).href,
+    cover: new URL("../../../music/vampire.jpeg", import.meta.url).href,
   },
 ];
 

@@ -177,7 +177,7 @@ function App() {
   const [transferStatus, setTransferStatus] = useState("");
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
-  const [currentTheme, setCurrentTheme] = useState("tomo");
+  const [currentTheme, setCurrentTheme] = useState("sora");
   const [language, setLanguageState] = useState(
     () => localStorage.getItem("language") || "en"
   );
@@ -1651,37 +1651,44 @@ if (
 
             <section className="homeInfoBanner">
               <div className="homeInfoBannerContent">
-                <h2>About SoundSync!*</h2>
-                <p>{text.homeBannerText}</p>
-                <p>Originaly it was a projected a stared 1 year ago (Spotify2Ytb), but never finished it.... Check out the demo of it</p>
+                <div className="homeInfoHeader">
+                  <h2>About SoundSync!*</h2>
+                  <p>{text.homeBannerText}</p>
+                </div>
 
                 <div className="homeInfoFeatureGrid">
                   <article className="homeInfoFeatureCard">
+                    <img src="/ok.jpg" alt="" />
+                    <div>
+                      <strong>Simple n' cool</strong>
+                      <span>Pick your platforms and move fast.</span>
+                    </div>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
+                    <img src="/club18.jpg" alt="" />
+                    <div>
+                      <strong>Transfer Anywhere</strong>
+                      <span>Spotify, YouTube and Apple Music.</span>
+                    </div>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
+                    <img src="/tomo0202.jpg" alt="" />
+                    <div>
+                      <strong>Free</strong>
+                      <span>No paywall, just sync your playlists.</span>
+                    </div>
+                  </article>
+
+                  <article className="homeInfoFeatureCard">
                     <img src="/confetti.jpg" alt="" />
-                    <strong>Simple et cool</strong>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/ichigo_20.jpg" alt="" />
-                    <strong>Transfer Anywhere, Sync Everthing</strong>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/yanis26xPFP.jpg" alt="" />
-                    <strong>em0cha0666xd</strong>
-                  </article>
-
-                  <article className="homeInfoFeatureCard">
-                    <img src="/yanis26xPFP2.jpg" alt="" />
-                    <div className="homeInfoDemoActions">
-                      <button type="button">video demo</button>
-                      <button type="button" className="oldDemoBtn">Old demo</button>
+                    <div>
+                      <strong>Made by me</strong>
+                      <span>Built from an old Spotify2Ytb idea.</span>
                     </div>
                   </article>
                 </div>
-              </div>
-              <div className="homeInfoBannerImage">
-                <img src="/wallpaper/ichigo50.jpg" alt="" />
               </div>
             </section>
 
