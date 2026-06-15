@@ -42,7 +42,7 @@ const copy = {
     switchAccount: "Switch account",
     removeChoice: "Remove platform choice",
     changePlatform: "Reset",
-    disconnectHint: "To Unlink an account, go to Profile.",
+    disconnectHint: "",
     logged: "✓ LINKED",
     pickPlaylist: "Select a playlist to sync𖤐",
     transferToNew: "Transfer into a new playlist",
@@ -98,7 +98,7 @@ const copy = {
     switchAccount: "Changer de compte",
     removeChoice: "Retirer le choix de plateforme",
     changePlatform: "Reset",
-    disconnectHint: "Pour se deconnecter d'un compte, allez dans Profil.",
+    disconnectHint: "",
     logged: "Online",
     pickPlaylist: "Choisissez une liste de lecture à synchroniser",
     transferToNew: "Transferer dans une nouvelle playlist",
@@ -200,12 +200,12 @@ function App() {
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/YouTube-Logo.png",
+      logo: "/logo/ytb-mini.png",
     },
     apple: appleMusicUserToken && {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/appleMusic.png",
+      logo: "/logo/Apple-Music-mini.png",
     },
   };
   const selectedPlatforms = platformOrder
@@ -619,7 +619,7 @@ function App() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/YouTube-Logo.png",
+      logo: "/logo/ytb-mini.png",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -631,7 +631,7 @@ function App() {
     {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/appleMusic.png",
+      logo: "/logo/Apple-Music-mini.png",
       isConnected: Boolean(appleMusicUserToken),
       login: loginAppleMusic,
       switchAccount: async () => {
@@ -1308,7 +1308,7 @@ if (
               <span>{sourcePlatform.name}</span>
             </>
           ) : (
-            <span className="emptySlotLabel">Source</span>
+            <span className="emptySlotLabel">?!</span>
           )}
         </div>
 
@@ -1321,7 +1321,7 @@ if (
               <span>{destinationPlatform.name}</span>
             </>
           ) : (
-            <span className="emptySlotLabel">Destination</span>
+            <span className="emptySlotLabel">?!</span>
           )}
         </div>
       </div>
@@ -1358,13 +1358,13 @@ if (
       />
       <section className="card">
         {/* <Parental /> */}
-        <section className="mainHero">
+        {/* <section className="mainHero">
           <img
             src="/SoundSync/SoundSyncLogoNoBG.png"
             alt="SoundSync"
             className="mainHeroLogo"
           />
-        </section>
+        </section> */}
 
         {currentPage === "profile" && (
           <div className="profilePage">
@@ -1652,7 +1652,7 @@ if (
             <section className="homeInfoBanner">
               <div className="homeInfoBannerContent">
                 <div className="homeInfoHeader">
-                  <h2>About SoundSync!*</h2>
+                  <h2>Why SoundSync?!</h2>
                   <p>{text.homeBannerText}</p>
                 </div>
 

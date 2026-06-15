@@ -1,6 +1,7 @@
 .siteFooter {
   position: relative;
   z-index: 5;
+  overflow: hidden;
 
   width: 100vw;
 
@@ -118,6 +119,8 @@
 }
 
 .footerBottom {
+  position: relative;
+  z-index: 1;
   margin-top: 24px;
   padding-top: 22px;
 
@@ -139,6 +142,17 @@
   font-weight: 900;
 }
 
+.footerMikuOnion {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: clamp(86px, 9vw, 140px);
+  height: auto;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 28%, transparent));
+}
+
 @media (max-width: 650px) {
 .siteFooter {
   margin-top: auto;
@@ -158,14 +172,18 @@
   .footerBottom {
     flex-direction: column;
     text-align: center;
+    padding-bottom: 76px;
+  }
+
+  .footerMikuOnion {
+    right: 0;
+    width: 84px;
   }
 
   .footerBrand span {
     font-size: 34px;
   }
 }
-
-
 
 
 

@@ -11,12 +11,13 @@
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--accent) 20%, rgba(4, 9, 20, 0.82)),
-      rgba(4, 9, 20, 0.72)
+      color-mix(in srgb, var(--accent) 34%, rgba(4, 9, 20, 0.82)),
+      color-mix(in srgb, var(--accent) 12%, rgba(4, 9, 20, 0.72))
     );
   box-shadow:
-    0 0 26px var(--accent-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    0 0 34px color-mix(in srgb, var(--accent) 42%, transparent),
+    0 0 54px color-mix(in srgb, var(--accent) 16%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .personalMusicBody {
@@ -135,7 +136,7 @@
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.14)),
+      color-mix(in srgb, var(--accent) 42%, rgba(255, 255, 255, 0.16)),
       rgba(255, 255, 255, 0.12)
     );
 }
@@ -158,8 +159,8 @@
 
 .personalMusicTabs .activePersonalTab {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 28%, rgba(255, 255, 255, 0.12));
-  box-shadow: 0 0 18px var(--accent-soft);
+  background: color-mix(in srgb, var(--accent) 44%, rgba(255, 255, 255, 0.14));
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 48%, transparent);
 }
 
 @media (max-width: 650px) {

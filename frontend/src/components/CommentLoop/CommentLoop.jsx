@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import "./CommentLoop.css";
 
 const messages = [
+    {
+    image: "/SoundSync/SoundSyncLogoNoBG.png",
+    title: "SoundSync",
+    type: "logo",
+  },
   {
     href: "https://www.instagram.com/yanis26x",
     image: "/yanis26xPFP.jpg",
@@ -14,6 +19,7 @@ const messages = [
     title: "Want sum more?!",
     subtitle: "visit my website",
   },
+
 ];
 
 function CommentLoop() {
@@ -36,31 +42,48 @@ function CommentLoop() {
 
   return (
     <section
-      className={`commentLoopPanel ${isLeaving ? "leaving" : "entering"}`}
+      className={`commentLoopPanel ${
+        activeMessage.type === "logo" ? "logoMode" : ""
+      } ${isLeaving ? "leaving" : "entering"}`}
       aria-label="Profile links"
     >
-      <a
-        className={`commentProfileCard ${isLeaving ? "leaving" : "entering"}`}
-        href={activeMessage.href}
-        target="_blank"
-        rel="noreferrer"
-        key={activeMessage.title}
-      >
-        <div className="commentProfileWrapper">
+      {activeMessage.type === "logo" ? (
+        <div
+          className={`commentProfileCard commentLogoCard ${
+            isLeaving ? "leaving" : "entering"
+          }`}
+          key={activeMessage.title}
+        >
           <img
             src={activeMessage.image}
             alt={activeMessage.title}
-            className="commentProfileImg"
+            className="commentLogoImg"
           />
-
-          <span className="commentOnlineIndicator"></span>
         </div>
+      ) : (
+        <a
+          className={`commentProfileCard ${isLeaving ? "leaving" : "entering"}`}
+          href={activeMessage.href}
+          target="_blank"
+          rel="noreferrer"
+          key={activeMessage.title}
+        >
+          <div className="commentProfileWrapper">
+            <img
+              src={activeMessage.image}
+              alt={activeMessage.title}
+              className="commentProfileImg"
+            />
 
-        <div className="commentProfileText">
-          <strong>{activeMessage.title}</strong>
-          <span>{activeMessage.subtitle}</span>
-        </div>
-      </a>
+            <span className="commentOnlineIndicator"></span>
+          </div>
+
+          <div className="commentProfileText">
+            <strong>{activeMessage.title}</strong>
+            <span>{activeMessage.subtitle}</span>
+          </div>
+        </a>
+      )}
     </section>
   );
 }

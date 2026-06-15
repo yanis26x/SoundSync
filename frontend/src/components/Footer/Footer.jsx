@@ -61,6 +61,13 @@ export default function Footer() {
           Download my latest app on the App Store
         </a>
       </div>
+
+      <img
+        src="/miku-onion.webp"
+        alt=""
+        aria-hidden="true"
+        className="footerMikuOnion"
+      />
     </footer>
   );
 }
