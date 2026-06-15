@@ -20,4 +20,15 @@ export const themes = {
     accentSoft: "rgba(95, 199, 255, 0.18)",
     text: "#f4fbff",
   },
+
+  miku: {
+  name: "Miku",
+  description: "Hatsune Miku floating through a galaxy of music.",
+  background: "/wallpaper/Miku.jpg",
+  cardBg: "rgba(5, 18, 32, 0.66)",
+  border: "rgba(80, 230, 255, 0.38)",
+  accent: "#39eaff",
+  accentSoft: "rgba(57, 234, 255, 0.18)",
+  text: "#f2fdff",
+},
 };

@@ -64,7 +64,7 @@ const copy = {
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
     transferLimit: "Current limit: 25 tracks per transfer.",
     homeBannerTitle: "Why SoundSync?!",
-    homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive. Hope you like it ;)",
+    homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive.",
   },
   fr: {
     subtitle: "Transfer Anywhere, Sync Everthing",
@@ -1658,34 +1658,34 @@ if (
 
                 <div className="homeInfoFeatureGrid">
                   <article className="homeInfoFeatureCard">
-                    <img src="/ok.jpg" alt="" />
+                    <img src="/ichigo/ok.jpg" alt="" />
                     <div>
-                      <strong>Simple n' cool</strong>
-                      <span>Pick your platforms and move fast.</span>
+                      <strong>Simple & Fast</strong>
+                      <span>Simple, fast and secure 2 use.</span>
                     </div>
                   </article>
 
                   <article className="homeInfoFeatureCard">
-                    <img src="/club18.jpg" alt="" />
+                    <img src="/ichigo/club18.jpg" alt="" />
                     <div>
                       <strong>Transfer Anywhere</strong>
-                      <span>Spotify, YouTube and Apple Music.</span>
+                      <span>Move your playlists across all platforms.</span>
                     </div>
                   </article>
 
                   <article className="homeInfoFeatureCard">
-                    <img src="/tomo0202.jpg" alt="" />
+                    <img src="/ichigo/happy.jpg" alt="" />
                     <div>
-                      <strong>Free</strong>
-                      <span>No paywall, just sync your playlists.</span>
+                      <strong>100% Free</strong>
+                      <span>Free forever. Just sync your playlists n' enjoy!</span>
                     </div>
                   </article>
 
                   <article className="homeInfoFeatureCard">
-                    <img src="/confetti.jpg" alt="" />
+                    <img src="/ichigo/hug2.jpg" alt="" />
                     <div>
-                      <strong>Made by me</strong>
-                      <span>Built from an old project.</span>
+                      <strong>4 Music Lovers</strong>
+                      <span>Made while listening 2 confetti!!</span>
                     </div>
                   </article>
                 </div>
