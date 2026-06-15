@@ -14,7 +14,10 @@ function PlatformChooser({
 }) {
   return (
     <section className="choosePanel">
-      <p className="chooseText">{chooseText}</p>
+      <div className="chooseHeader">
+        <p className="chooseEyebrow">Platform select</p>
+        <h2 className="chooseText">{chooseText}</h2>
+      </div>
 
       <div className="platformLoginRow">
         <button
@@ -23,11 +26,7 @@ function PlatformChooser({
           disabled={platformOrder.includes("spotify")}
         >
           {accessToken && <span className="loggedBadge">{loggedLabel}</span>}
-          <img
-            src="/logo/Spotify-Black-Logo.png"
-            alt="Spotify"
-            className="spotifyBigLogo"
-          />
+          <img src="/logo/Spotify-Black-Logo.png" alt="Spotify" className="spotifyBigLogo" />
         </button>
 
         <button
@@ -36,11 +35,7 @@ function PlatformChooser({
           disabled={platformOrder.includes("youtube")}
         >
           {youtubeAccessToken && <span className="loggedBadge">{loggedLabel}</span>}
-          <img
-            src="/logo/YouTube-Logo.png"
-            alt="YouTube"
-            className="youtubeBigLogo"
-          />
+          <img src="/logo/YouTube-Logo.png" alt="YouTube" className="youtubeBigLogo" />
         </button>
 
         <button
@@ -49,11 +44,7 @@ function PlatformChooser({
           disabled={platformOrder.includes("apple")}
         >
           {appleMusicUserToken && <span className="loggedBadge">{loggedLabel}</span>}
-          <img
-            src="/logo/appleMusic.png"
-            alt="Apple Music"
-            className="appleMusicLogo"
-          />
+          <img src="/logo/appleMusic.png" alt="Apple Music" className="appleMusicLogo" />
         </button>
       </div>
     </section>

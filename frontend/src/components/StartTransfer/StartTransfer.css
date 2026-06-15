@@ -1,67 +1,126 @@
 .destinationSetup {
   position: relative;
   width: 100%;
-  padding: 26px 32px;
+  padding: 30px 34px;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
 
   height: auto;
   min-height: unset;
+
   overflow: hidden;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 38%, rgba(255,255,255,.12));
-  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.12));
+  border-radius: 22px;
 
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(0,0,0,.82), rgba(0,0,0,.54));
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
+    linear-gradient(135deg, rgba(0,0,0,.88), rgba(0,0,0,.56));
 
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  backdrop-filter: blur(22px) saturate(1.22);
+  -webkit-backdrop-filter: blur(22px) saturate(1.22);
 
   box-shadow:
-    0 0 28px color-mix(in srgb, var(--accent) 24%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.12);
+    0 0 34px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 16px 36px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.14);
+
+  animation: destinationPanelIn .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+.destinationSetup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent);
+
+  transform: translateX(-120%);
+  animation: destinationShine 5.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.destinationHeader {
+  position: relative;
+  z-index: 2;
+}
+
+.destinationHeader p {
+  margin: 0 0 8px;
+
+  color: color-mix(in srgb, var(--accent) 78%, white);
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.destinationHeader h2 {
+  margin: 0;
+
+  color: var(--text-color);
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: .9;
+  font-weight: 1000;
+  letter-spacing: -2.3px;
+
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 46%, transparent),
+    0 4px 18px rgba(0,0,0,.68);
+
+  animation: destinationTitleIn .7s cubic-bezier(.22,1,.36,1) both;
 }
 
 .transferModeRow {
+  position: relative;
+  z-index: 2;
+
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
+  gap: 9px;
   flex-wrap: wrap;
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .08s both;
 }
 
 .transferModeRow button,
 .startTransferBtn {
   width: auto;
   margin: 0;
-  padding: 9px 13px;
+  padding: 9px 14px;
 
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.14);
 
   color: var(--text-color);
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 950;
 
-  background: rgba(0,0,0,.48);
+  background: rgba(0,0,0,.54);
   cursor: pointer;
 
   box-shadow:
     0 8px 18px rgba(0,0,0,.22),
     inset 0 1px 0 rgba(255,255,255,.1);
 
-  transition: .2s ease;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease,
+    opacity .2s ease;
 }
 
 .transferModeRow button:hover,
 .startTransferBtn:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
+
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 28%, transparent),
     inset 0 1px 0 rgba(255,255,255,.14);
@@ -69,33 +128,54 @@
 
 .selectedMode {
   border-color: var(--accent) !important;
-  background: color-mix(in srgb, var(--accent) 34%, rgba(0,0,0,.62)) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 42%, rgba(0,0,0,.72)),
+      rgba(0,0,0,.62)
+    ) !important;
+
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 36%, transparent),
     inset 0 1px 0 rgba(255,255,255,.18) !important;
 }
 
+.destinationInputGroup {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 460px;
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .16s both;
+}
+
 .playlistNameInput {
   width: 100%;
-  max-width: 420px;
   margin: 0;
-  padding: 12px 14px;
+  padding: 13px 15px;
 
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, rgba(255,255,255,.14));
+  border-radius: 15px;
 
-  background: rgba(0,0,0,.56);
+  background: rgba(0,0,0,.58);
   color: var(--text-color);
 
   font: inherit;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 850;
 
   outline: none;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
-    0 8px 18px rgba(0,0,0,.18);
+    0 10px 20px rgba(0,0,0,.2);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
 }
 
 .playlistNameInput::placeholder {
@@ -103,35 +183,80 @@
 }
 
 .playlistNameInput:focus {
+  transform: translateY(-1px);
   border-color: var(--accent);
+
   box-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 24%, transparent),
+    0 0 20px color-mix(in srgb, var(--accent) 28%, transparent),
     inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .transferLimit {
-  max-width: 520px;
+  position: relative;
+  z-index: 2;
+
+  max-width: 540px;
   margin: 0;
 
-  color: rgba(255,255,255,.62) !important;
+  color: rgba(255,255,255,.64) !important;
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 800;
   line-height: 1.35;
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .22s both;
 }
 
 .startTransferBtn {
-  margin-top: 2px;
-  padding: 10px 18px;
+  position: relative;
+  z-index: 2;
 
-  border-color: color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.12));
+  margin-top: 2px;
+  padding: 11px 20px;
+
+  overflow: hidden;
+
+  border-color: color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.12));
 
   color: #fff;
+
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--accent) 62%, black),
-      rgba(0,0,0,.72)
+      color-mix(in srgb, var(--accent) 64%, black),
+      rgba(0,0,0,.78)
     );
+
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 10px 22px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .28s both;
+}
+
+.startTransferBtn span {
+  position: relative;
+  z-index: 2;
+}
+
+.startTransferBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+
+  transform: translateX(-120%);
+  transition: transform .45s ease;
+}
+
+.startTransferBtn:hover::before {
+  transform: translateX(120%);
+}
+
+.startTransferBtn:hover {
+  transform: translateY(-3px) scale(1.02);
 }
 
 .startTransferBtn:disabled {
@@ -140,9 +265,16 @@
   transform: none;
 }
 
+.startTransferBtn:disabled::before {
+  display: none;
+}
+
 .transferError {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   margin: 0;
   padding: 10px 12px;
 
@@ -153,12 +285,15 @@
   background: rgba(50,0,0,.34);
 
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 850;
 }
 
 .transferProgress {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   margin: 0;
   padding: 12px 14px;
 
@@ -169,8 +304,12 @@
   border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.14));
   border-radius: 14px;
 
-  background: rgba(0,0,0,.52);
+  background: rgba(0,0,0,.56);
   color: var(--text-color);
+
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 .transferProgressPulse {
@@ -185,26 +324,16 @@
   animation: transferPulse .9s ease-in-out infinite;
 }
 
-@keyframes transferPulse {
-  0%, 100% {
-    transform: scale(.85);
-    opacity: .55;
-  }
-
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-}
-
 .transferProgress strong {
   display: block;
+
   font-size: 12px;
-  font-weight: 950;
+  font-weight: 1000;
 }
 
 .transferProgress p {
   margin: 2px 0 0;
+
   color: rgba(255,255,255,.66);
   font-size: 11px;
   font-weight: 750;
@@ -212,27 +341,36 @@
 }
 
 .transferResult {
+  position: relative;
+  z-index: 2;
+
   width: 100%;
-  margin-top: 8px;
+  margin-top: 10px;
   padding: 18px;
 
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 18px;
 
-  background: rgba(0,0,0,.46);
+  background:
+    linear-gradient(135deg, rgba(0,0,0,.6), rgba(0,0,0,.38));
 
   box-shadow:
     0 0 22px color-mix(in srgb, var(--accent) 18%, transparent),
     inset 0 1px 0 rgba(255,255,255,.1);
 
   text-align: left;
+
+  animation: transferResultIn .6s cubic-bezier(.22,1,.36,1) both;
 }
 
 .transferResultHeader h3 {
   margin: 0 0 14px;
 
-  font-size: 22px;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
   font-weight: 1000;
+  letter-spacing: -.7px;
 }
 
 .transferResultSummary {
@@ -242,24 +380,29 @@
 }
 
 .resultStat {
-  padding: 13px;
+  padding: 14px;
 
   border: 1px solid rgba(255,255,255,.1);
-  border-radius: 14px;
+  border-radius: 15px;
 
   background: rgba(0,0,0,.48);
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 .resultStat strong {
   display: block;
-  font-size: 26px;
+
+  font-size: 28px;
   line-height: 1;
   font-weight: 1000;
 }
 
 .resultStat span {
   display: block;
-  margin-top: 5px;
+  margin-top: 6px;
 
   color: rgba(255,255,255,.58);
   font-size: 11px;
@@ -303,6 +446,7 @@
 .resultListGroup h4 {
   margin: 0 0 8px;
 
+  color: #fff;
   font-size: 13px;
   font-weight: 1000;
 }
@@ -320,9 +464,95 @@
   line-height: 1.4;
 }
 
+@keyframes destinationPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes destinationTitleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(34px) scale(.88);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.035);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes destinationItemIn {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(.94);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.015);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes transferResultIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes transferPulse {
+  0%,
+  100% {
+    transform: scale(.85);
+    opacity: .55;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes destinationShine {
+  0%,
+  60% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  72% {
+    opacity: .45;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 900px) {
   .destinationSetup {
-    padding: 24px 20px;
+    padding: 26px 22px;
   }
 
   .transferResultSummary,
@@ -333,7 +563,11 @@
 
 @media (max-width: 650px) {
   .destinationSetup {
-    padding: 20px 16px;
+    padding: 22px 18px;
+  }
+
+  .destinationHeader h2 {
+    font-size: 38px;
   }
 
   .transferModeRow {
@@ -343,6 +577,7 @@
   }
 
   .transferModeRow button,
+  .destinationInputGroup,
   .playlistNameInput,
   .transferProgress,
   .transferLimit,

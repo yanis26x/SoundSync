@@ -21,6 +21,11 @@ function StartTransfer({
 }) {
   return (
     <section className="destinationSetup transferFocusPanel">
+      <div className="destinationHeader">
+        <p>Destination setup</p>
+        <h2>Start transfer</h2>
+      </div>
+
       <div className="transferModeRow">
         <button
           className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
@@ -37,35 +42,36 @@ function StartTransfer({
         </button>
       </div>
 
-      {destinationMode === "new" ? (
-        <input
-          className="playlistNameInput"
-          value={newPlaylistName}
-          onChange={(event) => setNewPlaylistName(event.target.value)}
-          placeholder={text.playlistName}
-        />
-      ) : (
-        <select
-          className="playlistNameInput"
-          value={destinationPlaylistId}
-          onChange={(event) => setDestinationPlaylistId(event.target.value)}
-        >
-          <option value="">{text.destinationPlaylist}</option>
-          {destinationPlaylists.map((playlist) => (
-            <option value={playlist.id} key={playlist.id}>
-              {getPlaylistName(destinationPlatform.id, playlist)}
-            </option>
-          ))}
-        </select>
-      )}
+      <div className="destinationInputGroup">
+        {destinationMode === "new" ? (
+          <input
+            className="playlistNameInput"
+            value={newPlaylistName}
+            onChange={(event) => setNewPlaylistName(event.target.value)}
+            placeholder={text.playlistName}
+          />
+        ) : (
+          <select
+            className="playlistNameInput"
+            value={destinationPlaylistId}
+            onChange={(event) => setDestinationPlaylistId(event.target.value)}
+          >
+            <option value="">{text.destinationPlaylist}</option>
+            {destinationPlaylists.map((playlist) => (
+              <option value={playlist.id} key={playlist.id}>
+                {getPlaylistName(destinationPlatform.id, playlist)}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
 
-      {transferError && (
-        <p className="error transferError">{transferError}</p>
-      )}
+      {transferError && <p className="error transferError">{transferError}</p>}
 
       {transferLoading && (
         <div className="transferProgress" role="status" aria-live="polite">
           <span className="transferProgressPulse" aria-hidden="true"></span>
+
           <div>
             <strong>{text.transferLoading}</strong>
             <p>{transferStatus}</p>
@@ -84,7 +90,7 @@ function StartTransfer({
           (destinationMode === "existing" && !destinationPlaylistId)
         }
       >
-        {transferLoading ? text.transferLoading : text.startTransfer}
+        <span>{transferLoading ? text.transferLoading : text.startTransfer}</span>
       </button>
 
       {transferResult && (

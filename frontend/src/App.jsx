@@ -1469,8 +1469,8 @@ if (
             <WhySoundSync text={text.homeBannerText} />
 
             <div className="homePersonalGrid">
-              <MyPersonalMusic />
               <CommentLoop />
+              <MyPersonalMusic />
             </div>
           </>
         )}

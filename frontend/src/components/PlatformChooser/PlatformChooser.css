@@ -2,211 +2,325 @@
   position: relative;
   height: 100%;
   min-height: 184px;
-  padding: 22px;
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+
+  overflow: hidden;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.12));
+  border-radius: 22px;
+
   background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 42%, var(--card-bg)),
-      color-mix(in srgb, var(--accent) 22%, var(--card-bg))
-    );
-  backdrop-filter: blur(24px) saturate(1.34);
-  -webkit-backdrop-filter: blur(24px) saturate(1.34);
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 36%),
+    linear-gradient(135deg, rgba(0,0,0,.92), rgba(0,0,0,.58));
+
+  backdrop-filter: blur(22px) saturate(1.24);
+  -webkit-backdrop-filter: blur(22px) saturate(1.24);
+
   box-shadow:
-    0 0 34px color-mix(in srgb, var(--accent) 42%, transparent),
-    0 0 58px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 32px color-mix(in srgb, var(--accent) 30%, transparent),
+    0 16px 36px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.14);
+
+  animation: choosePanelIn .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+.choosePanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent);
+
+  transform: translateX(-120%);
+  animation: chooseShine 5.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.chooseHeader {
+  position: relative;
+  z-index: 3;
+}
+
+.chooseEyebrow {
+  margin: 0 0 8px;
+
+  color: color-mix(in srgb, var(--accent) 78%, white);
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
 }
 
 .chooseText {
-  position: relative;
-  z-index: 5;
   width: fit-content;
   max-width: 100%;
-  margin: 0 0 18px;
-  padding: 0;
-  color: #ffffff !important;
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 900;
-  line-height: 1.08;
-  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
-  animation: riseIn 0.5s ease 0.46s both;
+
+  margin: 0;
+
+  color: #fff !important;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: .92;
+  font-weight: 1000;
+  letter-spacing: -1.8px;
+
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 5px 18px rgba(0,0,0,.72);
+
+  animation: chooseTitleIn .7s cubic-bezier(.22,1,.36,1) both;
 }
 
 .platformLoginRow {
+  position: relative;
+  z-index: 3;
+
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  animation: riseIn 0.5s ease 0.56s both;
-}
-
-.platformLoginRow button {
-  animation: popIn 0.42s ease both;
-}
-
-.platformLoginRow button:nth-child(1) {
-  animation-delay: 0.64s;
-}
-
-.platformLoginRow button:nth-child(2) {
-  animation-delay: 0.72s;
-}
-
-.platformLoginRow button:nth-child(3) {
-  animation-delay: 0.8s;
-}
-
-.spotifyBtn,
-.youtubeBtn,
-.appleBtn {
-  position: relative;
-  z-index: 5;
-  width: 100%;
-  min-width: 0;
-  height: 72px;
-  margin: 14px 0 0;
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.22)),
-      color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, 0.18))
-    );
-  color: white;
-  cursor: pointer;
-  backdrop-filter: blur(5px) saturate(1.12);
-  -webkit-backdrop-filter: blur(5px) saturate(1.12);
-  box-shadow:
-    0 0 32px color-mix(in srgb, var(--accent) 48%, transparent),
-    0 0 52px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+  gap: 12px;
 }
 
 .platformChoiceBtn {
+  position: relative;
   overflow: visible;
+
+  width: 100%;
+  height: 70px;
+  margin: 0;
+  padding: 12px 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, rgba(255,255,255,.14));
+  border-radius: 18px;
+
+  color: white;
+  cursor: pointer;
+
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.1), rgba(0,0,0,.56)),
+    rgba(0,0,0,.42);
+
+  backdrop-filter: blur(5px) saturate(1.12);
+  -webkit-backdrop-filter: blur(5px) saturate(1.12);
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.24),
+    0 0 18px color-mix(in srgb, var(--accent) 14%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  animation: platformBtnIn .65s cubic-bezier(.22,1,.36,1) both;
+
+  transition:
+    transform .22s ease,
+    background .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease,
+    opacity .22s ease,
+    filter .22s ease;
 }
 
-.platformChoiceBtn:disabled,
-.platformChoiceBtn.selectedPlatformBtn {
+.platformChoiceBtn:nth-child(1) {
+  animation-delay: .1s;
+}
+
+.platformChoiceBtn:nth-child(2) {
+  animation-delay: .18s;
+}
+
+.platformChoiceBtn:nth-child(3) {
+  animation-delay: .26s;
+}
+
+.platformChoiceBtn:hover {
+  transform: translateY(-5px) scale(1.025);
+  border-color: var(--accent);
+
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 28%, rgba(255,255,255,.08)), rgba(0,0,0,.56));
+
+  box-shadow:
+    0 16px 28px rgba(0,0,0,.34),
+    0 0 28px color-mix(in srgb, var(--accent) 38%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+.platformChoiceBtn.selectedPlatformBtn,
+.platformChoiceBtn:disabled {
   cursor: not-allowed;
-  opacity: 0.72;
+  opacity: .62;
+  filter: grayscale(.45);
+
   background:
-    linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.58),
-      rgba(0, 0, 0, 0.34)
-    );
-  border-color: rgba(255, 255, 255, 0.16);
+    linear-gradient(135deg, rgba(0,0,0,.7), rgba(0,0,0,.44));
+
+  border-color: rgba(255,255,255,.12);
+
   box-shadow:
-    0 0 12px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  filter: grayscale(0.35);
+    0 8px 16px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-.platformChoiceBtn:disabled:hover,
-.platformChoiceBtn.selectedPlatformBtn:hover {
+.platformChoiceBtn.selectedPlatformBtn:hover,
+.platformChoiceBtn:disabled:hover {
   transform: none;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(0, 0, 0, 0.58),
-      rgba(0, 0, 0, 0.34)
-    );
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 0 12px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(255,255,255,.12);
 }
 
 .loggedBadge {
   position: absolute;
-  top: -11px;
-  right: -9px;
+  top: -9px;
+  right: -8px;
+  z-index: 4;
+
   padding: 5px 9px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.14));
   border-radius: 999px;
-  background: #000000;
-  color: #fbfffc;
-  font-size: 11px;
-  font-weight: 900;
+
+  background: rgba(0,0,0,.9);
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 1000;
   line-height: 1;
   text-transform: uppercase;
-  box-shadow: 0 0 16px rgb(0, 0, 0);
-}
 
-.spotifyBtn:hover,
-.youtubeBtn:hover,
-.appleBtn:hover {
-  transform: translateY(-2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 64%, rgba(255, 255, 255, 0.24)),
-      color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.2))
-    );
-  border-color: var(--accent);
   box-shadow:
-    0 0 40px color-mix(in srgb, var(--accent) 58%, transparent),
-    0 0 64px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.38);
+    0 0 14px color-mix(in srgb, var(--accent) 30%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .spotifyBigLogo,
 .youtubeBigLogo,
 .appleMusicLogo {
-  width: 130px;
-  height: auto;
+  width: 120px;
+  max-height: 44px;
+
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.16));
-  transition: transform 0.25s ease;
+
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,.12))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 18%, transparent));
+
+  transition: transform .22s ease, filter .22s ease;
 }
 
 .youtubeBigLogo {
-  width: 150px;
+  width: 140px;
 }
 
 .appleMusicLogo {
-  width: 118px;
+  width: 112px;
 }
 
-.spotifyBtn:hover .spotifyBigLogo,
-.youtubeBtn:hover .youtubeBigLogo,
-.appleBtn:hover .appleMusicLogo {
-  transform: scale(1.05);
+.platformChoiceBtn:hover .spotifyBigLogo,
+.platformChoiceBtn:hover .youtubeBigLogo,
+.platformChoiceBtn:hover .appleMusicLogo {
+  transform: scale(1.06);
+  filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.18))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 34%, transparent));
+}
+
+@keyframes choosePanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chooseTitleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(.9);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.035);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes platformBtnIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(.9);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chooseShine {
+  0%,
+  60% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  72% {
+    opacity: .48;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 650px) {
-  .spotifyBtn,
-  .youtubeBtn,
-  .appleBtn {
-    width: 100%;
-    height: 62px;
-    padding: 10px;
+  .choosePanel {
+    min-height: 178px;
+    padding: 20px;
+    gap: 18px;
+  }
+
+  .chooseText {
+    font-size: 32px;
   }
 
   .platformLoginRow {
     gap: 8px;
   }
 
-  .choosePanel {
-    min-height: 178px;
+  .platformChoiceBtn {
+    height: 62px;
+    padding: 10px;
   }
 
   .spotifyBigLogo {
-    width: 120px;
+    width: 108px;
   }
 
   .youtubeBigLogo {
-    width: 140px;
+    width: 124px;
+  }
+
+  .appleMusicLogo {
+    width: 102px;
   }
 }
