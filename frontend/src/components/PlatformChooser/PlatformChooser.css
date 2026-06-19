@@ -14,9 +14,11 @@
   border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.12));
   border-radius: 22px;
 
-  background:
+  /* background:
     radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 36%),
-    linear-gradient(135deg, rgba(0,0,0,.92), rgba(0,0,0,.58));
+    linear-gradient(135deg, rgba(0,0,0,.92), rgba(0,0,0,.58)); */
+
+       background:rgba(0, 0, 0, 0.747);
 
   backdrop-filter: blur(22px) saturate(1.24);
   -webkit-backdrop-filter: blur(22px) saturate(1.24);
@@ -103,11 +105,13 @@
 
   color: white;
   cursor: pointer;
-
+/* 
   background:
     linear-gradient(135deg, rgba(255,255,255,.1), rgba(0,0,0,.56)),
-    rgba(0,0,0,.42);
+    rgba(0,0,0,.42); */
 
+
+background:rgba(0, 0, 0, 0.747);
   backdrop-filter: blur(5px) saturate(1.12);
   -webkit-backdrop-filter: blur(5px) saturate(1.12);
 
@@ -211,11 +215,12 @@
     drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 18%, transparent));
 
   transition: transform .22s ease, filter .22s ease;
+
 }
 
 .youtubeBigLogo {
   width: 170px;
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 .appleMusicLogo {
@@ -239,7 +244,7 @@
 }
 
 .platformChoiceBtn:hover .youtubeBigLogo {
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 .platformChoiceBtn:hover .appleMusicLogo {
@@ -369,38 +374,4 @@
 var(--accent) 0px 0px 8px,
 rgba(255,255,255,.85) 0px 0px 4px inset;
 
-  animation: doThisPop 1.25s ease-in-out infinite;
-}
-
-.doThisNotification::after {
-  content: "";
-  position: absolute;
-  inset: -6px;
-
-  border-radius: inherit;
-  border: var(--accent) 2px solid;
-
-  animation: doThisPing 1.25s ease-out infinite;
-}
-
-@keyframes doThisPop {
-  0%, 100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.08);
-  }
-}
-
-@keyframes doThisPing {
-  0% {
-    opacity: .8;
-    transform: scale(.9);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(1.35);
-  }
 }

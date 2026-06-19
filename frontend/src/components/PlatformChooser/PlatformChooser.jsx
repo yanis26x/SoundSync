@@ -38,7 +38,7 @@ function PlatformChooser({
           disabled={platformOrder.includes("youtube")}
         >
           {youtubeAccessToken && <span className="loggedBadge">{loggedLabel}</span>}
-          <img src="/logo/YouTube-Logo.png" alt="YouTube" className="youtubeBigLogo" />
+          <img src="/logo/YouTube-Logo.svg" alt="YouTube" className="youtubeBigLogo" />
         </button>
 
         <button
