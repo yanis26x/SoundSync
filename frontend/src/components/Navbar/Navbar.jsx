@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ThemeModal from "../ThemeModal/ThemeModal";
+import StatusOfTransfer from "../StatusOfTransfer/StatusOfTransfer";
 import "./Navbar.css";
 
 function Navbar({
@@ -12,6 +13,8 @@ function Navbar({
   profileLabel = "Profile",
   onResetPlatformChoice,
   resetLabel = "Reset",
+  sourcePlatform,
+  destinationPlatform,
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -34,10 +37,16 @@ function Navbar({
   return (
     <>
       <nav className="siteNavbar" aria-label="Main navigation">
-        <a className="siteNavbarBrand" href="/">
-          <span className="siteNavbarTitle">SoundSync</span>
-          <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
-        </a>
+        <div className="siteNavbarIdentity">
+          <a className="siteNavbarBrand" href="/">
+            <span className="siteNavbarTitle">SoundSync</span>
+            <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
+          </a>
+          <StatusOfTransfer
+            sourcePlatform={sourcePlatform}
+            destinationPlatform={destinationPlatform}
+          />
+        </div>
 
         <div className="siteNavbarActions">
           {onResetPlatformChoice && (

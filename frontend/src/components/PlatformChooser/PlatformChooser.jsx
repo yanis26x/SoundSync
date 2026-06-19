@@ -14,6 +14,7 @@ function PlatformChooser({
 }) {
   return (
     <section className="choosePanel">
+      <span className="doThisNotification">STEP 1</span>
       <div className="chooseHeader">
         <p className="chooseEyebrow">Platform select</p>
         <h2 className="chooseText">{chooseText}</h2>

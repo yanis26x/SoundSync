@@ -34,11 +34,12 @@
 
 .homeInfoHeader h2 {
   margin: 0;
+
+  color: var(--text-color);
   font-size: clamp(30px, 3vw, 48px);
   line-height: .95;
   font-weight: 1000;
   letter-spacing: -1.8px;
-  color: var(--text-color);
 
   text-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 55%, transparent),
@@ -66,6 +67,7 @@
 }
 
 .homeInfoFeatureCard {
+  position: relative;
   overflow: hidden;
 
   border-radius: 22px;
@@ -76,64 +78,63 @@
     0 16px 32px rgba(0,0,0,.35),
     0 0 22px color-mix(in srgb, var(--accent) 16%, transparent);
 
-  animation: cardRiseIn .85s cubic-bezier(.22,1,.36,1) both;
   animation:
-  cardRiseIn .9s cubic-bezier(.22,1,.36,1) both,
-  cardBreath 7s ease-in-out infinite;
+    cardRiseIn .9s cubic-bezier(.22,1,.36,1) both,
+    cardBreath 7s ease-in-out infinite;
 
   transition:
     transform .24s ease,
     box-shadow .24s ease,
     border-color .24s ease;
 }
-@keyframes cardBreath {
 
-  0% {
-
-    transform:
-      scale(1);
-
-  }
-
-  50% {
-
-    transform:
-      scale(1.018);
-
-  }
-
-  100% {
-
-    transform:
-      scale(1);
-
-  }
-
-}
 
 .homeInfoFeatureCard:nth-child(1) {
-  animation-delay: .18s;
+  animation-delay: .18s, .18s;
 }
 
 .homeInfoFeatureCard:nth-child(2) {
-  animation-delay: .28s;
+  animation-delay: .28s, .28s;
 }
 
 .homeInfoFeatureCard:nth-child(3) {
-  animation-delay: .38s;
+  animation-delay: .38s, .38s;
 }
 
 .homeInfoFeatureCard:nth-child(4) {
-  animation-delay: .48s;
+  animation-delay: .48s, .48s;
+}
+
+.homeInfoFeatureCard:nth-child(1)::before {
+  animation-delay: 0s;
+}
+
+.homeInfoFeatureCard:nth-child(2)::before {
+  animation-delay: 1.2s;
+}
+
+.homeInfoFeatureCard:nth-child(3)::before {
+  animation-delay: 2.4s;
+}
+
+.homeInfoFeatureCard:nth-child(4)::before {
+  animation-delay: 3.6s;
 }
 
 .homeInfoFeatureCard:hover {
+  animation-play-state: paused;
+
   transform: translateY(-8px) scale(1.025);
   border-color: color-mix(in srgb, var(--accent) 32%, black);
 
   box-shadow:
     0 22px 42px rgba(0,0,0,.48),
-    0 0 32px color-mix(in srgb, var(--accent) 38%, transparent);
+    0 0 18px var(--accent),
+    0 0 38px color-mix(in srgb, var(--accent) 52%, transparent);
+}
+
+.homeInfoFeatureCard:hover::before {
+  animation-play-state: running;
 }
 
 .homeInfoFeatureCard img {
@@ -188,113 +189,98 @@
   font-weight: 800;
 }
 
-@keyframes textPopIn {
-
+@keyframes accentReflection {
   0% {
-
+    left: -220%;
     opacity: 0;
-
-    transform:
-      translateY(38px)
-      scale(.88);
-
   }
 
-  60% {
-
-    opacity: 1;
-
-    transform:
-      translateY(-5px)
-      scale(1.04);
-
-  }
-
-  100% {
-
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-}
-
-@keyframes textSlideIn {
-
-  0% {
-
-    opacity: 0;
-
-    transform:
-      translateX(-42px);
-
-  }
-
-  70% {
-
-    opacity: 1;
-
-    transform:
-      translateX(6px);
-
-  }
-
-  100% {
-
-    opacity: 1;
-
-    transform:
-      translateX(0);
-
-  }
-
-}
-
-@keyframes cardRiseIn {
-
-  0% {
-
-    opacity: 0;
-
-    transform:
-      translateY(80px)
-      scale(.82);
-
+  10% {
+    opacity: .75;
   }
 
   45% {
-
-    opacity: .75;
-
-    transform:
-      translateY(-10px)
-      scale(1.04);
-
+    opacity: .95;
   }
 
-  70% {
-
-    opacity: 1;
-
-    transform:
-      translateY(4px)
-      scale(.99);
-
+  60% {
+    opacity: .45;
   }
 
   100% {
+    left: 240%;
+    opacity: 0;
+  }
+}
 
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-
+@keyframes cardBreath {
+  0% {
+    transform: scale(1);
   }
 
+  50% {
+    transform: scale(1.018);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes textPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(38px) scale(.88);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.04);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes textSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-42px);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cardRiseIn {
+  0% {
+    opacity: 0;
+    transform: translateY(80px) scale(.82);
+  }
+
+  45% {
+    opacity: .75;
+    transform: translateY(-10px) scale(1.04);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(4px) scale(.99);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 1000px) {

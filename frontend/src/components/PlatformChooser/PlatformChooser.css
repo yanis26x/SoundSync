@@ -63,7 +63,7 @@
 
   margin: 0;
 
-  color: #fff !important;
+  color: #ffffff !important;
   font-size: clamp(28px, 3.4vw, 44px);
   line-height: .92;
   font-weight: 1000;
@@ -336,5 +336,67 @@
 
   .appleMusicLogo {
     width: 102px;
+  }
+}
+
+
+.doThisNotification {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.85);
+
+  background: #ff1744;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: .7px;
+  text-transform: uppercase;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 23, 68, .18),
+    0 0 18px rgba(255, 23, 68, .75),
+    0 8px 18px rgba(0,0,0,.35);
+
+  animation: doThisPop 1.25s ease-in-out infinite;
+}
+
+.doThisNotification::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+
+  border-radius: inherit;
+  border: 2px solid rgba(255, 23, 68, .55);
+
+  animation: doThisPing 1.25s ease-out infinite;
+}
+
+@keyframes doThisPop {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes doThisPing {
+  0% {
+    opacity: .8;
+    transform: scale(.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
   }
 }

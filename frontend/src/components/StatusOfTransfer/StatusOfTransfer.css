@@ -1,0 +1,84 @@
+.transferStatus {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 6px 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(8, 8, 8, 0.48);
+  color: var(--text-color);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.transferStatusPrompt {
+  color: color-mix(in srgb, var(--accent) 76%, white);
+}
+
+.transferStatusItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.transferStatusLogo {
+  width: 21px;
+  height: 21px;
+  display: block;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.transferStatusDivider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.transferStatusDestination {
+  color: color-mix(in srgb, var(--text-color) 76%, transparent);
+}
+
+.transferStatusComplete {
+  gap: 7px;
+  padding-inline: 10px;
+}
+
+.transferStatusArrow {
+  color: var(--accent);
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 780px) {
+  .transferStatusPending .transferStatusItem span,
+  .transferStatusPending .transferStatusDivider,
+  .transferStatusDestination {
+    display: none;
+  }
+
+  .transferStatusPending::after {
+    content: "Step 2";
+    color: color-mix(in srgb, var(--text-color) 76%, transparent);
+  }
+}
+
+@media (max-width: 520px) {
+  .transferStatus {
+    min-height: 30px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .transferStatusLogo {
+    width: 18px;
+    height: 18px;
+  }
+}

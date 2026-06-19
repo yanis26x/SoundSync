@@ -1325,6 +1325,8 @@ if (
         profileLabel={text.profile}
         onResetPlatformChoice={selectedPlatforms.length > 0 ? resetPlatformChoice : undefined}
         resetLabel={text.changePlatform}
+        sourcePlatform={sourcePlatform}
+        destinationPlatform={destinationPlatform}
       />
 
       {currentPage === "home" &&

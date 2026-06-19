@@ -2,21 +2,6 @@
 
 SoundSync est une application web qui permet de transférer des playlists entre différentes plateformes musicales.
 
-
-## Fonctionnalités actuelles
-
-✅ Connexion avec Spotify
-
-✅ Récupération des playlists Spotify
-
-✅ Connexion avec YouTube
-
-✅ Système de thèmes personnalisés
-
-✅ Interface moderne avec plusieurs thèmes visuels
-
-🚧 Transfert de playlists (en développement)
-
 ---
 
 ## Lancer le projet
@@ -68,6 +53,8 @@ GOOGLE_CLIENT_ID=ton_google_client_id
 GOOGLE_CLIENT_SECRET=ton_google_client_secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
+
+Ajouter le fichier `AuthKey_3DHGA2M8R9.p8` dans le dossier `backend` :
 
 ---
 
