@@ -11,7 +11,22 @@ function PlatformLogo({ platform }) {
   );
 }
 
-function StatusOfTransfer({ sourcePlatform, destinationPlatform }) {
+function ResetButton({ onReset, resetLabel }) {
+  if (!onReset) return null;
+
+  return (
+    <button className="transferStatusReset" type="button" onClick={onReset}>
+      {resetLabel}
+    </button>
+  );
+}
+
+function StatusOfTransfer({
+  sourcePlatform,
+  destinationPlatform,
+  onReset,
+  resetLabel = "Reset",
+}) {
   if (!sourcePlatform) {
     return <div className="transferStatus transferStatusPrompt">Do Step 1</div>;
   }
@@ -25,6 +40,7 @@ function StatusOfTransfer({ sourcePlatform, destinationPlatform }) {
         </span>
         <span className="transferStatusDivider" aria-hidden="true" />
         <span className="transferStatusDestination">Destination: Do Step 2</span>
+        <ResetButton onReset={onReset} resetLabel={resetLabel} />
       </div>
     );
   }
@@ -37,6 +53,7 @@ function StatusOfTransfer({ sourcePlatform, destinationPlatform }) {
       <PlatformLogo platform={sourcePlatform} />
       <span className="transferStatusArrow" aria-hidden="true">→</span>
       <PlatformLogo platform={destinationPlatform} />
+      <ResetButton onReset={onReset} resetLabel={resetLabel} />
     </div>
   );
 }

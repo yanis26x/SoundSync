@@ -37,27 +37,18 @@ function Navbar({
   return (
     <>
       <nav className="siteNavbar" aria-label="Main navigation">
-        <div className="siteNavbarIdentity">
-          <a className="siteNavbarBrand" href="/">
-            <span className="siteNavbarTitle">SoundSync</span>
-            <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
-          </a>
+        <a className="siteNavbarBrand" href="/">
+          <span className="siteNavbarTitle">SoundSync</span>
+          <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
+        </a>
+
+        <div className="siteNavbarActions">
           <StatusOfTransfer
             sourcePlatform={sourcePlatform}
             destinationPlatform={destinationPlatform}
+            onReset={onResetPlatformChoice}
+            resetLabel={resetLabel}
           />
-        </div>
-
-        <div className="siteNavbarActions">
-          {onResetPlatformChoice && (
-            <button
-              type="button"
-              className="siteNavbarBtn resetHeaderBtn"
-              onClick={onResetPlatformChoice}
-            >
-              {resetLabel}
-            </button>
-          )}
 
           <button
             type="button"

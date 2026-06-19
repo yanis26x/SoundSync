@@ -38,13 +38,6 @@
   text-decoration: none;
 }
 
-.siteNavbarIdentity {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .siteNavbarTitle {
   font-size: 25px;
   font-weight: 950;
@@ -120,18 +113,6 @@
   font-weight: 950;
 }
 
-.resetHeaderBtn {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 46%, transparent);
-}
-
-.resetHeaderBtn:hover {
-  background: color-mix(in srgb, var(--accent) 82%, white 18%);
-  border-color: color-mix(in srgb, var(--accent) 82%, white 18%);
-}
-
 @keyframes navbarSlideDownIn {
   from {
     opacity: 0;
@@ -158,10 +139,6 @@
   .siteNavbarSubtitle {
     max-width: 150px;
     font-size: 10px;
-  }
-
-  .siteNavbarIdentity {
-    gap: 7px;
   }
 
   .siteNavbarSubtitle {

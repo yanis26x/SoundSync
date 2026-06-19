@@ -10,10 +10,7 @@ const wavePhrases = [
 ];
 
 function EmptyPanel({
-  selectedPlatformsCount,
-  resetLabel,
   disconnectHint,
-  onReset,
 }) {
   const [phraseIndex, setPhraseIndex] = useState(0);
 
@@ -41,12 +38,6 @@ function EmptyPanel({
 
       <div className="emptyPanelFooter">
         <p>{disconnectHint}</p>
-
-        {selectedPlatformsCount > 0 && (
-          <button className="changePlatformBtn secondaryBtn" onClick={onReset}>
-            {resetLabel}
-          </button>
-        )}
       </div>
     </section>
   );

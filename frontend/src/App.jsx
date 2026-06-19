@@ -183,7 +183,7 @@ function App() {
   const [transferStatus, setTransferStatus] = useState("");
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
-  const [currentTheme, setCurrentTheme] = useState("sora");
+  const [currentTheme, setCurrentTheme] = useState("miku");
   const [language, setLanguageState] = useState(
     () => localStorage.getItem("language") || "en"
   );
@@ -1412,12 +1412,7 @@ if (
                 />
 
                 <EmptyPanel
-                  sourcePlatform={sourcePlatform}
-                  destinationPlatform={destinationPlatform}
-                  selectedPlatformsCount={selectedPlatforms.length}
-                  resetLabel={text.changePlatform}
                   disconnectHint={text.disconnectHint}
-                  onReset={resetPlatformChoice}
                 />
               </div>
             )}
