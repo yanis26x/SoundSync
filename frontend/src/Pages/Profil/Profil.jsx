@@ -8,9 +8,6 @@ import "./Profil.css";
 
 function Profil() {
   const [currentTheme, setCurrentTheme] = useState("sora");
-  const [language, setLanguageState] = useState(
-    () => localStorage.getItem("language") || "en"
-  );
   const [accessToken, setAccessToken] = useState(
     () => localStorage.getItem("spotify_access_token") || ""
   );
@@ -22,8 +19,7 @@ function Profil() {
   );
   const [appleError, setAppleError] = useState("");
 
-  const copy = {
-    en: {
+  const text = {
       profileTitle: "Profile",
       profileSubtitle: "Manage your connected music accounts.",
       online: "Connected",
@@ -32,24 +28,6 @@ function Profil() {
       disconnect: "Disconnect",
       switchAccount: "Switch",
       appleLoginError: "Unable to connect to Apple Music.",
-    },
-    fr: {
-      profileTitle: "Profil",
-      profileSubtitle: "Gere tes comptes musicaux connectes.",
-      online: "Connecte",
-      offline: "Hors ligne",
-      connect: "Connecter",
-      disconnect: "Deconnecter",
-      switchAccount: "Changer",
-      appleLoginError: "Impossible de se connecter a Apple Music.",
-    },
-  };
-
-  const text = copy[language] || copy.en;
-
-  const setLanguage = (nextLanguage) => {
-    localStorage.setItem("language", nextLanguage);
-    setLanguageState(nextLanguage);
   };
 
   useEffect(() => {
@@ -219,8 +197,6 @@ function Profil() {
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
-        language={language}
-        setLanguage={setLanguage}
         onOpenProfile={() => {
           window.location.href = "/";
         }}

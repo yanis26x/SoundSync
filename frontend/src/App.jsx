@@ -15,8 +15,7 @@ import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 
 
-const copy = {
-  en: {
+const text = {
     subtitle: "Transfer Anywhere, Sync Everthing",
     chooseSource: "Select the source platform",
     chooseDestination: "Select the destination",
@@ -71,63 +70,6 @@ const copy = {
     transferLimit: "Current limit: 25 tracks per transfer.",
     homeBannerTitle: "Why SoundSync?!",
     homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive.",
-  },
-  fr: {
-    subtitle: "Transfer Anywhere, Sync Everthing",
-    chooseSource: "Choisis une plateforme 𖤐",
-    chooseDestination: "Select Destination 𖤐",
-    connected: "Connecte",
-    disconnect: "Deconnecter",  
-    tracks: "morceaux",
-    videos: "videos",
-    openSpotify: "Ouvrir sur Spotify",
-    openYoutube: "Ouvrir sur YouTube",
-    openApple: "Ouvrir dans Apple Music",
-    unknownArtist: "Artiste inconnu",
-    unknownTitle: "Titre inconnu",
-    showTracks: "Afficher les musiques",
-    hideTracks: "Ranger les musiques",
-    loadingTracks: "Chargement des musiques...",
-    loadingPlaylists: "Chargement des playlists",
-    unavailable: "Indisponible",
-    playlistError: "Erreur pendant la recuperation des playlists.",
-    youtubePlaylistError: "Erreur pendant la recuperation des playlists YouTube.",
-    applePlaylistError: "Erreur pendant la recuperation des playlists Apple Music.",
-    appleLoginError: "Impossible de se connecter a Apple Music.",
-    trackError: "Impossible de recuperer les musiques.",
-    profile: "Profil",
-    home: "Accueil",
-    profileTitle: "Profil",
-    online: "Connecte",
-    offline: "Offline",
-    connect: "Se connecter",
-    switchAccount: "Changer de compte",
-    removeChoice: "Retirer le choix de plateforme",
-    changePlatform: "Reset",
-    disconnectHint: "",
-    logged: "✓",
-    pickPlaylist: "Choisissez une liste de lecture à synchroniser",
-    transferToNew: "Transferer dans une nouvelle playlist",
-    transferToExisting: "Ajouter a une playlist existante",
-    playlistName: "Nom de la playlist",
-    destinationPlaylist: "Playlist destination",
-    startTransfer: "Demarrer le transfert",
-    transferLoading: "Transfert en cours...",
-    transferPreparing: "Chargement des musiques source...",
-    transferCreatingPlaylist: "Creation de la playlist destination...",
-    transferCheckingDestination: "Verification de la playlist destination...",
-    transferSearchingTrack: "Recherche",
-    transferAddingTracks: "Ajout des musiques...",
-    transferFinalizing: "Finalisation du transfert...",
-    transferDone: "Transfert termine",
-    addedTracks: "musiques ajoutees",
-    failedTracks: "musiques introuvables ou en erreur",
-    alreadyTracks: "musiques deja presentes",
-    unsupportedTransfer: "Le transfert est dispo pour Spotify et YouTube pour le moment.",
-    transferLimit: "Limite actuelle : 25 musiques par transfert.",
-    homeBannerTitle: "Run Me Yo Blood",
-    homeBannerText: "I'm having withdrawals, I feel uneasy -- Skittles got me feeling tranquil, they're so relieving",
-  },
 };
 
 function App() {
@@ -184,10 +126,6 @@ function App() {
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
   const [currentTheme, setCurrentTheme] = useState("miku");
-  const [language, setLanguageState] = useState(
-    () => localStorage.getItem("language") || "en"
-  );
-  const text = copy[language];
   const [platformOrder, setPlatformOrder] = useState(() => {
     const savedOrder = localStorage.getItem("platform_order");
 
@@ -232,11 +170,6 @@ function App() {
     : selectedSourcePlaylistId
       ? "destination"
       : "playlist";
-
-  const setLanguage = (nextLanguage) => {
-    localStorage.setItem("language", nextLanguage);
-    setLanguageState(nextLanguage);
-  };
 
   const addPlatformToOrder = (platformId) => {
     setPlatformOrder((currentOrder) => {
@@ -1317,8 +1250,6 @@ if (
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
-        language={language}
-        setLanguage={setLanguage}
         onOpenProfile={() => {
           window.location.href = "/profil";
         }}

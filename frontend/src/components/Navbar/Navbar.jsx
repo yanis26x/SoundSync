@@ -7,8 +7,6 @@ function Navbar({
   themes,
   currentTheme,
   setCurrentTheme,
-  language,
-  setLanguage,
   onOpenProfile,
   profileLabel = "Profile",
   onResetPlatformChoice,
@@ -18,7 +16,6 @@ function Navbar({
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
-  const nextLanguage = language === "en" ? "fr" : "en";
 
   const openThemeModal = () => {
     setIsThemeModalClosing(false);
@@ -68,13 +65,6 @@ function Navbar({
             Theme
           </button>
 
-          <button
-            type="button"
-            className="siteNavbarBtn languageNavbarBtn"
-            onClick={() => setLanguage(nextLanguage)}
-          >
-            {language.toUpperCase()}
-          </button>
         </div>
       </nav>
 

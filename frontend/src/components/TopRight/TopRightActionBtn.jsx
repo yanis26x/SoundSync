@@ -5,14 +5,11 @@ function TopRightActionBtn({
   themes,
   currentTheme,
   setCurrentTheme,
-  language,
-  setLanguage,
   onOpenProfile,
   profileLabel = "Profile",
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
-  const nextLanguage = language === "en" ? "fr" : "en";
 
   const openThemeModal = () => {
     setIsThemeModalClosing(false);
@@ -48,12 +45,6 @@ function TopRightActionBtn({
           Theme
         </button>
 
-        <button
-          className="languageBtn"
-          onClick={() => setLanguage(nextLanguage)}
-        >
-          {language.toUpperCase()}
-        </button>
 
       </div>
 

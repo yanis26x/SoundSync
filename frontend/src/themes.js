@@ -31,23 +31,5 @@ export const themes = {
   accentSoft: "rgba(0, 255, 217, 0.34)",
   text: "#f2fdff",
 },
-tokyo: {
-  name: "Tokyo",
-
-  description:
-    "Dreamy pastel Tokyo skyline glowing under a pink sunset.",
-
-  background: "/wallpaper/ttokyo.jpg",
-
-  cardBg: "rgba(255, 210, 245, 0.34)",
-
-  border: "rgba(255, 120, 215, 0.8)",
-
-  accent: "#ff42bc",
-
-  accentSoft: "rgba(255, 66, 188, 0.44)",
-
-  text: "#ffffff",
-},
 
 };
