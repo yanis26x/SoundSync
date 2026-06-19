@@ -215,6 +215,7 @@
 
 .youtubeBigLogo {
   width: 170px;
+  filter: brightness(0) invert(1);
 }
 
 .appleMusicLogo {
@@ -235,6 +236,10 @@
   filter:
     drop-shadow(0 0 10px rgba(255,255,255,.18))
     drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 34%, transparent));
+}
+
+.platformChoiceBtn:hover .youtubeBigLogo {
+  filter: brightness(0) invert(1);
 }
 
 .platformChoiceBtn:hover .appleMusicLogo {
@@ -349,7 +354,7 @@
   padding: 7px 10px;
 
   border-radius: 999px;
-  border: 2px solid rgba(255,255,255,.85);
+
 
   background: var(--accent);
   color: rgb(0, 0, 0);

@@ -1,12 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
-import Profil from './Profil.jsx'
+import Profil from './Pages/Profil/Profil.jsx'
 
 const routes = {
   '/': App,
-  '/Profil': Profil,
   '/profil': Profil,
+  '/Profil': Profil,
 }
 const RootPage = routes[window.location.pathname] || App
 

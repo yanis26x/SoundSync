@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { themes } from "./themes";
-import MusicParticles from "./components/Particles/MusicParticles";
-import Navbar from "./components/Navbar/Navbar";
-import "./App.css";
+import { themes } from "../../themes";
+import MusicParticles from "../../components/Particles/MusicParticles";
+import Navbar from "../../components/Navbar/Navbar";
+import "../../App.css";
 import "./Profil.css";
 
 function Profil() {

@@ -54,7 +54,7 @@ function Navbar({
             type="button"
             className="siteNavbarBtn"
             onClick={onOpenProfile || (() => {
-              window.location.href = "/Profil";
+              window.location.href = "/profil";
             })}
           >
             {profileLabel}

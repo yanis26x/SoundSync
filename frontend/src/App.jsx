@@ -49,7 +49,7 @@ const copy = {
     removeChoice: "Remove platform choice",
     changePlatform: "Reset",
     disconnectHint: "",
-    logged: "✓ LINKED",
+    logged: "✓",
     pickPlaylist: "Select a playlist to sync𖤐",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
@@ -105,7 +105,7 @@ const copy = {
     removeChoice: "Retirer le choix de plateforme",
     changePlatform: "Reset",
     disconnectHint: "",
-    logged: "Online",
+    logged: "✓",
     pickPlaylist: "Choisissez une liste de lecture à synchroniser",
     transferToNew: "Transferer dans une nouvelle playlist",
     transferToExisting: "Ajouter a une playlist existante",
@@ -1320,7 +1320,7 @@ if (
         language={language}
         setLanguage={setLanguage}
         onOpenProfile={() => {
-          window.location.href = "/Profil";
+          window.location.href = "/profil";
         }}
         profileLabel={text.profile}
         onResetPlatformChoice={selectedPlatforms.length > 0 ? resetPlatformChoice : undefined}

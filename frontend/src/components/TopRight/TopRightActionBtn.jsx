@@ -35,7 +35,7 @@ function TopRightActionBtn({
         <button
           className="profileBtn"
           onClick={onOpenProfile || (() => {
-            window.location.href = "/Profil";
+            window.location.href = "/profil";
           })}
         >
           {profileLabel}
