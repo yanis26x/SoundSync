@@ -107,31 +107,6 @@ Ajouter des utilisateurs
 ```
 
 Ajoutez ensuite les adresses Gmail souhaitées.
-
----
-
-## Plateformes prévues
-
-🚧 YouTube Music
-
-🚧 Apple Music
-
-🚧 SoundCloud
-
-🚧 Deezer
-
----
-
-## Prochaines étapes
-
-- Sélection d'une playlist Spotify
-- Création automatique d'une playlist YouTube
-- Importation des morceaux Spotify vers YouTube
-- Support Apple Music
-- Support SoundCloud
-- Historique des transferts
-- Améliorations de l'interface utilisateur
-
 ---
 
 Développé par Yanis26x.
