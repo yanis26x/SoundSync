@@ -18,6 +18,8 @@ function Profil() {
     () => localStorage.getItem("apple_music_user_token") || ""
   );
   const [appleError, setAppleError] = useState("");
+  const [accountDetails, setAccountDetails] = useState({});
+  const [detailsLoading, setDetailsLoading] = useState(true);
 
   const text = {
       profileTitle: "Profile",
@@ -40,6 +42,62 @@ function Profil() {
     document.documentElement.style.setProperty("--accent-soft", theme.accentSoft);
     document.documentElement.style.setProperty("--text-color", theme.text);
   }, [currentTheme]);
+
+  useEffect(() => {
+    const loadAccountDetails = async () => {
+      setDetailsLoading(true);
+
+      const loadPlatform = async (id, token, profilePath) => {
+        if (!token) return [id, null];
+
+        const headers = { Authorization: `Bearer ${token}` };
+        const [playlistResult, profileResult] = await Promise.allSettled([
+          axios.get(`http://127.0.0.1:8000/api/${id}/playlists`, { headers }),
+          profilePath
+            ? axios.get(`http://127.0.0.1:8000${profilePath}`, { headers })
+            : Promise.resolve(null),
+        ]);
+
+        const playlistResponse = playlistResult.status === "fulfilled"
+          ? playlistResult.value
+          : null;
+        const profileResponse = profileResult.status === "fulfilled"
+          ? profileResult.value
+          : null;
+        const playlists = playlistResponse?.data?.playlists || [];
+          const totalTracks = playlists.reduce((total, playlist) => {
+            const count = id === "spotify"
+              ? playlist.tracks?.total
+              : id === "youtube"
+                ? playlist.contentDetails?.itemCount
+                : playlist.attributes?.trackCount;
+
+            return total + (Number(count) || 0);
+          }, 0);
+
+        const profile = profileResponse?.data?.user || profileResponse?.data?.channel;
+
+        return [id, {
+          playlists: playlists.length,
+          totalTracks,
+          profile,
+          statsUnavailable: !playlistResponse,
+          profileUnavailable: Boolean(profilePath) && !profileResponse,
+        }];
+      };
+
+      const entries = await Promise.all([
+        loadPlatform("spotify", accessToken, "/api/spotify/me"),
+        loadPlatform("youtube", youtubeAccessToken, "/api/youtube/me"),
+        loadPlatform("apple", appleMusicUserToken),
+      ]);
+
+      setAccountDetails(Object.fromEntries(entries));
+      setDetailsLoading(false);
+    };
+
+    loadAccountDetails();
+  }, [accessToken, youtubeAccessToken, appleMusicUserToken]);
 
   const removePlatformChoice = (platformId) => {
     const savedOrder = localStorage.getItem("platform_order");
@@ -187,6 +245,29 @@ function Profil() {
     },
   ];
 
+  const getAccountPresentation = (platform) => {
+    const details = accountDetails[platform.id];
+    const profile = details?.profile;
+
+    if (platform.id === "spotify") {
+      return {
+        username: profile?.display_name || profile?.id,
+        extraLabel: "followers",
+        extraValue: profile?.followers?.total,
+      };
+    }
+
+    if (platform.id === "youtube") {
+      return {
+        username: profile?.snippet?.title,
+        extraLabel: "videos",
+        extraValue: profile?.statistics?.videoCount,
+      };
+    }
+
+    return { username: platform.isConnected ? "Apple Music Library" : "" };
+  };
+
   const connectedCount = accountPlatforms.filter((platform) => platform.isConnected).length;
 
   return (
@@ -201,6 +282,7 @@ function Profil() {
           window.location.href = "/";
         }}
         profileLabel="Home"
+        showTransferStatus={false}
       />
 
       <section className="profilPanel">
@@ -220,7 +302,11 @@ function Profil() {
         {appleError && <p className="error profilError">{appleError}</p>}
 
         <div className="profileAccountList">
-          {accountPlatforms.map((platform) => (
+          {accountPlatforms.map((platform) => {
+            const details = accountDetails[platform.id];
+            const presentation = getAccountPresentation(platform);
+
+            return (
             <article
               className={`profileAccountCard ${platform.isConnected ? "isConnected" : ""}`}
               key={platform.id}
@@ -233,10 +319,28 @@ function Profil() {
                 <div className="profileAccountText">
                   <h3>{platform.name}</h3>
 
+                  {platform.isConnected && presentation.username && (
+                    <strong className="profileUsername">{presentation.username}</strong>
+                  )}
+
                   <p className={platform.isConnected ? "success" : "offlineText"}>
                     <span></span>
                     {platform.isConnected ? text.online : text.offline}
                   </p>
+
+                  {platform.isConnected && !detailsLoading && details && !details.statsUnavailable && (
+                    <div className="profileAccountStats">
+                      <span><strong>{details.playlists}</strong> playlists</span>
+                      <span><strong>{details.totalTracks}</strong> tracks</span>
+                      {presentation.extraValue !== undefined && (
+                        <span><strong>{Number(presentation.extraValue).toLocaleString()}</strong> {presentation.extraLabel}</span>
+                      )}
+                    </div>
+                  )}
+
+                  {platform.isConnected && detailsLoading && (
+                    <span className="profileDetailsLoading">Loading account details...</span>
+                  )}
                 </div>
               </div>
 
@@ -258,7 +362,8 @@ function Profil() {
                 )}
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </section>
     </main>

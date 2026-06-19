@@ -195,10 +195,7 @@
   box-shadow:
     0 0 14px var(--accent),
     0 0 28px color-mix(in srgb, var(--accent) 50%, transparent);
-
-  animation: footerDividerPulse 3.2s ease-in-out infinite;
 }
-
 .footerBottom {
   position: relative;
   z-index: 2;
@@ -225,16 +222,11 @@
 }
 
 .footerStar {
-  color: var(--accent);
 
-  font-size: 28px;
+
+  font-size: 17px;
   line-height: 1;
 
-  text-shadow:
-    0 0 14px var(--accent),
-    0 0 28px color-mix(in srgb, var(--accent) 54%, transparent);
-
-  animation: footerStarPulse 2.2s ease-in-out infinite;
 }
 
 .appStoreBtn {
@@ -279,31 +271,6 @@
   }
 }
 
-@keyframes footerDividerPulse {
-  0%,
-  100% {
-    opacity: .55;
-    transform: translate(-50%, -50%) scaleX(.72);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scaleX(1);
-  }
-}
-
-@keyframes footerStarPulse {
-  0%,
-  100% {
-    transform: scale(.92) rotate(0deg);
-    opacity: .68;
-  }
-
-  50% {
-    transform: scale(1.14) rotate(8deg);
-    opacity: 1;
-  }
-}
 
 @keyframes footerMikuFloat {
   0%,

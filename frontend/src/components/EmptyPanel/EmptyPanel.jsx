@@ -24,7 +24,7 @@ function EmptyPanel({
 
   return (
     <section className="emptyPanel">
-      <h2 className="emptyPanelTitle">(°□°) ა</h2>
+      <h2 className="emptyPanelTitle">@yanis26x</h2>
 
       <div className="wavePhrase" key={phraseIndex}>
         {wavePhrases[phraseIndex]}

@@ -13,6 +13,7 @@ function Navbar({
   resetLabel = "Reset",
   sourcePlatform,
   destinationPlatform,
+  showTransferStatus = true,
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -40,12 +41,14 @@ function Navbar({
         </a>
 
         <div className="siteNavbarActions">
-          <StatusOfTransfer
-            sourcePlatform={sourcePlatform}
-            destinationPlatform={destinationPlatform}
-            onReset={onResetPlatformChoice}
-            resetLabel={resetLabel}
-          />
+          {showTransferStatus && (
+            <StatusOfTransfer
+              sourcePlatform={sourcePlatform}
+              destinationPlatform={destinationPlatform}
+              onReset={onResetPlatformChoice}
+              resetLabel={resetLabel}
+            />
+          )}
 
           <button
             type="button"

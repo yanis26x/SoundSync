@@ -238,15 +238,8 @@
 
   display: grid;
   place-items: center;
-
-  border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(255,255,255,.12));
   border-radius: 18px;
 
-  background: rgba(0,0,0,.42);
-
-  box-shadow:
-    0 0 20px color-mix(in srgb, var(--accent) 16%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 .profileLogoBox img {
@@ -264,6 +257,45 @@
   font-size: 22px;
   line-height: 1;
   font-weight: 1000;
+}
+
+.profileUsername {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255,255,255,.82);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.profileAccountStats {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.profileAccountStats span {
+  padding: 5px 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  background: rgba(0,0,0,.3);
+  color: rgba(255,255,255,.66);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.profileAccountStats strong {
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.profileDetailsLoading {
+  display: block;
+  margin-top: 9px;
+  color: rgba(255,255,255,.46);
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .profileAccountText p {
