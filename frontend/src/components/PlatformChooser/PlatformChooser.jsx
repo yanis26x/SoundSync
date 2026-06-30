@@ -26,7 +26,7 @@ function PlatformChooser({
       </button>
 
       <div className="chooseHeader">
-        <p className="chooseEyebrow">Platform select</p>
+        {/* <p className="chooseEyebrow">Platform select</p> */}
         <h2 className="chooseText">{chooseText}</h2>
       </div>
 
@@ -60,7 +60,7 @@ function PlatformChooser({
       </div>
 
             <p className="how2Disconnect">
-  <span>𖤐</span> 2 Disconnect or switch your account from a platform, go to 🧛🏻‍♀️Profil!
+ 2 Disconnect or switch your account from a platform, go to Profil!
 </p>
 
       <p className="platformComingSoon">

@@ -9,7 +9,7 @@ function HomeStart() {
     <section className="homeStartSection">
       <div className="homeStartContent">
         <div className="homeStartCopy">
-          <p className="homeStartEyebrow">Ready 2 sync?</p>
+          {/* <p className="homeStartEyebrow">Ready 2 sync?</p> */}
           <h2>
             Start your playlist <span>transfer</span>
           </h2>
@@ -29,7 +29,7 @@ function HomeStart() {
             className="homeStartBtn"
             onClick={openTransferPage}
           >
-            Start
+            Start →
           </button>
         </div>
       </div>

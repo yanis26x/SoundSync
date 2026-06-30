@@ -406,9 +406,6 @@ background:rgba(0, 0, 0, 0.747);
   animation: platformComingSoonFade .8s ease both;
 }
 
-.how2Disconnect span {
-  color: #ff2b2b !important;
-}
 
 
 .platformComingSoon {
