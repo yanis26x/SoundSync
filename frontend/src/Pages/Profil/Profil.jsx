@@ -278,11 +278,13 @@ function Profil() {
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
-        onOpenProfile={() => {
+        onOpenTransfer={() => {
           window.location.href = "/";
         }}
-        profileLabel="Home"
-        showTransferStatus={false}
+        transferLabel="Home"
+        showTransferButton={true}
+        showProfileButton={false}
+        showThemeButton={false}
       />
 
       <section className="profilPanel">

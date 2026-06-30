@@ -1,0 +1,311 @@
+.homeStartSection {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 26px;
+  animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+.homeStartContent {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  width: min(1120px, 100%);
+  padding: 30px 38px;
+  border: 1px solid color-mix(in srgb, var(--accent) 72%, rgba(255,255,255,.16));
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 82% 50%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 34%),
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.08), transparent 28%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.94), rgba(0, 0, 0, 0.64));
+  box-shadow:
+    0 0 36px color-mix(in srgb, var(--accent) 34%, transparent),
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+}
+
+.homeStartContent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  transform: translateX(-120%);
+  animation: homeStartShine 5.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.homeStartCopy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.homeStartEyebrow {
+  margin: 0 0 7px;
+  color: color-mix(in srgb, var(--accent) 80%, white);
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.homeStartCopy h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 1000;
+  line-height: .92;
+  letter-spacing: -2px;
+  text-shadow: 0 6px 18px rgba(0,0,0,.55);
+}
+
+.homeStartCopy h2 span {
+  color: var(--accent);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.homeStartDescription {
+  max-width: 520px;
+  margin: 12px 0 0;
+  color: rgba(255,255,255,.72);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+
+.homeStartBtnWrap {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 34px;
+}
+
+.homeStartBtnWrap::before {
+  content: "";
+  position: absolute;
+  inset: 28px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  filter: blur(18px);
+  opacity: .9;
+  animation: startBtnGlow 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.homeStartBtn {
+  position: relative;
+  z-index: 3;
+  min-width: 210px;
+  height: 62px;
+  margin: 0;
+  padding: 0 34px;
+  border: 1px solid color-mix(in srgb, var(--accent) 80%, white);
+  border-radius: 999px;
+  background: var(--accent);
+  color: #000;
+  font-size: 17px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 0 24px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 14px 28px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.38);
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease;
+}
+
+.homeStartBtn:hover {
+  transform: translateY(-4px) scale(1.04);
+  filter: brightness(1.08);
+  box-shadow:
+    0 0 38px color-mix(in srgb, var(--accent) 72%, transparent),
+    0 18px 34px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.42);
+}
+
+.musicNote {
+  position: absolute;
+  z-index: 4;
+  color: var(--accent);
+  font-size: 25px;
+  font-weight: 1000;
+  line-height: 1;
+  pointer-events: none;
+  opacity: .78;
+  text-shadow:
+    0 0 10px color-mix(in srgb, var(--accent) 90%, transparent),
+    0 0 22px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+.noteOne {
+  top: 14px;
+  left: 38px;
+  animation: musicNoteFloatOne 3.2s ease-in-out infinite;
+}
+
+.noteTwo {
+  top: 4px;
+  right: 42px;
+  font-size: 31px;
+  animation: musicNoteFloatTwo 3.8s ease-in-out infinite;
+}
+
+.noteThree {
+  bottom: 8px;
+  left: 55px;
+  font-size: 22px;
+  animation: musicNoteFloatThree 3.5s ease-in-out infinite;
+}
+
+.noteFour {
+  bottom: 18px;
+  right: 35px;
+  font-size: 28px;
+  animation: musicNoteFloatFour 4.1s ease-in-out infinite;
+}
+
+@keyframes homeStartShine {
+  0%,
+  58% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  72% {
+    opacity: .5;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes startBtnGlow {
+  0%,
+  100% {
+    transform: scale(.92);
+    opacity: .42;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: .95;
+  }
+}
+
+@keyframes musicNoteFloatOne {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-10deg) scale(1);
+    opacity: .45;
+  }
+
+  50% {
+    transform: translate(-8px, -12px) rotate(12deg) scale(1.18);
+    opacity: 1;
+  }
+}
+
+@keyframes musicNoteFloatTwo {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(9deg) scale(1);
+    opacity: .5;
+  }
+
+  50% {
+    transform: translate(10px, -14px) rotate(-12deg) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes musicNoteFloatThree {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(14deg) scale(.95);
+    opacity: .38;
+  }
+
+  50% {
+    transform: translate(-12px, 10px) rotate(-8deg) scale(1.15);
+    opacity: .95;
+  }
+}
+
+@keyframes musicNoteFloatFour {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-16deg) scale(1);
+    opacity: .42;
+  }
+
+  50% {
+    transform: translate(13px, 8px) rotate(10deg) scale(1.16);
+    opacity: .95;
+  }
+}
+
+@media (max-width: 650px) {
+  .homeStartSection {
+    margin-bottom: 16px;
+  }
+
+  .homeStartContent {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 18px;
+    gap: 20px;
+  }
+
+  .homeStartCopy {
+    text-align: center;
+  }
+
+  .homeStartCopy h2 {
+    font-size: 38px;
+  }
+
+  .homeStartDescription {
+    margin: 12px auto 0;
+    font-size: 14px;
+  }
+
+  .homeStartBtnWrap {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 30px;
+  }
+
+  .homeStartBtn {
+    min-width: 190px;
+    height: 56px;
+    font-size: 15px;
+  }
+
+  .musicNote {
+    font-size: 21px;
+  }
+
+  .noteTwo {
+    font-size: 25px;
+  }
+
+  .noteFour {
+    font-size: 24px;
+  }
+}

@@ -377,21 +377,6 @@ body::after {
 }
 
 
-.homeSetupGrid,
-.transferWorkspace {
-  position: relative;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.8fr);
-  gap: 22px;
-  align-items: stretch;
-  margin-top: 12px;
-}
-
-.transferWorkspace {
-  align-items: start;
-}
-
 .guidedPanel {
   isolation: isolate;
   animation: guidePanelGlow 1.8s ease-in-out infinite;
@@ -424,17 +409,6 @@ body::after {
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-}
-
-.transferWorkspace {
-  grid-auto-rows: minmax(0, auto);
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-}
-
-.transferFocusPanel {
-  width: min(1120px, 100%);
-  min-height: min(560px, calc(100vh - 190px));
 }
 
 .homePersonalGrid {
@@ -712,8 +686,6 @@ button:hover {
   }
 
   .mainHero,
-  .homeSetupGrid,
-  .transferWorkspace,
   .homePersonalGrid {
     grid-template-columns: 1fr;
   }
@@ -730,14 +702,6 @@ button:hover {
 
   .mainHeroText p {
     margin-inline: auto;
-  }
-
-  .transferFocusPanel {
-    width: 100%;
-  }
-
-  .transferFocusPanel {
-    min-height: 420px;
   }
 
   .playlistCard {

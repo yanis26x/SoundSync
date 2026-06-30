@@ -5,6 +5,8 @@ import Profil from './Pages/Profil/Profil.jsx'
 
 const routes = {
   '/': App,
+  '/transfer': App,
+  '/Transfer': App,
   '/profil': Profil,
   '/Profil': Profil,
 }

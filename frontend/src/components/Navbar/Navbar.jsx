@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ThemeModal from "../ThemeModal/ThemeModal";
-import StatusOfTransfer from "../StatusOfTransfer/StatusOfTransfer";
 import "./Navbar.css";
 
 function Navbar({
@@ -8,12 +7,12 @@ function Navbar({
   currentTheme,
   setCurrentTheme,
   onOpenProfile,
+  onOpenTransfer,
   profileLabel = "Profile",
-  onResetPlatformChoice,
-  resetLabel = "Reset",
-  sourcePlatform,
-  destinationPlatform,
-  showTransferStatus = true,
+  transferLabel = "Transfer",
+  showTransferButton = true,
+  showProfileButton = true,
+  showThemeButton = true,
 }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
@@ -41,44 +40,56 @@ function Navbar({
         </a>
 
         <div className="siteNavbarActions">
-          {showTransferStatus && (
-            <StatusOfTransfer
-              sourcePlatform={sourcePlatform}
-              destinationPlatform={destinationPlatform}
-              onReset={onResetPlatformChoice}
-              resetLabel={resetLabel}
-            />
+          {showTransferButton && (
+            <button
+              type="button"
+              className="siteNavbarBtn"
+              onClick={onOpenTransfer || (() => {
+                window.location.href = "/transfer";
+              })}
+            >
+              <span className="siteNavbarBtnIcon" aria-hidden="true">🏠</span>
+              <span>{transferLabel}</span>
+            </button>
           )}
 
-          <button
-            type="button"
-            className="siteNavbarBtn"
-            onClick={onOpenProfile || (() => {
-              window.location.href = "/profil";
-            })}
-          >
-            {profileLabel}
-          </button>
+          {showProfileButton && (
+            <button
+              type="button"
+              className="siteNavbarBtn"
+              onClick={onOpenProfile || (() => {
+                window.location.href = "/profil";
+              })}
+            >
+              <span className="siteNavbarBtnIcon" aria-hidden="true">🧛🏻‍♀️</span>
+              <span>{profileLabel}</span>
+            </button>
+          )}
 
-          <button
-            type="button"
-            className="siteNavbarBtn"
-            onClick={openThemeModal}
-          >
-            Theme
-          </button>
+          {showThemeButton && (
+            <button
+              type="button"
+              className="siteNavbarBtn"
+              onClick={openThemeModal}
+            >
+              <span className="siteNavbarBtnIcon" aria-hidden="true">🌄</span>
+              <span>Theme</span>
+            </button>
+          )}
 
         </div>
       </nav>
 
-      <ThemeModal
-        themes={themes}
-        currentTheme={currentTheme}
-        setCurrentTheme={setCurrentTheme}
-        isOpen={isThemeModalOpen}
-        isClosing={isThemeModalClosing}
-        onClose={closeThemeModal}
-      />
+      {showThemeButton && (
+        <ThemeModal
+          themes={themes}
+          currentTheme={currentTheme}
+          setCurrentTheme={setCurrentTheme}
+          isOpen={isThemeModalOpen}
+          isClosing={isThemeModalClosing}
+          onClose={closeThemeModal}
+        />
+      )}
     </>
   );
 }

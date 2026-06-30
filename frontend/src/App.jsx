@@ -4,14 +4,12 @@ import { themes } from "./themes";
 import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
+import HomeStart from "./components/HomeStart/HomeStart";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
-import PlaylistChooser from "./components/PlaylistChooser/PlaylistChooser";
-import StartTransfer from "./components/StartTransfer/StartTransfer";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
-import EmptyPanel from "./components/EmptyPanel/EmptyPanel";
-import PlatformChooser from "./components/PlatformChooser/PlatformChooser";
 import Navbar from "./components/Navbar/Navbar";
+import Transfer from "./Pages/Transfer/Transfer";
 import "./App.css";
 
 
@@ -116,7 +114,9 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState({});
   const [trackLoading, setTrackLoading] = useState({});
   const [trackErrors, setTrackErrors] = useState({});
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage] = useState(() =>
+    window.location.pathname.toLowerCase() === "/transfer" ? "transfer" : "home"
+  );
   const [selectedSourcePlaylistId, setSelectedSourcePlaylistId] = useState("");
   const [destinationMode, setDestinationMode] = useState("new");
   const [newPlaylistName, setNewPlaylistName] = useState("");
@@ -165,12 +165,6 @@ function App() {
     youtube: "/logo/YouTube-Logo.png",
     apple: "/logo/appleMusic.png",
   };
-  const activeGuideStep = selectedPlatforms.length < 2
-    ? "platforms"
-    : selectedSourcePlaylistId
-      ? "destination"
-      : "playlist";
-
   const addPlatformToOrder = (platformId) => {
     setPlatformOrder((currentOrder) => {
       if (currentOrder.includes(platformId)) {
@@ -1253,14 +1247,17 @@ if (
         onOpenProfile={() => {
           window.location.href = "/profil";
         }}
+        onOpenTransfer={() => {
+          window.location.href = "/";
+        }}
         profileLabel={text.profile}
-        onResetPlatformChoice={selectedPlatforms.length > 0 ? resetPlatformChoice : undefined}
-        resetLabel={text.changePlatform}
-        sourcePlatform={sourcePlatform}
-        destinationPlatform={destinationPlatform}
+        transferLabel={text.home}
+        showTransferButton={currentPage === "transfer"}
+        showProfileButton={true}
+        showThemeButton={currentPage !== "transfer"}
       />
 
-      {currentPage === "home" &&
+      {currentPage === "transfer" &&
         selectedPlatforms.length === 2 &&
         sourcePlatform &&
         destinationPlatform &&
@@ -1325,74 +1322,51 @@ if (
           </div>
         )}
 
+        {currentPage === "transfer" && (
+          <Transfer
+            text={text}
+            chooseText={chooseText}
+            platformOrder={platformOrder}
+            accessToken={accessToken}
+            youtubeAccessToken={youtubeAccessToken}
+            appleMusicUserToken={appleMusicUserToken}
+            selectedPlatforms={selectedPlatforms}
+            sourcePlatform={sourcePlatform}
+            destinationPlatform={destinationPlatform}
+            platformDisplayLogos={platformDisplayLogos}
+            getPlatformDetails={getPlatformDetails}
+            getPlatformPlaylists={getPlatformPlaylists}
+            selectedSourcePlaylistId={selectedSourcePlaylistId}
+            setSelectedSourcePlaylistId={setSelectedSourcePlaylistId}
+            setTransferResult={setTransferResult}
+            setTransferError={setTransferError}
+            newPlaylistName={newPlaylistName}
+            setNewPlaylistName={setNewPlaylistName}
+            getPlaylistImage={getPlaylistImage}
+            getPlaylistName={getPlaylistName}
+            getPlaylistCount={getPlaylistCount}
+            destinationMode={destinationMode}
+            setDestinationMode={setDestinationMode}
+            destinationPlaylistId={destinationPlaylistId}
+            setDestinationPlaylistId={setDestinationPlaylistId}
+            destinationPlaylists={destinationPlaylists}
+            transferError={transferError}
+            transferLoading={transferLoading}
+            transferStatus={transferStatus}
+            selectedSourcePlaylist={selectedSourcePlaylist}
+            startPlaylistTransfer={startPlaylistTransfer}
+            transferResult={transferResult}
+            addPlatformToOrder={addPlatformToOrder}
+            loginSpotify={loginSpotify}
+            loginYoutube={loginYoutube}
+            loginAppleMusic={loginAppleMusic}
+            resetPlatformChoice={resetPlatformChoice}
+          />
+        )}
+
         {currentPage === "home" && (
           <>
-            {selectedPlatforms.length < 2 && (
-              <div className="homeSetupGrid">
-                <PlatformChooser
-                  chooseText={chooseText}
-                  platformOrder={platformOrder}
-                  accessToken={accessToken}
-                  youtubeAccessToken={youtubeAccessToken}
-                  appleMusicUserToken={appleMusicUserToken}
-                  loggedLabel={text.logged}
-                  onAddPlatform={addPlatformToOrder}
-                  onLoginSpotify={loginSpotify}
-                  onLoginYoutube={loginYoutube}
-                  onLoginAppleMusic={loginAppleMusic}
-                />
-
-                <EmptyPanel
-                  disconnectHint={text.disconnectHint}
-                />
-              </div>
-            )}
-
-            {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
-              <div className="transferWorkspace">
-                {!selectedSourcePlaylistId ? (
-                  <PlaylistChooser
-                    text={text}
-                    sourcePlatform={sourcePlatform}
-                    sourcePlatformLogo={platformDisplayLogos[sourcePlatform.id]}
-                    platformDetails={getPlatformDetails(sourcePlatform.id)}
-                    playlists={getPlatformPlaylists(sourcePlatform.id)}
-                    selectedPlaylistId={selectedSourcePlaylistId}
-                    getPlaylistImage={getPlaylistImage}
-                    getPlaylistName={getPlaylistName}
-                    getPlaylistCount={getPlaylistCount}
-                    onSelectPlaylist={(playlist) => {
-                      setSelectedSourcePlaylistId(playlist.id);
-                      setTransferResult(null);
-                      setTransferError("");
-                      if (!newPlaylistName) {
-                        setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
-                      }
-                    }}
-                  />
-                ) : (
-                  <StartTransfer
-                    text={text}
-                    destinationMode={destinationMode}
-                    setDestinationMode={setDestinationMode}
-                    newPlaylistName={newPlaylistName}
-                    setNewPlaylistName={setNewPlaylistName}
-                    destinationPlaylistId={destinationPlaylistId}
-                    setDestinationPlaylistId={setDestinationPlaylistId}
-                    destinationPlaylists={destinationPlaylists}
-                    destinationPlatform={destinationPlatform}
-                    getPlaylistName={getPlaylistName}
-                    transferError={transferError}
-                    transferLoading={transferLoading}
-                    transferStatus={transferStatus}
-                    transferLimit={text.transferLimit}
-                    selectedSourcePlaylist={selectedSourcePlaylist}
-                    startPlaylistTransfer={startPlaylistTransfer}
-                    transferResult={transferResult}
-                  />
-                )}
-              </div>
-            )}
+            <HomeStart />
 
             <WhySoundSync text={text.homeBannerText} />
 

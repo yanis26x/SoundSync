@@ -11,12 +11,20 @@ function PlatformChooser({
   onLoginSpotify,
   onLoginYoutube,
   onLoginAppleMusic,
+  onResetPlatformChoice,
+  resetLabel = "Reset",
 }) {
   return (
     <section className="choosePanel">
-      <span className="doThisNotification">
-        {platformOrder.length === 0 ? "STEP 1" : "STEP 2"}
-      </span>
+      <button
+        type="button"
+        className="platformResetBtn"
+        onClick={onResetPlatformChoice}
+        disabled={platformOrder.length === 0}
+      >
+        {resetLabel}
+      </button>
+
       <div className="chooseHeader">
         <p className="chooseEyebrow">Platform select</p>
         <h2 className="chooseText">{chooseText}</h2>
@@ -50,6 +58,17 @@ function PlatformChooser({
           <img src="/logo/appleMusic.png" alt="Apple Music" className="appleMusicLogo" />
         </button>
       </div>
+
+            <p className="how2Disconnect">
+  <span>𖤐</span> 2 Disconnect or switch your account from a platform, go to 🧛🏻‍♀️Profil!
+</p>
+
+      <p className="platformComingSoon">
+ More platforms are coming soon — SoundCloud, Deezer, TIDAL and
+  more. Be Patient!
+</p>
+
+
     </section>
   );
 }
