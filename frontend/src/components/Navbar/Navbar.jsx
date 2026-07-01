@@ -72,8 +72,8 @@ function Navbar({
               className="siteNavbarBtn"
               onClick={openThemeModal}
             >
-              <span className="siteNavbarBtnIcon" aria-hidden="true">🌄</span>
-              <span>Theme</span>
+              <span className="siteNavbarBtnIcon" aria-hidden="true">⚙️</span>
+              <span>Custom</span>
             </button>
           )}
 

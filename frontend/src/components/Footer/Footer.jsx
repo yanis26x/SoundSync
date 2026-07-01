@@ -50,7 +50,8 @@ export default function Footer() {
       <div className="footerBottom">
         <p>BL00d + F13nD & V@mP+ N1t3MaR3!</p>
 
-        <span className="footerStar">𖤐</span>
+        <span className="footerStar">
+hello?!</span>
 
         <a
           href="https://apps.apple.com/us/app/qibla/id6754793667"

@@ -1,13 +1,26 @@
 import "./HomeStart.css";
 
-function HomeStart() {
+function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
   const openTransferPage = () => {
+    if (onOpenTransfer) {
+      onOpenTransfer();
+      return;
+    }
+
     window.location.href = "/transfer";
   };
 
   return (
     <section className="homeStartSection">
       <div className="homeStartContent">
+        <button
+          type="button"
+          className="homeActivityToggleBtn"
+          onClick={onToggleActivity}
+        >
+          {isActivityVisible ? "Hide activity" : "Show activity"}
+        </button>
+
         <div className="homeStartCopy">
           {/* <p className="homeStartEyebrow">Ready 2 sync?</p> */}
           <h2>

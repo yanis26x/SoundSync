@@ -31,16 +31,30 @@ function Transfer({
   setDestinationPlaylistId,
   destinationPlaylists,
   transferError,
+  transferStarted,
   transferLoading,
   transferStatus,
   selectedSourcePlaylist,
+  selectedSourceTracks,
+  selectedSourceTracksLoading,
+  selectedSourceTracksError,
+  trackSelectionMode,
+  setTrackSelectionMode,
+  selectedTrackKeys,
+  setSelectedTrackKeys,
+  toggleSelectedTrack,
+  getTrackLabel,
   startPlaylistTransfer,
+  restartTransferFlow,
+  returnToMenu,
+  stopTransfer,
   transferResult,
   addPlatformToOrder,
   loginSpotify,
   loginYoutube,
   loginAppleMusic,
   resetPlatformChoice,
+  startSimulationTransfer,
 }) {
   return (
     <section className="transferPage">
@@ -57,6 +71,11 @@ function Transfer({
 
           <PlatformChooser
             chooseText={chooseText}
+            chooseSubText={
+              platformOrder.length === 1
+                ? "where do you want to tranfer them !?"
+                : "Where are the musics you want to transfer from?!"
+            }
             platformOrder={platformOrder}
             accessToken={accessToken}
             youtubeAccessToken={youtubeAccessToken}
@@ -65,19 +84,22 @@ function Transfer({
             onLoginSpotify={loginSpotify}
             onLoginYoutube={loginYoutube}
             onLoginAppleMusic={loginAppleMusic}
+            onStartSimulation={startSimulationTransfer}
           />
         </div>
       )}
 
       {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
         <div className="transferWorkspace">
-          <button
-            type="button"
-            className="platformResetBtn transferResetChoiceBtn"
-            onClick={resetPlatformChoice}
-          >
-            ↻ {text.changePlatform}
-          </button>
+          {!transferStarted && (
+            <button
+              type="button"
+              className="platformResetBtn transferResetChoiceBtn"
+              onClick={resetPlatformChoice}
+            >
+              ↻ {text.changePlatform}
+            </button>
+          )}
 
           {!selectedSourcePlaylistId ? (
             <PlaylistChooser
@@ -94,6 +116,8 @@ function Transfer({
                 setSelectedSourcePlaylistId(playlist.id);
                 setTransferResult(null);
                 setTransferError("");
+                setTrackSelectionMode("all");
+                setSelectedTrackKeys([]);
                 if (!newPlaylistName) {
                   setNewPlaylistName(getPlaylistName(sourcePlatform.id, playlist));
                 }
@@ -112,11 +136,24 @@ function Transfer({
               destinationPlatform={destinationPlatform}
               getPlaylistName={getPlaylistName}
               transferError={transferError}
+              transferStarted={transferStarted}
               transferLoading={transferLoading}
               transferStatus={transferStatus}
               transferLimit={text.transferLimit}
               selectedSourcePlaylist={selectedSourcePlaylist}
+              sourcePlatform={sourcePlatform}
+              sourceTracks={selectedSourceTracks}
+              sourceTracksLoading={selectedSourceTracksLoading}
+              sourceTracksError={selectedSourceTracksError}
+              trackSelectionMode={trackSelectionMode}
+              setTrackSelectionMode={setTrackSelectionMode}
+              selectedTrackKeys={selectedTrackKeys}
+              toggleSelectedTrack={toggleSelectedTrack}
+              getTrackLabel={getTrackLabel}
               startPlaylistTransfer={startPlaylistTransfer}
+              restartTransferFlow={restartTransferFlow}
+              returnToMenu={returnToMenu}
+              stopTransfer={stopTransfer}
               transferResult={transferResult}
             />
           )}

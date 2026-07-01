@@ -1,17 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
 import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
 import HomeStart from "./components/HomeStart/HomeStart";
+import Activiter from "./components/Activiter/Activiter";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
 import Navbar from "./components/Navbar/Navbar";
+import TransferDoneToast from "./components/TransferDoneToast/TransferDoneToast";
 import Transfer from "./Pages/Transfer/Transfer";
 import "./App.css";
 
+const transferDoneSound = new URL("../music/psp.mp3", import.meta.url).href;
 
 const text = {
     subtitle: "Transfer Anywhere, Sync Everthing",
@@ -47,12 +50,20 @@ const text = {
     changePlatform: "Reset",
     disconnectHint: "",
     logged: "✓",
-    pickPlaylist: "Select a playlist to sync𖤐",
+    pickPlaylist: "Select a playlist to sync",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
     playlistName: "Playlist name",
     destinationPlaylist: "Destination playlist",
     startTransfer: "Start transfer",
+    transferAllTracks: "All tracks",
+    transferSpecificTracks: "Choose tracks",
+    transferTrackChoice: "Tracks to sync",
+    noSelectedTracks: "Choose at least one track to transfer.",
+    transferBlockedTitle: "Transfer already running",
+    transferBlockedText: "You can't start a new transfer until the current one is finished.",
+    stopTransfer: "Stop transfer",
+    transferStopped: "Transfer stopped.",
     transferLoading: "Transfer in progress...",
     transferPreparing: "Loading source tracks...",
     transferCreatingPlaylist: "Creating destination playlist...",
@@ -61,14 +72,19 @@ const text = {
     transferAddingTracks: "Adding tracks...",
     transferFinalizing: "Finalizing transfer...",
     transferDone: "Transfer done",
+    transferDoneNotification: "Transfer finished",
+    transferDoneNotificationText: "Your playlist transfer is ready to review.",
+    restartTransfer: "return 2 the menu",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
     alreadyTracks: "tracks already in playlist",
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
-    transferLimit: "Current limit: 25 tracks per transfer.",
+    transferLimit: "Transfers are sent in batches of 50 tracks.",
     homeBannerTitle: "Why SoundSync?!",
     homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive.",
 };
+
+const TRANSFER_BATCH_SIZE = 50;
 
 function App() {
   const [initialConnection] = useState(() => {
@@ -114,18 +130,31 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState({});
   const [trackLoading, setTrackLoading] = useState({});
   const [trackErrors, setTrackErrors] = useState({});
-  const [currentPage] = useState(() =>
-    window.location.pathname.toLowerCase() === "/transfer" ? "transfer" : "home"
-  );
+  const [currentPage, setCurrentPage] = useState(() => {
+    const pathName = window.location.pathname.toLowerCase();
+
+    if (pathName === "/transfer") return "transfer";
+    if (pathName === "/profil") return "profile";
+
+    return "home";
+  });
   const [selectedSourcePlaylistId, setSelectedSourcePlaylistId] = useState("");
+  const [trackSelectionMode, setTrackSelectionMode] = useState("all");
+  const [selectedTrackKeys, setSelectedTrackKeys] = useState([]);
   const [destinationMode, setDestinationMode] = useState("new");
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [destinationPlaylistId, setDestinationPlaylistId] = useState("");
+  const [transferStarted, setTransferStarted] = useState(false);
   const [transferLoading, setTransferLoading] = useState(false);
   const [transferStatus, setTransferStatus] = useState("");
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
+  const [transferDoneToast, setTransferDoneToast] = useState(null);
+  const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
+  const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
+  const [isActivityVisible, setIsActivityVisible] = useState(true);
   const [currentTheme, setCurrentTheme] = useState("miku");
+  const transferAbortControllerRef = useRef(null);
   const [platformOrder, setPlatformOrder] = useState(() => {
     const savedOrder = localStorage.getItem("platform_order");
 
@@ -181,6 +210,15 @@ function App() {
   const resetPlatformChoice = () => {
     localStorage.setItem("platform_order", JSON.stringify([]));
     setPlatformOrder([]);
+    setSelectedSourcePlaylistId("");
+    setTrackSelectionMode("all");
+    setSelectedTrackKeys([]);
+    setTransferStarted(false);
+  };
+
+  const navigateToPage = (page, path) => {
+    window.history.pushState({}, "", path);
+    setCurrentPage(page);
   };
 
   const getPlatformDetails = (platformId) => {
@@ -380,8 +418,64 @@ function App() {
 
     if (shouldCleanUrl) {
       window.history.replaceState({}, document.title, "/");
+      setCurrentPage("home");
     }
   }, [initialConnection]);
+
+  useEffect(() => {
+    const syncCurrentPageWithPath = () => {
+      const pathName = window.location.pathname.toLowerCase();
+
+      if (pathName === "/transfer") {
+        setCurrentPage("transfer");
+      } else if (pathName === "/profil") {
+        setCurrentPage("profile");
+      } else {
+        setCurrentPage("home");
+      }
+    };
+
+    window.addEventListener("popstate", syncCurrentPageWithPath);
+
+    return () => window.removeEventListener("popstate", syncCurrentPageWithPath);
+  }, []);
+
+  useEffect(() => {
+    if (!transferResult) return;
+
+    setTransferDoneToast({
+      id: Date.now(),
+      added: transferResult.added.length,
+      failed: transferResult.failed.length,
+      isClosing: false,
+    });
+
+    const notificationAudio = new Audio(transferDoneSound);
+    notificationAudio.volume = 0.45;
+    notificationAudio.play().catch(() => {});
+
+    const audioTimeout = window.setTimeout(() => {
+      notificationAudio.pause();
+      notificationAudio.currentTime = 0;
+    }, 5200);
+
+    const closeTimeout = window.setTimeout(() => {
+      setTransferDoneToast((currentToast) =>
+        currentToast ? { ...currentToast, isClosing: true } : currentToast
+      );
+    }, 8400);
+
+    const removeTimeout = window.setTimeout(() => {
+      setTransferDoneToast(null);
+    }, 9000);
+
+    return () => {
+      window.clearTimeout(audioTimeout);
+      window.clearTimeout(closeTimeout);
+      window.clearTimeout(removeTimeout);
+      notificationAudio.pause();
+    };
+  }, [transferResult]);
 
   useEffect(() => {
     const theme = themes[currentTheme];
@@ -916,6 +1010,177 @@ function App() {
   const destinationPlaylists = destinationPlatform
     ? getPlatformPlaylists(destinationPlatform.id)
     : [];
+  const selectedSourceTrackKey =
+    sourcePlatform && selectedSourcePlaylist
+      ? `${sourcePlatform.id}:${selectedSourcePlaylist.id}`
+      : "";
+  const selectedSourceTracks = selectedSourceTrackKey
+    ? playlistTracks[selectedSourceTrackKey] || []
+    : [];
+  const selectedSourceTracksLoading = selectedSourceTrackKey
+    ? Boolean(trackLoading[selectedSourceTrackKey])
+    : false;
+  const selectedSourceTracksError = selectedSourceTrackKey
+    ? trackErrors[selectedSourceTrackKey] || ""
+    : "";
+
+  useEffect(() => {
+    if (
+      !sourcePlatform ||
+      !selectedSourcePlaylist ||
+      !selectedSourceTrackKey ||
+      playlistTracks[selectedSourceTrackKey] ||
+      trackLoading[selectedSourceTrackKey]
+    ) {
+      return;
+    }
+
+    getPlaylistTracks(sourcePlatform.id, selectedSourcePlaylist.id);
+  }, [
+    getPlaylistTracks,
+    playlistTracks,
+    selectedSourcePlaylist,
+    selectedSourceTrackKey,
+    sourcePlatform,
+    trackLoading,
+  ]);
+
+  const toggleSelectedTrack = (trackKey) => {
+    setSelectedTrackKeys((currentKeys) => {
+      if (currentKeys.includes(trackKey)) {
+        return currentKeys.filter((currentKey) => currentKey !== trackKey);
+      }
+
+      return [...currentKeys, trackKey];
+    });
+  };
+
+  const restartTransferFlow = () => {
+    setSelectedSourcePlaylistId("");
+    setDestinationPlaylistId("");
+    setDestinationMode("new");
+    setNewPlaylistName("");
+    setTrackSelectionMode("all");
+    setSelectedTrackKeys([]);
+    setTransferStarted(false);
+    setTransferLoading(false);
+    setTransferStatus("");
+    setTransferResult(null);
+    setTransferError("");
+    setSimulationTransferMeta(null);
+  };
+
+  const runSimulationTransfer = async () => {
+    if (transferLoading) {
+      setIsTransferBlockedModalOpen(true);
+      return;
+    }
+
+    const simulationSourcePlatform = {
+      id: "spotify",
+      name: "Spotify",
+      logo: "/logo/spotify-mini.png",
+    };
+    const simulationDestinationPlatform = {
+      id: "youtube",
+      name: "YouTube",
+      logo: "/logo/ytb-mini.png",
+    };
+    const simulationPlaylist = {
+      id: "simulation-playlist",
+      name: "Simulation playlist",
+    };
+    const simulationTracks = [
+      "Synthetic Love - SoundSync",
+      "No Credit Needed - Demo Mode",
+      "Midnight Cache - Local Test",
+      "API-Free Anthem - SoundSync",
+      "Transfer Dreams - Demo Artist",
+      "Almost There - Fake Playlist",
+      "Offline Hearts - SoundSync",
+      "Test Run Forever - Demo Mode",
+    ];
+    const failedTracks = ["Missing Simulation Track - Demo Artist"];
+
+    restartTransferFlow();
+    setSimulationTransferMeta({
+      sourcePlatform: simulationSourcePlatform,
+      destinationPlatform: simulationDestinationPlatform,
+      playlist: simulationPlaylist,
+    });
+    setTransferStarted(true);
+    setTransferLoading(true);
+    setTransferError("");
+    setTransferResult(null);
+    navigateToPage("home", "/");
+
+    const simulationAbortController = new AbortController();
+    transferAbortControllerRef.current = simulationAbortController;
+    const wait = (duration) =>
+      new Promise((resolve, reject) => {
+        const timeout = window.setTimeout(resolve, duration);
+
+        simulationAbortController.signal.addEventListener(
+          "abort",
+          () => {
+            window.clearTimeout(timeout);
+            reject(new axios.CanceledError(text.transferStopped));
+          },
+          { once: true }
+        );
+      });
+
+    try {
+      setTransferStatus("Simulation: loading source tracks...");
+      await wait(650);
+
+      for (const [index, track] of simulationTracks.entries()) {
+        setTransferStatus(`Simulation: matching ${index + 1}/${simulationTracks.length}: ${track}`);
+        await wait(260);
+      }
+
+      setTransferStatus("Simulation: adding tracks 1/1");
+      await wait(700);
+
+      setTransferStatus(text.transferFinalizing);
+      await wait(380);
+
+      setTransferResult({
+        added: simulationTracks,
+        failed: failedTracks,
+        already: ["Already Synced - Demo Mode"],
+      });
+    } catch (err) {
+      if (axios.isCancel(err)) {
+        setTransferError(text.transferStopped);
+      } else {
+        setTransferError(text.trackError);
+      }
+    } finally {
+      if (transferAbortControllerRef.current === simulationAbortController) {
+        transferAbortControllerRef.current = null;
+        setTransferLoading(false);
+        setTransferStatus("");
+      }
+    }
+  };
+
+  const startNewTransferFlow = () => {
+    if (transferLoading) {
+      setIsTransferBlockedModalOpen(true);
+      return;
+    }
+
+    restartTransferFlow();
+    navigateToPage("transfer", "/transfer");
+  };
+
+  const stopTransfer = () => {
+    if (!transferLoading) return;
+
+    transferAbortControllerRef.current?.abort();
+    setTransferStatus(text.transferStopped);
+  };
 
   const startPlaylistTransfer = async () => {
     if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
@@ -927,10 +1192,19 @@ if (
   return;
 }
 
+    setTransferStarted(true);
     setTransferLoading(true);
     setTransferStatus(text.transferPreparing);
     setTransferError("");
     setTransferResult(null);
+    setSimulationTransferMeta(null);
+    const transferAbortController = new AbortController();
+    transferAbortControllerRef.current = transferAbortController;
+    const throwIfTransferStopped = () => {
+      if (transferAbortController.signal.aborted) {
+        throw new axios.CanceledError(text.transferStopped);
+      }
+    };
 
     const sourceTrackKey = `${sourcePlatform.id}:${selectedSourcePlaylist.id}`;
 
@@ -942,6 +1216,7 @@ if (
         const tracksResponse = await authorizedRequest(sourcePlatform.id, {
           method: "get",
           url: `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
+          signal: transferAbortController.signal,
         });
 
         tracks = tracksResponse.data.tracks;
@@ -950,9 +1225,20 @@ if (
           [sourceTrackKey]: tracks,
         }));
       }
+      throwIfTransferStopped();
 
-      const trackLabels = tracks
-        .slice(0, 25)
+      const tracksToTransfer =
+        trackSelectionMode === "specific"
+          ? tracks.filter((track, index) =>
+            selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
+          )
+          : tracks;
+
+      if (trackSelectionMode === "specific" && tracksToTransfer.length === 0) {
+        throw new Error(text.noSelectedTracks);
+      }
+
+      const trackLabels = tracksToTransfer
         .map((track) => getTrackLabel(sourcePlatform.id, track))
         .filter(Boolean);
 
@@ -967,6 +1253,7 @@ if (
         const createResponse = await authorizedRequest(destinationPlatform.id, {
           method: "post",
           url: createUrl,
+          signal: transferAbortController.signal,
           data:
             destinationPlatform.id === "youtube"
               ? {
@@ -991,6 +1278,7 @@ if (
         const destinationTrackResponse = await authorizedRequest(destinationPlatform.id, {
           method: "get",
           url: `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists/${targetPlaylistId}/tracks`,
+          signal: transferAbortController.signal,
         });
 
         existingDestinationTrackIds = new Set(
@@ -1013,6 +1301,15 @@ if (
       const added = [];
       const failed = [];
       const already = [];
+      const chunkItems = (items, size) => {
+        const chunks = [];
+
+        for (let index = 0; index < items.length; index += size) {
+          chunks.push(items.slice(index, index + size));
+        }
+
+        return chunks;
+      };
       const pushTransferResult = (label, status) => {
         if (status === "added") {
           added.push(label);
@@ -1027,11 +1324,13 @@ if (
         const uris = [];
 
         for (const [index, label] of trackLabels.entries()) {
+          throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("spotify", {
               method: "get",
               url: "http://127.0.0.1:8000/api/spotify/search",
+              signal: transferAbortController.signal,
               params: {
                 q: label,
               },
@@ -1048,30 +1347,39 @@ if (
             } else {
               pushTransferResult(label, "failed");
             }
-          } catch {
+          } catch (err) {
+            if (axios.isCancel(err)) throw err;
             pushTransferResult(label, "failed");
           }
         }
 
-        if (uris.length > 0) {
-          setTransferStatus(text.transferAddingTracks);
+        for (const [chunkIndex, uriChunk] of chunkItems(uris, TRANSFER_BATCH_SIZE).entries()) {
+          setTransferStatus(
+            `${text.transferAddingTracks} ${chunkIndex + 1}/${Math.ceil(uris.length / TRANSFER_BATCH_SIZE)}`
+          );
+          throwIfTransferStopped();
           await authorizedRequest("spotify", {
             method: "post",
             url: `http://127.0.0.1:8000/api/spotify/playlists/${targetPlaylistId}/tracks`,
+            signal: transferAbortController.signal,
             data: {
-              uris,
+              uris: uriChunk,
             },
           });
         }
       }
 
       if (destinationPlatform.id === "youtube") {
+        const youtubeVideos = [];
+
         for (const [index, label] of trackLabels.entries()) {
+          throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("youtube", {
               method: "get",
               url: "http://127.0.0.1:8000/api/youtube/search",
+              signal: transferAbortController.signal,
               params: {
                 q: label,
               },
@@ -1088,17 +1396,34 @@ if (
               continue;
             }
 
+            existingDestinationTrackIds.add(videoId);
+            youtubeVideos.push({ label, videoId });
+          } catch (err) {
+            if (axios.isCancel(err)) throw err;
+            pushTransferResult(label, "failed");
+          }
+        }
+
+        for (const [chunkIndex, videoChunk] of chunkItems(youtubeVideos, TRANSFER_BATCH_SIZE).entries()) {
+          setTransferStatus(
+            `${text.transferAddingTracks} ${chunkIndex + 1}/${Math.ceil(youtubeVideos.length / TRANSFER_BATCH_SIZE)}`
+          );
+          throwIfTransferStopped();
+
+          try {
             await authorizedRequest("youtube", {
               method: "post",
               url: `http://127.0.0.1:8000/api/youtube/playlists/${targetPlaylistId}/tracks`,
+              signal: transferAbortController.signal,
               data: {
-                videoId,
+                videoIds: videoChunk.map((video) => video.videoId),
               },
             });
-            existingDestinationTrackIds.add(videoId);
-            pushTransferResult(label, "added");
-          } catch {
-            pushTransferResult(label, "failed");
+
+            videoChunk.forEach((video) => pushTransferResult(video.label, "added"));
+          } catch (err) {
+            if (axios.isCancel(err)) throw err;
+            videoChunk.forEach((video) => pushTransferResult(video.label, "failed"));
           }
         }
       }
@@ -1107,11 +1432,13 @@ if (
         const songs = [];
 
         for (const [index, label] of trackLabels.entries()) {
+          throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
             const searchResponse = await authorizedRequest("apple", {
               method: "get",
               url: "http://127.0.0.1:8000/api/apple/search",
+              signal: transferAbortController.signal,
               params: {
                 q: label,
               },
@@ -1132,18 +1459,23 @@ if (
             songs.push(songId);
             existingDestinationTrackIds.add(songId);
             pushTransferResult(label, "added");
-          } catch {
+          } catch (err) {
+            if (axios.isCancel(err)) throw err;
             pushTransferResult(label, "failed");
           }
         }
 
-        if (songs.length > 0) {
-          setTransferStatus(text.transferAddingTracks);
+        for (const [chunkIndex, songChunk] of chunkItems(songs, TRANSFER_BATCH_SIZE).entries()) {
+          setTransferStatus(
+            `${text.transferAddingTracks} ${chunkIndex + 1}/${Math.ceil(songs.length / TRANSFER_BATCH_SIZE)}`
+          );
+          throwIfTransferStopped();
           await authorizedRequest("apple", {
             method: "post",
             url: `http://127.0.0.1:8000/api/apple/playlists/${targetPlaylistId}/tracks`,
+            signal: transferAbortController.signal,
             data: {
-              songs,
+              songs: songChunk,
             },
           });
         }
@@ -1156,10 +1488,17 @@ if (
         already,
       });
     } catch (err) {
-      setTransferError(err.response?.data?.message || err.message || text.trackError);
+      if (axios.isCancel(err)) {
+        setTransferError(text.transferStopped);
+      } else {
+        setTransferError(err.response?.data?.message || err.message || text.trackError);
+      }
     } finally {
-      setTransferLoading(false);
-      setTransferStatus("");
+      if (transferAbortControllerRef.current === transferAbortController) {
+        transferAbortControllerRef.current = null;
+        setTransferLoading(false);
+        setTransferStatus("");
+      }
     }
   };
 
@@ -1240,16 +1579,22 @@ if (
     <main className="app">
       <MusicParticles />
 
+      {transferDoneToast && (
+        <TransferDoneToast
+          className={transferDoneToast.isClosing ? "closing" : ""}
+          title={text.transferDoneNotification}
+          message={text.transferDoneNotificationText}
+          added={transferDoneToast.added}
+          failed={transferDoneToast.failed}
+        />
+      )}
+
       <Navbar
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
-        onOpenProfile={() => {
-          window.location.href = "/profil";
-        }}
-        onOpenTransfer={() => {
-          window.location.href = "/";
-        }}
+        onOpenProfile={() => navigateToPage("profile", "/profil")}
+        onOpenTransfer={() => navigateToPage("home", "/")}
         profileLabel={text.profile}
         transferLabel={text.home}
         showTransferButton={currentPage === "transfer"}
@@ -1264,6 +1609,34 @@ if (
         !selectedSourcePlaylistId && (
           <DialoguePersona texte={text.pickPlaylist} />
         )}
+
+      {isTransferBlockedModalOpen && (
+        <div
+          className="transferBlockedOverlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="transferBlockedTitle"
+          onClick={() => setIsTransferBlockedModalOpen(false)}
+        >
+          <div className="transferBlockedModal" onClick={(event) => event.stopPropagation()}>
+            <button
+              type="button"
+              className="transferBlockedClose"
+              onClick={() => setIsTransferBlockedModalOpen(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+
+            <img src="/ichigo/hug.jpg" alt="" />
+
+            <div>
+              <h2 id="transferBlockedTitle">{text.transferBlockedTitle}</h2>
+              <p>{text.transferBlockedText}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="card">
         {/* <Parental /> */}
@@ -1351,22 +1724,56 @@ if (
             setDestinationPlaylistId={setDestinationPlaylistId}
             destinationPlaylists={destinationPlaylists}
             transferError={transferError}
+            transferStarted={transferStarted}
             transferLoading={transferLoading}
             transferStatus={transferStatus}
             selectedSourcePlaylist={selectedSourcePlaylist}
+            selectedSourceTracks={selectedSourceTracks}
+            selectedSourceTracksLoading={selectedSourceTracksLoading}
+            selectedSourceTracksError={selectedSourceTracksError}
+            trackSelectionMode={trackSelectionMode}
+            setTrackSelectionMode={setTrackSelectionMode}
+            selectedTrackKeys={selectedTrackKeys}
+            setSelectedTrackKeys={setSelectedTrackKeys}
+            toggleSelectedTrack={toggleSelectedTrack}
+            getTrackLabel={getTrackLabel}
             startPlaylistTransfer={startPlaylistTransfer}
+            restartTransferFlow={restartTransferFlow}
+            returnToMenu={() => navigateToPage("home", "/")}
+            stopTransfer={stopTransfer}
             transferResult={transferResult}
             addPlatformToOrder={addPlatformToOrder}
             loginSpotify={loginSpotify}
             loginYoutube={loginYoutube}
             loginAppleMusic={loginAppleMusic}
             resetPlatformChoice={resetPlatformChoice}
+            startSimulationTransfer={runSimulationTransfer}
           />
         )}
 
         {currentPage === "home" && (
           <>
-            <HomeStart />
+            <HomeStart
+              onOpenTransfer={startNewTransferFlow}
+              isActivityVisible={isActivityVisible}
+              onToggleActivity={() => setIsActivityVisible((currentValue) => !currentValue)}
+            />
+
+            {isActivityVisible && (
+              <Activiter
+                text={text}
+                transferStarted={transferStarted}
+                transferLoading={transferLoading}
+                transferStatus={transferStatus}
+                transferResult={transferResult}
+                transferError={transferError}
+                sourcePlatform={simulationTransferMeta?.sourcePlatform || sourcePlatform}
+                destinationPlatform={simulationTransferMeta?.destinationPlatform || destinationPlatform}
+                selectedSourcePlaylist={simulationTransferMeta?.playlist || selectedSourcePlaylist}
+                getPlaylistName={getPlaylistName}
+                onStopTransfer={stopTransfer}
+              />
+            )}
 
             <WhySoundSync text={text.homeBannerText} />
 

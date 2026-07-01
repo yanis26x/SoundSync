@@ -767,7 +767,7 @@ app.get("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
 app.post("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
   const accessToken = req.headers.authorization?.replace("Bearer ", "");
   const { playlistId } = req.params;
-  const { videoId } = req.body;
+  const { videoId, videoIds } = req.body;
 
   if (!accessToken) {
     return res.status(401).json({
@@ -776,7 +776,11 @@ app.post("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
     });
   }
 
-  if (!videoId) {
+  const videosToAdd = Array.isArray(videoIds)
+    ? videoIds.filter(Boolean).slice(0, 50)
+    : [videoId].filter(Boolean);
+
+  if (videosToAdd.length === 0) {
     return res.status(400).json({
       success: false,
       message: "Video YouTube requise.",
@@ -784,31 +788,38 @@ app.post("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
   }
 
   try {
-    const response = await axios.post(
-      "https://www.googleapis.com/youtube/v3/playlistItems",
-      {
-        snippet: {
-          playlistId,
-          resourceId: {
-            kind: "youtube#video",
-            videoId,
+    const items = [];
+
+    for (const nextVideoId of videosToAdd) {
+      const response = await axios.post(
+        "https://www.googleapis.com/youtube/v3/playlistItems",
+        {
+          snippet: {
+            playlistId,
+            resourceId: {
+              kind: "youtube#video",
+              videoId: nextVideoId,
+            },
           },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        params: {
-          part: "snippet",
-        },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          params: {
+            part: "snippet",
+          },
+        }
+      );
+
+      items.push(response.data);
+    }
 
     res.json({
       success: true,
-      item: response.data,
+      item: items[0],
+      items,
     });
   } catch (error) {
     console.error("Erreur ajout YouTube :", error.response?.data || error.message);

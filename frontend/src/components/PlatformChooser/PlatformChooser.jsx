@@ -2,6 +2,7 @@ import "./PlatformChooser.css";
 
 function PlatformChooser({
   chooseText,
+  chooseSubText,
   platformOrder,
   accessToken,
   youtubeAccessToken,
@@ -10,6 +11,7 @@ function PlatformChooser({
   onLoginSpotify,
   onLoginYoutube,
   onLoginAppleMusic,
+  onStartSimulation,
 }) {
   return (
     <section className="choosePanel">
@@ -18,9 +20,7 @@ function PlatformChooser({
 
         <h2 className="chooseText">{chooseText}</h2>
 
-        <p className="chooseSubText">
-          Choose your main music platform to get started.
-        </p>
+        <p className="chooseSubText">{chooseSubText}</p>
       </div>
 
       <div className="platformLoginRow">
@@ -55,6 +55,14 @@ function PlatformChooser({
       <p className="platformComingSoon">
         More platforms are coming soon — SoundCloud, Deezer, TIDAL and more.
       </p>
+
+      <button
+        type="button"
+        className="simulationTransferBtn"
+        onClick={onStartSimulation}
+      >
+        Simulation transfer
+      </button>
 
       <div className="platformDemoHelp">
         <p>Having trouble?! Check out the Demo video of SoundSync</p>

@@ -12,13 +12,36 @@ function StartTransfer({
   destinationPlatform,
   getPlaylistName,
   transferError,
+  transferStarted,
   transferLoading,
   transferStatus,
   transferLimit,
   selectedSourcePlaylist,
+  sourcePlatform,
+  sourceTracks,
+  sourceTracksLoading,
+  sourceTracksError,
+  trackSelectionMode,
+  setTrackSelectionMode,
+  selectedTrackKeys,
+  toggleSelectedTrack,
+  getTrackLabel,
   startPlaylistTransfer,
+  restartTransferFlow,
+  returnToMenu,
+  stopTransfer,
   transferResult,
 }) {
+  const sourceTrackKey =
+    sourcePlatform && selectedSourcePlaylist
+      ? `${sourcePlatform.id}:${selectedSourcePlaylist.id}`
+      : "";
+  const visibleSourceTracks = sourceTracks;
+  const selectedTrackCount = selectedTrackKeys.filter((trackKey) =>
+    trackKey.startsWith(`${sourceTrackKey}:`)
+  ).length;
+  const showTransferSetup = !transferStarted;
+
   return (
     <section className="destinationSetup transferFocusPanel">
       <div className="destinationHeader">
@@ -26,45 +49,115 @@ function StartTransfer({
         <h2>Start transfer</h2>
       </div>
 
-      <div className="transferModeRow">
-        <button
-          className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-          onClick={() => setDestinationMode("new")}
-        >
-          {text.transferToNew}
-        </button>
+      {showTransferSetup && (
+        <>
+          <div className="transferModeRow">
+            <button
+              className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+              onClick={() => setDestinationMode("new")}
+            >
+              {text.transferToNew}
+            </button>
 
-        <button
-          className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-          onClick={() => setDestinationMode("existing")}
-        >
-          {text.transferToExisting}
-        </button>
-      </div>
+            <button
+              className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+              onClick={() => setDestinationMode("existing")}
+            >
+              {text.transferToExisting}
+            </button>
+          </div>
 
-      <div className="destinationInputGroup">
-        {destinationMode === "new" ? (
-          <input
-            className="playlistNameInput"
-            value={newPlaylistName}
-            onChange={(event) => setNewPlaylistName(event.target.value)}
-            placeholder={text.playlistName}
-          />
-        ) : (
-          <select
-            className="playlistNameInput"
-            value={destinationPlaylistId}
-            onChange={(event) => setDestinationPlaylistId(event.target.value)}
+          <div className="destinationInputGroup">
+            {destinationMode === "new" ? (
+              <input
+                className="playlistNameInput"
+                value={newPlaylistName}
+                onChange={(event) => setNewPlaylistName(event.target.value)}
+                placeholder={text.playlistName}
+              />
+            ) : (
+              <select
+                className="playlistNameInput"
+                value={destinationPlaylistId}
+                onChange={(event) => setDestinationPlaylistId(event.target.value)}
+              >
+                <option value="">{text.destinationPlaylist}</option>
+                {destinationPlaylists.map((playlist) => (
+                  <option value={playlist.id} key={playlist.id}>
+                    {getPlaylistName(destinationPlatform.id, playlist)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          <div className="trackSelectionPanel">
+            <div className="trackSelectionHeader">
+              <p>{text.transferTrackChoice}</p>
+              <span>
+                {trackSelectionMode === "specific"
+                  ? `${selectedTrackCount}/${sourceTracks.length}`
+                  : `${sourceTracks.length} tracks`}
+              </span>
+            </div>
+
+            <div className="transferModeRow trackModeRow">
+              <button
+                type="button"
+                className={trackSelectionMode === "all" ? "selectedMode" : "secondaryBtn"}
+                onClick={() => setTrackSelectionMode("all")}
+              >
+                {text.transferAllTracks}
+              </button>
+
+              <button
+                type="button"
+                className={trackSelectionMode === "specific" ? "selectedMode" : "secondaryBtn"}
+                onClick={() => setTrackSelectionMode("specific")}
+              >
+                {text.transferSpecificTracks}
+              </button>
+            </div>
+
+            {trackSelectionMode === "specific" && (
+              <div className="trackChoiceList">
+                {sourceTracksLoading && <p>{text.loadingTracks}</p>}
+                {sourceTracksError && <p className="trackChoiceError">{sourceTracksError}</p>}
+                {!sourceTracksLoading && !sourceTracksError && visibleSourceTracks.map((track, index) => {
+                  const trackKey = `${sourceTrackKey}:${index}`;
+                  const isSelected = selectedTrackKeys.includes(trackKey);
+
+                  return (
+                    <label className="trackChoiceItem" key={trackKey}>
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelectedTrack(trackKey)}
+                      />
+                      <span>{getTrackLabel(sourcePlatform.id, track)}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <p className="transferLimit">{transferLimit}</p>
+
+          <button
+            className="startTransferBtn"
+            onClick={startPlaylistTransfer}
+            disabled={
+              !selectedSourcePlaylist ||
+              transferLoading ||
+              (trackSelectionMode === "specific" && selectedTrackCount === 0) ||
+              (destinationMode === "existing" && !destinationPlaylistId)
+            }
           >
-            <option value="">{text.destinationPlaylist}</option>
-            {destinationPlaylists.map((playlist) => (
-              <option value={playlist.id} key={playlist.id}>
-                {getPlaylistName(destinationPlatform.id, playlist)}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
+            <span>{text.startTransfer}</span>
+          </button>
+        </>
+      )}
 
       {transferError && <p className="error transferError">{transferError}</p>}
 
@@ -76,22 +169,12 @@ function StartTransfer({
             <strong>{text.transferLoading}</strong>
             <p>{transferStatus}</p>
           </div>
+
+          <button type="button" className="transferStopBtn" onClick={stopTransfer}>
+            {text.stopTransfer}
+          </button>
         </div>
       )}
-
-      <p className="transferLimit">{transferLimit}</p>
-
-      <button
-        className="startTransferBtn"
-        onClick={startPlaylistTransfer}
-        disabled={
-          !selectedSourcePlaylist ||
-          transferLoading ||
-          (destinationMode === "existing" && !destinationPlaylistId)
-        }
-      >
-        <span>{transferLoading ? text.transferLoading : text.startTransfer}</span>
-      </button>
 
       {transferResult && (
         <div className="transferResult">
@@ -157,6 +240,15 @@ function StartTransfer({
             </section>
           </div>
         </div>
+      )}
+
+      {transferStarted && (
+        <button
+          className="startTransferBtn restartTransferBtn"
+          onClick={returnToMenu || restartTransferFlow}
+        >
+          <span>{text.restartTransfer}</span>
+        </button>
       )}
     </section>
   );

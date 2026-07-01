@@ -193,6 +193,107 @@
     inset 0 1px 0 rgba(255,255,255,.12);
 }
 
+.trackSelectionPanel {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 560px;
+  padding: 14px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, rgba(255,255,255,.12));
+  border-radius: 16px;
+
+  background: rgba(0,0,0,.38);
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .2s both;
+}
+
+.trackSelectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 10px;
+}
+
+.trackSelectionHeader p,
+.trackSelectionHeader span {
+  margin: 0;
+
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.trackSelectionHeader span {
+  color: color-mix(in srgb, var(--accent) 78%, white);
+}
+
+.trackModeRow {
+  margin-bottom: 10px;
+}
+
+.trackChoiceList {
+  max-height: 260px;
+  overflow-y: auto;
+
+  display: grid;
+  gap: 8px;
+
+  padding-right: 4px;
+}
+
+.trackChoiceList > p {
+  margin: 0;
+
+  color: rgba(255,255,255,.66);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.trackChoiceError {
+  color: #ff9b9b !important;
+}
+
+.trackChoiceItem {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+
+  min-height: 40px;
+  padding: 9px 10px;
+
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+
+  background: rgba(0,0,0,.42);
+  cursor: pointer;
+}
+
+.trackChoiceItem input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.trackChoiceItem span {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: rgba(255,255,255,.78);
+  font-size: 12px;
+  font-weight: 820;
+}
+
 .transferLimit {
   position: relative;
   z-index: 2;
@@ -315,6 +416,21 @@
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 18%, transparent),
     inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+.transferStopBtn {
+  flex: 0 0 auto;
+  padding: 8px 11px;
+
+  border: 1px solid rgba(255, 92, 92, .38);
+  border-radius: 999px;
+
+  color: #ffb0b0;
+  background: rgba(80,0,0,.32);
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 950;
 }
 
 .transferProgressPulse {
@@ -594,5 +710,14 @@
   .startTransferBtn {
     width: 100%;
     max-width: none;
+  }
+
+  .transferProgress {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .transferStopBtn {
+    width: 100%;
   }
 }

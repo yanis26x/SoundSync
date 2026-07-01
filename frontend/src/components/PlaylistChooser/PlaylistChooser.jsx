@@ -16,7 +16,7 @@ function PlaylistChooser({
     <section className="playlistPickPanel transferFocusPanel">
       <div className="playlistChooserHeader">
         <div>
-          <p>Source playlist</p>
+          <p>Choose a playlist</p>
           <h2>Playlist from</h2>
         </div>
 
