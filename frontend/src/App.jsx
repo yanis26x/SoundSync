@@ -51,7 +51,7 @@ const text = {
     changePlatform: "Reset",
     disconnectHint: "",
     logged: "✓",
-    pickPlaylist: "Select a playlist to sync",
+    pickPlaylist: "Select a playlist 2 sync",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
     playlistName: "Playlist name",
@@ -59,7 +59,7 @@ const text = {
     startTransfer: "Start transfer",
     transferAllTracks: "All tracks",
     transferSpecificTracks: "Choose tracks",
-    transferTrackChoice: "Tracks to sync",
+    transferTrackChoice: "Tracks 2 sync",
     noSelectedTracks: "Choose at least one track to transfer.",
     transferBlockedTitle: "Transfer already running",
     transferBlockedText: "You can't start a new transfer until the current one is finished.",
@@ -82,7 +82,7 @@ const text = {
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
     transferLimit: "Transfers are sent in batches of 50 tracks.",
     homeBannerTitle: "Why SoundSync?!",
-    homeBannerText: "My Apple Music subscription was about to expire... so I built SoundSync to keep my playlists alive.",
+    homeBannerText: "My Apple Music subscription was about 2 expire... so I built SoundSync 2 keep all my playlists that i spent hours making!!",
 };
 
 const TRANSFER_BATCH_SIZE = 50;

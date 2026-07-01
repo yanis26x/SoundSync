@@ -90,6 +90,26 @@
   animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .08s both;
 }
 
+.transferSetupStep {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.destinationStepPanel {
+  animation: setupStepIn .48s cubic-bezier(.22,1,.36,1) both;
+}
+
+.tracksStepPanel {
+  animation: setupStepIn .5s cubic-bezier(.22,1,.36,1) both;
+}
+
 .transferModeRow button,
 .startTransferBtn {
   width: auto;
@@ -234,6 +254,33 @@
 
 .trackModeRow {
   margin-bottom: 10px;
+}
+
+.setupActionRow {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.setupBackBtn {
+  width: auto;
+  margin: 0;
+  padding: 10px 15px;
+
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+
+  color: rgba(255,255,255,.82);
+  background: rgba(0,0,0,.48);
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 950;
 }
 
 .trackChoiceList {
@@ -630,6 +677,26 @@
 
   100% {
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes setupStepIn {
+  0% {
+    opacity: 0;
+    transform: translateX(22px) scale(.98);
+    filter: blur(8px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateX(-3px) scale(1.01);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
   }
 }
 

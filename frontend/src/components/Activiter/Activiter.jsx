@@ -23,12 +23,12 @@ function Activiter({
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
       : hasResult
         ? "Previous playlist"
-        : "No transfer started yet";
+        : "No transfer started yet.";
   const transferTitle = sourcePlatform && destinationPlatform
     ? ""
     : hasActivity
       ? "Playlist transfer"
-      : "Ready when you are";
+      : "What R U waiting 4?!";
   const heading = transferLoading
     ? "Transfer running"
     : hasResult || transferError

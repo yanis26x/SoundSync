@@ -24,10 +24,10 @@ function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
         <div className="homeStartCopy">
           {/* <p className="homeStartEyebrow">Ready 2 sync?</p> */}
           <h2>
-            Start your playlist <span>transfer</span>
+            Let's start 2 <span>Sync!</span>
           </h2>
           <p className="homeStartDescription">
-            Choose your platforms, pick your playlist, and keep your music alive.
+            Choose your platforms, pick your playlist, and keep listening 2 your playlists on all your favorite music platforms.
           </p>
         </div>
 

@@ -50,7 +50,7 @@ function PlatformChooser({
       </div>
 
       <p className="how2Disconnect">
-       2 Disconnect or switch your account from a platform, go to Profil !
+       2 Disconnect or switch your account from a platform, go to Profil.
       </p>
       <p className="platformComingSoon">
         More platforms are coming soon — SoundCloud, Deezer, TIDAL and more.
@@ -68,7 +68,7 @@ function PlatformChooser({
         <p>Having trouble?! Check out the Demo video of SoundSync</p>
         <a
           className="platformDemoBtn"
-          href="https://youtu.be/y2KCOBugjk0?si=4jWAXsb3Y3pk5m6F"
+          href="https://bakerskateboards.com/collections/all-boards/products/brand-logo-black-white-deck"
           target="_blank"
           rel="noreferrer"
         >

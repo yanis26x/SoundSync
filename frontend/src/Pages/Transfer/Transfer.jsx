@@ -3,6 +3,8 @@ import PlaylistChooser from "../../components/PlaylistChooser/PlaylistChooser";
 import StartTransfer from "../../components/StartTransfer/StartTransfer";
 import "./Transfer.css";
 
+const transferTouchSound = new URL("../../../music/touchP4.wav", import.meta.url).href;
+
 function Transfer({
   text,
   chooseText,
@@ -56,8 +58,18 @@ function Transfer({
   resetPlatformChoice,
   startSimulationTransfer,
 }) {
+  const playTransferTouchSound = (event) => {
+    const clickedButton = event.target.closest("button");
+
+    if (!clickedButton || clickedButton.disabled) return;
+
+    const audio = new Audio(transferTouchSound);
+    audio.volume = 0.45;
+    audio.play().catch(() => {});
+  };
+
   return (
-    <section className="transferPage">
+    <section className="transferPage" onClickCapture={playTransferTouchSound}>
       {selectedPlatforms.length < 2 && (
         <div className="transferPlatformStage">
           <button
@@ -73,8 +85,8 @@ function Transfer({
             chooseText={chooseText}
             chooseSubText={
               platformOrder.length === 1
-                ? "where do you want to tranfer them !?"
-                : "Where are the musics you want to transfer from?!"
+                ? "where do you want 2 tranfer them !?"
+                : "where are the musics you want 2 transfer from?!"
             }
             platformOrder={platformOrder}
             accessToken={accessToken}
