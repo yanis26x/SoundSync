@@ -15,6 +15,7 @@ import Transfer from "./Pages/Transfer/Transfer";
 import "./App.css";
 
 const transferDoneSound = new URL("../music/psp.mp3", import.meta.url).href;
+const transferToastCloseSound = new URL("../music/oupsP4.wav", import.meta.url).href;
 
 const text = {
     subtitle: "Transfer Anywhere, Sync Everthing",
@@ -453,6 +454,8 @@ function App() {
     const notificationAudio = new Audio(transferDoneSound);
     notificationAudio.volume = 0.45;
     notificationAudio.play().catch(() => {});
+    const closeAudio = new Audio(transferToastCloseSound);
+    closeAudio.volume = 0.5;
 
     const audioTimeout = window.setTimeout(() => {
       notificationAudio.pause();
@@ -460,6 +463,8 @@ function App() {
     }, 5200);
 
     const closeTimeout = window.setTimeout(() => {
+      closeAudio.currentTime = 0;
+      closeAudio.play().catch(() => {});
       setTransferDoneToast((currentToast) =>
         currentToast ? { ...currentToast, isClosing: true } : currentToast
       );
@@ -474,6 +479,7 @@ function App() {
       window.clearTimeout(closeTimeout);
       window.clearTimeout(removeTimeout);
       notificationAudio.pause();
+      closeAudio.pause();
     };
   }, [transferResult]);
 

@@ -34,6 +34,17 @@ function Activiter({
     : hasResult || transferError
       ? "Last transfer"
       : "Activity";
+  const activityLogoMap = {
+    apple: "/logo/appleMusic.png",
+    spotify: "/logo/Spotify-Black-Logo.png",
+    youtube: "/logo/YouTube-Logo.svg",
+  };
+  const sourceLogo = sourcePlatform
+    ? activityLogoMap[sourcePlatform.id] || sourcePlatform.logo
+    : "";
+  const destinationLogo = destinationPlatform
+    ? activityLogoMap[destinationPlatform.id] || destinationPlatform.logo
+    : "";
 
   return (
     <section className="activiterPanel">
@@ -49,8 +60,8 @@ function Activiter({
               {sourcePlatform && destinationPlatform ? (
                 <div className="activiterPlatformLogos" aria-label={`${sourcePlatform.name} to ${destinationPlatform.name}`}>
                   <div className="activiterPlatformLogoWrap">
-                    {sourcePlatform.logo ? (
-                      <img src={sourcePlatform.logo} alt={sourcePlatform.name} />
+                    {sourceLogo ? (
+                      <img src={sourceLogo} alt={sourcePlatform.name} />
                     ) : (
                       <span>{sourcePlatform.name}</span>
                     )}
@@ -59,8 +70,8 @@ function Activiter({
                   <span className="activiterPlatformArrow" aria-hidden="true">→</span>
 
                   <div className="activiterPlatformLogoWrap">
-                    {destinationPlatform.logo ? (
-                      <img src={destinationPlatform.logo} alt={destinationPlatform.name} />
+                    {destinationLogo ? (
+                      <img src={destinationLogo} alt={destinationPlatform.name} />
                     ) : (
                       <span>{destinationPlatform.name}</span>
                     )}
