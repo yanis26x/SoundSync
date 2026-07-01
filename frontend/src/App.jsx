@@ -5,7 +5,6 @@ import MusicParticles from "./components/Particles/MusicParticles";
 import Footer from "./components/Footer/Footer";
 import CommentLoop from "./components/CommentLoop/CommentLoop";
 import HomeStart from "./components/HomeStart/HomeStart";
-import Activiter from "./components/Activiter/Activiter";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
@@ -166,7 +165,6 @@ function App() {
   const [transferDoneToast, setTransferDoneToast] = useState(null);
   const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
-  const [isActivityVisible, setIsActivityVisible] = useState(true);
   const [currentTheme, setCurrentTheme] = useState(() => {
     const savedTheme = localStorage.getItem("sound_sync_theme");
 
@@ -1814,25 +1812,21 @@ if (
           <>
             <HomeStart
               onOpenTransfer={startNewTransferFlow}
-              isActivityVisible={isActivityVisible}
-              onToggleActivity={() => setIsActivityVisible((currentValue) => !currentValue)}
+              text={text}
+              transferStarted={transferStarted}
+              transferLoading={transferLoading}
+              transferStatus={transferStatus}
+              transferResult={transferResult}
+              transferError={transferError}
+              sourcePlatform={simulationTransferMeta?.sourcePlatform || sourcePlatform}
+              destinationPlatform={simulationTransferMeta?.destinationPlatform || destinationPlatform}
+              selectedSourcePlaylist={simulationTransferMeta?.playlist || selectedSourcePlaylist}
+              selectedSourceTracks={selectedSourceTracks}
+              selectedSourceTracksLoading={selectedSourceTracksLoading}
+              selectedSourceTracksError={selectedSourceTracksError}
+              getPlaylistName={getPlaylistName}
+              getTrackLabel={getTrackLabel}
             />
-
-            {isActivityVisible && (
-              <Activiter
-                text={text}
-                transferStarted={transferStarted}
-                transferLoading={transferLoading}
-                transferStatus={transferStatus}
-                transferResult={transferResult}
-                transferError={transferError}
-                sourcePlatform={simulationTransferMeta?.sourcePlatform || sourcePlatform}
-                destinationPlatform={simulationTransferMeta?.destinationPlatform || destinationPlatform}
-                selectedSourcePlaylist={simulationTransferMeta?.playlist || selectedSourcePlaylist}
-                getPlaylistName={getPlaylistName}
-                onStopTransfer={stopTransfer}
-              />
-            )}
 
             <WhySoundSync text={text.homeBannerText} />
 

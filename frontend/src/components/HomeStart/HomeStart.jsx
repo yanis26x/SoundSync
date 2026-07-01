@@ -1,6 +1,26 @@
+import { useState } from "react";
+import InfoCard from "../InfoCard/InfoCard";
 import "./HomeStart.css";
 
-function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
+function HomeStart({
+  onOpenTransfer,
+  text,
+  transferStarted,
+  transferLoading,
+  transferStatus,
+  transferResult,
+  transferError,
+  sourcePlatform,
+  destinationPlatform,
+  selectedSourcePlaylist,
+  selectedSourceTracks,
+  selectedSourceTracksLoading,
+  selectedSourceTracksError,
+  getPlaylistName,
+  getTrackLabel,
+}) {
+  const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
+
   const openTransferPage = () => {
     if (onOpenTransfer) {
       onOpenTransfer();
@@ -13,14 +33,6 @@ function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
   return (
     <section className="homeStartSection">
       <div className="homeStartContent">
-        <button
-          type="button"
-          className="homeActivityToggleBtn"
-          onClick={onToggleActivity}
-        >
-          {isActivityVisible ? "Hide activity" : "Show activity"}
-        </button>
-
         <div className="homeStartCopy">
           {/* <p className="homeStartEyebrow">Ready 2 sync?</p> */}
           <h2>
@@ -45,6 +57,33 @@ function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
             Start →
           </button>
         </div>
+
+        {isInfoCardVisible && (
+          <InfoCard
+            text={text}
+            transferStarted={transferStarted}
+            transferLoading={transferLoading}
+            transferStatus={transferStatus}
+            transferResult={transferResult}
+            transferError={transferError}
+            sourcePlatform={sourcePlatform}
+            destinationPlatform={destinationPlatform}
+            selectedSourcePlaylist={selectedSourcePlaylist}
+            selectedSourceTracks={selectedSourceTracks}
+            selectedSourceTracksLoading={selectedSourceTracksLoading}
+            selectedSourceTracksError={selectedSourceTracksError}
+            getPlaylistName={getPlaylistName}
+            getTrackLabel={getTrackLabel}
+          />
+        )}
+
+        <button
+          type="button"
+          className="homeStartInfoToggleBtn"
+          onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
+        >
+          {isInfoCardVisible ? "Hide info" : "Show info"}
+        </button>
       </div>
     </section>
   );

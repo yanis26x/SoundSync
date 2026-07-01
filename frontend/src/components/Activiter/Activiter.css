@@ -10,9 +10,21 @@
   border-radius: 22px;
 
   background:
-    radial-gradient(circle at 12% 18%, rgba(255,255,255,.08), transparent 28%),
-    radial-gradient(circle at 88% 22%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(0,0,0,.86), rgba(0,0,0,.56));
+  radial-gradient(
+    circle at 82% 48%,
+    color-mix(in srgb, var(--accent) 34%, transparent),
+    transparent 36%
+  ),
+  radial-gradient(
+    circle at 18% 18%,
+    rgba(255,255,255,.10),
+    transparent 30%
+  ),
+  linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.56)),
+    color-mix(in srgb, var(--accent) 30%, rgba(0,0,0,.46))
+  );
 
   box-shadow:
     0 0 34px color-mix(in srgb, var(--accent) 24%, transparent),

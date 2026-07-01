@@ -12,23 +12,36 @@
   position: relative;
   overflow: hidden;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 28px;
   width: min(1120px, 100%);
-  padding: 30px 38px;
-  border: 1px solid color-mix(in srgb, var(--accent) 72%, rgba(255,255,255,.16));
+  padding: 30px 38px 44px;
+  border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.22));
   border-radius: 26px;
   background:
-    radial-gradient(circle at 82% 50%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 34%),
-    radial-gradient(circle at 12% 20%, rgba(255,255,255,.08), transparent 28%),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.94), rgba(0, 0, 0, 0.64));
+    radial-gradient(
+      circle at 82% 48%,
+      color-mix(in srgb, var(--accent) 34%, transparent),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(255,255,255,.10),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.56)),
+      color-mix(in srgb, var(--accent) 30%, rgba(0,0,0,.46))
+    );
   box-shadow:
-    0 0 36px color-mix(in srgb, var(--accent) 34%, transparent),
-    0 18px 38px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(22px) saturate(1.2);
-  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    0 0 34px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 18px 38px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(20px) saturate(1.35);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
 }
 
 .homeStartContent::before {
@@ -40,52 +53,7 @@
   animation: homeStartShine 5.8s ease-in-out infinite;
   pointer-events: none;
 }
-.homeActivityToggleBtn {
-  position: absolute;
-  right: 18px;
-  bottom: 14px;
 
-  z-index: 5;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: auto;
-  min-width: 0;
-
-  padding: 5px 9px;
-
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, rgba(255,255,255,.15));
-  border-radius: 999px;
-
-  background: rgba(0,0,0,.45);
-  color: rgba(255,255,255,.78);
-
-  font-size: 10px;
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
-
-  cursor: pointer;
-
-  transition:
-    background .18s ease,
-    color .18s ease,
-    border-color .18s ease,
-    transform .18s ease;
-}
-
-.homeActivityToggleBtn:hover {
-  background: color-mix(in srgb, var(--accent) 16%, rgba(0,0,0,.6));
-  border-color: var(--accent);
-  color: #fff;
-  transform: translateY(-1px);
-}
-
-.homeActivityToggleBtn:active {
-  transform: scale(.96);
-}
 .homeStartCopy {
   position: relative;
   z-index: 1;
@@ -112,8 +80,10 @@
 }
 
 .homeStartCopy h2 span {
-  color: var(--accent);
-  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 50%, transparent);
+  color: color-mix(in srgb, var(--accent) 75%, white 25%);
+  text-shadow:
+    0 0 16px color-mix(in srgb, var(--accent) 62%, transparent),
+    0 4px 16px rgba(0,0,0,.35);
 }
 
 .homeStartDescription {
@@ -124,6 +94,46 @@
   font-weight: 800;
   line-height: 1.4;
   text-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
+}
+
+.homeStartInfoToggleBtn {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  z-index: 5;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.18));
+  border-radius: 999px;
+  background: rgba(0,0,0,.48);
+  color: rgba(255,255,255,.86);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  transition:
+    transform .18s ease,
+    color .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+
+.homeStartInfoToggleBtn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, rgba(0,0,0,.52));
+  color: #fff;
+}
+
+.homeStartInfoToggleBtn:active {
+  transform: scale(.96);
 }
 
 .homeStartBtnWrap {
@@ -329,7 +339,7 @@
   .homeStartContent {
     flex-direction: column;
     align-items: stretch;
-    padding: 24px 18px;
+    padding: 24px 18px 42px;
     gap: 20px;
   }
 
