@@ -51,7 +51,7 @@ const text = {
     changePlatform: "Reset",
     disconnectHint: "",
     logged: "✓",
-    pickPlaylist: "Select a playlist 2 sync",
+    pickPlaylist: "Select a playlist 2 start syncing ur music",
     transferToNew: "Transfer into a new playlist",
     transferToExisting: "Add to an existing playlist",
     playlistName: "Playlist name",

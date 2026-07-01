@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import "./DialoguePersona.css";
 
+const selectPlaylistMikuSound = new URL(
+  "../../../music/Miku/selectPlaylistMiku.mp3",
+  import.meta.url
+).href;
+
 // JE N'EST PAS ECRIT CE CODE MOI MEME, IL VIENT DINTENET!!!
 //YANIS26X
 
@@ -13,6 +18,17 @@ export default function DialoguePersona({
   const [visible, setVisible] = useState(true);
   const [disparition, setDisparition] = useState(false);
   const [nombreLettres, setNombreLettres] = useState(0);
+
+  useEffect(() => {
+    const audio = new Audio(selectPlaylistMikuSound);
+    audio.volume = 0.55;
+    audio.play().catch(() => {});
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
 
   useEffect(() => {
     let index = 0;
