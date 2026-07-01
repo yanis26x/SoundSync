@@ -1,319 +1,207 @@
 .profilPage {
   min-height: 100vh;
-  padding: 120px 30px 56px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  padding: 112px 28px 56px;
   color: var(--text-color);
-
-  animation: profilePageIn .55s ease both;
+  animation: profilePageIn .45s ease both;
 }
 
 .profilPanel {
   position: relative;
   z-index: 5;
-
-  width: min(920px, 100%);
-  padding: 30px;
-
-  overflow: hidden;
-
-  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.14));
-  border-radius: 26px;
-
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(0,0,0,.82), rgba(0,0,0,.48));
-
-  backdrop-filter: blur(22px) saturate(1.25);
-  -webkit-backdrop-filter: blur(22px) saturate(1.25);
-
-  box-shadow:
-    0 0 38px color-mix(in srgb, var(--accent) 34%, transparent),
-    0 18px 48px rgba(0,0,0,.38),
-    inset 0 1px 0 rgba(255,255,255,.16);
-}
-
-.profilPanel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.08),
-      transparent
-    );
-
-  transform: translateX(-110%);
-  animation: profileShine 4.8s ease-in-out infinite;
-  pointer-events: none;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
 }
 
 .profilHeader {
-  position: relative;
-  z-index: 2;
-
-  margin-bottom: 26px;
-
+  min-height: 260px;
+  padding: clamp(24px, 5vw, 52px);
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.profilEyebrow {
-  margin: 0 0 8px;
-
-  color: color-mix(in srgb, var(--accent) 78%, white);
-  font-size: 12px;
-  font-weight: 1000;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.16));
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.34)),
+    var(--bg-image) center / cover;
+  box-shadow:
+    0 24px 54px rgba(0,0,0,.34),
+    0 0 34px color-mix(in srgb, var(--accent) 22%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.14);
 }
 
 .profilHeader h1 {
   margin: 0;
-
-  font-size: clamp(42px, 7vw, 76px);
-  line-height: .88;
+  font-size: clamp(48px, 9vw, 104px);
+  line-height: .82;
   font-weight: 1000;
-  letter-spacing: -3px;
-
+  letter-spacing: -2px;
   text-shadow:
-    0 0 20px color-mix(in srgb, var(--accent) 54%, transparent),
-    0 5px 18px rgba(0,0,0,.65);
+    0 0 20px color-mix(in srgb, var(--accent) 50%, transparent),
+    0 8px 24px rgba(0,0,0,.66);
 }
 
 .profilHeader span {
   display: block;
-  margin-top: 12px;
-
-  color: rgba(255,255,255,.68);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.profilStatusPill {
-  min-width: 118px;
-  padding: 14px 16px;
-
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 4px;
-
-  border: 1px solid color-mix(in srgb, var(--accent) 44%, rgba(255,255,255,.12));
-  border-radius: 999px;
-
-  background: rgba(0,0,0,.42);
-
-  box-shadow:
-    0 0 22px color-mix(in srgb, var(--accent) 20%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-.profilStatusPill strong {
-  color: var(--accent);
-  font-size: 26px;
-  font-weight: 1000;
-  line-height: 1;
-}
-
-.profilStatusPill span {
-  color: rgba(255,255,255,.62);
-  font-size: 12px;
-  font-weight: 900;
+  max-width: 520px;
+  margin-top: 16px;
+  color: rgba(255,255,255,.76);
+  font-size: 16px;
+  font-weight: 850;
 }
 
 .profilError {
-  position: relative;
-  z-index: 2;
-
-  margin: 0 0 18px;
-  padding: 12px 14px;
-
+  margin: 0;
+  padding: 13px 15px;
   border: 1px solid rgba(255, 92, 92, .36);
-  border-radius: 14px;
-
-  background: rgba(80,0,0,.28);
+  border-radius: 12px;
+  background: rgba(80,0,0,.34);
   color: #ffb4b4;
-
   font-size: 13px;
   font-weight: 850;
 }
 
-.profileAccountList {
-  position: relative;
-  z-index: 2;
-
+.profilSectionSwitch {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: min(420px, 100%);
+  padding: 6px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  background: rgba(0,0,0,.46);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 14px 28px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.profilSectionSwitch button {
+  width: 100%;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(255,255,255,.68);
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 1000;
+}
+
+.profilSectionSwitch button:hover {
+  transform: none;
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,255,255,.1);
+  box-shadow: none;
+}
+
+.profilSectionSwitch .activeProfilSection {
+  border-color: color-mix(in srgb, var(--accent) 46%, rgba(255,255,255,.16));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 28%, transparent), rgba(255,255,255,.07));
+  color: #fff;
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 20%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+.profileAccountList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .profileAccountCard {
   position: relative;
   overflow: hidden;
-
-  padding: 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 20px;
-
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
   background:
-    linear-gradient(135deg, rgba(0,0,0,.58), rgba(0,0,0,.34));
-
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
+    rgba(0,0,0,.58);
+  backdrop-filter: blur(18px) saturate(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
   box-shadow:
-    0 12px 26px rgba(0,0,0,.22),
+    0 16px 34px rgba(0,0,0,.28),
     inset 0 1px 0 rgba(255,255,255,.1);
-
-  animation: accountCardIn .65s cubic-bezier(.22,1,.36,1) both;
-
-  transition:
-    transform .22s ease,
-    border-color .22s ease,
-    box-shadow .22s ease;
 }
 
-.profileAccountCard:nth-child(1) {
-  animation-delay: .08s;
+.profileAccountCard {
+  min-height: 320px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  animation: accountCardIn .55s cubic-bezier(.22,1,.36,1) both;
 }
 
 .profileAccountCard:nth-child(2) {
-  animation-delay: .16s;
+  animation-delay: .08s;
 }
 
 .profileAccountCard:nth-child(3) {
-  animation-delay: .24s;
+  animation-delay: .16s;
 }
 
-.profileAccountCard::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background:
-    radial-gradient(circle at left, color-mix(in srgb, var(--accent) 16%, transparent), transparent 32%);
-
-  opacity: 0;
-  transition: opacity .22s ease;
-  pointer-events: none;
-}
-
-.profileAccountCard:hover {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent) 44%, rgba(255,255,255,.16));
-  box-shadow:
-    0 18px 34px rgba(0,0,0,.34),
-    0 0 24px color-mix(in srgb, var(--accent) 18%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-.profileAccountCard:hover::before,
-.profileAccountCard.isConnected::before {
-  opacity: 1;
+.profileAccountCard.isConnected {
+  border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.14));
 }
 
 .profileAccountMain {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  min-width: 0;
+  display: grid;
+  gap: 18px;
 }
 
 .profileLogoBox {
-  width: 76px;
-  height: 64px;
-  flex: 0 0 76px;
-
+  width: 82px;
+  height: 82px;
   display: grid;
   place-items: center;
-  border-radius: 18px;
-
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,.08);
 }
 
 .profileLogoBox img {
-  max-width: 54px;
-  max-height: 38px;
+  max-width: 58px;
+  max-height: 44px;
   object-fit: contain;
-
-  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--accent) 28%, transparent));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 30%, transparent));
 }
 
 .profileAccountText h3 {
   margin: 0;
-
   color: #fff;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
   font-weight: 1000;
 }
 
 .profileUsername {
   display: block;
-  margin-top: 6px;
-  color: rgba(255,255,255,.82);
+  margin-top: 8px;
+  color: rgba(255,255,255,.78);
   font-size: 13px;
   font-weight: 850;
 }
 
-.profileAccountStats {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-
-.profileAccountStats span {
-  padding: 5px 8px;
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 999px;
-  background: rgba(0,0,0,.3);
-  color: rgba(255,255,255,.66);
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.profileAccountStats strong {
-  color: var(--accent);
-  font-size: 11px;
-}
-
-.profileDetailsLoading {
-  display: block;
-  margin-top: 9px;
-  color: rgba(255,255,255,.46);
-  font-size: 10px;
-  font-weight: 800;
-}
-
 .profileAccountText p {
-  margin: 8px 0 0;
-
-  display: flex;
+  margin: 12px 0 0;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-
+  gap: 8px;
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 950;
   text-transform: uppercase;
 }
 
 .profileAccountText p span {
-  width: 8px;
-  height: 8px;
-
+  width: 9px;
+  height: 9px;
   display: inline-block;
   border-radius: 999px;
 }
@@ -328,45 +216,69 @@
 }
 
 .offlineText {
-  color: rgba(255,255,255,.48);
+  color: rgba(255,255,255,.5);
 }
 
 .offlineText span {
   background: rgba(255,255,255,.35);
 }
 
-.profileAccountActions {
+.profileAccountStats {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.profileAccountStats span {
+  min-height: 54px;
+  padding: 10px;
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 9px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  background: rgba(0,0,0,.28);
+  color: rgba(255,255,255,.66);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.profileAccountStats strong {
+  color: var(--accent);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.profileDetailsLoading {
+  display: block;
+  margin-top: 16px;
+  color: rgba(255,255,255,.5);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.profileAccountActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .compactBtn {
+  width: 100%;
   margin: 0;
-  padding: 9px 13px;
-
-  border-radius: 999px;
-
+  padding: 11px 12px;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 950;
 }
 
 .connectBtn {
+  grid-column: 1 / -1;
   border: 1px solid color-mix(in srgb, var(--accent) 60%, rgba(255,255,255,.16));
   background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 62%, black),
-      rgba(0,0,0,.72)
-    );
-
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 58%, black), rgba(0,0,0,.72));
   color: #fff;
-
-  box-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 28%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.18);
 }
 
 .dangerBtn {
@@ -378,19 +290,19 @@
 @keyframes profilePageIn {
   from {
     opacity: 0;
-    transform: translateY(18px) scale(.98);
+    transform: translateY(16px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 @keyframes accountCardIn {
   from {
     opacity: 0;
-    transform: translateY(28px) scale(.94);
+    transform: translateY(20px) scale(.98);
   }
 
   to {
@@ -399,57 +311,36 @@
   }
 }
 
-@keyframes profileShine {
-  0%,
-  55% {
-    transform: translateX(-120%);
-    opacity: 0;
+@media (max-width: 920px) {
+  .profileAccountList {
+    grid-template-columns: 1fr;
   }
 
-  68% {
-    opacity: .55;
-  }
-
-  100% {
-    transform: translateX(120%);
-    opacity: 0;
+  .profileAccountCard {
+    min-height: 0;
   }
 }
 
 @media (max-width: 650px) {
   .profilPage {
-    padding: 120px 18px 40px;
-    align-items: flex-start;
-  }
-
-  .profilPanel {
-    padding: 22px;
+    padding: 104px 16px 38px;
   }
 
   .profilHeader {
-    flex-direction: column;
-    align-items: flex-start;
+    min-height: 220px;
+    border-radius: 18px;
   }
 
   .profilHeader h1 {
-    font-size: 48px;
+    font-size: 52px;
   }
 
-  .profilStatusPill {
-    align-self: flex-start;
-  }
-
-  .profileAccountCard {
-    align-items: flex-start;
-    flex-direction: column;
+  .profileAccountStats {
+    grid-template-columns: 1fr;
   }
 
   .profileAccountActions {
-    justify-content: flex-start;
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 
-  .compactBtn {
-    flex: 1;
-  }
 }

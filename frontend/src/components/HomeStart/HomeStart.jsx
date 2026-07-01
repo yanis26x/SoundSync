@@ -27,7 +27,7 @@ function HomeStart({ onOpenTransfer, isActivityVisible, onToggleActivity }) {
             Let's start 2 <span>Sync!</span>
           </h2>
           <p className="homeStartDescription">
-            Choose your platforms, pick your playlist, and keep listening 2 your playlists on all your favorite music platforms.
+            Choose your platforms, pick your playlist, and keep listening 2 your favorite playlists across all your music platforms.
           </p>
         </div>
 

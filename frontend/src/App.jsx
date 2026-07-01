@@ -9,6 +9,7 @@ import Activiter from "./components/Activiter/Activiter";
 import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
 import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
+import FirstVisitMikuModal from "./components/FirstVisitMikuModal/FirstVisitMikuModal";
 import Navbar from "./components/Navbar/Navbar";
 import TransferDoneToast from "./components/TransferDoneToast/TransferDoneToast";
 import Transfer from "./Pages/Transfer/Transfer";
@@ -166,7 +167,11 @@ function App() {
   const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
   const [isActivityVisible, setIsActivityVisible] = useState(true);
-  const [currentTheme, setCurrentTheme] = useState("miku");
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("sound_sync_theme");
+
+    return themes[savedTheme] ? savedTheme : "miku";
+  });
   const [soundSettings, setSoundSettings] = useState(() => {
     const savedSettings = localStorage.getItem("sound_sync_custom_settings");
 
@@ -524,6 +529,7 @@ function App() {
 
   useEffect(() => {
     const theme = themes[currentTheme];
+    localStorage.setItem("sound_sync_theme", currentTheme);
 
     document.documentElement.style.setProperty(
       "--bg-image",
@@ -1623,6 +1629,7 @@ if (
   return (
     <main className="app">
       <MusicParticles />
+      <FirstVisitMikuModal />
 
       {transferDoneToast && (
         <TransferDoneToast

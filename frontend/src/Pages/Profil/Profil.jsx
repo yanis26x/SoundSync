@@ -5,9 +5,14 @@ import MusicParticles from "../../components/Particles/MusicParticles";
 import Navbar from "../../components/Navbar/Navbar";
 import "../../App.css";
 import "./Profil.css";
+import Info from "./Info/Info";
 
 function Profil() {
-  const [currentTheme, setCurrentTheme] = useState("sora");
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("sound_sync_theme");
+
+    return themes[savedTheme] ? savedTheme : "miku";
+  });
   const [accessToken, setAccessToken] = useState(
     () => localStorage.getItem("spotify_access_token") || ""
   );
@@ -20,6 +25,7 @@ function Profil() {
   const [appleError, setAppleError] = useState("");
   const [accountDetails, setAccountDetails] = useState({});
   const [detailsLoading, setDetailsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState("profile");
 
   const text = {
       profileTitle: "Profile",
@@ -268,8 +274,6 @@ function Profil() {
     return { username: platform.isConnected ? "Apple Music Library" : "" };
   };
 
-  const connectedCount = accountPlatforms.filter((platform) => platform.isConnected).length;
-
   return (
     <main className="profilPage">
       <MusicParticles />
@@ -290,19 +294,36 @@ function Profil() {
       <section className="profilPanel">
         <div className="profilHeader">
           <div>
-            <p className="profilEyebrow">SoundSync Account</p>
-            <h1>{text.profileTitle}</h1>
-            <span>{text.profileSubtitle}</span>
+            <h1>{activeSection === "profile" ? text.profileTitle : "Info"}</h1>
+            <span>
+              {activeSection === "profile"
+                ? text.profileSubtitle
+                : "Learn more about SoundSync, the app, and the person behind it."}
+            </span>
           </div>
+        </div>
 
-          <div className="profilStatusPill">
-            <strong>{connectedCount}</strong>
-            <span>/ {accountPlatforms.length} linked</span>
-          </div>
+        <div className="profilSectionSwitch" aria-label="Profile sections">
+          <button
+            type="button"
+            className={activeSection === "profile" ? "activeProfilSection" : ""}
+            onClick={() => setActiveSection("profile")}
+          >
+            Profil
+          </button>
+
+          <button
+            type="button"
+            className={activeSection === "info" ? "activeProfilSection" : ""}
+            onClick={() => setActiveSection("info")}
+          >
+            Info
+          </button>
         </div>
 
         {appleError && <p className="error profilError">{appleError}</p>}
 
+        {activeSection === "profile" ? (
         <div className="profileAccountList">
           {accountPlatforms.map((platform) => {
             const details = accountDetails[platform.id];
@@ -367,6 +388,9 @@ function Profil() {
             );
           })}
         </div>
+        ) : (
+          <Info />
+        )}
       </section>
     </main>
   );
