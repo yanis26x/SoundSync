@@ -15,12 +15,12 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 28px;
+  gap: 12px;
   width: min(1120px, 100%);
   padding: 30px 38px 44px;
-  border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.22));
+  /* border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.22)); */
   border-radius: 26px;
-  background:
+  /* background:
     radial-gradient(
       circle at 82% 48%,
       color-mix(in srgb, var(--accent) 34%, transparent),
@@ -35,13 +35,13 @@
       135deg,
       color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.56)),
       color-mix(in srgb, var(--accent) 30%, rgba(0,0,0,.46))
-    );
-  box-shadow:
+    ); */
+  /* box-shadow:
     0 0 34px color-mix(in srgb, var(--accent) 28%, transparent),
     0 18px 38px rgba(0,0,0,.28),
-    inset 0 1px 0 rgba(255,255,255,.18);
-  backdrop-filter: blur(20px) saturate(1.35);
-  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+    inset 0 1px 0 rgba(255,255,255,.18); */
+  /* backdrop-filter: blur(20px) saturate(1.35);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35); */
 }
 
 .homeStartContent::before {
@@ -97,17 +97,15 @@
 }
 
 .homeStartInfoToggleBtn {
-  position: absolute;
-  right: 18px;
-  bottom: 14px;
+  position: relative;
   z-index: 5;
   width: auto;
   min-width: 0;
-  margin: 0;
-  padding: 6px 10px;
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.18));
+  margin: 10px 0 0;
+  padding: 7px 12px;
+  border: 2px solid rgba(0,0,0,.9);
   border-radius: 999px;
-  background: rgba(0,0,0,.48);
+  background: rgba(0,0,0,.72);
   color: rgba(255,255,255,.86);
   font: inherit;
   font-size: 10px;
@@ -126,86 +124,131 @@
 }
 
 .homeStartInfoToggleBtn:hover {
-  transform: translateY(-1px);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, rgba(0,0,0,.52));
+  transform: translateY(-2px) scale(1.04);
+  border-color: rgba(0,0,0,1);
+  background: rgba(0,0,0,.9);
   color: #fff;
 }
 
 .homeStartInfoToggleBtn:active {
   transform: scale(.96);
 }
-
 .homeStartBtnWrap {
   position: relative;
   z-index: 2;
   flex: 0 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 34px;
+  padding: 8px 12px;
+  perspective: 700px;
 }
 
 .homeStartBtnWrap::before {
   content: "";
   position: absolute;
-  inset: 28px;
+  inset: 18px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 32%, transparent);
-  filter: blur(18px);
-  opacity: .9;
-  animation: startBtnGlow 2.6s ease-in-out infinite;
+  background:
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent) 52%, transparent),
+      transparent 68%
+    );
+  filter: blur(20px);
+  opacity: .72;
+  animation: startBtnGlow 2.8s ease-in-out infinite;
   pointer-events: none;
 }
 
 .homeStartBtn {
   position: relative;
   z-index: 3;
+  overflow: hidden;
 
-  min-width: 210px;
-  height: 62px;
+  min-width: 154px;
+  height: 48px;
   margin: 0;
-  padding: 0 34px;
+  padding: 0 24px;
 
-  border: 4px solid var(--accent);
+  border: 4px solid rgba(0,0,0,.96);
   border-radius: 999px;
 
-  background: rgb(0, 0, 0);
-  color: white;
+  background: #050505;
 
-  font-size: 17px;
+  color: #fff;
+
+  font-size: 14px;
   font-weight: 1000;
   text-transform: uppercase;
+  letter-spacing: .8px;
 
   cursor: pointer;
 
   box-shadow:
-    0 0 28px color-mix(in srgb, var(--accent) 60%, transparent),
-    0 16px 28px rgba(0,0,0,.34),
-    inset 0 2px 0 rgba(255,255,255,.35);
+    0 0 18px color-mix(in srgb, var(--accent) 38%, transparent),
+    0 12px 22px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  animation: startButtonPopIn .72s cubic-bezier(.16,1,.3,1) .35s both;
 
   transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    filter .18s ease;
+    transform .24s cubic-bezier(.16, 1, .3, 1),
+    box-shadow .24s ease,
+    border-width .24s ease,
+    filter .24s ease;
+}
+
+.homeStartBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(8, 2, 2, 0.42),
+      transparent
+    );
+
+  transform: translateX(-130%) skewX(-18deg);
+  transition: transform .65s ease;
+  pointer-events: none;
+}
+
+.homeStartBtn::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  border: 1px solid rgba(255,255,255,.18);
+  pointer-events: none;
 }
 
 .homeStartBtn:hover {
-  transform: scale(1.04);
+  transform: translateY(-5px) rotate(-1deg) scale(1.07);
+
+  border-width: 6px;
 
   box-shadow:
-    0 0 38px color-mix(in srgb, var(--accent) 72%, transparent),
-    0 18px 34px rgba(0,0,0,.42),
-    inset 0 2px 0 rgba(255,255,255,.45);
+    0 0 28px color-mix(in srgb, var(--accent) 58%, transparent),
+    0 18px 30px rgba(0,0,0,.44),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+.homeStartBtn:hover::before {
+  transform: translateX(130%) skewX(-18deg);
 }
 
 .homeStartBtn:active {
-  transform: scale(.98);
+  transform: translateY(-2px) scale(.98);
 
   box-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 42%, transparent),
-    0 8px 16px rgba(0,0,0,.28),
-    inset 0 2px 0 rgba(255,255,255,.28);
+    0 0 20px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 12px 22px rgba(0,0,0,.34),
+    inset 0 2px 8px rgba(0,0,0,.35);
 }
 
 .musicNote {
@@ -276,6 +319,30 @@
   50% {
     transform: scale(1.08);
     opacity: .95;
+  }
+}
+
+@keyframes startButtonPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(.72) rotate(-4deg);
+    filter: blur(4px);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.08) rotate(1.2deg);
+    filter: blur(0);
+  }
+
+  82% {
+    transform: translateY(2px) scale(.98) rotate(-.5deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+    filter: blur(0);
   }
 }
 
@@ -359,13 +426,13 @@
   .homeStartBtnWrap {
     width: fit-content;
     margin: 0 auto;
-    padding: 30px;
+    padding: 10px 12px;
   }
 
   .homeStartBtn {
-    min-width: 190px;
-    height: 56px;
-    font-size: 15px;
+    min-width: 148px;
+    height: 46px;
+    font-size: 13px;
   }
 
   .musicNote {

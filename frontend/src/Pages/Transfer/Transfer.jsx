@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import PlatformChooser from "../../components/PlatformChooser/PlatformChooser";
-import PlaylistChooser from "../../components/PlaylistChooser/PlaylistChooser";
-import StartTransfer from "../../components/StartTransfer/StartTransfer";
+import PlatformChooser from "../../components/TRANSFER/PlatformChooser/PlatformChooser";
+import PlaylistChooser from "../../components/TRANSFER/PlaylistChooser/PlaylistChooser";
+import StartTransfer from "../../components/TRANSFER/StartTransfer/StartTransfer";
 import "./Transfer.css";
 
 const transferTouchSound = new URL("../../../music/touchP4.wav", import.meta.url).href;

@@ -12,37 +12,29 @@
   position: relative;
   overflow: hidden;
   min-height: 236px;
-  border: 8px solid rgba(0,0,0,.92);
+  border: 12px solid rgba(0,0,0,.92);
   border-radius: 22px;
   background: #000;
   box-shadow:
     0 14px 28px rgba(0,0,0,.36),
     0 0 18px color-mix(in srgb, var(--accent) 16%, transparent);
-  animation:
-    infoCardBounceIn .82s cubic-bezier(.18,.9,.22,1.22) both,
-    cardBreath 7s ease-in-out infinite;
+  animation: infoCardBounceIn .82s cubic-bezier(.18,.9,.22,1.22) both;
   transition:
     transform .24s ease,
     border-color .24s ease,
+    border-width .24s ease,
     box-shadow .24s ease;
 }
 
-.infoCard:nth-child(1) {
-  animation-delay: .06s, .9s;
-}
-
-.infoCard:nth-child(2) {
-  animation-delay: .22s, 1.06s;
-}
-
-.infoCard:nth-child(3) {
-  animation-delay: .38s, 1.22s;
-}
+.infoCard:nth-child(1) { animation-delay: .06s; }
+.infoCard:nth-child(2) { animation-delay: .22s; }
+.infoCard:nth-child(3) { animation-delay: .38s; }
 
 .infoCard:hover {
   animation-play-state: paused;
-  transform: translateY(-5px) scale(1.018);
-  border-color: color-mix(in srgb, var(--accent) 34%, black);
+  transform: translateY(-6px) scale(1.05);
+  border-width: 16px;
+  border-color: rgba(0,0,0,.96);
   box-shadow:
     0 18px 34px rgba(0,0,0,.46),
     0 0 28px color-mix(in srgb, var(--accent) 36%, transparent);
@@ -126,26 +118,26 @@
   position: relative;
   z-index: 2;
   min-height: 100%;
-  align-items: stretch;
-  justify-content: space-between;
-  text-align: left;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
   background: transparent;
 }
 
 .infoCardProcessed .infoCardBody p {
   margin: 0;
-  width: fit-content;
-  padding: 5px 8px;
-  border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.18));
-  border-radius: 999px;
-  color: color-mix(in srgb, var(--accent) 62%, white);
-  background: rgba(0,0,0,.38);
-  font-size: 9px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-shadow: 0 2px 8px rgba(0,0,0,.95);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: rgba(255,255,255,.94);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: none;
 }
 
 .infoCardTrackStage {
@@ -258,17 +250,17 @@ button.infoCardFeatured {
 
 .infoCardActivity .infoCardBody p {
   margin: 0;
-  width: fit-content;
-  padding: 5px 8px;
-  border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.18));
-  border-radius: 999px;
-  color: color-mix(in srgb, var(--accent) 62%, white);
-  background: rgba(0,0,0,.56);
-  font-size: 9px;
-  font-weight: 1000;
-  line-height: 1;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: rgba(255,255,255,.94);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: none;
 }
 
 .infoCardFeatured .infoCardBody strong {
@@ -284,10 +276,10 @@ button.infoCardFeatured {
   width: 100%;
   max-height: 50px;
   overflow: hidden;
-  padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 12px;
-  background: rgba(0,0,0,.46);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
 }
 
@@ -307,6 +299,21 @@ button.infoCardFeatured {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow: 0 2px 8px rgba(0,0,0,.95);
+}
+
+.infoCardProcessed .infoCardBody strong,
+.infoCardProcessed .infoCardBody span,
+.infoCardProcessed .infoCardTicker li,
+.infoCardActivity .infoCardBody strong,
+.infoCardActivity .infoCardBody span,
+.infoCardActivity .infoCardTicker li,
+.infoCardActivity .infoCardStats span {
+  text-shadow: none;
+}
+
+.infoCardProcessedTicker {
+  max-width: min(260px, 100%);
+  margin: 0 auto;
 }
 
 .infoCardStats {

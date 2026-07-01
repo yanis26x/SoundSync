@@ -259,7 +259,7 @@ body::after {
   padding: 10px 14px;
 
   border-radius: 999px;
-  border: 1px solid var(--border-color);
+  border: 4px solid rgba(0,0,0,.9);
 
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-color);
@@ -411,14 +411,43 @@ body::after {
   -webkit-mask-composite: xor;
 }
 
-.homePersonalGrid {
+.homeMainGrid {
   position: relative;
   z-index: 5;
   display: grid;
-  grid-template-columns: minmax(250px, 0.62fr) minmax(0, 1.38fr);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 240px);
+  align-items: start;
   gap: 18px;
-  margin-top: 18px;
+}
+
+.homeLeftStack,
+.homeRightStack {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.homeLeftStack .homeStartSection {
+  margin-bottom: 0;
+}
+
+.homeLeftStack .homeInfoBanner {
+  margin-top: 0;
+}
+
+@media (min-width: 901px) {
+  .homeMainGrid {
+    width: calc(100vw - 60px);
+    margin-left: calc((100% - (100vw - 60px)) / 2);
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 250px);
+    gap: 24px;
+  }
+
+  .homeRightStack .commentLoopPanel {
+    height: 220px;
+    min-height: 220px;
+  }
 }
 
 button {
@@ -539,7 +568,10 @@ button:hover {
   transition:
     transform 0.25s ease,
     background 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    border-width 0.25s ease,
+    box-shadow 0.25s ease;
+
 }
 
 .playlistCard::before {
@@ -570,8 +602,12 @@ button:hover {
 }
 
 .playlistCard:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
+  transform: translateY(-5px) scale(1.035);
+  border-width: 8px;
+  border-color: rgba(0,0,0,.96);
+  box-shadow:
+    0 18px 34px rgba(0,0,0,.34),
+    0 0 22px color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
 .failedList {
@@ -768,7 +804,7 @@ button:hover {
   }
 
   .mainHero,
-  .homePersonalGrid {
+  .homeMainGrid {
     grid-template-columns: 1fr;
   }
 

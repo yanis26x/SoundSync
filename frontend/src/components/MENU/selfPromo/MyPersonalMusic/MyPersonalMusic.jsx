@@ -5,14 +5,14 @@ const songs = [
   {
     title: "Strawberry Milkshake",
     subtitle: "canonconfetti",
-    src: new URL("../../../music/banana.mp3", import.meta.url).href,
-    cover: new URL("../../../music/when-they-cryCOVER.jpg", import.meta.url).href,
+    src: new URL("../../../../../music/banana.mp3", import.meta.url).href,
+    cover: new URL("../../../../../music/when-they-cryCOVER.jpg", import.meta.url).href,
   },
   {
     title: "laugh",
     subtitle: "",
-    src: new URL("../../../music/swamp.mp3", import.meta.url).href,
-    cover: new URL("../../../music/vampire.jpeg", import.meta.url).href,
+    src: new URL("../../../../../music/swamp.mp3", import.meta.url).href,
+    cover: new URL("../../../../../music/vampire.jpeg", import.meta.url).href,
   },
 ];
 
@@ -43,6 +43,19 @@ function MyPersonalMusic() {
   return (
     <section className="personalMusicPanel">
       <div className="personalMusicGrid">
+        <a
+          className="personalMiniCard"
+          href="https://soundcloud.com/yanis-85868466?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src="/ichigo/club18.jpg" alt="" />
+          <div>
+            <strong>SoundCloud</strong>
+            <span>Listen to my tracks.</span>
+          </div>
+        </a>
+
         <article className="personalMiniCard musicCard">
           <img
             className="personalMusicCover"
@@ -75,32 +88,6 @@ function MyPersonalMusic() {
 
         <a
           className="personalMiniCard"
-          href="https://open.spotify.com/user/yanisdjenadi?si=47a51b9a70a048b2"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <img src="/ichigo/confetti.jpg" alt="" />
-          <div>
-            <strong>Spotify</strong>
-            <span>Follow my playlists.</span>
-          </div>
-        </a>
-
-        <a
-          className="personalMiniCard"
-          href="https://soundcloud.com/yanis-85868466?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <img src="/ichigo/club18.jpg" alt="" />
-          <div>
-            <strong>SoundCloud</strong>
-            <span>Listen to my tracks.</span>
-          </div>
-        </a>
-
-        <a
-          className="personalMiniCard"
           href="https://yanis26x.github.io/yanis26x/"
           target="_blank"
           rel="noreferrer"
@@ -109,6 +96,19 @@ function MyPersonalMusic() {
           <div>
             <strong>Website</strong>
             <span>Want sum more?!</span>
+          </div>
+        </a>
+
+        <a
+          className="personalMiniCard"
+          href="https://open.spotify.com/user/yanisdjenadi?si=47a51b9a70a048b2"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src="/ichigo/confetti.jpg" alt="" />
+          <div>
+            <strong>Spotify</strong>
+            <span>Follow my playlists.</span>
           </div>
         </a>
       </div>

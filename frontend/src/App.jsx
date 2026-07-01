@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { themes } from "./themes";
-import MusicParticles from "./components/Particles/MusicParticles";
-import Footer from "./components/Footer/Footer";
-import CommentLoop from "./components/CommentLoop/CommentLoop";
-import HomeStart from "./components/HomeStart/HomeStart";
-import MyPersonalMusic from "./components/MyPersonalMusic/MyPersonalMusic";
-import WhySoundSync from "./components/WhySoundSync/WhySoundSync";
+import MusicParticles from "./components/TOUTLESPAGES/Particles/MusicParticles";
+import Footer from "./components/TOUTLESPAGES/Footer/Footer";
+import CommentLoop from "./components/MENU/selfPromo/CommentLoop/CommentLoop";
+import HomeStart from "./components/MENU/HomeStart/HomeStart";
+import MyPersonalMusic from "./components/MENU/selfPromo/MyPersonalMusic/MyPersonalMusic";
+import WhySoundSync from "./components/MENU/WhySoundSync/WhySoundSync";
 import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
-import FirstVisitMikuModal from "./components/FirstVisitMikuModal/FirstVisitMikuModal";
-import Navbar from "./components/Navbar/Navbar";
+import FirstVisitMikuModal from "./components/MENU/FirstVisitMikuModal/FirstVisitMikuModal";
+import Navbar from "./components/TOUTLESPAGES/Navbar/Navbar";
 import TransferDoneToast from "./components/TransferDoneToast/TransferDoneToast";
 import Transfer from "./Pages/Transfer/Transfer";
 import "./App.css";
@@ -1809,32 +1809,34 @@ if (
         )}
 
         {currentPage === "home" && (
-          <>
-            <HomeStart
-              onOpenTransfer={startNewTransferFlow}
-              text={text}
-              transferStarted={transferStarted}
-              transferLoading={transferLoading}
-              transferStatus={transferStatus}
-              transferResult={transferResult}
-              transferError={transferError}
-              sourcePlatform={simulationTransferMeta?.sourcePlatform || sourcePlatform}
-              destinationPlatform={simulationTransferMeta?.destinationPlatform || destinationPlatform}
-              selectedSourcePlaylist={simulationTransferMeta?.playlist || selectedSourcePlaylist}
-              selectedSourceTracks={selectedSourceTracks}
-              selectedSourceTracksLoading={selectedSourceTracksLoading}
-              selectedSourceTracksError={selectedSourceTracksError}
-              getPlaylistName={getPlaylistName}
-              getTrackLabel={getTrackLabel}
-            />
+          <div className="homeMainGrid">
+            <div className="homeLeftStack">
+              <HomeStart
+                onOpenTransfer={startNewTransferFlow}
+                text={text}
+                transferStarted={transferStarted}
+                transferLoading={transferLoading}
+                transferStatus={transferStatus}
+                transferResult={transferResult}
+                transferError={transferError}
+                sourcePlatform={simulationTransferMeta?.sourcePlatform || sourcePlatform}
+                destinationPlatform={simulationTransferMeta?.destinationPlatform || destinationPlatform}
+                selectedSourcePlaylist={simulationTransferMeta?.playlist || selectedSourcePlaylist}
+                selectedSourceTracks={selectedSourceTracks}
+                selectedSourceTracksLoading={selectedSourceTracksLoading}
+                selectedSourceTracksError={selectedSourceTracksError}
+                getPlaylistName={getPlaylistName}
+                getTrackLabel={getTrackLabel}
+              />
 
-            <WhySoundSync text={text.homeBannerText} />
-
-            <div className="homePersonalGrid">
-              <CommentLoop />
-              <MyPersonalMusic />
+              <WhySoundSync text={text.homeBannerText} />
             </div>
-          </>
+
+            <div className="homeRightStack">
+              <MyPersonalMusic />
+              <CommentLoop />
+            </div>
+          </div>
         )}
 
 

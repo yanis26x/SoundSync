@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomModal from "../CustomModal/CustomModal";
+import CustomModal from "./CustomModal/CustomModal";
 import "./Navbar.css";
 
 function Navbar({

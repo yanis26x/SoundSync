@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InfoCard from "../InfoCard/InfoCard";
+import InfoCard from "./InfoCard/InfoCard";
 import "./HomeStart.css";
 
 function HomeStart({
@@ -56,6 +56,14 @@ function HomeStart({
           >
             Start →
           </button>
+
+          <button
+            type="button"
+            className="homeStartInfoToggleBtn"
+            onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
+          >
+            {isInfoCardVisible ? "Hide info" : "Show info"}
+          </button>
         </div>
 
         {isInfoCardVisible && (
@@ -77,13 +85,6 @@ function HomeStart({
           />
         )}
 
-        <button
-          type="button"
-          className="homeStartInfoToggleBtn"
-          onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
-        >
-          {isInfoCardVisible ? "Hide info" : "Show info"}
-        </button>
       </div>
     </section>
   );

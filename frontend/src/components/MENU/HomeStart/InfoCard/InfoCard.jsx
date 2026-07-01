@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import "./InfoCard.css";
 
 const staticInfoCards = [
   {
-    image: "/ichigo/ok2.jpg",
-    title: "Dashboard",
-    description: "Information about your transfers and playlists.",
+    image: "/SoundSync/SoundSyncLogoNoBG.png",
+    title: "MORE SOON",
+    description: "okay?!",
   },
 ];
 
@@ -37,7 +37,6 @@ function InfoCard({
   getTrackLabel,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [processedTrackIndex, setProcessedTrackIndex] = useState(0);
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
   const playlistName =
@@ -51,34 +50,6 @@ function InfoCard({
   const addedTracks = transferResult?.added || [];
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
-  const processedTracks = [
-    ...addedTracks.map((track) => ({
-      title: getFallbackTrackLabel(track),
-      status: "Synced",
-      tone: "synced",
-    })),
-    ...failedTracks.map((track) => ({
-      title: getFallbackTrackLabel(track),
-      status: "Failed",
-      tone: "failed",
-    })),
-    ...alreadyTracks.map((track) => ({
-      title: getFallbackTrackLabel(track),
-      status: "Already there",
-      tone: "already",
-    })),
-  ];
-  const processedPreviewItems = processedTracks.length > 0
-    ? processedTracks.slice(0, 8)
-    : [
-      {
-        title: transferLoading ? "Processing tracks..." : "No processed tracks yet",
-        status: transferLoading ? "Live" : "Waiting",
-        tone: transferLoading ? "synced" : "already",
-      },
-    ];
-  const activeProcessedTrack =
-    processedPreviewItems[processedTrackIndex % processedPreviewItems.length];
   const queuedTracks = selectedSourceTracks.map((track) =>
     sourcePlatform && getTrackLabel
       ? getTrackLabel(sourcePlatform.id, track)
@@ -173,20 +144,6 @@ function InfoCard({
     </div>
   );
 
-  useEffect(() => {
-    setProcessedTrackIndex(0);
-
-    if (processedPreviewItems.length <= 1) return undefined;
-
-    const intervalId = window.setInterval(() => {
-      setProcessedTrackIndex((currentIndex) => (
-        currentIndex + 1
-      ) % processedPreviewItems.length);
-    }, 1450);
-
-    return () => window.clearInterval(intervalId);
-  }, [processedPreviewItems.length]);
-
   return (
     <>
       <div className="infoCardGrid" aria-label="SoundSync highlights">
@@ -204,21 +161,7 @@ function InfoCard({
       ))}
 
         <article className="infoCard infoCardProcessed">
-          <img src="/ichigo/yea.jpeg" alt="" />
-          <div className="infoCardBody">
-            <p>Processed tracks</p>
-            <div className="infoCardTrackStage" aria-label="Processed transfer tracks">
-              <div
-                className="infoCardTrackFrame"
-                key={`processed-track-${processedTrackIndex}-${activeProcessedTrack.title}`}
-              >
-                <strong>{activeProcessedTrack.title}</strong>
-                <span className={`infoCardTrackStatus is-${activeProcessedTrack.tone}`}>
-                  {activeProcessedTrack.status}
-                </span>
-              </div>
-            </div>
-          </div>
+          <img src="/ichigo/confetti.jpg" alt="" />
         </article>
 
         <button

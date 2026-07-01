@@ -3,8 +3,8 @@
   width: 100%;
   padding: 28px 32px 34px;
   margin-top: 28px;
-
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.12));
+/* 
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.12)); */
   border-radius: 22px;
   overflow: hidden;
 
@@ -12,7 +12,7 @@
     radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 38%),
     linear-gradient(135deg, rgba(0,0,0,.58), rgba(0,0,0,.28)); */
 
-background:
+/* background:
   radial-gradient(
     circle at 82% 48%,
     color-mix(in srgb, var(--accent) 34%, transparent),
@@ -27,13 +27,13 @@ background:
     135deg,
     color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.56)),
     color-mix(in srgb, var(--accent) 30%, rgba(0,0,0,.46))
-  );
+  ); */
 
 
        
-  box-shadow:
+  /* box-shadow:
     0 0 34px color-mix(in srgb, var(--accent) 32%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.14);
+    inset 0 1px 0 rgba(255,255,255,.14); */
 }
 
 .homeInfoBannerContent {
@@ -60,9 +60,6 @@ background:
   font-weight: 1000;
   letter-spacing: -1.8px;
 
-  text-shadow:
-    0 0 18px color-mix(in srgb, var(--accent) 55%, transparent),
-    0 4px 18px rgba(0,0,0,.65);
 
   animation: textPopIn .8s cubic-bezier(.22,1,.36,1) both;
 }
@@ -104,7 +101,8 @@ background:
   transition:
     transform .24s ease,
     box-shadow .24s ease,
-    border-color .24s ease;
+    border-color .24s ease,
+    border-width .24s ease;
 }
 
 
@@ -143,8 +141,9 @@ background:
 .homeInfoFeatureCard:hover {
   animation-play-state: paused;
 
-  transform: translateY(-8px) scale(1.025);
-  border-color: color-mix(in srgb, var(--accent) 32%, black);
+  transform: translateY(-8px) scale(1.055);
+  border-width: 14px;
+  border-color: rgba(0,0,0,.96);
 
   box-shadow:
     0 22px 42px rgba(0,0,0,.48),
