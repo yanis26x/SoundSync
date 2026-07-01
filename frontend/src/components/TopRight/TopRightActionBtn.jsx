@@ -1,27 +1,29 @@
 import { useState } from "react";
-import ThemeModal from "../ThemeModal/ThemeModal";
+import CustomModal from "../CustomModal/CustomModal";
 
 function TopRightActionBtn({
   themes,
   currentTheme,
   setCurrentTheme,
+  soundSettings,
+  setSoundSettings,
   onOpenProfile,
   profileLabel = "Profile",
 }) {
-  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
-  const [isThemeModalClosing, setIsThemeModalClosing] = useState(false);
+  const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
+  const [isCustomModalClosing, setIsCustomModalClosing] = useState(false);
 
-  const openThemeModal = () => {
-    setIsThemeModalClosing(false);
-    setIsThemeModalOpen(true);
+  const openCustomModal = () => {
+    setIsCustomModalClosing(false);
+    setIsCustomModalOpen(true);
   };
 
-  const closeThemeModal = () => {
-    setIsThemeModalClosing(true);
+  const closeCustomModal = () => {
+    setIsCustomModalClosing(true);
 
     window.setTimeout(() => {
-      setIsThemeModalOpen(false);
-      setIsThemeModalClosing(false);
+      setIsCustomModalOpen(false);
+      setIsCustomModalClosing(false);
     }, 200);
   };
 
@@ -40,7 +42,7 @@ function TopRightActionBtn({
 
         <button
           className="themeBtn"
-          onClick={openThemeModal}
+          onClick={openCustomModal}
         >
           Theme
         </button>
@@ -48,13 +50,15 @@ function TopRightActionBtn({
 
       </div>
 
-      <ThemeModal
+      <CustomModal
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
-        isOpen={isThemeModalOpen}
-        isClosing={isThemeModalClosing}
-        onClose={closeThemeModal}
+        soundSettings={soundSettings}
+        setSoundSettings={setSoundSettings}
+        isOpen={isCustomModalOpen}
+        isClosing={isCustomModalClosing}
+        onClose={closeCustomModal}
       />
     </>
   );

@@ -14,12 +14,15 @@ const selectPlaylistMikuSound = new URL(
 export default function DialoguePersona({
   nom = "@yanis26x",
   texte = "ughhh yea!?",
+  mikuVoiceEnabled = true,
 }) {
   const [visible, setVisible] = useState(true);
   const [disparition, setDisparition] = useState(false);
   const [nombreLettres, setNombreLettres] = useState(0);
 
   useEffect(() => {
+    if (!mikuVoiceEnabled) return undefined;
+
     const audio = new Audio(selectPlaylistMikuSound);
     audio.volume = 0.55;
     audio.play().catch(() => {});
@@ -28,7 +31,7 @@ export default function DialoguePersona({
       audio.pause();
       audio.currentTime = 0;
     };
-  }, []);
+  }, [mikuVoiceEnabled]);
 
   useEffect(() => {
     let index = 0;

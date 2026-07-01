@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./StartTransfer.css";
+
+const whatMusicSound = new URL("../../../music/Miku/whatMusic.mp3", import.meta.url).href;
+const orWhatSound = new URL("../../../music/Miku/Orwhat.mp3", import.meta.url).href;
 
 function StartTransfer({
   text,
@@ -32,8 +35,11 @@ function StartTransfer({
   returnToMenu,
   stopTransfer,
   transferResult,
+  mikuVoiceEnabled = true,
 }) {
   const [setupStep, setSetupStep] = useState("destination");
+  const hasPlayedOrWhatSoundRef = useRef(false);
+  const hasPlayedWhatMusicSoundRef = useRef(false);
   const sourceTrackKey =
     sourcePlatform && selectedSourcePlaylist
       ? `${sourcePlatform.id}:${selectedSourcePlaylist.id}`
@@ -51,13 +57,43 @@ function StartTransfer({
     (trackSelectionMode !== "specific" || selectedTrackCount > 0) &&
     canContinueToTracks;
 
+  useEffect(() => {
+    if (!showTransferSetup || setupStep !== "tracks") {
+      hasPlayedWhatMusicSoundRef.current = false;
+      return;
+    }
+
+    if (!mikuVoiceEnabled || hasPlayedWhatMusicSoundRef.current) return;
+
+    hasPlayedWhatMusicSoundRef.current = true;
+
+    const audio = new Audio(whatMusicSound);
+    audio.volume = 0.55;
+    audio.play().catch(() => {});
+  }, [mikuVoiceEnabled, setupStep, showTransferSetup]);
+
+  useEffect(() => {
+    if (!showTransferSetup || setupStep !== "destination") {
+      hasPlayedOrWhatSoundRef.current = false;
+      return;
+    }
+
+    if (!mikuVoiceEnabled || hasPlayedOrWhatSoundRef.current) return;
+
+    hasPlayedOrWhatSoundRef.current = true;
+
+    const audio = new Audio(orWhatSound);
+    audio.volume = 0.55;
+    audio.play().catch(() => {});
+  }, [mikuVoiceEnabled, setupStep, showTransferSetup]);
+
   return (
     <section className="destinationSetup transferFocusPanel">
       <div className="destinationHeader">
         <h2>
           {showTransferSetup && setupStep === "destination"
-            ? "Where 2 U want 2 sync ur music?!"
-            : "What 2 U want 2 sync?!"}
+            ? "How 2 U want 2 sync it?!"
+            : "Witch music 2 U want 2 sync?!"}
         </h2>
       </div>
 

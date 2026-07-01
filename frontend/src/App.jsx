@@ -15,7 +15,19 @@ import Transfer from "./Pages/Transfer/Transfer";
 import "./App.css";
 
 const transferDoneSound = new URL("../music/psp.mp3", import.meta.url).href;
+const transferDonehello = new URL("../music/hello.mp3", import.meta.url).href;
 const transferToastCloseSound = new URL("../music/oupsP4.wav", import.meta.url).href;
+
+const defaultSoundSettings = {
+  notificationSound: "psp",
+  transferButtonSound: "touchP4",
+  mikuVoiceEnabled: true,
+};
+
+const notificationSounds = {
+  psp: transferDoneSound,
+  hello: transferDonehello,
+};
 
 const text = {
     subtitle: "Transfer Anywhere, Sync Everthing",
@@ -74,7 +86,7 @@ const text = {
     transferFinalizing: "Finalizing transfer...",
     transferDone: "Transfer done",
     transferDoneNotification: "Transfer finished",
-    transferDoneNotificationText: "Your playlist transfer is ready to review.",
+    transferDoneNotificationText: "Your playlist transfer is ready 2 review.",
     restartTransfer: "return 2 the menu",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
@@ -155,6 +167,17 @@ function App() {
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
   const [isActivityVisible, setIsActivityVisible] = useState(true);
   const [currentTheme, setCurrentTheme] = useState("miku");
+  const [soundSettings, setSoundSettings] = useState(() => {
+    const savedSettings = localStorage.getItem("sound_sync_custom_settings");
+
+    try {
+      return savedSettings
+        ? { ...defaultSoundSettings, ...JSON.parse(savedSettings) }
+        : defaultSoundSettings;
+    } catch {
+      return defaultSoundSettings;
+    }
+  });
   const transferAbortControllerRef = useRef(null);
   const [platformOrder, setPlatformOrder] = useState(() => {
     const savedOrder = localStorage.getItem("platform_order");
@@ -451,20 +474,32 @@ function App() {
       isClosing: false,
     });
 
-    const notificationAudio = new Audio(transferDoneSound);
-    notificationAudio.volume = 0.45;
-    notificationAudio.play().catch(() => {});
-    const closeAudio = new Audio(transferToastCloseSound);
-    closeAudio.volume = 0.5;
+    const notificationSound = notificationSounds[soundSettings.notificationSound];
+    const notificationAudio = notificationSound ? new Audio(notificationSound) : null;
+    const closeAudio = notificationSound ? new Audio(transferToastCloseSound) : null;
+
+    if (notificationAudio) {
+      notificationAudio.volume = 0.45;
+      notificationAudio.play().catch(() => {});
+    }
+
+    if (closeAudio) {
+      closeAudio.volume = 0.5;
+    }
 
     const audioTimeout = window.setTimeout(() => {
+      if (!notificationAudio) return;
+
       notificationAudio.pause();
       notificationAudio.currentTime = 0;
     }, 5200);
 
     const closeTimeout = window.setTimeout(() => {
-      closeAudio.currentTime = 0;
-      closeAudio.play().catch(() => {});
+      if (closeAudio) {
+        closeAudio.currentTime = 0;
+        closeAudio.play().catch(() => {});
+      }
+
       setTransferDoneToast((currentToast) =>
         currentToast ? { ...currentToast, isClosing: true } : currentToast
       );
@@ -478,10 +513,14 @@ function App() {
       window.clearTimeout(audioTimeout);
       window.clearTimeout(closeTimeout);
       window.clearTimeout(removeTimeout);
-      notificationAudio.pause();
-      closeAudio.pause();
+      notificationAudio?.pause();
+      closeAudio?.pause();
     };
-  }, [transferResult]);
+  }, [soundSettings.notificationSound, transferResult]);
+
+  useEffect(() => {
+    localStorage.setItem("sound_sync_custom_settings", JSON.stringify(soundSettings));
+  }, [soundSettings]);
 
   useEffect(() => {
     const theme = themes[currentTheme];
@@ -1599,6 +1638,8 @@ if (
         themes={themes}
         currentTheme={currentTheme}
         setCurrentTheme={setCurrentTheme}
+        soundSettings={soundSettings}
+        setSoundSettings={setSoundSettings}
         onOpenProfile={() => navigateToPage("profile", "/profil")}
         onOpenTransfer={() => navigateToPage("home", "/")}
         profileLabel={text.profile}
@@ -1613,7 +1654,10 @@ if (
         sourcePlatform &&
         destinationPlatform &&
         !selectedSourcePlaylistId && (
-          <DialoguePersona texte={text.pickPlaylist} />
+          <DialoguePersona
+            texte={text.pickPlaylist}
+            mikuVoiceEnabled={soundSettings.mikuVoiceEnabled}
+          />
         )}
 
       {isTransferBlockedModalOpen && (
@@ -1754,6 +1798,8 @@ if (
             loginAppleMusic={loginAppleMusic}
             resetPlatformChoice={resetPlatformChoice}
             startSimulationTransfer={runSimulationTransfer}
+            transferButtonSound={soundSettings.transferButtonSound}
+            mikuVoiceEnabled={soundSettings.mikuVoiceEnabled}
           />
         )}
 

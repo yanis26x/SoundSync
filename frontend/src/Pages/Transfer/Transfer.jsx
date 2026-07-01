@@ -1,9 +1,17 @@
+import { useEffect, useRef } from "react";
 import PlatformChooser from "../../components/PlatformChooser/PlatformChooser";
 import PlaylistChooser from "../../components/PlaylistChooser/PlaylistChooser";
 import StartTransfer from "../../components/StartTransfer/StartTransfer";
 import "./Transfer.css";
 
 const transferTouchSound = new URL("../../../music/touchP4.wav", import.meta.url).href;
+const transferOupsSound = new URL("../../../music/oupsP4.wav", import.meta.url).href;
+const whereToSyncSound = new URL("../../../music/Miku/where2youWant.mp3", import.meta.url).href;
+
+const transferButtonSounds = {
+  touchP4: transferTouchSound,
+  oupsP4: transferOupsSound,
+};
 
 function Transfer({
   text,
@@ -57,13 +65,35 @@ function Transfer({
   loginAppleMusic,
   resetPlatformChoice,
   startSimulationTransfer,
+  transferButtonSound = "touchP4",
+  mikuVoiceEnabled = true,
 }) {
+  const hasPlayedWhereToSyncSoundRef = useRef(false);
+
+  useEffect(() => {
+    if (platformOrder.length !== 1) {
+      hasPlayedWhereToSyncSoundRef.current = false;
+      return;
+    }
+
+    if (!mikuVoiceEnabled || hasPlayedWhereToSyncSoundRef.current) return;
+
+    hasPlayedWhereToSyncSoundRef.current = true;
+
+    const audio = new Audio(whereToSyncSound);
+    audio.volume = 0.55;
+    audio.play().catch(() => {});
+  }, [mikuVoiceEnabled, platformOrder.length]);
+
   const playTransferTouchSound = (event) => {
     const clickedButton = event.target.closest("button");
 
     if (!clickedButton || clickedButton.disabled) return;
 
-    const audio = new Audio(transferTouchSound);
+    const sound = transferButtonSounds[transferButtonSound];
+    if (!sound) return;
+
+    const audio = new Audio(sound);
     audio.volume = 0.45;
     audio.play().catch(() => {});
   };
@@ -85,7 +115,7 @@ function Transfer({
             chooseText={chooseText}
             chooseSubText={
               platformOrder.length === 1
-                ? "where do you want 2 tranfer them !?"
+                ? "Where 2 U want 2 sync ur music?!"
                 : "where are the musics you want 2 transfer from?!"
             }
             platformOrder={platformOrder}
@@ -167,6 +197,7 @@ function Transfer({
               returnToMenu={returnToMenu}
               stopTransfer={stopTransfer}
               transferResult={transferResult}
+              mikuVoiceEnabled={mikuVoiceEnabled}
             />
           )}
         </div>

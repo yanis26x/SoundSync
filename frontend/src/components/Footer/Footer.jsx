@@ -1,5 +1,7 @@
 import "./Footer.css";
 
+const turnHerOffSound = new URL("../../../music/Miku/Turnheroff.mp3", import.meta.url).href;
+
 export default function Footer() {
   const footerLinks = [
     {
@@ -15,6 +17,12 @@ export default function Footer() {
       href: "https://yanis26x.github.io/yanis26x/",
     },
   ];
+
+  const playTurnHerOffSound = () => {
+    const audio = new Audio(turnHerOffSound);
+    audio.volume = 0.55;
+    audio.play().catch(() => {});
+  };
 
   return (
     <footer className="siteFooter">
@@ -63,12 +71,19 @@ hello?!</span>
         </a>
       </div>
 
-      <img
-        src="/miku-onion.webp"
-        alt=""
-        aria-hidden="true"
-        className="footerMikuOnion"
-      />
+      <button
+        type="button"
+        className="footerMikuOnionBtn"
+        onClick={playTurnHerOffSound}
+        aria-label="Play Miku sound"
+      >
+        <img
+          src="/miku-onion.webp"
+          alt=""
+          aria-hidden="true"
+          className="footerMikuOnion"
+        />
+      </button>
     </footer>
   );
 }
