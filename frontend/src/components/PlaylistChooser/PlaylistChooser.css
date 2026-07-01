@@ -151,12 +151,12 @@
   width: 100%;
   min-height: 178px;
   margin: 0;
-  padding: 15px;
+  padding: 0;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   border: 1px solid color-mix(in srgb, var(--accent) 38%, rgba(255,255,255,.12));
   border-radius: 20px;
@@ -204,20 +204,18 @@
 .sourcePlaylistChoice::before {
   content: "";
   position: absolute;
-  inset: -20px;
+  inset: -10px;
 
-  background-image:
-    linear-gradient(rgba(0,0,0,.1), rgba(0,0,0,.78)),
-    var(--playlist-image);
+  background-image: var(--playlist-image);
 
   background-size: cover;
   background-position: center;
 
-  filter: blur(16px) saturate(1.08);
-  transform: scale(1.12);
+  filter: blur(2px) saturate(1.08) brightness(.82);
+  transform: scale(1.04);
   z-index: 0;
 
-  opacity: .88;
+  opacity: .92;
 
   transition:
     filter .25s ease,
@@ -232,13 +230,19 @@
   z-index: 0;
 
   background:
-    linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.14)),
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.9) 0%,
+      rgba(0,0,0,.78) 28%,
+      rgba(0,0,0,.28) 62%,
+      rgba(0,0,0,.08) 100%
+    ),
     radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%);
 }
 
 .sourcePlaylistChoice:hover::before {
-  transform: scale(1.18);
-  filter: blur(12px) saturate(1.2);
+  transform: scale(1.14);
+  filter: blur(1px) saturate(1.18) brightness(.92);
   opacity: 1;
 }
 
@@ -253,34 +257,14 @@
 
 .sourcePlaylistChoice.selected::after {
   background:
-    linear-gradient(to top, rgba(0,0,0,.84), rgba(0,0,0,.12)),
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.9) 0%,
+      rgba(0,0,0,.78) 28%,
+      rgba(0,0,0,.28) 62%,
+      rgba(0,0,0,.08) 100%
+    ),
     radial-gradient(circle at top right, rgba(16,240,96,.28), transparent 36%);
-}
-
-.playlistArtworkBox {
-  position: relative;
-  z-index: 1;
-
-  width: 62px;
-  height: 62px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 16px;
-  background: rgba(0,0,0,.34);
-
-  box-shadow:
-    0 10px 20px rgba(0,0,0,.36),
-    inset 0 1px 0 rgba(255,255,255,.12);
-}
-
-.playlistArtworkBox img {
-  width: 54px;
-  height: 54px;
-
-  object-fit: cover;
-  border-radius: 13px;
 }
 
 .playlistText {
@@ -288,6 +272,9 @@
   z-index: 1;
 
   width: 100%;
+  padding: 46px 15px 15px;
+
+  background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.54) 56%, transparent);
 }
 
 .playlistText span {
@@ -312,10 +299,6 @@
   color: rgba(255,255,255,.72);
   font-size: 12px;
   font-weight: 850;
-}
-
-.appleSourcePlaylistChoice .playlistArtworkBox img {
-  transform: none;
 }
 
 @keyframes playlistPanelIn {
@@ -413,17 +396,6 @@
 
   .sourcePlaylistChoice {
     min-height: 160px;
-    padding: 13px;
-  }
-
-  .playlistArtworkBox {
-    width: 54px;
-    height: 54px;
-  }
-
-  .playlistArtworkBox img {
-    width: 46px;
-    height: 46px;
   }
 
   .playlistText span {

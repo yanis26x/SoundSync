@@ -46,19 +46,25 @@ function Transfer({
     <section className="transferPage">
       {selectedPlatforms.length < 2 && (
         <div className="transferPlatformStage">
+          <button
+            type="button"
+            className="platformResetBtn"
+            onClick={resetPlatformChoice}
+            disabled={platformOrder.length === 0}
+          >
+            ↻ {text.changePlatform}
+          </button>
+
           <PlatformChooser
             chooseText={chooseText}
             platformOrder={platformOrder}
             accessToken={accessToken}
             youtubeAccessToken={youtubeAccessToken}
             appleMusicUserToken={appleMusicUserToken}
-            loggedLabel={text.logged}
             onAddPlatform={addPlatformToOrder}
             onLoginSpotify={loginSpotify}
             onLoginYoutube={loginYoutube}
             onLoginAppleMusic={loginAppleMusic}
-            onResetPlatformChoice={resetPlatformChoice}
-            resetLabel={text.changePlatform}
           />
         </div>
       )}
@@ -67,10 +73,10 @@ function Transfer({
         <div className="transferWorkspace">
           <button
             type="button"
-            className="transferResetChoiceBtn"
+            className="platformResetBtn transferResetChoiceBtn"
             onClick={resetPlatformChoice}
           >
-            {text.changePlatform}
+            ↻ {text.changePlatform}
           </button>
 
           {!selectedSourcePlaylistId ? (

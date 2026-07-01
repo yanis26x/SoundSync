@@ -38,22 +38,13 @@ function PlaylistChooser({
 
           return (
             <button
-              className={`sourcePlaylistChoice${
-                sourcePlatform.id === "apple" ? " appleSourcePlaylistChoice" : ""
-              }${isSelected ? " selected" : ""}`}
+              className={`sourcePlaylistChoice${isSelected ? " selected" : ""}`}
               key={playlist.id}
               onClick={() => onSelectPlaylist(playlist)}
               style={{
                 "--playlist-image": `url(${getPlaylistImage(sourcePlatform.id, playlist)})`,
               }}
             >
-              <div className="playlistArtworkBox">
-                <img
-                  src={getPlaylistImage(sourcePlatform.id, playlist)}
-                  alt={getPlaylistName(sourcePlatform.id, playlist)}
-                />
-              </div>
-
               <div className="playlistText">
                 <span>{getPlaylistName(sourcePlatform.id, playlist)}</span>
                 <small>{getPlaylistCount(sourcePlatform.id, playlist)} {text.tracks}</small>

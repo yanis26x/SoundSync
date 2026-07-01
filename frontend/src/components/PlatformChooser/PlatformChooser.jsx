@@ -6,25 +6,13 @@ function PlatformChooser({
   accessToken,
   youtubeAccessToken,
   appleMusicUserToken,
-  loggedLabel,
   onAddPlatform,
   onLoginSpotify,
   onLoginYoutube,
   onLoginAppleMusic,
-  onResetPlatformChoice,
-  resetLabel = "Reset",
 }) {
   return (
     <section className="choosePanel">
-      <button
-        type="button"
-        className="platformResetBtn"
-        onClick={onResetPlatformChoice}
-        disabled={platformOrder.length === 0}
-      >
-        ↻ {resetLabel}
-      </button>
-
       <div className="chooseHeader">
         {/* <p className="chooseEyebrow">Source platform</p> */}
 
@@ -41,7 +29,6 @@ function PlatformChooser({
           onClick={accessToken ? () => onAddPlatform("spotify") : onLoginSpotify}
           disabled={platformOrder.includes("spotify")}
         >
-          {accessToken && <span className="loggedBadge">✓</span>}
           <img src="/logo/Spotify-Black-Logo.png" alt="Spotify" className="spotifyBigLogo" />
         </button>
 
@@ -50,8 +37,7 @@ function PlatformChooser({
           onClick={youtubeAccessToken ? () => onAddPlatform("youtube") : onLoginYoutube}
           disabled={platformOrder.includes("youtube")}
         >
-          {youtubeAccessToken && <span className="loggedBadge">✓</span>}
-          <img src="/logo/YouTube-Logo.svg" alt="YouTube" className="youtubeBigLogo" />
+          <img src="/logo/ytb-mini.png" alt="YouTube" className="youtubeBigLogo" />
         </button>
 
         <button
@@ -59,7 +45,6 @@ function PlatformChooser({
           onClick={appleMusicUserToken ? () => onAddPlatform("apple") : onLoginAppleMusic}
           disabled={platformOrder.includes("apple")}
         >
-          {appleMusicUserToken && <span className="loggedBadge">✓</span>}
           <img src="/logo/appleMusic.png" alt="Apple Music" className="appleMusicLogo" />
         </button>
       </div>
@@ -67,10 +52,6 @@ function PlatformChooser({
       <p className="how2Disconnect">
        2 Disconnect or switch your account from a platform, go to Profil !
       </p>
-      <p className="platformHintText">
-        ✓ on a platform means your account is connected.
-      </p>
-
       <p className="platformComingSoon">
         More platforms are coming soon — SoundCloud, Deezer, TIDAL and more.
       </p>

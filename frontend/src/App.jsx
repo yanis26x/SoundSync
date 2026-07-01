@@ -162,7 +162,7 @@ function App() {
     : text.chooseSource;
   const platformDisplayLogos = {
     spotify: "/logo/spotify-mini.png",
-    youtube: "/logo/YouTube-Logo.png",
+    youtube: "/logo/YouTube-Logo.svg",
     apple: "/logo/appleMusic.png",
   };
   const addPlatformToOrder = (platformId) => {

@@ -45,7 +45,6 @@ export default function Footer() {
       </div>
 
       <div className="footerDivider">
-        <span></span>
       </div>
 
       <div className="footerBottom">
