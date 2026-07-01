@@ -440,6 +440,72 @@
   display: none;
 }
 
+.platformDemoHelp {
+  position: relative;
+  z-index: 3;
+
+  width: min(100%, 560px);
+  margin: -8px auto 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  text-align: center;
+
+  animation: platformComingSoonFade .8s ease both;
+}
+
+.platformDemoHelp p {
+  margin: 0;
+
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.platformDemoBtn {
+  width: auto;
+  margin: 0;
+  padding: 9px 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.16));
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.46);
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.12);
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.platformDemoBtn:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 70%, white);
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--accent) 28%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
+}
+
 @keyframes choosePanelIn {
   from {
     opacity: 0;
@@ -588,5 +654,21 @@
 
   .platformComingSoon {
     margin-top: -12px;
+  }
+
+  .platformDemoHelp {
+    width: 100%;
+    margin-top: -6px;
+    gap: 10px;
+  }
+
+  .platformDemoHelp p {
+    font-size: 11px;
+  }
+
+  .platformDemoBtn {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 10px;
   }
 }

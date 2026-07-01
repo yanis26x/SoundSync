@@ -55,6 +55,18 @@ function PlatformChooser({
       <p className="platformComingSoon">
         More platforms are coming soon — SoundCloud, Deezer, TIDAL and more.
       </p>
+
+      <div className="platformDemoHelp">
+        <p>Having trouble?! Check out the Demo video of SoundSync</p>
+        <a
+          className="platformDemoBtn"
+          href="https://youtu.be/y2KCOBugjk0?si=4jWAXsb3Y3pk5m6F"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Watch demo video
+        </a>
+      </div>
     </section>
   );
 }
