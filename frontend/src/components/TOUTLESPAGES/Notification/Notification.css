@@ -1,6 +1,8 @@
 .transferDoneToast {
+  --toast-exit-y: -110px;
+
   position: fixed;
-  top: 88px;
+  top: 10px;
   left: 50%;
   z-index: 10001;
 
@@ -221,7 +223,7 @@
 
   100% {
     opacity: 0;
-    transform: translate(-50%, -88px) scale(.84);
+    transform: translate(-50%, var(--toast-exit-y)) scale(.84);
     filter: blur(12px);
   }
 }
@@ -280,7 +282,9 @@
 
 @media (max-width: 650px) {
   .transferDoneToast {
-    top: 82px;
+    --toast-exit-y: -100px;
+
+    top: 8px;
     width: calc(100vw - 22px);
     min-height: 92px;
     padding: 14px 15px;
