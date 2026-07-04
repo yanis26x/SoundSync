@@ -1,6 +1,6 @@
 import "./Footer.css";
 
-const turnHerOffSound = new URL("../../../music/Miku/Turnheroff.mp3", import.meta.url).href;
+const turnHerOffSound = new URL("../../../../SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
 
 export default function Footer() {
   const footerLinks = [

@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { themes } from "./themes";
-import MusicParticles from "./components/TOUTLESPAGES/Particles/MusicParticles";
-import Footer from "./components/TOUTLESPAGES/Footer/Footer";
-import CommentLoop from "./components/MENU/selfPromo/CommentLoop/CommentLoop";
-import HomeStart from "./components/MENU/HomeStart/HomeStart";
-import MyPersonalMusic from "./components/MENU/selfPromo/MyPersonalMusic/MyPersonalMusic";
-import WhySoundSync from "./components/MENU/WhySoundSync/WhySoundSync";
-import DialoguePersona from "./components/dialoguePersona/DialoguePersona";
-import FirstVisitMikuModal from "./components/MENU/FirstVisitMikuModal/FirstVisitMikuModal";
-import Navbar from "./components/TOUTLESPAGES/Navbar/Navbar";
-import TransferDoneToast from "./components/TransferDoneToast/TransferDoneToast";
-import Transfer from "./Pages/Transfer/Transfer";
-import "./App.css";
+import { themes } from "../../themes";
+import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
+import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
+import CommentLoop from "../../components/MENU/selfPromo/CommentLoop/CommentLoop";
+import HomeStart from "../../components/MENU/HomeStart/HomeStart";
+import MyPersonalMusic from "../../components/MENU/selfPromo/MyPersonalMusic/MyPersonalMusic";
+import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
+import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
+import FirstVisitMikuModal from "../../components/MENU/FirstVisitMikuModal/FirstVisitMikuModal";
+import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
+import Notification from "../../components/TOUTLESPAGES/Notification/Notification";
+import Transfer from "../Transfer/Transfer";
+import "./Menu.css";
 
-const transferDoneSound = new URL("../music/psp.mp3", import.meta.url).href;
-const transferDonehello = new URL("../music/hello.mp3", import.meta.url).href;
-const transferToastCloseSound = new URL("../music/oupsP4.wav", import.meta.url).href;
+const transferDoneSound = new URL("../../../SOUND/sfx/psp.mp3", import.meta.url).href;
+const transferDonehello = new URL("../../../SOUND/sfx/hello.mp3", import.meta.url).href;
+const transferToastCloseSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
 
 const defaultSoundSettings = {
   notificationSound: "psp",
@@ -99,7 +99,7 @@ const text = {
 
 const TRANSFER_BATCH_SIZE = 50;
 
-function App() {
+function Menu() {
   const [initialConnection] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const spotifyTokenFromUrl = params.get("spotify_access_token");
@@ -1630,7 +1630,7 @@ if (
       <FirstVisitMikuModal />
 
       {transferDoneToast && (
-        <TransferDoneToast
+        <Notification
           className={transferDoneToast.isClosing ? "closing" : ""}
           title={text.transferDoneNotification}
           message={text.transferDoneNotificationText}
@@ -1846,4 +1846,4 @@ if (
   );
 }
 
-export default App;
+export default Menu;

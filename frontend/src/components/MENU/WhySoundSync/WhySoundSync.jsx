@@ -2,12 +2,12 @@ import "./WhySoundSync.css";
 
 const features = [
   {
-    image: "/ichigo/ok.jpg",
+    image: "/ichigo/blueSkyHappy.jpg",
     title: "Simple & Fast",
     description: "Simple, fast and secure 2 use.",
   },
   {
-    image: "/ichigo/club18.jpg",
+    image: "/ichigo/playingGuitars.jpg",
     title: "Transfer Anywhere",
     description: "Move your playlists across all platforms.",
   },

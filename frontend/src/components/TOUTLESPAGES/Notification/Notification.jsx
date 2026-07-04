@@ -1,6 +1,6 @@
-import "./TransferDoneToast.css";
+import "./Notification.css";
 
-function TransferDoneToast({
+function Notification({
   className = "",
   title,
   message,
@@ -40,4 +40,4 @@ function TransferDoneToast({
   );
 }
 
-export default TransferDoneToast;
+export default Notification;

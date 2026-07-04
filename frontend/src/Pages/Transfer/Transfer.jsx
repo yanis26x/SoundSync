@@ -4,9 +4,9 @@ import PlaylistChooser from "../../components/TRANSFER/PlaylistChooser/PlaylistC
 import StartTransfer from "../../components/TRANSFER/StartTransfer/StartTransfer";
 import "./Transfer.css";
 
-const transferTouchSound = new URL("../../../music/touchP4.wav", import.meta.url).href;
-const transferOupsSound = new URL("../../../music/oupsP4.wav", import.meta.url).href;
-const whereToSyncSound = new URL("../../../music/Miku/where2youWant.mp3", import.meta.url).href;
+const transferTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
+const transferOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const whereToSyncSound = new URL("../../../SOUND/Miku/where2youWant.mp3", import.meta.url).href;
 
 const transferButtonSounds = {
   touchP4: transferTouchSound,

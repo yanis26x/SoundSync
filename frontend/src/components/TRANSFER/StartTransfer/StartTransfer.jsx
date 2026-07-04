@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./StartTransfer.css";
 
-const whatMusicSound = new URL("../../../music/Miku/whatMusic.mp3", import.meta.url).href;
-const orWhatSound = new URL("../../../music/Miku/Orwhat.mp3", import.meta.url).href;
+const whatMusicSound = new URL("../../../../SOUND/Miku/whatMusic.mp3", import.meta.url).href;
+const orWhatSound = new URL("../../../../SOUND/Miku/Orwhat.mp3", import.meta.url).href;
 
 function StartTransfer({
   text,

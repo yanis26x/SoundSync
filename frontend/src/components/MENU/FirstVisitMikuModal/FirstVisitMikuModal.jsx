@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import "./FirstVisitMikuModal.css";
 
 const introStorageKey = "sound_sync_miku_intro_seen";
-const introSound = new URL("../../../music/Miku/Turnheroff.mp3", import.meta.url).href;
+const introSound = new URL("../../../../SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
 const introDuration = 30000;
 const maxSubtitleCharacters = 190;
 const introText = `What's up! Welcome to SoundSync!

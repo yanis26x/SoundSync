@@ -5,14 +5,14 @@ const songs = [
   {
     title: "Strawberry Milkshake",
     subtitle: "canonconfetti",
-    src: new URL("../../../../../music/banana.mp3", import.meta.url).href,
-    cover: new URL("../../../../../music/when-they-cryCOVER.jpg", import.meta.url).href,
+    src: new URL("../../../../../SOUND/music/milshake-confetti.mp3", import.meta.url).href,
+    cover: "/ichigo/2girlsStudy.jpg",
   },
   {
     title: "laugh",
     subtitle: "",
-    src: new URL("../../../../../music/swamp.mp3", import.meta.url).href,
-    cover: new URL("../../../../../music/vampire.jpeg", import.meta.url).href,
+    src: new URL("../../../../../SOUND/music/hehe-swamp.mp3", import.meta.url).href,
+    cover: "/vampire.jpeg",
   },
 ];
 
@@ -49,7 +49,7 @@ function MyPersonalMusic() {
           target="_blank"
           rel="noreferrer"
         >
-          <img src="/ichigo/club18.jpg" alt="" />
+          <img src="/ichigo/playingGuitars.jpg" alt="" />
           <div>
             <strong>SoundCloud</strong>
             <span>Listen to my tracks.</span>

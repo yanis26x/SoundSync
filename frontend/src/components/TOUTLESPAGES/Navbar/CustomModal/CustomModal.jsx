@@ -2,11 +2,11 @@ import { useEffect, useRef } from "react";
 import "./CustomModal.css";
 
 const previewSounds = {
-  psp: new URL("../../../music/psp.mp3", import.meta.url).href,
-  hello: new URL("../../../music/hello.mp3", import.meta.url).href,
-  oupsP4: new URL("../../../music/oupsP4.wav", import.meta.url).href,
-  touchP4: new URL("../../../music/touchP4.wav", import.meta.url).href,
-  miku: new URL("../../../music/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
+  psp: new URL("../../../../../SOUND/sfx/psp.mp3", import.meta.url).href,
+  hello: new URL("../../../../../SOUND/sfx/hello.mp3", import.meta.url).href,
+  oupsP4: new URL("../../../../../SOUND/sfx/oups-P4.wav", import.meta.url).href,
+  touchP4: new URL("../../../../../SOUND/sfx/touch-P4.wav", import.meta.url).href,
+  miku: new URL("../../../../../SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
 };
 
 const defaultSoundSettings = {

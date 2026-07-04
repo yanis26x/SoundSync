@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
-import "../../App.css";
+import "../Menu/Menu.css";
 import "./Profil.css";
 import Info from "./Info/Info";
 

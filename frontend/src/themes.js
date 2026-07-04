@@ -2,7 +2,7 @@ export const themes = {
   tomo: {
     name: "Tomo",
     description: "Two girls looking at each other and smiling.",
-    background: "/wallpaper/tomo_yoko03.jpg",
+    background: "/wallpaper/eyesContact.jpg",
     cardBg: "rgba(72, 32, 14, 0.68)",
     border: "rgba(255, 170, 54, 0.58)",
     accent: "#ff7a00",

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import "./DialoguePersona.css";
 
 const selectPlaylistMikuSound = new URL(
-  "../../../music/Miku/selectPlaylistMiku.mp3",
+  "../../../../SOUND/Miku/selectPlaylistMiku.mp3",
   import.meta.url
 ).href;
 
