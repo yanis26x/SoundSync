@@ -40,7 +40,13 @@ function InfoCard({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const hasResult = Boolean(transferResult);
-  const hasActivity = transferStarted || transferLoading || hasResult || transferError;
+  const hasActiveTransfer = transferStarted || transferLoading;
+
+  if (!hasActiveTransfer) {
+    return null;
+  }
+
+  const hasActivity = hasActiveTransfer || hasResult || transferError;
   const playlistName =
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
@@ -163,8 +169,9 @@ function InfoCard({
       ))}
 
         <article className="infoCard infoCardProcessed">
-          <img src="/ichigo/confetti.jpg" alt="" />
-          {/* <img src="/utils/vampire.jpeg" alt="" /> */}
+          {/* <img src="/ichigo/confetti.jpg" alt="" /> */}
+          <img src="/utils/vampire.jpeg" alt="" />
+          {/* <img src="/utils/yanis26xPFP.jpg" alt="" /> */}
           <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" />
         </article>
 

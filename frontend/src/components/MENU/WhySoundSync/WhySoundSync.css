@@ -67,11 +67,18 @@
 .homeInfoHeader p {
   max-width: 720px;
   margin: 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  background: rgba(0,0,0,.42);
 
-  color: rgba(255,255,255,.78);
+  color: rgba(255,255,255,.94);
   font-size: 15px;
   line-height: 1.45;
   font-weight: 800;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.9),
+    0 8px 22px rgba(0,0,0,.55);
 
   animation: textSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
 }
@@ -85,10 +92,13 @@
 .homeInfoFeatureCard {
   position: relative;
   overflow: hidden;
+  display: block;
 
   border-radius: 22px;
   border: 10px solid rgba(0,0,0,.92);
   background: rgba(0,0,0,.88);
+  color: inherit;
+  text-decoration: none;
 
   box-shadow:
     0 16px 32px rgba(0,0,0,.35),
@@ -103,6 +113,10 @@
     box-shadow .24s ease,
     border-color .24s ease,
     border-width .24s ease;
+}
+
+.homeInfoFeatureCard.is-disabledLink {
+  cursor: default;
 }
 
 
@@ -155,6 +169,57 @@
   animation-play-state: running;
 }
 
+.homeInfoFeatureCardSwap::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  z-index: 2;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255,255,255,.34) 48%,
+    color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.22)) 54%,
+    transparent 67%
+  );
+  opacity: 0;
+  transform: translateX(-75%) rotate(8deg);
+  pointer-events: none;
+}
+
+.homeInfoFeatureCardSwap.is-changing {
+  transform: translateY(-14px) scale(1.035) rotate(-2deg);
+  box-shadow:
+    0 20px 42px rgba(0,0,0,.48),
+    0 0 26px color-mix(in srgb, var(--accent) 52%, transparent);
+}
+
+.homeInfoFeatureCardSwap.is-changing img,
+.homeInfoFeatureCardSwap.is-changing strong,
+.homeInfoFeatureCardSwap.is-changing span {
+  opacity: 0;
+  filter: blur(10px) saturate(1.6) contrast(1.08);
+  transform: translateY(-18px) scale(.9) rotate(1deg);
+}
+
+.homeInfoFeatureCardSwap.is-changing::after,
+.homeInfoFeatureCardSwap.is-entering::after {
+  animation: featureFlash .62s cubic-bezier(.16,1,.3,1) both;
+}
+
+.homeInfoFeatureCardSwap.is-alternate {
+  border-color: rgba(0,0,0,.98);
+  box-shadow:
+    0 18px 38px rgba(0,0,0,.48),
+    0 0 18px color-mix(in srgb, var(--accent) 64%, transparent),
+    0 0 36px rgba(255,255,255,.14);
+}
+
+.homeInfoFeatureCardSwap.is-entering img,
+.homeInfoFeatureCardSwap.is-entering strong,
+.homeInfoFeatureCardSwap.is-entering span {
+  animation: featureContentIn .54s cubic-bezier(.16,1,.3,1) both;
+}
+
 .homeInfoFeatureCard img {
   width: 100%;
   height: 210px;
@@ -163,6 +228,7 @@
   border-radius: 13px 13px 0 0;
 
   transition:
+    opacity .32s ease,
     transform .35s ease,
     filter .35s ease;
 }
@@ -196,6 +262,12 @@
   font-size: 20px;
   line-height: 1.05;
   font-weight: 1000;
+  transition:
+    opacity .32s ease,
+    transform .32s ease,
+    filter .32s ease,
+    color .32s ease,
+    text-shadow .32s ease;
 }
 
 .homeInfoFeatureCard span {
@@ -205,6 +277,10 @@
   font-size: 13px;
   line-height: 1.25;
   font-weight: 800;
+  transition:
+    opacity .32s ease,
+    transform .32s ease,
+    filter .32s ease;
 }
 
 @keyframes accentReflection {
@@ -297,6 +373,52 @@
 
   100% {
     opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes featureFlash {
+  0% {
+    opacity: 0;
+    transform: translateX(-90%) rotate(8deg);
+  }
+
+  22% {
+    opacity: 1;
+  }
+
+  44% {
+    opacity: .74;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(90%) rotate(8deg);
+  }
+}
+
+@keyframes featureContentIn {
+  0% {
+    opacity: 0;
+    filter: blur(10px) saturate(1.5) contrast(1.1);
+    transform: translateY(22px) scale(.88) rotate(-1deg);
+  }
+
+  48% {
+    opacity: 1;
+    filter: blur(1px) saturate(1.18);
+    transform: translateY(-8px) scale(1.075) rotate(.7deg);
+  }
+
+  72% {
+    opacity: 1;
+    filter: blur(0) saturate(1.08);
+    transform: translateY(3px) scale(.985) rotate(0);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0) saturate(1);
     transform: translateY(0) scale(1);
   }
 }

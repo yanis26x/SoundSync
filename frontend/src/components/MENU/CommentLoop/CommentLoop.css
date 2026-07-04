@@ -9,16 +9,8 @@
 
   overflow: hidden;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.12));
-  border-radius: 18px;
 
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(0,0,0,.82), rgba(0,0,0,.38));
 
-  box-shadow:
-    0 0 28px color-mix(in srgb, var(--accent) 24%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.12);
 
   animation: commentPanelIn .55s cubic-bezier(.22,1,.36,1) both;
 }
@@ -104,17 +96,8 @@
   border-width: 8px;
   border-color: rgba(0,0,0,.96);
 
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 18%, rgba(0,0,0,.52)),
-      rgba(0,0,0,.3)
-    );
 
-  box-shadow:
-    0 18px 34px rgba(0,0,0,.36),
-    0 0 24px color-mix(in srgb, var(--accent) 26%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.14);
+
 }
 
 .commentLogoCard {

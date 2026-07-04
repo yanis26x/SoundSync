@@ -4,11 +4,10 @@ import "./CustomModal.css";
 const previewSounds = {
   psp: new URL("../../../../../SOUND/sfx/psp.mp3", import.meta.url).href,
   hello: new URL("../../../../../SOUND/sfx/hello.mp3", import.meta.url).href,
+  evilLaugh: new URL("../../../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href,
   oupsP4: new URL("../../../../../SOUND/sfx/oups-P4.wav", import.meta.url).href,
   touchP4: new URL("../../../../../SOUND/sfx/touch-P4.wav", import.meta.url).href,
   cancelKh: new URL("../../../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href,
-  selectKh: new URL("../../../../../SOUND/sfx/select-kh.mp3", import.meta.url).href,
-  moveKh: new URL("../../../../../SOUND/sfx/move-kh.mp3", import.meta.url).href,
   miku: new URL("../../../../../SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
 };
 
@@ -84,6 +83,7 @@ function CustomModal({
   const notificationSoundOptions = [
     { value: "psp", label: "PSP" },
     { value: "hello", label: "hello" },
+    { value: "evilLaugh", label: "Evil Laugh" },
     { value: "none", label: "🔇" },
   ];
 
@@ -95,8 +95,6 @@ function CustomModal({
   const transferButtonSoundOptions = [
     { value: "oupsP4", label: "Oups P4" },
     { value: "touchP4", label: "Touch P4" },
-    { value: "selectKh", label: "Select KH" },
-    { value: "moveKh", label: "Move KH" },
     { value: "none", label: "🔇" },
   ];
 

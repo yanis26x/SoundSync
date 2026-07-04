@@ -6,15 +6,12 @@ import "./Transfer.css";
 
 const transferTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
 const transferOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
-const transferSelectKhSound = new URL("../../../SOUND/sfx/select-kh.mp3", import.meta.url).href;
-const transferMoveKhSound = new URL("../../../SOUND/sfx/move-kh.mp3", import.meta.url).href;
+const whereMusicFromSound = new URL("../../../SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
 const whereToSyncSound = new URL("../../../SOUND/Miku/where2youWant.mp3", import.meta.url).href;
 
 const transferButtonSounds = {
   touchP4: transferTouchSound,
   oupsP4: transferOupsSound,
-  selectKh: transferSelectKhSound,
-  moveKh: transferMoveKhSound,
 };
 
 function Transfer({
@@ -72,7 +69,51 @@ function Transfer({
   transferButtonSound = "touchP4",
   mikuVoiceEnabled = true,
 }) {
+  const platformPromptAudioRef = useRef(null);
+  const hasPlayedWhereMusicFromSoundRef = useRef(false);
   const hasPlayedWhereToSyncSoundRef = useRef(false);
+
+  const stopPlatformPromptAudio = () => {
+    if (!platformPromptAudioRef.current) return;
+
+    platformPromptAudioRef.current.pause();
+    platformPromptAudioRef.current.currentTime = 0;
+    platformPromptAudioRef.current = null;
+  };
+
+  const playPlatformPromptAudio = (sound) => {
+    if (!mikuVoiceEnabled) return;
+
+    stopPlatformPromptAudio();
+
+    const audio = new Audio(sound);
+    audio.volume = 0.82;
+    platformPromptAudioRef.current = audio;
+    audio.play().catch(() => {});
+  };
+
+  useEffect(() => {
+    if (platformOrder.length !== 0) {
+      hasPlayedWhereMusicFromSoundRef.current = false;
+      return;
+    }
+
+    if (!mikuVoiceEnabled) {
+      stopPlatformPromptAudio();
+      return;
+    }
+
+    if (sessionStorage.getItem("sound_sync_source_prompt_played") === "true") {
+      sessionStorage.removeItem("sound_sync_source_prompt_played");
+      hasPlayedWhereMusicFromSoundRef.current = true;
+      return;
+    }
+
+    if (hasPlayedWhereMusicFromSoundRef.current) return;
+
+    hasPlayedWhereMusicFromSoundRef.current = true;
+    playPlatformPromptAudio(whereMusicFromSound);
+  }, [mikuVoiceEnabled, platformOrder.length]);
 
   useEffect(() => {
     if (platformOrder.length !== 1) {
@@ -80,14 +121,25 @@ function Transfer({
       return;
     }
 
-    if (!mikuVoiceEnabled || hasPlayedWhereToSyncSoundRef.current) return;
+    if (!mikuVoiceEnabled) {
+      stopPlatformPromptAudio();
+      return;
+    }
+
+    if (hasPlayedWhereToSyncSoundRef.current) return;
 
     hasPlayedWhereToSyncSoundRef.current = true;
-
-    const audio = new Audio(whereToSyncSound);
-    audio.volume = 0.55;
-    audio.play().catch(() => {});
+    playPlatformPromptAudio(whereToSyncSound);
   }, [mikuVoiceEnabled, platformOrder.length]);
+
+  useEffect(() => () => {
+    stopPlatformPromptAudio();
+  }, []);
+
+  const handleAddPlatform = (platformId) => {
+    stopPlatformPromptAudio();
+    addPlatformToOrder(platformId);
+  };
 
   const playTransferTouchSound = (event) => {
     const clickedButton = event.target.closest("button");
@@ -126,7 +178,7 @@ function Transfer({
             accessToken={accessToken}
             youtubeAccessToken={youtubeAccessToken}
             appleMusicUserToken={appleMusicUserToken}
-            onAddPlatform={addPlatformToOrder}
+            onAddPlatform={handleAddPlatform}
             onLoginSpotify={loginSpotify}
             onLoginYoutube={loginYoutube}
             onLoginAppleMusic={loginAppleMusic}

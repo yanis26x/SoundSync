@@ -16,12 +16,12 @@ import "./Menu.css";
 
 const transferDoneSound = new URL("../../../SOUND/sfx/psp.mp3", import.meta.url).href;
 const transferDonehello = new URL("../../../SOUND/sfx/hello.mp3", import.meta.url).href;
-const transferToastCloseSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const notificationEvilLaughSound = new URL("../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
+const transferToastCloseSound = new URL("../../../SOUND/sfx/disapearing-P4.wav", import.meta.url).href;
 const menuTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
 const menuOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
 const menuCancelKhSound = new URL("../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href;
-const menuSelectKhSound = new URL("../../../SOUND/sfx/select-kh.mp3", import.meta.url).href;
-const menuMoveKhSound = new URL("../../../SOUND/sfx/move-kh.mp3", import.meta.url).href;
+const whereMusicFromSound = new URL("../../../SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
 
 const defaultSoundSettings = {
   notificationSound: "psp",
@@ -34,13 +34,12 @@ const defaultSoundSettings = {
 const notificationSounds = {
   psp: transferDoneSound,
   hello: transferDonehello,
+  evilLaugh: notificationEvilLaughSound,
 };
 
 const menuButtonSounds = {
   touchP4: menuTouchSound,
   oupsP4: menuOupsSound,
-  selectKh: menuSelectKhSound,
-  moveKh: menuMoveKhSound,
 };
 
 const cancelButtonSounds = {
@@ -1237,6 +1236,13 @@ function Menu() {
     if (transferLoading) {
       setIsTransferBlockedModalOpen(true);
       return;
+    }
+
+    if (soundSettings.mikuVoiceEnabled) {
+      const audio = new Audio(whereMusicFromSound);
+      audio.volume = 0.82;
+      audio.play().catch(() => {});
+      sessionStorage.setItem("sound_sync_source_prompt_played", "true");
     }
 
     restartTransferFlow();

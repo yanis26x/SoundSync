@@ -19,6 +19,7 @@ function HomeStart({
   getTrackLabel,
 }) {
   const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
+  const hasActiveTransfer = transferStarted || transferLoading;
 
   return (
     <section className="homeStartSection">
@@ -33,17 +34,19 @@ function HomeStart({
           </p>
         </div>
 
-        <div className="homeStartBtnWrap" aria-hidden="false">
-          <button
-            type="button"
-            className="homeStartInfoToggleBtn"
-            onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
-          >
-            {isInfoCardVisible ? "Hide info" : "Show info"}
-          </button>
-        </div>
+        {hasActiveTransfer && (
+          <div className="homeStartBtnWrap" aria-hidden="false">
+            <button
+              type="button"
+              className="homeStartInfoToggleBtn"
+              onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
+            >
+              {isInfoCardVisible ? "Hide Dashboard" : "Show Dashboard"}
+            </button>
+          </div>
+        )}
 
-        {isInfoCardVisible && (
+        {hasActiveTransfer && isInfoCardVisible && (
           <InfoCard
             text={text}
             transferStarted={transferStarted}
