@@ -287,6 +287,7 @@ function Profil() {
         }}
         transferLabel="Home"
         showTransferButton={true}
+        showInfoButton={false}
         showProfileButton={false}
         showThemeButton={false}
       />

@@ -8,18 +8,25 @@ function Navbar({
   setCurrentTheme,
   soundSettings,
   setSoundSettings,
+  onPreviewNotification,
+  onOpenInfo,
   onOpenProfile,
   onOpenTransfer,
-  profileLabel = "Profile",
+  infoLabel = "Info",
+  profileLabel = "Profil",
   transferLabel = "Transfer",
+  isTransferActive = false,
   showTransferButton = true,
+  showInfoButton = true,
   showProfileButton = true,
   showThemeButton = true,
 }) {
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
   const [isCustomModalClosing, setIsCustomModalClosing] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const openCustomModal = () => {
+    setIsMobileMenuOpen(false);
     setIsCustomModalClosing(false);
     setIsCustomModalOpen(true);
   };
@@ -45,40 +52,65 @@ function Navbar({
           {showTransferButton && (
             <button
               type="button"
-              className="siteNavbarBtn"
+              className={`siteNavbarBtn siteNavbarStartBtn ${isTransferActive ? "isActive" : "isIdle"}`}
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
             >
-              <span className="siteNavbarBtnIcon" aria-hidden="true">🏠</span>
+              <span className="siteNavbarStatusDot" aria-hidden="true" />
               <span>{transferLabel}</span>
             </button>
           )}
 
-          {showProfileButton && (
-            <button
-              type="button"
-              className="siteNavbarBtn"
-              onClick={onOpenProfile || (() => {
-                window.location.href = "/profil";
-              })}
-            >
-              <span className="siteNavbarBtnIcon" aria-hidden="true">🧛🏻‍♀️</span>
-              <span>{profileLabel}</span>
-            </button>
-          )}
+          {(showInfoButton || showProfileButton || showThemeButton) && (
+            <>
+              <button
+                type="button"
+                className="siteNavbarMenuBtn"
+                onClick={() => setIsMobileMenuOpen((currentValue) => !currentValue)}
+                aria-label="Open menu"
+                aria-expanded={isMobileMenuOpen}
+              >
+                ☰
+              </button>
 
-          {showThemeButton && (
-            <button
-              type="button"
-              className="siteNavbarBtn"
-              onClick={openCustomModal}
-            >
-              <span className="siteNavbarBtnIcon" aria-hidden="true">⚙️</span>
-              <span>Custom</span>
-            </button>
-          )}
+              <div className={`siteNavbarSecondaryActions ${isMobileMenuOpen ? "isOpen" : ""}`}>
+                {showInfoButton && (
+                  <button
+                    type="button"
+                    className="siteNavbarBtn"
+                    onClick={onOpenInfo || (() => {
+                      window.location.href = "/profil";
+                    })}
+                  >
+                    <span>{infoLabel}</span>
+                  </button>
+                )}
 
+                {showProfileButton && (
+                  <button
+                    type="button"
+                    className="siteNavbarBtn"
+                    onClick={onOpenProfile || (() => {
+                      window.location.href = "/profil";
+                    })}
+                  >
+                    <span>{profileLabel}</span>
+                  </button>
+                )}
+
+                {showThemeButton && (
+                  <button
+                    type="button"
+                    className="siteNavbarBtn"
+                    onClick={openCustomModal}
+                  >
+                    <span>Custom</span>
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </nav>
 
@@ -89,6 +121,7 @@ function Navbar({
           setCurrentTheme={setCurrentTheme}
           soundSettings={soundSettings}
           setSoundSettings={setSoundSettings}
+          onPreviewNotification={onPreviewNotification}
           isOpen={isCustomModalOpen}
           isClosing={isCustomModalClosing}
           onClose={closeCustomModal}

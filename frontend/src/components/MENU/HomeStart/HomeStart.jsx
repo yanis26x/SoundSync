@@ -3,7 +3,6 @@ import InfoCard from "./InfoCard/InfoCard";
 import "./HomeStart.css";
 
 function HomeStart({
-  onOpenTransfer,
   text,
   transferStarted,
   transferLoading,
@@ -21,15 +20,6 @@ function HomeStart({
 }) {
   const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
 
-  const openTransferPage = () => {
-    if (onOpenTransfer) {
-      onOpenTransfer();
-      return;
-    }
-
-    window.location.href = "/transfer";
-  };
-
   return (
     <section className="homeStartSection">
       <div className="homeStartContent">
@@ -44,19 +34,6 @@ function HomeStart({
         </div>
 
         <div className="homeStartBtnWrap" aria-hidden="false">
-          <span className="musicNote noteOne">♪</span>
-          <span className="musicNote noteTwo">♫</span>
-          <span className="musicNote noteThree">♬</span>
-          <span className="musicNote noteFour">♩</span>
-
-          <button
-            type="button"
-            className="homeStartBtn"
-            onClick={openTransferPage}
-          >
-            Start →
-          </button>
-
           <button
             type="button"
             className="homeStartInfoToggleBtn"

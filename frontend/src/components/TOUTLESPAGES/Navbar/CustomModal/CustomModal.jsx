@@ -6,12 +6,17 @@ const previewSounds = {
   hello: new URL("../../../../../SOUND/sfx/hello.mp3", import.meta.url).href,
   oupsP4: new URL("../../../../../SOUND/sfx/oups-P4.wav", import.meta.url).href,
   touchP4: new URL("../../../../../SOUND/sfx/touch-P4.wav", import.meta.url).href,
+  cancelKh: new URL("../../../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href,
+  selectKh: new URL("../../../../../SOUND/sfx/select-kh.mp3", import.meta.url).href,
+  moveKh: new URL("../../../../../SOUND/sfx/move-kh.mp3", import.meta.url).href,
   miku: new URL("../../../../../SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
 };
 
 const defaultSoundSettings = {
   notificationSound: "psp",
+  notificationStyle: "classic",
   transferButtonSound: "touchP4",
+  cancelButtonSound: "oupsP4",
   mikuVoiceEnabled: true,
 };
 
@@ -21,6 +26,7 @@ function CustomModal({
   setCurrentTheme,
   soundSettings = defaultSoundSettings,
   setSoundSettings = () => {},
+  onPreviewNotification,
   isOpen,
   isClosing,
   onClose,
@@ -78,14 +84,31 @@ function CustomModal({
   const notificationSoundOptions = [
     { value: "psp", label: "PSP" },
     { value: "hello", label: "hello" },
-    { value: "none", label: "Rien" },
+    { value: "none", label: "🔇" },
+  ];
+
+  const notificationStyleOptions = [
+    { value: "classic", label: "White" },
+    { value: "theme", label: "Theme" },
   ];
 
   const transferButtonSoundOptions = [
     { value: "oupsP4", label: "Oups P4" },
     { value: "touchP4", label: "Touch P4" },
-    { value: "none", label: "Rien" },
+    { value: "selectKh", label: "Select KH" },
+    { value: "moveKh", label: "Move KH" },
+    { value: "none", label: "🔇" },
   ];
+
+  const cancelButtonSoundOptions = [
+    { value: "oupsP4", label: "Oups P4" },
+    { value: "cancelKh", label: "Cancel KH" },
+    { value: "none", label: "🔇" },
+  ];
+
+  const renderSelectedDot = () => (
+    <span className="customSelectedDot" aria-label="Choisi" />
+  );
 
   return (
     <div className={modalClassName} onClick={onClose}>
@@ -116,7 +139,6 @@ function CustomModal({
               }`}
               onClick={() => {
                 setCurrentTheme(key);
-                onClose();
               }}
             >
               <img src={theme.background} alt={theme.name} />
@@ -129,13 +151,13 @@ function CustomModal({
           ))}
         </div>
 
-        <h3 className="customModalSectionTitle">Sons</h3>
+        <h3 className="customModalSectionTitle">Sound</h3>
 
         <div className="customSoundSettings">
           <div className="customSoundRow">
             <div>
-              <h4>Notification</h4>
-              <p>Son quand un transfert est fini.</p>
+              <h4>Sound Notification</h4>
+              <p>The sound that plays when you get a notification.</p>
             </div>
 
             <div className="customSegmentedControl" aria-label="Notification sound">
@@ -154,7 +176,7 @@ function CustomModal({
                   >
                     <span>{option.label}</span>
                     {soundSettings.notificationSound === option.value && (
-                      <strong>Choisi</strong>
+                      renderSelectedDot()
                     )}
                   </button>
 
@@ -162,7 +184,10 @@ function CustomModal({
                     <button
                       type="button"
                       className="customSoundPreview"
-                      onClick={() => playPreviewSound(option.value)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        playPreviewSound(option.value);
+                      }}
                       aria-label={`Play ${option.label}`}
                     >
                       ▶
@@ -175,8 +200,49 @@ function CustomModal({
 
           <div className="customSoundRow">
             <div>
-              <h4>Boutons Transfer</h4>
-              <p>Bruit quand tu cliques un bouton dans la page Transfer.</p>
+              <h4>Color notification</h4>
+              <p>Change the color of the notification.</p>
+            </div>
+
+            <div className="customSegmentedControl" aria-label="Notification color style">
+              {notificationStyleOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`customSoundOption ${
+                    soundSettings.notificationStyle === option.value ? "selectedSoundOption" : ""
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="customSoundSelect"
+                    onClick={() => updateSoundSetting("notificationStyle", option.value)}
+                    aria-pressed={soundSettings.notificationStyle === option.value}
+                  >
+                    <span>{option.label}</span>
+                    {soundSettings.notificationStyle === option.value && (
+                      renderSelectedDot()
+                    )}
+                  </button>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className="customPreviewNotificationBtn"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onPreviewNotification?.();
+                }}
+              >
+                Preview
+              </button>
+            </div>
+          </div>
+
+          <div className="customSoundRow">
+            <div>
+              <h4>Select</h4>
+              <p>Select sound when you click on a button.(pr linstant juste sur Menu et Tranfer, A FAIRE DANS TOUTES LES PAGES!!)</p>
             </div>
 
             <div className="customSegmentedControl" aria-label="Transfer button sound">
@@ -195,7 +261,7 @@ function CustomModal({
                   >
                     <span>{option.label}</span>
                     {soundSettings.transferButtonSound === option.value && (
-                      <strong>Choisi</strong>
+                      renderSelectedDot()
                     )}
                   </button>
 
@@ -203,7 +269,54 @@ function CustomModal({
                     <button
                       type="button"
                       className="customSoundPreview"
-                      onClick={() => playPreviewSound(option.value)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        playPreviewSound(option.value);
+                      }}
+                      aria-label={`Play ${option.label}`}
+                    >
+                      ▶
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="customSoundRow">
+            <div>
+              <h4>Cancel</h4>
+              <p>Cancel sound when you click on a closing/hiding button.</p>
+            </div>
+
+            <div className="customSegmentedControl" aria-label="Cancel button sound">
+              {cancelButtonSoundOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`customSoundOption ${
+                    soundSettings.cancelButtonSound === option.value ? "selectedSoundOption" : ""
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="customSoundSelect"
+                    onClick={() => updateSoundSetting("cancelButtonSound", option.value)}
+                    aria-pressed={soundSettings.cancelButtonSound === option.value}
+                  >
+                    <span>{option.label}</span>
+                    {soundSettings.cancelButtonSound === option.value && (
+                      renderSelectedDot()
+                    )}
+                  </button>
+
+                  {option.value !== "none" && (
+                    <button
+                      type="button"
+                      className="customSoundPreview"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        playPreviewSound(option.value);
+                      }}
                       aria-label={`Play ${option.label}`}
                     >
                       ▶
@@ -217,7 +330,7 @@ function CustomModal({
           <div className="customSoundRow">
             <div>
               <h4>Hatsune Miku</h4>
-              <p>Voix dans dialoguePersona.</p>
+              <p>Voice that play to tell you what to do.</p>
             </div>
 
             <div className="customToggleGroup">
@@ -229,13 +342,17 @@ function CustomModal({
                     updateSoundSetting("mikuVoiceEnabled", event.target.checked)
                   }
                 />
-                <span>{soundSettings.mikuVoiceEnabled ? "On - Choisi" : "Off - Choisi"}</span>
+                <span>{soundSettings.mikuVoiceEnabled ? "On" : "Off"}</span>
+                {renderSelectedDot()}
               </label>
 
               <button
                 type="button"
                 className="customSoundPreview"
-                onClick={() => playPreviewSound("miku")}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  playPreviewSound("miku");
+                }}
                 aria-label="Play Hatsune Miku"
               >
                 ▶

@@ -2,14 +2,16 @@ import "./Notification.css";
 
 function Notification({
   className = "",
+  variant = "classic",
   title,
   message,
   added,
   failed,
+  showStats = true,
 }) {
   return (
     <div
-      className={`transferDoneToast ${className}`}
+      className={`transferDoneToast ${variant === "theme" ? "themeToast" : "classicToast"} ${className}`}
       role="status"
       aria-live="polite"
     >
@@ -33,7 +35,9 @@ function Notification({
         </div>
 
         <p>
-          {title}. {message} {added} added, {failed} failed.
+          {showStats
+            ? `${title}. ${message} ${added} added, ${failed} failed.`
+            : `${title}. ${message}.`}
         </p>
       </div>
     </div>

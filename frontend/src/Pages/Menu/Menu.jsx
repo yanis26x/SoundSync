@@ -8,7 +8,7 @@ import HomeStart from "../../components/MENU/HomeStart/HomeStart";
 import SelfPromo from "../../components/MENU/selfPromo/SelfPromo/SelfPromo";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
-import FirstVisitMikuModal from "../../components/MENU/FirstVisitMikuModal/FirstVisitMikuModal";
+import FirstVisitMikuModal from "../../components/TOUTLESPAGES/FirstVisitMikuModal/FirstVisitMikuModal";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
 import Notification from "../../components/TOUTLESPAGES/Notification/Notification";
 import Transfer from "../Transfer/Transfer";
@@ -17,16 +17,35 @@ import "./Menu.css";
 const transferDoneSound = new URL("../../../SOUND/sfx/psp.mp3", import.meta.url).href;
 const transferDonehello = new URL("../../../SOUND/sfx/hello.mp3", import.meta.url).href;
 const transferToastCloseSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const menuTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
+const menuOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const menuCancelKhSound = new URL("../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href;
+const menuSelectKhSound = new URL("../../../SOUND/sfx/select-kh.mp3", import.meta.url).href;
+const menuMoveKhSound = new URL("../../../SOUND/sfx/move-kh.mp3", import.meta.url).href;
 
 const defaultSoundSettings = {
   notificationSound: "psp",
+  notificationStyle: "classic",
   transferButtonSound: "touchP4",
+  cancelButtonSound: "oupsP4",
   mikuVoiceEnabled: true,
 };
 
 const notificationSounds = {
   psp: transferDoneSound,
   hello: transferDonehello,
+};
+
+const menuButtonSounds = {
+  touchP4: menuTouchSound,
+  oupsP4: menuOupsSound,
+  selectKh: menuSelectKhSound,
+  moveKh: menuMoveKhSound,
+};
+
+const cancelButtonSounds = {
+  oupsP4: menuOupsSound,
+  cancelKh: menuCancelKhSound,
 };
 
 const text = {
@@ -1624,18 +1643,87 @@ if (
     setTransferError("");
   }, [sourcePlatform?.id, destinationPlatform?.id]);
 
+  const playMenuButtonSound = (event) => {
+    if (currentPage === "transfer") return;
+
+    const clickedButton = event.target.closest("button");
+
+    if (!clickedButton || clickedButton.disabled) return;
+    if (clickedButton.closest(".personalMusicControls")) return;
+    if (clickedButton.closest(".customSoundPreview")) return;
+    if (clickedButton.closest(".customPreviewNotificationBtn")) return;
+
+    const buttonText = clickedButton.textContent.trim().toLowerCase();
+    const ariaLabel = (clickedButton.getAttribute("aria-label") || "").toLowerCase();
+    const isCancelButton =
+      buttonText.startsWith("hide") ||
+      buttonText === "x" ||
+      buttonText === "×" ||
+      ariaLabel.includes("close");
+
+    const sound = isCancelButton
+      ? cancelButtonSounds[soundSettings.cancelButtonSound]
+      : menuButtonSounds[soundSettings.transferButtonSound];
+    if (!sound) return;
+
+    const audio = new Audio(sound);
+    audio.volume = 0.45;
+    audio.play().catch(() => {});
+  };
+
+  const previewNotification = () => {
+    const previewId = Date.now();
+    const notificationSound = notificationSounds[soundSettings.notificationSound];
+
+    const previewAudio = notificationSound ? new Audio(notificationSound) : null;
+
+    if (previewAudio) {
+      previewAudio.volume = 0.45;
+      previewAudio.play().catch(() => {});
+    }
+
+    setTransferDoneToast({
+      id: previewId,
+      title: "Preview notification",
+      message: "This is how its gonna look",
+      added: 0,
+      failed: 0,
+      showStats: false,
+      isClosing: false,
+    });
+
+    window.setTimeout(() => {
+      if (previewAudio) {
+        previewAudio.pause();
+        previewAudio.currentTime = 0;
+      }
+
+      setTransferDoneToast((currentToast) =>
+        currentToast?.id === previewId ? { ...currentToast, isClosing: true } : currentToast
+      );
+    }, 3200);
+
+    window.setTimeout(() => {
+      setTransferDoneToast((currentToast) =>
+        currentToast?.id === previewId ? null : currentToast
+      );
+    }, 3800);
+  };
+
   return (
-    <main className="app">
+    <main className="app" onClickCapture={playMenuButtonSound}>
       <MusicParticles />
       <FirstVisitMikuModal />
 
       {transferDoneToast && (
         <Notification
           className={transferDoneToast.isClosing ? "closing" : ""}
-          title={text.transferDoneNotification}
-          message={text.transferDoneNotificationText}
+          variant={soundSettings.notificationStyle}
+          title={transferDoneToast.title || text.transferDoneNotification}
+          message={transferDoneToast.message || text.transferDoneNotificationText}
           added={transferDoneToast.added}
           failed={transferDoneToast.failed}
+          showStats={transferDoneToast.showStats !== false}
         />
       )}
 
@@ -1645,11 +1733,20 @@ if (
         setCurrentTheme={setCurrentTheme}
         soundSettings={soundSettings}
         setSoundSettings={setSoundSettings}
+        onPreviewNotification={previewNotification}
+        onOpenInfo={() => navigateToPage("profile", "/profil")}
         onOpenProfile={() => navigateToPage("profile", "/profil")}
-        onOpenTransfer={() => navigateToPage("home", "/")}
-        profileLabel={text.profile}
-        transferLabel={text.home}
-        showTransferButton={currentPage === "transfer"}
+        onOpenTransfer={
+          currentPage === "transfer"
+            ? () => navigateToPage("home", "/")
+            : startNewTransferFlow
+        }
+        infoLabel="Info"
+        profileLabel="Profil"
+        transferLabel={currentPage === "transfer" ? "HOME" : "START"}
+        isTransferActive={transferStarted || transferLoading}
+        showTransferButton={currentPage === "home" || currentPage === "transfer"}
+        showInfoButton={true}
         showProfileButton={true}
         showThemeButton={currentPage !== "transfer"}
       />
@@ -1812,7 +1909,6 @@ if (
           <div className="homeMainGrid">
             <div className="homeLeftStack">
               <HomeStart
-                onOpenTransfer={startNewTransferFlow}
                 text={text}
                 transferStarted={transferStarted}
                 transferLoading={transferLoading}

@@ -6,11 +6,15 @@ import "./Transfer.css";
 
 const transferTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
 const transferOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const transferSelectKhSound = new URL("../../../SOUND/sfx/select-kh.mp3", import.meta.url).href;
+const transferMoveKhSound = new URL("../../../SOUND/sfx/move-kh.mp3", import.meta.url).href;
 const whereToSyncSound = new URL("../../../SOUND/Miku/where2youWant.mp3", import.meta.url).href;
 
 const transferButtonSounds = {
   touchP4: transferTouchSound,
   oupsP4: transferOupsSound,
+  selectKh: transferSelectKhSound,
+  moveKh: transferMoveKhSound,
 };
 
 function Transfer({

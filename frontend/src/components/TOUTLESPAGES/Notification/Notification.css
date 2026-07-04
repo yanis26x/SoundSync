@@ -31,6 +31,34 @@
     transferDoneToastFloat 4s ease-in-out .9s infinite;
 }
 
+.transferDoneToast.themeToast {
+  border-color: color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.18));
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 26%, rgba(14,14,18,.96)),
+      rgba(8,8,10,.96)
+    );
+  color: var(--text-color);
+  box-shadow:
+    0 24px 52px rgba(0, 0, 0, .34),
+    0 0 28px color-mix(in srgb, var(--accent) 36%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.transferDoneToast.themeToast .transferDoneToastOnline {
+  border-color: color-mix(in srgb, var(--accent) 22%, #111);
+}
+
+.transferDoneToast.themeToast .transferDoneToastHeader strong {
+  color: var(--text-color);
+}
+
+.transferDoneToast.themeToast .transferDoneToastHeader span,
+.transferDoneToast.themeToast p {
+  color: color-mix(in srgb, var(--text-color) 74%, transparent);
+}
+
 .transferDoneToast.closing {
   pointer-events: none;
   animation: transferDoneToastOut .6s cubic-bezier(.55,0,.2,1) both;
