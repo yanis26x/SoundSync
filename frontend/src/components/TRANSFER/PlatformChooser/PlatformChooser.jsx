@@ -37,7 +37,7 @@ function PlatformChooser({
           onClick={youtubeAccessToken ? () => onAddPlatform("youtube") : onLoginYoutube}
           disabled={platformOrder.includes("youtube")}
         >
-          <img src="/logo/ytb-mini.png" alt="YouTube" className="youtubeBigLogo" />
+          <img src="/logo/mini/ytb-mini.png" alt="YouTube" className="youtubeBigLogo" />
         </button>
 
         <button

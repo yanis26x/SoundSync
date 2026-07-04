@@ -12,7 +12,7 @@ const songs = [
     title: "laugh",
     subtitle: "",
     src: new URL("../../../../../SOUND/music/hehe-swamp.mp3", import.meta.url).href,
-    cover: "/vampire.jpeg",
+    cover: "/utils/vampire.jpeg",
   },
 ];
 

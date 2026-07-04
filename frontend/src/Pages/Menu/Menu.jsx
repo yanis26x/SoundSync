@@ -195,17 +195,17 @@ function Menu() {
     spotify: accessToken && {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/spotify-mini.png",
+      logo: "/logo/mini/spotify-mini.png",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/ytb-mini.png",
+      logo: "/logo/mini/ytb-mini.png",
     },
     apple: appleMusicUserToken && {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/Apple-Music-mini.png",
+      logo: "/logo/mini/Apple-Music-mini.png",
     },
   };
   const selectedPlatforms = platformOrder
@@ -217,7 +217,7 @@ function Menu() {
     ? text.chooseDestination
     : text.chooseSource;
   const platformDisplayLogos = {
-    spotify: "/logo/spotify-mini.png",
+    spotify: "/logo/mini/spotify-mini.png",
     youtube: "/logo/YouTube-Logo.svg",
     apple: "/logo/appleMusic.png",
   };
@@ -700,7 +700,7 @@ function Menu() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/ytb-mini.png",
+      logo: "/logo/mini/ytb-mini.png",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -712,7 +712,7 @@ function Menu() {
     {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/Apple-Music-mini.png",
+      logo: "/logo/mini/Apple-Music-mini.png",
       isConnected: Boolean(appleMusicUserToken),
       login: loginAppleMusic,
       switchAccount: async () => {
@@ -1128,12 +1128,12 @@ function Menu() {
     const simulationSourcePlatform = {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/spotify-mini.png",
+      logo: "/logo/mini/spotify-mini.png",
     };
     const simulationDestinationPlatform = {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/ytb-mini.png",
+      logo: "/logo/mini/ytb-mini.png",
     };
     const simulationPlaylist = {
       id: "simulation-playlist",

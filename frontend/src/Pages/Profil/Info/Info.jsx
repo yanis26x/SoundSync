@@ -25,14 +25,14 @@ const infoCards = [
   {
     title: "Made by @yanis26x",
     text: "I'm Yanis, a 20-year-old developer from Montreal who loves building weird, fun, and useful apps. SoundSync is one of many personal projects I've made, alongside websites, mobile apps, and other experiments. If you like this project, feel free to check out my other work and say hi on social media.",
-    image: "/yanis26xPFP2.jpg",
+    image: "/utils/yanis26xPFP2.jpg",
     className: "creatorInfoImage",
   },
 
   {
     title: "Do it with Miku",
     text: "Miku guides you through every step of the syncing process. I wrote dozens of different voice lines so she doesn't keep repeating the same thing. The goal was to make it feel like she's actually talking to you instead of sounding like a boring assistant.",
-    image: "/miku-onion.webp",
+    image: "/utils/miku-onion.webp",
     className: "mikuInfoImage",
   },
 

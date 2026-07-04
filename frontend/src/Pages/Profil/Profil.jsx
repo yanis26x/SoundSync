@@ -216,7 +216,7 @@ function Profil() {
     {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/spotify-mini.png",
+      logo: "/logo/mini/spotify-mini.png",
       isConnected: Boolean(accessToken),
       login: loginSpotify,
       switchAccount: () => {
@@ -228,7 +228,7 @@ function Profil() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/ytb-mini.png",
+      logo: "/logo/mini/ytb-mini.png",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -240,7 +240,7 @@ function Profil() {
     {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/Apple-Music-mini.png",
+      logo: "/logo/mini/Apple-Music-mini.png",
       isConnected: Boolean(appleMusicUserToken),
       login: loginAppleMusic,
       switchAccount: async () => {

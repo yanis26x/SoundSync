@@ -107,14 +107,14 @@ export default function FirstVisitMikuModal() {
             onClick={startIntro}
             aria-label="Play Miku intro"
           >
-            <img src="/miku-onion.webp" alt="Miku" />
+            <img src="/utils/miku-onion.webp" alt="Miku" />
           </button>
         )}
       </div>
 
       {hasStarted && (
         <div className="firstVisitMikuDialogue">
-          <img src="/miku-onion.webp" alt="" aria-hidden="true" />
+          <img src="/utils/miku-onion.webp" alt="" aria-hidden="true" />
 
           <div className="firstVisitMikuBubble">
             <div className="nomDialoguePersona">@yanis26x</div>

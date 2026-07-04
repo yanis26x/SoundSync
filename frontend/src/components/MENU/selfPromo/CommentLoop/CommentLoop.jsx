@@ -9,13 +9,13 @@ const messages = [
   },
   {
     href: "https://www.instagram.com/yanis26x",
-    image: "/yanis26xPFP.jpg",
+    image: "/utils/yanis26xPFP.jpg",
     title: "@yanis26x",
     subtitle: "",
   },
   {
     href: "https://yanis26x.github.io/yanis26x/",
-    image: "/yanis26xPFP2.jpg",
+    image: "/utils/yanis26xPFP2.jpg",
     title: "Want sum more?!",
     subtitle: "visit my website",
   },

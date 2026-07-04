@@ -78,7 +78,7 @@ hello?!</span>
         aria-label="Play Miku sound"
       >
         <img
-          src="/miku-onion.webp"
+          src="/utils/miku-onion.webp"
           alt=""
           aria-hidden="true"
           className="footerMikuOnion"
