@@ -16,6 +16,8 @@ function Navbar({
   profileLabel = "Profil",
   transferLabel = "Transfer",
   isTransferActive = false,
+  isTransferLoading = false,
+  transferStatus = "",
   showTransferButton = true,
   showInfoButton = true,
   showProfileButton = true,
@@ -48,6 +50,27 @@ function Navbar({
           <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
         </a>
 
+        {isTransferLoading && (
+          <div className="siteNavbarTransferLoader" role="status" aria-live="polite">
+            <div className="siteNavbarTransferLoaderBars" aria-hidden="true">
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+
+            <div className="siteNavbarTransferLoaderText">
+              <strong>Transfer in progress</strong>
+              <span>{transferStatus || "Preparing your playlist..."}</span>
+            </div>
+
+            <div className="siteNavbarTransferLoaderRail" aria-hidden="true">
+              <span></span>
+            </div>
+          </div>
+        )}
+
         <div className="siteNavbarActions">
           {showTransferButton && (
             <button
@@ -56,6 +79,7 @@ function Navbar({
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
+              title={isTransferLoading ? transferStatus : undefined}
             >
               <span className="siteNavbarStatusDot" aria-hidden="true" />
               <span>{transferLabel}</span>

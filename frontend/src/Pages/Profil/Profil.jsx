@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
-import "../Menu/Menu.css";
 import "./Profil.css";
-import Info from "./Info/Info";
 
 function Profil() {
   const [currentTheme, setCurrentTheme] = useState(() => {
@@ -25,7 +23,6 @@ function Profil() {
   const [appleError, setAppleError] = useState("");
   const [accountDetails, setAccountDetails] = useState({});
   const [detailsLoading, setDetailsLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState("profile");
 
   const text = {
       profileTitle: "Profile",
@@ -285,9 +282,12 @@ function Profil() {
         onOpenTransfer={() => {
           window.location.href = "/";
         }}
+        onOpenInfo={() => {
+          window.location.href = "/info";
+        }}
         transferLabel="Home"
         showTransferButton={true}
-        showInfoButton={false}
+        showInfoButton={true}
         showProfileButton={false}
         showThemeButton={false}
       />
@@ -295,36 +295,13 @@ function Profil() {
       <section className="profilPanel">
         <div className="profilHeader">
           <div>
-            <h1>{activeSection === "profile" ? text.profileTitle : "Info"}</h1>
-            <span>
-              {activeSection === "profile"
-                ? text.profileSubtitle
-                : "Learn more about SoundSync, the app, and the person behind it."}
-            </span>
+            <h1>{text.profileTitle}</h1>
+            <span>{text.profileSubtitle}</span>
           </div>
-        </div>
-
-        <div className="profilSectionSwitch" aria-label="Profile sections">
-          <button
-            type="button"
-            className={activeSection === "profile" ? "activeProfilSection" : ""}
-            onClick={() => setActiveSection("profile")}
-          >
-            Profil
-          </button>
-
-          <button
-            type="button"
-            className={activeSection === "info" ? "activeProfilSection" : ""}
-            onClick={() => setActiveSection("info")}
-          >
-            Info
-          </button>
         </div>
 
         {appleError && <p className="error profilError">{appleError}</p>}
 
-        {activeSection === "profile" ? (
         <div className="profileAccountList">
           {accountPlatforms.map((platform) => {
             const details = accountDetails[platform.id];
@@ -389,9 +366,6 @@ function Profil() {
             );
           })}
         </div>
-        ) : (
-          <Info />
-        )}
       </section>
     </main>
   );

@@ -167,6 +167,124 @@
   box-shadow: 0 0 12px rgba(44,255,102,.9);
 }
 
+.siteNavbarTransferLoader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(520px, calc(100vw - 420px));
+  min-width: 280px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 54%, rgba(255,255,255,.16));
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.76), color-mix(in srgb, var(--accent) 18%, rgba(0,0,0,.72)), rgba(0,0,0,.76));
+  box-shadow:
+    0 0 24px color-mix(in srgb, var(--accent) 28%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  transform: translate(-50%, -50%);
+  animation: navbarTransferLoaderIn .36s ease both;
+}
+
+.siteNavbarTransferLoader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+  transform: translateX(-120%);
+  animation: navbarTransferLoaderShine 1.7s ease-in-out infinite;
+}
+
+.siteNavbarTransferLoader > * {
+  position: relative;
+  z-index: 1;
+}
+
+.siteNavbarTransferLoaderBars {
+  height: 30px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.siteNavbarTransferLoaderBars i {
+  width: 5px;
+  height: 9px;
+  display: block;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 78%, white);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 54%, transparent);
+  animation: navbarTransferLoaderBars .9s ease-in-out infinite;
+}
+
+.siteNavbarTransferLoaderBars i:nth-child(2) {
+  animation-delay: .08s;
+}
+
+.siteNavbarTransferLoaderBars i:nth-child(3) {
+  animation-delay: .16s;
+}
+
+.siteNavbarTransferLoaderBars i:nth-child(4) {
+  animation-delay: .24s;
+}
+
+.siteNavbarTransferLoaderBars i:nth-child(5) {
+  animation-delay: .32s;
+}
+
+.siteNavbarTransferLoaderText {
+  min-width: 0;
+}
+
+.siteNavbarTransferLoaderText strong,
+.siteNavbarTransferLoaderText span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.siteNavbarTransferLoaderText strong {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.siteNavbarTransferLoaderText span {
+  margin-top: 3px;
+  color: rgba(255,255,255,.76);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.siteNavbarTransferLoaderRail {
+  position: relative;
+  grid-column: 1 / -1;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+}
+
+.siteNavbarTransferLoaderRail span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 82%, white), transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 58%, transparent);
+  animation: navbarTransferLoaderRail 1.1s ease-in-out infinite;
+}
+
 .siteNavbarMenuBtn {
   display: none;
   width: 42px;
@@ -214,6 +332,57 @@
   }
 }
 
+@keyframes navbarTransferLoaderIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes navbarTransferLoaderShine {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  40% {
+    opacity: .8;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes navbarTransferLoaderBars {
+  0%,
+  100% {
+    height: 9px;
+    opacity: .58;
+  }
+
+  50% {
+    height: 28px;
+    opacity: 1;
+  }
+}
+
+@keyframes navbarTransferLoaderRail {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(275%);
+  }
+}
+
 @media (max-width: 650px) {
   .siteNavbar {
     min-height: 74px;
@@ -236,6 +405,23 @@
 
   .siteNavbarActions {
     gap: 6px;
+  }
+
+  .siteNavbarTransferLoader {
+    top: calc(100% + 12px);
+    width: min(360px, calc(100vw - 24px));
+    min-width: 0;
+    padding: 9px 12px;
+    transform: translateX(-50%);
+    border-radius: 16px;
+  }
+
+  .siteNavbarTransferLoaderText strong {
+    font-size: 11px;
+  }
+
+  .siteNavbarTransferLoaderText span {
+    font-size: 10px;
   }
 
   .siteNavbarSecondaryActions {

@@ -1734,8 +1734,12 @@ if (
         soundSettings={soundSettings}
         setSoundSettings={setSoundSettings}
         onPreviewNotification={previewNotification}
-        onOpenInfo={() => navigateToPage("profile", "/profil")}
-        onOpenProfile={() => navigateToPage("profile", "/profil")}
+        onOpenInfo={() => {
+          window.location.href = "/info";
+        }}
+        onOpenProfile={() => {
+          window.location.href = "/profil";
+        }}
         onOpenTransfer={
           currentPage === "transfer"
             ? () => navigateToPage("home", "/")
@@ -1745,6 +1749,8 @@ if (
         profileLabel="Profil"
         transferLabel={currentPage === "transfer" ? "HOME" : "START"}
         isTransferActive={transferStarted || transferLoading}
+        isTransferLoading={transferLoading}
+        transferStatus={transferStatus}
         showTransferButton={currentPage === "home" || currentPage === "transfer"}
         showInfoButton={true}
         showProfileButton={true}

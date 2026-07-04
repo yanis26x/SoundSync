@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import { themes } from "../../themes";
+import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
+import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
+import "../Menu/Menu.css";
 import "./Info.css";
 
 const infoCards = [
@@ -52,28 +57,72 @@ const infoCards = [
 ];
 
 function Info() {
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("sound_sync_theme");
+
+    return themes[savedTheme] ? savedTheme : "miku";
+  });
+
+  useEffect(() => {
+    const theme = themes[currentTheme];
+
+    document.documentElement.style.setProperty("--bg-image", `url(${theme.background})`);
+    document.documentElement.style.setProperty("--card-bg", theme.cardBg);
+    document.documentElement.style.setProperty("--border-color", theme.border);
+    document.documentElement.style.setProperty("--accent", theme.accent);
+    document.documentElement.style.setProperty("--accent-soft", theme.accentSoft);
+    document.documentElement.style.setProperty("--text-color", theme.text);
+  }, [currentTheme]);
+
   return (
-    <section className="profilInfoSection" aria-labelledby="profilInfoTitle">
-      <div className="profilInfoHeader">
-        <span>Info</span>
-        <h2 id="profilInfoTitle">About SoundSync</h2>
-      </div>
+    <main className="infoPage">
+      <MusicParticles />
 
-      <div className="profilInfoGrid">
-        {infoCards.map((card) => (
-          <article className="profilInfoCard" key={card.title}>
-            <div className="profilInfoImageBox">
-              <img src={card.image} alt="" className={card.className} />
-            </div>
+      <Navbar
+        themes={themes}
+        currentTheme={currentTheme}
+        setCurrentTheme={setCurrentTheme}
+        onOpenTransfer={() => {
+          window.location.href = "/";
+        }}
+        transferLabel="Home"
+        showTransferButton={true}
+        showInfoButton={false}
+        showProfileButton={true}
+        showThemeButton={false}
+      />
 
-            <div>
-              <h3>{card.title}</h3>
-              <p>{card.text}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+      <section className="infoPanel" aria-labelledby="infoTitle">
+        <div className="infoHero">
+          <div>
+            <h1 id="infoTitle">Info</h1>
+            <span>Learn more about SoundSync, the app, and the person behind it.</span>
+          </div>
+        </div>
+
+        <div className="profilInfoSection">
+          <div className="profilInfoHeader">
+            <span>Info</span>
+            <h2>About SoundSync</h2>
+          </div>
+
+          <div className="profilInfoGrid">
+            {infoCards.map((card) => (
+              <article className="profilInfoCard" key={card.title}>
+                <div className="profilInfoImageBox">
+                  <img src={card.image} alt="" className={card.className} />
+                </div>
+
+                <div>
+                  <h3>{card.title}</h3>
+                  <p>{card.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
