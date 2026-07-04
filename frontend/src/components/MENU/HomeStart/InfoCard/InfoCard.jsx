@@ -4,7 +4,9 @@ import "./InfoCard.css";
 
 const staticInfoCards = [
   {
-    image: "/SoundSync/SoundSyncLogoNoBG.png",
+    // image: "/SoundSync/SoundSyncLogoNoBG.png",
+    // image: "/utils/yanis26xPFP2.jpg",
+    image: "/SoundSync/SoundSyncLogo.png",
     title: "MORE SOON",
     description: "okay?!",
   },
@@ -162,6 +164,8 @@ function InfoCard({
 
         <article className="infoCard infoCardProcessed">
           <img src="/ichigo/confetti.jpg" alt="" />
+          {/* <img src="/utils/vampire.jpeg" alt="" /> */}
+          <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" />
         </article>
 
         <button

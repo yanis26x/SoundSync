@@ -5,7 +5,7 @@ import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticl
 import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
 import CommentLoop from "../../components/MENU/selfPromo/CommentLoop/CommentLoop";
 import HomeStart from "../../components/MENU/HomeStart/HomeStart";
-import MyPersonalMusic from "../../components/MENU/selfPromo/MyPersonalMusic/MyPersonalMusic";
+import SelfPromo from "../../components/MENU/selfPromo/SelfPromo/SelfPromo";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
 import FirstVisitMikuModal from "../../components/MENU/FirstVisitMikuModal/FirstVisitMikuModal";
@@ -1833,7 +1833,7 @@ if (
             </div>
 
             <div className="homeRightStack">
-              <MyPersonalMusic />
+              <SelfPromo />
               <CommentLoop />
             </div>
           </div>

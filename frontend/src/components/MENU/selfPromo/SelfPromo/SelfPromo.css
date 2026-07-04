@@ -1,3 +1,53 @@
+.selfPromoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selfPromoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+}
+
+.selfPromoHeader h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 1000;
+}
+
+.selfPromoHeader button {
+  min-width: 92px;
+  height: 34px;
+  padding: 0 14px;
+  border: 2px solid color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.2));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, rgba(0,0,0,.52));
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 1000;
+  cursor: pointer;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.selfPromoHeader button:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.selfPromoSection.isHidden {
+  padding-bottom: 8px;
+}
+
 .personalMusicPanel {
   position: relative;
   height: 220px;
