@@ -15,9 +15,7 @@
   border: 12px solid rgba(0,0,0,.92);
   border-radius: 22px;
   background: #000;
-  box-shadow:
-    0 14px 28px rgba(0,0,0,.36),
-    0 0 18px color-mix(in srgb, var(--accent) 16%, transparent);
+
   animation: infoCardBounceIn .82s cubic-bezier(.18,.9,.22,1.22) both;
   transition:
     transform .24s ease,

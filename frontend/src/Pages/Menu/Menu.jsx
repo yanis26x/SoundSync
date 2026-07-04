@@ -3,7 +3,7 @@ import axios from "axios";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
-import CommentLoop from "../../components/MENU/selfPromo/CommentLoop/CommentLoop";
+import CommentLoop from "../../components/MENU/CommentLoop/CommentLoop";
 import HomeStart from "../../components/MENU/HomeStart/HomeStart";
 import SelfPromo from "../../components/MENU/selfPromo/SelfPromo/SelfPromo";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
@@ -1932,11 +1932,11 @@ if (
               />
 
               <WhySoundSync text={text.homeBannerText} />
+              <CommentLoop />
             </div>
 
             <div className="homeRightStack">
               <SelfPromo />
-              <CommentLoop />
             </div>
           </div>
         )}

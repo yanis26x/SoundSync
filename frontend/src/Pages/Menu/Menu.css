@@ -425,11 +425,15 @@ body::after {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 
 .homeLeftStack .homeStartSection {
   margin-bottom: 0;
+}
+
+.homeLeftStack .homeStartContent {
+  padding-bottom: 16px;
 }
 
 .homeLeftStack .homeInfoBanner {
