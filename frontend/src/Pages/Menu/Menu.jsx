@@ -5,6 +5,7 @@ import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticl
 import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
 import Starting from "../../components/MENU/Starting/Starting";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
+import Socials from "../../components/MENU/Socials/Socials";
 import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
 import FirstVisitMikuModal from "../../components/TOUTLESPAGES/FirstVisitMikuModal/FirstVisitMikuModal";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
@@ -1939,6 +1940,8 @@ if (
               <WhySoundSync
                 text={text.homeBannerText}
               />
+
+              <Socials />
             </div>
           </div>
         )}

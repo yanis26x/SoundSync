@@ -1,0 +1,207 @@
+.socialsSection {
+  width: 100%;
+  margin-top: 30px;
+  padding: 0 32px 8px;
+}
+
+.socialsSection h2 {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: .95;
+  font-weight: 1000;
+  text-align: right;
+  text-shadow:
+    0 3px 0 #000,
+    0 12px 26px rgba(0, 0, 0, .55);
+  animation: socialsTitleIn .78s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.socialsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 190px);
+  gap: 22px;
+  align-items: start;
+  justify-content: center;
+}
+
+.socialCard {
+  position: relative;
+  display: block;
+  width: 190px;
+  height: 190px;
+  overflow: hidden;
+  border: 12px solid rgba(0, 0, 0, .95);
+  border-radius: 24px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, .42),
+    0 0 22px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: socialCardIn .82s cubic-bezier(.22, 1, .36, 1) both;
+  transition:
+    transform .24s ease,
+    box-shadow .24s ease,
+    border-color .24s ease;
+}
+
+.socialCard:nth-child(1) {
+  animation-delay: .12s;
+}
+
+.socialCard:nth-child(2) {
+  animation-delay: .2s;
+}
+
+.socialCard:nth-child(3) {
+  animation-delay: .28s;
+}
+
+.socialCard:nth-child(4) {
+  animation-delay: .36s;
+}
+
+.socialCard:hover,
+.socialCard:focus-visible {
+  transform: translateY(-7px) scale(1.04);
+  border-color: #000;
+  outline: none;
+  box-shadow:
+    0 24px 42px rgba(0, 0, 0, .52),
+    0 0 18px var(--accent),
+    0 0 34px color-mix(in srgb, var(--accent) 48%, transparent);
+}
+
+.socialCard img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 12px;
+  transition:
+    transform .32s ease,
+    filter .32s ease;
+}
+
+.socialCard:hover img,
+.socialCard:focus-visible img {
+  transform: scale(1.055);
+  filter: saturate(1.12) contrast(1.04);
+}
+
+.socialCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 32%,
+      rgba(0, 0, 0, .3) 60%,
+      rgba(0, 0, 0, .58) 100%
+    );
+  pointer-events: none;
+}
+
+.socialCardText {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.socialCardText strong {
+  color: #fff;
+  font-size: 24px;
+  line-height: .98;
+  font-weight: 1000;
+  text-shadow:
+    0 2px 0 #000,
+    0 8px 20px rgba(0, 0, 0, .9);
+}
+
+.socialCardText span {
+  margin-top: 7px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 900;
+  text-shadow:
+    0 2px 0 #000,
+    0 8px 18px rgba(0, 0, 0, .9);
+}
+
+@keyframes socialsTitleIn {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes socialCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(38px) scale(.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 1000px) {
+  .socialsGrid {
+    grid-template-columns: repeat(2, 190px);
+  }
+}
+
+@media (max-width: 650px) {
+  .socialsSection {
+    padding: 0 18px 8px;
+  }
+
+  .socialsSection h2 {
+    text-align: center;
+  }
+
+  .socialsGrid {
+    grid-template-columns: repeat(2, 150px);
+    gap: 14px;
+  }
+
+  .socialCard {
+    width: 150px;
+    height: 150px;
+    border-width: 10px;
+    border-radius: 20px;
+  }
+
+  .socialCardText {
+    left: 8px;
+    right: 8px;
+    bottom: 12px;
+  }
+
+  .socialCardText strong {
+    font-size: 19px;
+  }
+
+  .socialCardText span {
+    font-size: 10px;
+  }
+}
