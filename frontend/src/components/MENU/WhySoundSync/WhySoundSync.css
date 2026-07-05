@@ -3,38 +3,8 @@
   width: 100%;
   padding: 28px 32px 34px;
   margin-top: 28px;
-
-/* 
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,.12)); */
   border-radius: 22px;
   overflow: hidden;
-
-  /* background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 38%),
-    linear-gradient(135deg, rgba(0,0,0,.58), rgba(0,0,0,.28)); */
-
-/* background:
-  radial-gradient(
-    circle at 82% 48%,
-    color-mix(in srgb, var(--accent) 34%, transparent),
-    transparent 36%
-  ),
-  radial-gradient(
-    circle at 18% 18%,
-    rgba(255,255,255,.10),
-    transparent 30%
-  ),
-  linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 22%, rgba(0,0,0,.56)),
-    color-mix(in srgb, var(--accent) 30%, rgba(0,0,0,.46))
-  ); */
-
-
-       
-  /* box-shadow:
-    0 0 34px color-mix(in srgb, var(--accent) 32%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.14); */
 }
 
 .homeInfoBannerContent {
@@ -82,62 +52,6 @@
     0 8px 22px rgba(0,0,0,.55);
 
   animation: textSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
-}
-
-.homeInfoHeaderActions {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.homeInfoHeaderActionBtn {
-  width: 132px;
-  height: 34px;
-  padding: 0 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border: 2px solid rgba(0,0,0,.9);
-  border-radius: 999px;
-  background: rgba(0,0,0,.72);
-  color: rgba(255,255,255,.86);
-  font: inherit;
-  font-size: 10px;
-  font-weight: 950;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-  box-shadow:
-    0 8px 18px rgba(0,0,0,.24),
-    inset 0 1px 0 rgba(255,255,255,.12);
-  transition:
-    transform .18s ease,
-    color .18s ease,
-    border-color .18s ease,
-    background .18s ease;
-}
-
-.homeInfoHeaderActionBtn img {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 auto;
-  object-fit: contain;
-  filter:
-    brightness(0) invert(1)
-    drop-shadow(0 0 5px rgba(255,255,255,.2));
-}
-
-.homeInfoHeaderActionBtn:hover {
-  transform: translateY(-2px) scale(1.04);
-  border-color: rgba(0,0,0,1);
-  background: rgba(0,0,0,.9);
-  color: #fff;
-}
-
-.homeInfoHeaderActionBtn:active {
-  transform: scale(.96);
 }
 
 .homeInfoFeatureGrid {
@@ -493,13 +407,13 @@
 
   .homeInfoHeader {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 20px;
   }
 
-  .homeInfoHeaderActions {
+  .homeInfoHeader p {
     width: 100%;
-    flex-wrap: wrap;
+    text-align: center;
   }
 
   .homeInfoHeader h2 {

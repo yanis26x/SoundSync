@@ -52,13 +52,7 @@ const features = [
   },
 ];
 
-function WhySoundSync({
-  text,
-  isDashboardVisible,
-  isSelfPromoVisible,
-  onToggleDashboard,
-  onToggleSelfPromo,
-}) {
+function WhySoundSync({ text }) {
   const [showAlternateFeatures, setShowAlternateFeatures] = useState(false);
   const [areFeaturesChanging, setAreFeaturesChanging] = useState(false);
   const [hasAnimatedIn, setHasAnimatedIn] = useState(false);
@@ -111,35 +105,6 @@ function WhySoundSync({
           {/* <h2>Why SoundSync?!</h2> */}
           <p>{text}</p>
 
-          <div className="homeInfoHeaderActions">
-            <button
-              type="button"
-              className="homeInfoHeaderActionBtn"
-              onClick={onToggleDashboard}
-              aria-label={isDashboardVisible ? "Hide Dashboard" : "Show Dashboard"}
-            >
-              <img
-                src={isDashboardVisible ? "/logo/icon/hide.png" : "/logo/icon/show.png"}
-                alt=""
-                aria-hidden="true"
-              />
-              <span>Dashboard</span>
-            </button>
-
-            <button
-              type="button"
-              className="homeInfoHeaderActionBtn"
-              onClick={onToggleSelfPromo}
-              aria-label={isSelfPromoVisible ? "Hide Selfpromo" : "Show Selfpromo"}
-            >
-              <img
-                src={isSelfPromoVisible ? "/logo/icon/hide.png" : "/logo/icon/show.png"}
-                alt=""
-                aria-hidden="true"
-              />
-              <span>Selfpromo</span>
-            </button>
-          </div>
         </div>
 
         <div className="homeInfoFeatureGrid">

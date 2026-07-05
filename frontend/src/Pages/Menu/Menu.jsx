@@ -3,9 +3,7 @@ import axios from "axios";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
-import CommentLoop from "../../components/MENU/CommentLoop/CommentLoop";
-import HomeStart from "../../components/MENU/HomeStart/HomeStart";
-import SelfPromo from "../../components/MENU/selfPromo/SelfPromo/SelfPromo";
+import Starting from "../../components/MENU/Starting/Starting";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
 import FirstVisitMikuModal from "../../components/TOUTLESPAGES/FirstVisitMikuModal/FirstVisitMikuModal";
@@ -183,8 +181,6 @@ function Menu() {
   const [transferDoneToast, setTransferDoneToast] = useState(null);
   const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
-  const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
-  const [isSelfPromoVisible, setIsSelfPromoVisible] = useState(true);
   const [currentTheme, setCurrentTheme] = useState(() => {
     const savedTheme = localStorage.getItem("sound_sync_theme");
 
@@ -1922,7 +1918,7 @@ if (
         {currentPage === "home" && (
           <div className="homeMainGrid">
             <div className="homeLeftStack">
-              <HomeStart
+              <Starting
                 text={text}
                 transferStarted={transferStarted}
                 transferLoading={transferLoading}
@@ -1937,21 +1933,12 @@ if (
                 selectedSourceTracksError={selectedSourceTracksError}
                 getPlaylistName={getPlaylistName}
                 getTrackLabel={getTrackLabel}
-                isInfoCardVisible={isInfoCardVisible}
+                onStartTransfer={startNewTransferFlow}
               />
 
               <WhySoundSync
                 text={text.homeBannerText}
-                isDashboardVisible={isInfoCardVisible}
-                isSelfPromoVisible={isSelfPromoVisible}
-                onToggleDashboard={() => setIsInfoCardVisible((currentValue) => !currentValue)}
-                onToggleSelfPromo={() => setIsSelfPromoVisible((currentValue) => !currentValue)}
               />
-              {/* <CommentLoop /> */}
-            </div>
-
-            <div className="homeRightStack">
-              <SelfPromo isHidden={!isSelfPromoVisible} />
             </div>
           </div>
         )}
