@@ -53,9 +53,9 @@ function SelfPromo() {
   return (
     <section className={`selfPromoSection ${isHidden ? "isHidden" : ""}`}>
       <div className="selfPromoHeader">
-        <h2>My selfPromo</h2>
+        {/* <h2>My selfPromo</h2> */}
         <button type="button" onClick={toggleSection}>
-          {isHidden ? "Show me" : "Hide it"}
+          {isHidden ? "Show Selfpromo" : "Hide Selfpromo"}
         </button>
       </div>
 

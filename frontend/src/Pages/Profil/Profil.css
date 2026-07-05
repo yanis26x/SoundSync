@@ -161,16 +161,16 @@
   height: 82px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255,255,255,.12);
+
   border-radius: 14px;
-  background: rgba(255,255,255,.08);
+
 }
 
 .profileLogoBox img {
   max-width: 58px;
   max-height: 44px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 30%, transparent));
+
 }
 
 .profileAccountText h3 {
@@ -283,8 +283,8 @@
 
 .dangerBtn {
   border: 1px solid rgba(255, 92, 92, .38);
-  background: rgba(80,0,0,.42);
-  color: #ffadad;
+  background: rgb(244, 1, 1);
+  color: #ffffff;
 }
 
 @keyframes profilePageIn {

@@ -19,7 +19,28 @@
   border: none;
 
   /* background: transparent; */
-  background: rgba(0, 0, 0, 0.815);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.82) 0%,
+      color-mix(in srgb, var(--accent) 10%, rgba(0,0,0,.76)) 50%,
+      rgba(0,0,0,.82) 100%
+    );
+
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+
+border-bottom: 1px solid
+color-mix(in srgb, var(--accent) 45%, rgba(255,255,255,.15));
+
+box-shadow:
+0 18px 40px rgba(0,0,0,.35),
+0 0 40px color-mix(in srgb, var(--accent) 18%, transparent);
+
+  box-shadow:
+    0 14px 38px rgba(0,0,0,.35),
+    0 0 35px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.08);
 
   animation: navbarSlideDownIn 0.46s ease 0.18s both;
 }
@@ -49,7 +70,7 @@
 }
 
 .siteNavbarSubtitle {
-  color: color-mix(in srgb, var(--text-color) 76%, transparent);
+  color: color-mix(in srgb, var(--accent) 99%, transparent);
 
   font-size: 12px;
   font-weight: 800;
@@ -83,7 +104,7 @@
   width: auto;
   white-space: nowrap;
 
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 2px solid var(--border-color);
   border-radius: 999px;
 
   background: rgba(10, 8, 8, 0.641);
@@ -135,7 +156,7 @@
 
 .siteNavbarStartBtn {
   min-width: 104px;
-  border: 2px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.2));
+border: 2px solid var(--border-color);
   background: #050505;
   color: #fff;
   font-size: 14px;
@@ -154,17 +175,18 @@
   border-radius: 999px;
   background: #2cff66;
   box-shadow: 0 0 12px rgba(44,255,102,.9);
-  animation: navbarStatusBlink 1s ease-in-out infinite;
+  animation: navbarStatusBlink 0.85s ease-in-out infinite;
 }
 
-.siteNavbarStartBtn.isActive .siteNavbarStatusDot {
-  background: #ff2d2d;
-  box-shadow: 0 0 12px rgba(255,45,45,.92);
-}
-
-.siteNavbarStartBtn.isIdle .siteNavbarStatusDot {
+.siteNavbarStartBtn.isStart .siteNavbarStatusDot {
   background: #2cff66;
   box-shadow: 0 0 12px rgba(44,255,102,.9);
+}
+
+.siteNavbarStartBtn.isHome {
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
 }
 
 .siteNavbarTransferLoader {
@@ -460,6 +482,7 @@
   }
 
   .siteNavbarStartBtn {
+    
     min-width: 86px;
     padding: 10px 14px;
     font-size: 12px;

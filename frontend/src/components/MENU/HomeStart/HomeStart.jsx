@@ -29,9 +29,10 @@ function HomeStart({
           <h2>
             Let's start 2 <span>Sync!</span>
           </h2>
-          <p className="homeStartDescription">
-            Choose your platforms, pick your playlist, and keep listening 2 your favorite playlists across all your music platforms.
-          </p>
+<p className="homeStartDescription">
+  Start 2 sync your music and playlists by clicking{" "}
+  <span className="homeStartHighlight">START</span> in the top.
+</p>
         </div>
 
         {hasActiveTransfer && (

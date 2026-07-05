@@ -80,7 +80,7 @@
 }
 
 .homeStartCopy h2 span {
-  color: color-mix(in srgb, var(--accent) 75%, white 25%);
+  color: var(--accent);
   text-shadow:
     0 0 16px color-mix(in srgb, var(--accent) 62%, transparent),
     0 4px 16px rgba(0,0,0,.35);
@@ -96,6 +96,14 @@
   text-shadow:
     0 2px 8px rgba(0, 0, 0, 0.9),
     0 8px 22px rgba(0, 0, 0, 0.62);
+}
+
+.homeStartHighlight {
+  color: rgb(134, 255, 140);
+
+  font-weight: 1000;
+  letter-spacing: 0.8px;
+
 }
 
 .homeStartInfoToggleBtn {
@@ -400,16 +408,20 @@
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
   .homeStartSection {
     margin-bottom: 16px;
   }
 
   .homeStartContent {
+    box-sizing: border-box;
+    overflow: visible;
     flex-direction: column;
     align-items: stretch;
-    padding: 24px 18px 42px;
-    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    padding: 24px 18px 26px;
+    gap: 14px;
   }
 
   .homeStartCopy {

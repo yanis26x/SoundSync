@@ -14,6 +14,51 @@ const transferButtonSounds = {
   oupsP4: transferOupsSound,
 };
 
+function PlatformRouteIndicator({ sourcePlatform, destinationPlatform }) {
+  const sourceLabel = sourcePlatform?.name || "Source";
+  const destinationLabel = destinationPlatform?.name || "Destination";
+
+  return (
+    <div
+      className="platformRouteIndicator"
+      aria-label={
+        destinationPlatform
+          ? `Transfer from ${sourceLabel} to ${destinationLabel}`
+          : `Transfer from ${sourceLabel} to ${destinationLabel}`
+      }
+    >
+      {sourcePlatform ? (
+        <img src={sourcePlatform.logo} alt={sourceLabel} />
+      ) : (
+        <span className="platformRoutePlaceholder" aria-label="Source not selected">?</span>
+      )}
+      <span aria-hidden="true">→</span>
+      {destinationPlatform ? (
+        <img src={destinationPlatform.logo} alt={destinationLabel} />
+      ) : (
+        <span className="platformRoutePlaceholder" aria-label="Destination not selected">?</span>
+      )}
+    </div>
+  );
+}
+
+function TransferStepBadge({ currentStep, onReset, resetDisabled }) {
+  return (
+    <div className="transferStepBadge" aria-label={`Step ${currentStep} of 5`}>
+      <strong>{currentStep}/5</strong>
+      <button
+        type="button"
+        className="transferStepResetBtn"
+        onClick={onReset}
+        disabled={resetDisabled}
+        aria-label="Reset platform choice"
+      >
+        ↻
+      </button>
+    </div>
+  );
+}
+
 function Transfer({
   text,
   chooseText,
@@ -154,18 +199,31 @@ function Transfer({
     audio.play().catch(() => {});
   };
 
+  const currentStep = selectedPlatforms.length === 0
+    ? 1
+    : selectedPlatforms.length === 1
+      ? 2
+      : !selectedSourcePlaylistId
+        ? 3
+        : transferStarted || transferLoading || transferResult
+          ? 5
+          : 4;
+
   return (
     <section className="transferPage" onClickCapture={playTransferTouchSound}>
       {selectedPlatforms.length < 2 && (
         <div className="transferPlatformStage">
-          <button
-            type="button"
-            className="platformResetBtn"
-            onClick={resetPlatformChoice}
-            disabled={platformOrder.length === 0}
-          >
-            ↻ {text.changePlatform}
-          </button>
+          <div className="transferPlatformTopBar">
+            <PlatformRouteIndicator
+              sourcePlatform={sourcePlatform}
+              destinationPlatform={destinationPlatform}
+            />
+            <TransferStepBadge
+              currentStep={currentStep}
+              onReset={resetPlatformChoice}
+              resetDisabled={platformOrder.length === 0}
+            />
+          </div>
 
           <PlatformChooser
             chooseText={chooseText}
@@ -189,15 +247,16 @@ function Transfer({
 
       {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
         <div className="transferWorkspace">
-          {!transferStarted && (
-            <button
-              type="button"
-              className="platformResetBtn transferResetChoiceBtn"
-              onClick={resetPlatformChoice}
-            >
-              ↻ {text.changePlatform}
-            </button>
-          )}
+          <div className="transferWorkspaceTopBar">
+            <PlatformRouteIndicator
+              sourcePlatform={sourcePlatform}
+              destinationPlatform={destinationPlatform}
+            />
+            <TransferStepBadge
+              currentStep={currentStep}
+              onReset={resetPlatformChoice}
+            />
+          </div>
 
           {!selectedSourcePlaylistId ? (
             <PlaylistChooser

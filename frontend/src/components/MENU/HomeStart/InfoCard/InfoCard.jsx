@@ -4,11 +4,8 @@ import "./InfoCard.css";
 
 const staticInfoCards = [
   {
-    // image: "/SoundSync/SoundSyncLogoNoBG.png",
-    // image: "/utils/yanis26xPFP2.jpg",
     image: "/SoundSync/SoundSyncLogo.png",
-    title: "MORE SOON",
-    description: "okay?!",
+    title: "SoundSync",
   },
 ];
 
@@ -157,22 +154,20 @@ function InfoCard({
       <div className="infoCardGrid" aria-label="SoundSync highlights">
       {staticInfoCards.map((card) => (
         <article
-          className="infoCard"
+          className="infoCard infoCardImageOnly"
           key={card.title}
         >
           <img src={card.image} alt="" />
-          <div className="infoCardBody">
-            <strong>{card.title}</strong>
-            <span>{card.description}</span>
-          </div>
         </article>
       ))}
 
         <article className="infoCard infoCardProcessed">
           {/* <img src="/ichigo/confetti.jpg" alt="" /> */}
-          <img src="/utils/vampire.jpeg" alt="" />
+          {/* <img src="/utils/vampire.jpeg" alt="" /> */}
           {/* <img src="/utils/yanis26xPFP.jpg" alt="" /> */}
-          <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" />
+          {/* <img src="/SoundSync/SoundSyncLogoNoBG.png" alt="" /> */}
+          <img src="/SoundSync/SoundSyncLogo.png" alt="" />
+
         </article>
 
         <button

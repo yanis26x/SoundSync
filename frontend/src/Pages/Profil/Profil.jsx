@@ -225,7 +225,7 @@ function Profil() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/ytb-mini.png",
+      logo: "/logo/mini/Youtube-mini.svg",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {

@@ -91,6 +91,7 @@
     0 0 2px rgba(0,0,0,.9);
 }
 
+.infoCardImageOnly img,
 .infoCardProcessed img {
   position: absolute;
   inset: 0;
@@ -101,6 +102,7 @@
   transform: scale(1.01);
 }
 
+.infoCardImageOnly::after,
 .infoCardProcessed::after {
   content: "";
   position: absolute;
@@ -611,35 +613,77 @@ button.infoCardFeatured {
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
   .infoCardGrid {
+    box-sizing: border-box;
     grid-template-columns: 1fr;
-    gap: 12px;
+    justify-items: center;
+    width: 100%;
+    max-width: 100%;
+    gap: 0;
+  }
+
+  .infoCardGrid > .infoCard:not(.infoCardActivity) {
+    display: none;
   }
 
   .infoCard {
-    min-height: 220px;
-    border-width: 6px;
-    border-radius: 18px;
+    min-height: clamp(260px, 68vw, 390px);
+    border-width: 7px;
+    border-radius: 20px;
   }
 
-  .infoCard img {
-    height: 124px;
+  .infoCard:hover {
+    transform: none;
+    border-width: 7px;
   }
 
-  .infoCardFeatured {
-    display: block;
+  .infoCardActivity {
+    width: min(100%, calc(100vw - 40px), 430px);
+    max-width: 100%;
+    margin: 0 auto;
+    justify-self: center;
+    box-sizing: border-box;
   }
 
   .infoCardFeatured img {
     position: absolute;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 11px;
   }
 
   .infoCardFeatured .infoCardBody {
     min-height: 100%;
+    padding: 20px 16px;
     border-left: 0;
+  }
+
+  .infoCardActivity .infoCardBody {
+    gap: 9px;
+  }
+
+  .infoCardFeatured .infoCardBody strong {
+    max-width: 100%;
+    font-size: clamp(24px, 8vw, 34px);
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+
+  .infoCardFeatured .infoCardBody span {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  .infoCardTicker {
+    max-height: 58px;
+  }
+
+  .infoCardStats {
+    width: 100%;
+  }
+
+  .infoCardStats span {
+    font-size: 9px;
   }
 
   .infoCardModal {

@@ -12,8 +12,8 @@ function Navbar({
   onOpenInfo,
   onOpenProfile,
   onOpenTransfer,
-  infoLabel = "Info",
-  profileLabel = "Profil",
+  infoLabel = "INFO",
+  profileLabel = "PROFIL",
   transferLabel = "Transfer",
   isTransferActive = false,
   isTransferLoading = false,
@@ -26,6 +26,7 @@ function Navbar({
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
   const [isCustomModalClosing, setIsCustomModalClosing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const normalizedTransferLabel = transferLabel.toUpperCase();
 
   const openCustomModal = () => {
     setIsMobileMenuOpen(false);
@@ -75,14 +76,16 @@ function Navbar({
           {showTransferButton && (
             <button
               type="button"
-              className={`siteNavbarBtn siteNavbarStartBtn ${isTransferActive ? "isActive" : "isIdle"}`}
+              className={`siteNavbarBtn siteNavbarStartBtn ${normalizedTransferLabel === "START" ? "isStart" : "isHome"}`}
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
               title={isTransferLoading ? transferStatus : undefined}
             >
-              <span className="siteNavbarStatusDot" aria-hidden="true" />
-              <span>{transferLabel}</span>
+              {normalizedTransferLabel === "START" && (
+                <span className="siteNavbarStatusDot" aria-hidden="true" />
+              )}
+              <span>{normalizedTransferLabel}</span>
             </button>
           )}
 
@@ -107,7 +110,7 @@ function Navbar({
                       window.location.href = "/profil";
                     })}
                   >
-                    <span>{infoLabel}</span>
+                    <span>{infoLabel.toUpperCase()}</span>
                   </button>
                 )}
 
@@ -119,7 +122,7 @@ function Navbar({
                       window.location.href = "/profil";
                     })}
                   >
-                    <span>{profileLabel}</span>
+                    <span>{profileLabel.toUpperCase()}</span>
                   </button>
                 )}
 
@@ -129,7 +132,7 @@ function Navbar({
                     className="siteNavbarBtn"
                     onClick={openCustomModal}
                   >
-                    <span>Custom</span>
+                    <span>CUSTOM</span>
                   </button>
                 )}
               </div>

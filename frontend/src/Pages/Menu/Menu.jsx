@@ -218,7 +218,7 @@ function Menu() {
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/ytb-mini.png",
+      logo: "/logo/mini/Youtube-mini.svg",
     },
     apple: appleMusicUserToken && {
       id: "apple",
@@ -718,7 +718,7 @@ function Menu() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/ytb-mini.png",
+      logo: "/logo/mini/Youtube-mini.svg",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -1151,7 +1151,7 @@ function Menu() {
     const simulationDestinationPlatform = {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/ytb-mini.png",
+      logo: "/logo/mini/Youtube-mini.svg",
     };
     const simulationPlaylist = {
       id: "simulation-playlist",

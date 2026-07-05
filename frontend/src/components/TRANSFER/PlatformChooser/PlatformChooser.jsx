@@ -1,5 +1,44 @@
 import "./PlatformChooser.css";
 
+const platforms = [
+  {
+    id: "spotify",
+    name: "Spotify",
+    logo: "/logo/Spotify-Black-Logo.png",
+    logoClassName: "spotifyBigLogo",
+    isAvailable: true,
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    logo: "/logo/YouTube-Logo.svg",
+    logoClassName: "youtubeBigLogo",
+    isAvailable: true,
+  },
+  {
+    id: "apple",
+    name: "Apple Music",
+    logo: "/logo/appleMusic.png",
+    logoClassName: "appleMusicLogo",
+    isAvailable: true,
+  },
+  {
+    id: "soundcloud",
+    name: "SoundCloud",
+    logo: "/logo/Soundcloud_logo.svg",
+    logoClassName: "soundCloudLogo",
+    isAvailable: false,
+  },
+  {
+    id: "simulation",
+    name: "Simulation",
+    logo: "/utils/miku-onion.webp",
+    logoClassName: "simulationLogo",
+    isAvailable: true,
+    isSimulation: true,
+  },
+];
+
 function PlatformChooser({
   chooseText,
   chooseSubText,
@@ -13,56 +52,60 @@ function PlatformChooser({
   onLoginAppleMusic,
   onStartSimulation,
 }) {
+  const platformActions = {
+    spotify: accessToken ? () => onAddPlatform("spotify") : onLoginSpotify,
+    youtube: youtubeAccessToken ? () => onAddPlatform("youtube") : onLoginYoutube,
+    apple: appleMusicUserToken ? () => onAddPlatform("apple") : onLoginAppleMusic,
+    simulation: onStartSimulation,
+  };
+
   return (
     <section className="choosePanel">
       <div className="chooseHeader">
         {/* <p className="chooseEyebrow">Source platform</p> */}
 
-        <h2 className="chooseText">{chooseText}</h2>
+        <h2 className="chooseText" key={`choose-title-${chooseText}`}>{chooseText}</h2>
 
-        <p className="chooseSubText">{chooseSubText}</p>
+        <p className="chooseSubText" key={`choose-subtitle-${chooseSubText}`}>{chooseSubText}</p>
       </div>
 
       <div className="platformLoginRow">
-        <button
-          className={`spotifyBtn platformChoiceBtn${platformOrder.includes("spotify") ? " selectedPlatformBtn" : ""}`}
-          onClick={accessToken ? () => onAddPlatform("spotify") : onLoginSpotify}
-          disabled={platformOrder.includes("spotify")}
-        >
-          <img src="/logo/Spotify-Black-Logo.png" alt="Spotify" className="spotifyBigLogo" />
-        </button>
+        {platforms.map((platform) => {
+          const isSelected = platformOrder.includes(platform.id);
+          const isDisabled = isSelected || !platform.isAvailable;
+          const statusText = platform.isSimulation
+            ? "Demo mode"
+            : !platform.isAvailable
+              ? "Coming soon"
+              : isSelected
+                ? "Selected"
+                : "Available";
 
-        <button
-          className={`youtubeBtn platformChoiceBtn${platformOrder.includes("youtube") ? " selectedPlatformBtn" : ""}`}
-          onClick={youtubeAccessToken ? () => onAddPlatform("youtube") : onLoginYoutube}
-          disabled={platformOrder.includes("youtube")}
-        >
-          <img src="/logo/mini/ytb-mini.png" alt="YouTube" className="youtubeBigLogo" />
-        </button>
-
-        <button
-          className={`appleBtn platformChoiceBtn${platformOrder.includes("apple") ? " selectedPlatformBtn" : ""}`}
-          onClick={appleMusicUserToken ? () => onAddPlatform("apple") : onLoginAppleMusic}
-          disabled={platformOrder.includes("apple")}
-        >
-          <img src="/logo/appleMusic.png" alt="Apple Music" className="appleMusicLogo" />
-        </button>
+          return (
+            <button
+              type="button"
+              className={`platformChoiceBtn ${platform.id}Btn${isSelected ? " selectedPlatformBtn" : ""}${!platform.isAvailable ? " unavailablePlatformBtn" : ""}`}
+              onClick={platformActions[platform.id]}
+              disabled={isDisabled}
+              key={platform.id}
+            >
+              <span className="platformChoiceGlow" aria-hidden="true" />
+              <img src={platform.logo} alt={platform.name} className={platform.logoClassName} />
+              <span className="platformChoiceMeta">
+                <strong>{platform.name}</strong>
+                <span>{statusText}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       <p className="how2Disconnect">
-       2 Disconnect or switch your account from a platform, go to Profil.
+       2 Disconnect or switch your account from a platform, go 2 Profil.
       </p>
       <p className="platformComingSoon">
-        More platforms are coming soon — SoundCloud, Deezer, TIDAL and more.
+        SoundCloud is displayed for now, selection is coming later.
       </p>
-
-      <button
-        type="button"
-        className="simulationTransferBtn"
-        onClick={onStartSimulation}
-      >
-        Simulation transfer
-      </button>
 
       <div className="platformDemoHelp">
         <p>Having trouble?! Check out the Demo video of SoundSync</p>

@@ -102,7 +102,7 @@ function WhySoundSync({ text }) {
     <section className="homeInfoBanner">
       <div className="homeInfoBannerContent">
         <div className="homeInfoHeader">
-          <h2>Why SoundSync?!</h2>
+          {/* <h2>Why SoundSync?!</h2> */}
           <p>{text}</p>
         </div>
 
