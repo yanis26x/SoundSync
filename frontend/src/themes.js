@@ -3,7 +3,7 @@ export const themes = {
     name: "Tomo",
     description: "Two girls looking at each other and smiling.",
     background: "/wallpaper/eyesContact.jpg",
-    cardBg: "rgba(161, 62, 16, 0.68)",
+    cardBg: "rgba(0, 0, 0, 0.68)",
     border: "rgb(249, 91, 0)",
     accent: "#fd4907",
     accentSoft: "rgba(255, 123, 0, 0.34)",
@@ -22,8 +22,8 @@ export const themes = {
   },
 
   miku: {
-  name: "Miku",
-  description: "Hatsune Miku floating through a galaxy of music.",
+  name: "Hastune Miku",
+  description: "Hatsune Miku projetDIVA F - Playstation 3",
   background: "/wallpaper/Miku.jpg",
   cardBg: "rgba(2, 26, 36, 0.72)",
   border: "rgb(0, 255, 255)",

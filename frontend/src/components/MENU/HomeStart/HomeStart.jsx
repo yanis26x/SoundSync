@@ -1,4 +1,3 @@
-import { useState } from "react";
 import InfoCard from "./InfoCard/InfoCard";
 import "./HomeStart.css";
 
@@ -17,8 +16,8 @@ function HomeStart({
   selectedSourceTracksError,
   getPlaylistName,
   getTrackLabel,
+  isInfoCardVisible,
 }) {
-  const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
   const hasActiveTransfer = transferStarted || transferLoading;
 
   return (
@@ -30,22 +29,10 @@ function HomeStart({
             Let's start 2 <span>Sync!</span>
           </h2>
 <p className="homeStartDescription">
-  Start 2 sync your music and playlists by clicking{" "}
-  <span className="homeStartHighlight">START</span> in the top.
+  Start 2 sync your music and playlists by clicking the {" "}
+  <span className="homeStartHighlight">START</span> button.
 </p>
         </div>
-
-        {hasActiveTransfer && (
-          <div className="homeStartBtnWrap" aria-hidden="false">
-            <button
-              type="button"
-              className="homeStartInfoToggleBtn"
-              onClick={() => setIsInfoCardVisible((currentValue) => !currentValue)}
-            >
-              {isInfoCardVisible ? "Hide Dashboard" : "Show Dashboard"}
-            </button>
-          </div>
-        )}
 
         {hasActiveTransfer && isInfoCardVisible && (
           <InfoCard

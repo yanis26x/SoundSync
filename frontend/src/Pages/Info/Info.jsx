@@ -20,12 +20,7 @@ const infoCards = [
     className: "soundSyncInfoLogo",
   },
 
-  {
-    title: "Watch the first prototype",
-    text: "Curious about where SoundSync started? Here's a demo of the old Spotify2YTB project before I rebuilt everything from scratch: https://youtu.be/sBKze5G8eKU",
-    image: "/SoundSync/SoundSyncLogo.png",
-    className: "soundSyncInfoLogo",
-  },
+
 
   {
     title: "Made by @yanis26x",

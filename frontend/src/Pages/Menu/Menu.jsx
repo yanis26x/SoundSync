@@ -183,6 +183,8 @@ function Menu() {
   const [transferDoneToast, setTransferDoneToast] = useState(null);
   const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
+  const [isInfoCardVisible, setIsInfoCardVisible] = useState(true);
+  const [isSelfPromoVisible, setIsSelfPromoVisible] = useState(true);
   const [currentTheme, setCurrentTheme] = useState(() => {
     const savedTheme = localStorage.getItem("sound_sync_theme");
 
@@ -1935,14 +1937,21 @@ if (
                 selectedSourceTracksError={selectedSourceTracksError}
                 getPlaylistName={getPlaylistName}
                 getTrackLabel={getTrackLabel}
+                isInfoCardVisible={isInfoCardVisible}
               />
 
-              <WhySoundSync text={text.homeBannerText} />
-              <CommentLoop />
+              <WhySoundSync
+                text={text.homeBannerText}
+                isDashboardVisible={isInfoCardVisible}
+                isSelfPromoVisible={isSelfPromoVisible}
+                onToggleDashboard={() => setIsInfoCardVisible((currentValue) => !currentValue)}
+                onToggleSelfPromo={() => setIsSelfPromoVisible((currentValue) => !currentValue)}
+              />
+              {/* <CommentLoop /> */}
             </div>
 
             <div className="homeRightStack">
-              <SelfPromo />
+              <SelfPromo isHidden={!isSelfPromoVisible} />
             </div>
           </div>
         )}

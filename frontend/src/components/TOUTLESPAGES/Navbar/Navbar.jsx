@@ -27,6 +27,7 @@ function Navbar({
   const [isCustomModalClosing, setIsCustomModalClosing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const normalizedTransferLabel = transferLabel.toUpperCase();
+  const isStartButton = normalizedTransferLabel === "START";
 
   const openCustomModal = () => {
     setIsMobileMenuOpen(false);
@@ -76,16 +77,26 @@ function Navbar({
           {showTransferButton && (
             <button
               type="button"
-              className={`siteNavbarBtn siteNavbarStartBtn ${normalizedTransferLabel === "START" ? "isStart" : "isHome"}`}
+              className={`siteNavbarBtn siteNavbarStartBtn ${isStartButton ? "isStart" : "isHome"}`}
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
-              title={isTransferLoading ? transferStatus : undefined}
+              title={isTransferLoading ? transferStatus : normalizedTransferLabel}
+              aria-label={normalizedTransferLabel}
             >
-              {normalizedTransferLabel === "START" && (
+              {isStartButton && (
                 <span className="siteNavbarStatusDot" aria-hidden="true" />
               )}
-              <span>{normalizedTransferLabel}</span>
+              {isStartButton ? (
+                <span>{normalizedTransferLabel}</span>
+              ) : (
+                <img
+                  className="siteNavbarBtnImage"
+                  src="/logo/icon/home.png"
+                  alt=""
+                  aria-hidden="true"
+                />
+              )}
             </button>
           )}
 
@@ -109,8 +120,15 @@ function Navbar({
                     onClick={onOpenInfo || (() => {
                       window.location.href = "/profil";
                     })}
+                    title={infoLabel}
+                    aria-label={infoLabel}
                   >
-                    <span>{infoLabel.toUpperCase()}</span>
+                    <img
+                      className="siteNavbarBtnImage"
+                      src="/logo/icon/info.png"
+                      alt=""
+                      aria-hidden="true"
+                    />
                   </button>
                 )}
 
@@ -121,8 +139,15 @@ function Navbar({
                     onClick={onOpenProfile || (() => {
                       window.location.href = "/profil";
                     })}
+                    title={profileLabel}
+                    aria-label={profileLabel}
                   >
-                    <span>{profileLabel.toUpperCase()}</span>
+                    <img
+                      className="siteNavbarBtnImage"
+                      src="/logo/icon/profil.png"
+                      alt=""
+                      aria-hidden="true"
+                    />
                   </button>
                 )}
 
@@ -131,8 +156,15 @@ function Navbar({
                     type="button"
                     className="siteNavbarBtn"
                     onClick={openCustomModal}
+                    title="CUSTOM"
+                    aria-label="CUSTOM"
                   >
-                    <span>CUSTOM</span>
+                    <img
+                      className="siteNavbarBtnImage"
+                      src="/logo/icon/custom.png"
+                      alt=""
+                      aria-hidden="true"
+                    />
                   </button>
                 )}
               </div>

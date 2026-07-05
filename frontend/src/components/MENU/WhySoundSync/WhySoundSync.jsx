@@ -7,11 +7,11 @@ const features = [
     title: "Simple & Fast",
     description: "Simple, fast and secure 2 use.",
     link: "",
-    alternate: {
-      image: "/ichigo/bigSmiles.jpeg",
-      title: "Quick Setup",
-      description: "Pick, sync, and keep the music moving.",
-      link: "",
+        alternate: {
+      image: "/wallpaper/soraMusic.jpg",
+      title: "Want sum more?!",
+      description: "Visit my Bl00dy website 4 more!",
+      link: "https://yanis26x.github.io/yanis26x/",
     },
   },
   {
@@ -20,10 +20,10 @@ const features = [
     description: "Move your playlists across all platforms.",
     link: "",
     alternate: {
-      image: "/ichigo/inClassHappy.jpg",
-      title: "Everywhere",
-      description: "Your playlists follow your vibe.",
-      link: "",
+      image: "/wallpaper/eyesContact.jpg",
+      title: "Let's be friends!!",
+      description: "If you want 2 contact me, add me on ig @yanis26x.",
+      link: "https://www.instagram.com/yanis26x/",
     },
   },
   {
@@ -31,10 +31,10 @@ const features = [
     title: "100% Free",
     description: "Free forever. Just sync your playlists n' enjoy!",
     link: "",
-    alternate: {
-      image: "/ichigo/hug.jpg",
-      title: "No Paywall",
-      description: "No stress, no hidden fees, just music.",
+        alternate: {
+      image: "/ichigo/bigSmiles.jpeg",
+      title: "Having withdrawal",
+      description: "Pick, sync, and keep the music moving. ",
       link: "",
     },
   },
@@ -43,16 +43,22 @@ const features = [
     title: "4 Music Lovers",
     description: "Made while listening 2 confetti!!",
     link: "",
-    alternate: {
-      image: "/ichigo/confetti.jpg",
-      title: "@yanis26x",
-      description: "made BL00d + F13nD & V@mP+ N1t3MaR3!.",
-      link: "https://yanis26x.github.io/yanis26x/",
+        alternate: {
+      image: "/ichigo/inClassHappy.jpg",
+      title: "4 Everyone",
+      description: "meant 2 be used by everyone easly.",
+      link: "",
     },
   },
 ];
 
-function WhySoundSync({ text }) {
+function WhySoundSync({
+  text,
+  isDashboardVisible,
+  isSelfPromoVisible,
+  onToggleDashboard,
+  onToggleSelfPromo,
+}) {
   const [showAlternateFeatures, setShowAlternateFeatures] = useState(false);
   const [areFeaturesChanging, setAreFeaturesChanging] = useState(false);
   const [hasAnimatedIn, setHasAnimatedIn] = useState(false);
@@ -73,7 +79,7 @@ function WhySoundSync({ text }) {
           setHasAnimatedIn(false);
         }, 560);
       }, 340);
-    }, 5000);
+    }, 10000);
 
     return () => {
       window.clearInterval(swapInterval);
@@ -104,6 +110,36 @@ function WhySoundSync({ text }) {
         <div className="homeInfoHeader">
           {/* <h2>Why SoundSync?!</h2> */}
           <p>{text}</p>
+
+          <div className="homeInfoHeaderActions">
+            <button
+              type="button"
+              className="homeInfoHeaderActionBtn"
+              onClick={onToggleDashboard}
+              aria-label={isDashboardVisible ? "Hide Dashboard" : "Show Dashboard"}
+            >
+              <img
+                src={isDashboardVisible ? "/logo/icon/hide.png" : "/logo/icon/show.png"}
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              type="button"
+              className="homeInfoHeaderActionBtn"
+              onClick={onToggleSelfPromo}
+              aria-label={isSelfPromoVisible ? "Hide Selfpromo" : "Show Selfpromo"}
+            >
+              <img
+                src={isSelfPromoVisible ? "/logo/icon/hide.png" : "/logo/icon/show.png"}
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Selfpromo</span>
+            </button>
+          </div>
         </div>
 
         <div className="homeInfoFeatureGrid">
