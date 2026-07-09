@@ -27,7 +27,6 @@ function Navbar({
   const [isCustomModalClosing, setIsCustomModalClosing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const normalizedTransferLabel = transferLabel.toUpperCase();
-  const isStartButton = normalizedTransferLabel === "START";
 
   const openCustomModal = () => {
     setIsMobileMenuOpen(false);
@@ -77,26 +76,19 @@ function Navbar({
           {showTransferButton && (
             <button
               type="button"
-              className={`siteNavbarBtn siteNavbarStartBtn ${isStartButton ? "isStart" : "isHome"}`}
+              className="siteNavbarBtn siteNavbarStartBtn isHome"
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
-              title={isTransferLoading ? transferStatus : normalizedTransferLabel}
-              aria-label={normalizedTransferLabel}
+              title={isTransferLoading ? transferStatus : "HOME"}
+              aria-label="HOME"
             >
-              {isStartButton && (
-                <span className="siteNavbarStatusDot" aria-hidden="true" />
-              )}
-              {isStartButton ? (
-                <span>{normalizedTransferLabel}</span>
-              ) : (
-                <img
-                  className="siteNavbarBtnImage"
-                  src="/logo/icon/home.png"
-                  alt=""
-                  aria-hidden="true"
-                />
-              )}
+              <img
+                className="siteNavbarBtnImage"
+                src="/logo/icon/home.png"
+                alt=""
+                aria-hidden="true"
+              />
             </button>
           )}
 
