@@ -72,8 +72,9 @@ function Info() {
   useEffect(() => {
     const theme = themes[currentTheme];
 
-    document.documentElement.style.setProperty("--bg-image", theme.background ? `url(${theme.background})` : "none");
-    document.documentElement.style.setProperty("--bg-color", theme.backgroundColor || "#0d0d0d");
+    document.documentElement.style.setProperty("--bg-image", theme.background ? `url(${theme.background})` : theme.backgroundColor || "none");
+    document.documentElement.style.setProperty("--bg-color", theme.background ? theme.backgroundColor || "#0d0d0d" : "#000000");
+    document.documentElement.style.setProperty("--bg-size", theme.background ? "cover" : "170% 170%");
     document.documentElement.style.setProperty("--card-bg", theme.cardBg);
     document.documentElement.style.setProperty("--border-color", theme.border);
     document.documentElement.style.setProperty("--accent", theme.accent);

@@ -550,12 +550,17 @@ function Menu() {
 
     document.documentElement.style.setProperty(
       "--bg-image",
-      theme.background ? `url(${theme.background})` : "none"
+      theme.background ? `url(${theme.background})` : theme.backgroundColor || "none"
     );
 
     document.documentElement.style.setProperty(
       "--bg-color",
-      theme.backgroundColor || "#0d0d0d"
+      theme.background ? theme.backgroundColor || "#0d0d0d" : "#000000"
+    );
+
+    document.documentElement.style.setProperty(
+      "--bg-size",
+      theme.background ? "cover" : "170% 170%"
     );
 
     document.documentElement.style.setProperty(

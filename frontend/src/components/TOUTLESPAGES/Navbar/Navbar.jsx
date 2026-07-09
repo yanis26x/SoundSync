@@ -83,10 +83,9 @@ function Navbar({
               title={isTransferLoading ? transferStatus : "HOME"}
               aria-label="HOME"
             >
-              <img
+              <span
                 className="siteNavbarBtnImage"
-                src="/logo/icon/home.png"
-                alt=""
+                style={{ "--icon-url": "url('/logo/icon/home.png')" }}
                 aria-hidden="true"
               />
             </button>
@@ -115,10 +114,9 @@ function Navbar({
                     title={infoLabel}
                     aria-label={infoLabel}
                   >
-                    <img
+                    <span
                       className="siteNavbarBtnImage"
-                      src="/logo/icon/info.png"
-                      alt=""
+                      style={{ "--icon-url": "url('/logo/icon/info.png')" }}
                       aria-hidden="true"
                     />
                   </button>
@@ -134,10 +132,9 @@ function Navbar({
                     title={profileLabel}
                     aria-label={profileLabel}
                   >
-                    <img
+                    <span
                       className="siteNavbarBtnImage"
-                      src="/logo/icon/profil.png"
-                      alt=""
+                      style={{ "--icon-url": "url('/logo/icon/profil.png')" }}
                       aria-hidden="true"
                     />
                   </button>
@@ -151,10 +148,9 @@ function Navbar({
                     title="CUSTOM"
                     aria-label="CUSTOM"
                   >
-                    <img
+                    <span
                       className="siteNavbarBtnImage"
-                      src="/logo/icon/custom.png"
-                      alt=""
+                      style={{ "--icon-url": "url('/logo/icon/custom.png')" }}
                       aria-hidden="true"
                     />
                   </button>

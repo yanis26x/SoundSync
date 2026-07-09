@@ -1,3 +1,35 @@
+const createBlackAccentTheme = ({
+  name,
+  description,
+  accent,
+  mid,
+  end,
+  text = "#f2fffd",
+}) => ({
+  name,
+  description,
+  background: "",
+  backgroundColor: `
+    radial-gradient(
+      circle at 50% 45%,
+      ${end} 0%,
+      ${mid} 38%,
+      #050505 72%,
+      #000000 100%
+    ),
+    linear-gradient(
+      180deg,
+      #000000 0%,
+      #000000 100%
+    )
+  `,
+  cardBg: "rgba(0, 10, 9, 0.84)",
+  border: `${accent}80`,
+  accent,
+  accentSoft: `${accent}29`,
+  text,
+});
+
 export const themes = {
   tomo: {
     name: "Tomo",
@@ -32,16 +64,57 @@ export const themes = {
     text: "#f2fdff",
   },
 
-  noir: {
-    name: "Noir",
-    description: "Fond noir simple avec accents blancs.",
-    background: "",
-    backgroundColor: "#000000",
-    cardBg: "rgba(0, 0, 0, 0.82)",
-    border: "rgba(255, 255, 255, 0.56)",
+  noir: createBlackAccentTheme({
+    name: "Turquoise",
+    description: "Fond noir avec un léger dégradé turquoise.",
+    accent: "#00ffd9",
+    mid: "#000000",
+    end: "#00ffd9",
+  }),
+
+  noirOrange: createBlackAccentTheme({
+    name: "Orange",
+    description: "Fond noir avec un léger dégradé orange.",
+    accent: "#ff8800",
+    mid: "#000000",
+    end: "#ff8800",
+    text: "#fff8ef",
+  }),
+
+  noirMauve: createBlackAccentTheme({
+    name: "Purple",
+    description: "Fond noir avec un léger dégradé mauve.",
+    accent: "#8602fa",
+    mid: "#000000",
+    end: "#8602fa",
+    text: "#fbf5ff",
+  }),
+
+  noirSilver: createBlackAccentTheme({
+    name: "Silver",
+    description: "Fond noir avec un léger dégradé silver.",
     accent: "#ffffff",
-    accentSoft: "rgba(255, 255, 255, 0.18)",
+    mid: "#000000",
+    end: "#ffffff",
     text: "#ffffff",
-  },
+  }),
+
+  noirRose: createBlackAccentTheme({
+    name: "Pink",
+    description: "Fond noir avec un léger dégradé rose.",
+    accent: "#ff007b",
+    mid: "#000000",
+    end: "#ff0084",
+    text: "#fff4fa",
+  }),
+
+  noirRouge: createBlackAccentTheme({
+    name: "Red",
+    description: "Fond noir avec un léger dégradé rouge.",
+    accent: "#ff0000",
+    mid: "#000000",
+    end: "#ff0000",
+    text: "#fff4f4",
+  }),
 
 };

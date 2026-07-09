@@ -124,6 +124,38 @@ function CustomModal({
     { id: "voice", label: "Voice" },
     { id: "fx", label: "FX" },
   ];
+  const themeEntries = Object.entries(themes);
+  const imageThemes = themeEntries.filter(([, theme]) => theme.background);
+  const colorThemes = themeEntries.filter(([, theme]) => !theme.background);
+
+  const renderThemeOption = ([key, theme], variant = "image") => (
+    <button
+      key={key}
+      className={`themeOption ${
+        variant === "color" ? "colorThemeOption" : "imageThemeOption"
+      } ${currentTheme === key ? "selectedTheme" : ""}`}
+      onClick={() => {
+        setCurrentTheme(key);
+      }}
+    >
+      <span className="themeSelectedIndicator" aria-hidden="true" />
+
+      {theme.background ? (
+        <img src={theme.background} alt={theme.name} />
+      ) : (
+        <span
+          className="themeOptionPreview"
+          style={{ background: theme.backgroundColor || theme.cardBg }}
+          aria-hidden="true"
+        />
+      )}
+
+      <div>
+        <h3 style={{ color: theme.accent }}>{theme.name}</h3>
+        {variant === "image" && <p>{theme.description}</p>}
+      </div>
+    </button>
+  );
 
   return (
     <div className={modalClassName} onClick={onClose}>
@@ -164,33 +196,14 @@ function CustomModal({
           <>
             <h3 className="customModalSectionTitle">Theme</h3>
 
-            <div className="customModalGrid">
-              {Object.entries(themes).map(([key, theme]) => (
-                <button
-                  key={key}
-                  className={`themeOption ${
-                    currentTheme === key ? "selectedTheme" : ""
-                  }`}
-                  onClick={() => {
-                    setCurrentTheme(key);
-                  }}
-                >
-                  {theme.background ? (
-                    <img src={theme.background} alt={theme.name} />
-                  ) : (
-                    <span
-                      className="themeOptionPreview"
-                      style={{ background: theme.backgroundColor || theme.cardBg }}
-                      aria-hidden="true"
-                    />
-                  )}
+            <div className="customThemeGroups">
+              <div className="customModalGrid imageThemeGrid">
+                {imageThemes.map((themeEntry) => renderThemeOption(themeEntry))}
+              </div>
 
-                  <div>
-                    <h3>{theme.name}</h3>
-                    <p>{theme.description}</p>
-                  </div>
-                </button>
-              ))}
+              <div className="customModalGrid colorThemeGrid">
+                {colorThemes.map((themeEntry) => renderThemeOption(themeEntry, "color"))}
+              </div>
             </div>
           </>
         )}

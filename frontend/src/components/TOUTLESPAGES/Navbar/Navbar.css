@@ -135,10 +135,10 @@
   width: 21px;
   height: 21px;
   display: block;
-  object-fit: contain;
-  filter:
-    brightness(0) invert(1)
-    drop-shadow(0 0 7px rgba(255,255,255,.2));
+  background: var(--accent);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 34%, transparent));
+  mask: var(--icon-url) center / contain no-repeat;
+  -webkit-mask: var(--icon-url) center / contain no-repeat;
 }
 
 .siteNavbarStartBtn {
