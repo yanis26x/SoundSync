@@ -11,6 +11,17 @@ function Profil() {
 
     return themes[savedTheme] ? savedTheme : "miku";
   });
+  const [particlesEnabled] = useState(() => {
+    const savedSettings = localStorage.getItem("sound_sync_custom_settings");
+
+    try {
+      return savedSettings
+        ? JSON.parse(savedSettings).particlesEnabled !== false
+        : true;
+    } catch {
+      return true;
+    }
+  });
   const [accessToken, setAccessToken] = useState(
     () => localStorage.getItem("spotify_access_token") || ""
   );
@@ -38,7 +49,8 @@ function Profil() {
   useEffect(() => {
     const theme = themes[currentTheme];
 
-    document.documentElement.style.setProperty("--bg-image", `url(${theme.background})`);
+    document.documentElement.style.setProperty("--bg-image", theme.background ? `url(${theme.background})` : "none");
+    document.documentElement.style.setProperty("--bg-color", theme.backgroundColor || "#0d0d0d");
     document.documentElement.style.setProperty("--card-bg", theme.cardBg);
     document.documentElement.style.setProperty("--border-color", theme.border);
     document.documentElement.style.setProperty("--accent", theme.accent);
@@ -273,7 +285,7 @@ function Profil() {
 
   return (
     <main className="profilPage">
-      <MusicParticles />
+      {particlesEnabled && <MusicParticles />}
 
       <Navbar
         themes={themes}

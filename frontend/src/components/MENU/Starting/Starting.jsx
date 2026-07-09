@@ -26,6 +26,7 @@ function Starting({
   getPlaylistName,
   getTrackLabel,
   onStartTransfer,
+  onRetryFailed,
 }) {
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
@@ -33,10 +34,22 @@ function Starting({
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
       : hasResult
-        ? "Last playlist"
+        ? transferResult.playlistName || "Last playlist"
         : "No transfer yet";
-  const sourceName = sourcePlatform?.name || "Source";
-  const destinationName = destinationPlatform?.name || "Destination";
+  const sourceName = transferResult?.sourceName || sourcePlatform?.name || "Source";
+  const destinationName = transferResult?.destinationName || destinationPlatform?.name || "Destination";
+  const playlistImage =
+    transferResult?.playlistImage ||
+    (sourcePlatform && selectedSourcePlaylist && getPlaylistName ? null : "");
+  const transferDate = transferResult?.transferredAt
+    ? new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(transferResult.transferredAt))
+    : "";
   const addedTracks = transferResult?.added || [];
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
@@ -85,12 +98,22 @@ function Starting({
         </article>
 
         <article className="startingCard startingActivityCard">
+          {playlistImage && (
+            <img
+              className="startingPlaylistArt"
+              src={playlistImage}
+              alt=""
+              aria-hidden="true"
+            />
+          )}
+
           <p className="startingCardKicker">
             {transferLoading ? "Transfer running" : hasResult ? "Last transfer" : "Activity"}
           </p>
 
           <h2>{playlistName}</h2>
           <span className="startingRoute">{sourceName} → {destinationName}</span>
+          {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 
           <div className="startingTicker" aria-label="Transfer activity preview">
             <ul>
@@ -105,6 +128,17 @@ function Starting({
             <span>{getCount(failedTracks)} failed</span>
             <span>{getCount(alreadyTracks)} already</span>
           </div>
+
+          {failedTracks.length > 0 && (
+            <button
+              type="button"
+              className="startingRetryBtn"
+              onClick={onRetryFailed}
+              disabled={transferLoading}
+            >
+              {text?.retryFailedTracks || "Retry failed tracks"}
+            </button>
+          )}
         </article>
       </div>
     </section>

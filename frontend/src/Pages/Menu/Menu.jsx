@@ -28,6 +28,7 @@ const defaultSoundSettings = {
   transferButtonSound: "touchP4",
   cancelButtonSound: "oupsP4",
   mikuVoiceEnabled: true,
+  particlesEnabled: true,
 };
 
 const notificationSounds = {
@@ -104,6 +105,7 @@ const text = {
     transferDone: "Transfer done",
     transferDoneNotification: "Transfer finished",
     transferDoneNotificationText: "Your playlist transfer is ready 2 review.",
+    retryFailedTracks: "Retry failed tracks",
     restartTransfer: "return 2 the menu",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
@@ -548,7 +550,12 @@ function Menu() {
 
     document.documentElement.style.setProperty(
       "--bg-image",
-      `url(${theme.background})`
+      theme.background ? `url(${theme.background})` : "none"
+    );
+
+    document.documentElement.style.setProperty(
+      "--bg-color",
+      theme.backgroundColor || "#0d0d0d"
     );
 
     document.documentElement.style.setProperty(
@@ -1215,6 +1222,12 @@ function Menu() {
         added: simulationTracks,
         failed: failedTracks,
         already: ["Already Synced - Demo Mode"],
+        playlistName: simulationPlaylist.name,
+        playlistImage: "/SoundSync/SoundSyncLogoNoBG.png",
+        transferredAt: new Date().toISOString(),
+        sourceName: simulationSourcePlatform.name,
+        destinationName: simulationDestinationPlatform.name,
+        targetPlaylistId: "simulation-target-playlist",
       });
     } catch (err) {
       if (axios.isCancel(err)) {
@@ -1255,7 +1268,10 @@ function Menu() {
     setTransferStatus(text.transferStopped);
   };
 
-  const startPlaylistTransfer = async () => {
+  const startPlaylistTransfer = async ({
+    retryLabels = null,
+    retryTargetPlaylistId = "",
+  } = {}) => {
     if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
 
 if (
@@ -1311,13 +1327,15 @@ if (
         throw new Error(text.noSelectedTracks);
       }
 
-      const trackLabels = tracksToTransfer
-        .map((track) => getTrackLabel(sourcePlatform.id, track))
-        .filter(Boolean);
+      const trackLabels = Array.isArray(retryLabels)
+        ? retryLabels.filter(Boolean)
+        : tracksToTransfer
+          .map((track) => getTrackLabel(sourcePlatform.id, track))
+          .filter(Boolean);
 
-      let targetPlaylistId = destinationPlaylistId;
+      let targetPlaylistId = retryTargetPlaylistId || destinationPlaylistId;
 
-      if (destinationMode === "new") {
+      if (!retryTargetPlaylistId && destinationMode === "new") {
         setTransferStatus(text.transferCreatingPlaylist);
         const createUrl = `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists`;
         const playlistTitle =
@@ -1559,6 +1577,12 @@ if (
         added,
         failed,
         already,
+        playlistName: getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
+        playlistImage: getPlaylistImage(sourcePlatform.id, selectedSourcePlaylist),
+        transferredAt: new Date().toISOString(),
+        sourceName: sourcePlatform.name,
+        destinationName: destinationPlatform.name,
+        targetPlaylistId,
       });
     } catch (err) {
       if (axios.isCancel(err)) {
@@ -1573,6 +1597,15 @@ if (
         setTransferStatus("");
       }
     }
+  };
+
+  const retryFailedTransfer = () => {
+    if (!transferResult?.failed?.length || transferLoading) return;
+
+    startPlaylistTransfer({
+      retryLabels: transferResult.failed,
+      retryTargetPlaylistId: transferResult.targetPlaylistId,
+    });
   };
 
   const renderTrackPanel = (platformId, playlistId) => {
@@ -1717,7 +1750,7 @@ if (
 
   return (
     <main className="app" onClickCapture={playMenuButtonSound}>
-      <MusicParticles />
+      {soundSettings.particlesEnabled && <MusicParticles />}
       <FirstVisitMikuModal />
 
       {transferDoneToast && (
@@ -1901,6 +1934,7 @@ if (
             toggleSelectedTrack={toggleSelectedTrack}
             getTrackLabel={getTrackLabel}
             startPlaylistTransfer={startPlaylistTransfer}
+            retryFailedTransfer={retryFailedTransfer}
             restartTransferFlow={restartTransferFlow}
             returnToMenu={() => navigateToPage("home", "/")}
             stopTransfer={stopTransfer}
@@ -1935,6 +1969,7 @@ if (
                 getPlaylistName={getPlaylistName}
                 getTrackLabel={getTrackLabel}
                 onStartTransfer={startNewTransferFlow}
+                onRetryFailed={retryFailedTransfer}
               />
 
               <WhySoundSync

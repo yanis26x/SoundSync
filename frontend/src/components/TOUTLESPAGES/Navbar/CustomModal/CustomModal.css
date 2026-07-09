@@ -6,9 +6,11 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(0, 0, 0, .58);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
+    rgba(0, 0, 0, .68);
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
 }
 
 .customModalOverlay.open {
@@ -20,19 +22,21 @@
 }
 
 .customModal {
-  width: min(860px, 100%);
-  max-height: min(760px, 90vh);
+  width: min(940px, 100%);
+  max-height: min(780px, 90vh);
   overflow: auto;
-  padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, rgba(255,255,255,.14));
-  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(255,255,255,.14));
+  border-radius: 16px;
   background:
-    linear-gradient(180deg, rgba(22,22,26,.98), rgba(8,8,10,.98));
+    linear-gradient(180deg, rgba(24,24,28,.98), rgba(8,8,10,.99));
   color: var(--text-color);
   box-shadow:
-    0 28px 80px rgba(0,0,0,.48),
-    0 0 34px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 30px 90px rgba(0,0,0,.58),
+    0 0 42px color-mix(in srgb, var(--accent) 16%, transparent),
     inset 0 1px 0 rgba(255,255,255,.12);
+  scrollbar-color: color-mix(in srgb, var(--accent) 44%, rgba(255,255,255,.18)) rgba(255,255,255,.06);
+  scrollbar-width: thin;
 }
 
 .customModalOverlay.open .customModal {
@@ -45,49 +49,83 @@
 
 .customModalHeader {
   position: sticky;
-  top: -20px;
+  top: -22px;
   z-index: 4;
-  margin: -20px -20px 18px;
-  padding: 18px 20px;
+  margin: -22px -22px 20px;
+  padding: 18px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   border-bottom: 1px solid rgba(255,255,255,.1);
   background: rgba(10,10,12,.94);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .customModalHeader h2 {
+  flex: 0 0 auto;
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
   font-weight: 1000;
 }
 
+.customModalTabs {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+
+.customModalTab {
+  min-height: 34px;
+  margin: 0;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 0;
+  background: rgba(255,255,255,.06);
+  color: color-mix(in srgb, var(--text-color) 70%, transparent);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.customModalTab:hover,
+.activeCustomTab {
+  background: rgba(255,255,255,.14);
+  color: var(--text-color);
+}
+
 .customModalClose {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   margin: 0;
   padding: 0;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.18);
   border-radius: 999px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.075);
   color: var(--text-color);
   font: inherit;
-  font-size: 23px;
+  font-size: 24px;
   line-height: 1;
   cursor: pointer;
 }
 
+.customModalClose:hover {
+  border-color: rgba(255,255,255,.24);
+}
+
 .customModalSectionTitle {
-  margin: 22px 0 12px;
-  color: color-mix(in srgb, var(--text-color) 76%, transparent);
+  margin: 24px 0 12px;
+  color: color-mix(in srgb, var(--accent) 70%, var(--text-color));
   font-size: 12px;
   font-weight: 1000;
-  letter-spacing: .08em;
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 
@@ -98,46 +136,59 @@
 .customModalGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .themeOption {
   position: relative;
   overflow: hidden;
-  min-height: 230px;
+  min-height: 236px;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 14px;
-  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: rgba(255,255,255,.055);
   color: var(--text-color);
   text-align: left;
   cursor: pointer;
   transition:
     transform .2s ease,
     border-color .2s ease,
-    box-shadow .2s ease;
+    box-shadow .2s ease,
+    background .2s ease;
 }
 
 .themeOption:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--accent) 48%, rgba(255,255,255,.16));
-  box-shadow: 0 16px 28px rgba(0,0,0,.28);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.24);
+  background: rgba(255,255,255,.075);
+  box-shadow: 0 16px 34px rgba(0,0,0,.34);
+}
+
+.themeOption img,
+.themeOptionPreview {
+  width: 100%;
+  height: 150px;
 }
 
 .themeOption img {
-  width: 100%;
-  height: 148px;
   object-fit: cover;
 }
 
+.themeOptionPreview {
+  display: block;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
 .themeOption div {
-  min-height: 82px;
-  padding: 12px;
-  background: rgba(0,0,0,.24);
+  min-height: 86px;
+  padding: 13px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(0,0,0,.12)),
+    rgba(0,0,0,.34);
 }
 
 .themeOption h3 {
@@ -149,36 +200,40 @@
 
 .themeOption p {
   margin: 0;
-  color: color-mix(in srgb, var(--text-color) 70%, transparent);
+  color: color-mix(in srgb, var(--text-color) 68%, transparent);
   font-size: 12px;
   line-height: 1.35;
 }
 
 .selectedTheme {
-  border-color: var(--accent);
+  border-color: rgba(255,255,255,.34);
+  background: rgba(255,255,255,.11);
   box-shadow:
-    0 0 22px color-mix(in srgb, var(--accent) 34%, transparent),
+    0 0 0 1px rgba(255,255,255,.12),
     inset 0 1px 0 rgba(255,255,255,.16);
 }
 
 .customSoundSettings {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .customSoundRow {
   display: grid;
-  grid-template-columns: minmax(170px, 1fr) minmax(320px, 1.5fr);
+  grid-template-columns: minmax(190px, 1fr) minmax(340px, 1.45fr);
   align-items: center;
-  gap: 16px;
-  padding: 14px;
+  gap: 18px;
+  min-height: 78px;
+  padding: 15px;
   border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px;
-  background: rgba(255,255,255,.055);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.062), rgba(255,255,255,.032));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 .customSoundRow h4 {
-  margin: 0 0 5px;
+  margin: 0 0 6px;
   color: var(--accent);
   font-size: 14px;
   line-height: 1;
@@ -187,7 +242,8 @@
 
 .customSoundRow p {
   margin: 0;
-  color: color-mix(in srgb, var(--text-color) 64%, transparent);
+  max-width: 360px;
+  color: color-mix(in srgb, var(--text-color) 62%, transparent);
   font-size: 12px;
   line-height: 1.35;
 }
@@ -208,8 +264,8 @@
 
 .customSoundOption {
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 999px;
+  border: 0;
+  border-radius: 0;
   background: rgba(0,0,0,.24);
   transition:
     border-color .2s ease,
@@ -218,9 +274,8 @@
 }
 
 .customSoundOption.selectedSoundOption {
-  border-color: rgba(255,255,255,.13);
-  background: rgba(255,255,255,.06);
-  box-shadow: none;
+  background: rgba(255,255,255,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 .customSoundSelect,
@@ -237,7 +292,8 @@
 
 .customSoundSelect {
   min-height: 38px;
-  padding: 0 12px;
+  min-width: 78px;
+  padding: 0 13px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -252,7 +308,6 @@
   padding: 0;
   display: grid;
   place-items: center;
-  border-left: 1px solid rgba(255,255,255,.12);
   font-size: 11px;
 }
 
@@ -260,31 +315,36 @@
 .customSoundPreview:hover,
 .customPreviewNotificationBtn:hover,
 .customModalClose:hover {
-  background: color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,.06));
+  background: rgba(255,255,255,.1);
 }
 
 .customPreviewNotificationBtn {
-  min-height: 30px;
-  padding: 0 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid color-mix(in srgb, var(--accent) 46%, rgba(255,255,255,.16));
-  border-radius: 999px;
+  padding: 0;
+  border: 0;
   background: rgba(0,0,0,.24);
-  font-size: 11px;
   font-weight: 900;
-  white-space: nowrap;
+}
+
+.customMuteIcon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  object-fit: contain;
+  filter: invert(1);
+}
+
+.customIconOnlySelect {
+  min-width: 38px;
+  padding: 0;
 }
 
 .customSelectedDot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   flex: 0 0 auto;
   border-radius: 999px;
-  background: #33ff66;
-  box-shadow: 0 0 12px rgba(51,255,102,.92);
-  animation: customSelectedBlink 1s ease-in-out infinite;
+  background: var(--text-color);
+  box-shadow: none;
 }
 
 .customToggleGroup {
@@ -294,21 +354,22 @@
 
 .customToggle {
   min-height: 38px;
-  padding: 0 13px;
+  min-width: 82px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 999px;
+  border: 0;
+  border-radius: 0;
   background: rgba(0,0,0,.24);
   font-size: 12px;
   font-weight: 850;
 }
 
 .customToggle:has(input:checked) {
-  border-color: rgba(255,255,255,.13);
-  box-shadow: none;
+  background: rgba(255,255,255,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 .customToggle input {
@@ -351,19 +412,6 @@
   }
 }
 
-@keyframes customSelectedBlink {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: .38;
-    transform: scale(.72);
-  }
-}
-
 @media (max-width: 760px) {
   .customModalOverlay {
     padding: 12px;
@@ -372,13 +420,26 @@
   .customModal {
     max-height: 88vh;
     padding: 16px;
-    border-radius: 16px;
+    border-radius: 14px;
   }
 
   .customModalHeader {
     top: -16px;
     margin: -16px -16px 16px;
     padding: 15px 16px;
+    flex-wrap: wrap;
+  }
+
+  .customModalTabs {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .customModalTab {
+    flex: 0 0 auto;
   }
 
   .customModalGrid {
@@ -387,11 +448,25 @@
 
   .themeOption {
     min-height: 0;
+    display: grid;
+    grid-template-columns: 118px minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .themeOption img,
+  .themeOptionPreview {
+    height: 100%;
+    min-height: 112px;
+  }
+
+  .themeOption div {
+    min-height: 112px;
   }
 
   .customSoundRow {
     grid-template-columns: 1fr;
     align-items: stretch;
+    gap: 12px;
   }
 
   .customSegmentedControl {
@@ -408,5 +483,40 @@
 
   .customToggleGroup {
     justify-self: stretch;
+  }
+
+  .customToggle {
+    flex: 1;
+  }
+}
+
+@media (max-width: 430px) {
+  .customModalOverlay {
+    padding: 8px;
+  }
+
+  .customModal {
+    max-height: 92vh;
+    padding: 14px;
+  }
+
+  .customModalHeader {
+    top: -14px;
+    margin: -14px -14px 14px;
+    padding: 14px;
+  }
+
+  .themeOption {
+    grid-template-columns: 1fr;
+  }
+
+  .themeOption img,
+  .themeOptionPreview {
+    height: 132px;
+    min-height: 0;
+  }
+
+  .themeOption div {
+    min-height: 0;
   }
 }

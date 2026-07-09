@@ -35,6 +35,7 @@ function StartTransfer({
   returnToMenu,
   stopTransfer,
   transferResult,
+  retryFailedTransfer,
   mikuVoiceEnabled = true,
 }) {
   const [setupStep, setSetupStep] = useState("destination");
@@ -56,6 +57,8 @@ function StartTransfer({
     !transferLoading &&
     (trackSelectionMode !== "specific" || selectedTrackCount > 0) &&
     canContinueToTracks;
+  const canRetryFailed =
+    Boolean(transferResult?.failed?.length) && !transferLoading;
 
   useEffect(() => {
     if (!showTransferSetup || setupStep !== "tracks") {
@@ -248,6 +251,16 @@ function StartTransfer({
         <div className="transferResult">
           <div className="transferResultHeader">
             <h3>{text.transferDone}</h3>
+
+            {canRetryFailed && (
+              <button
+                type="button"
+                className="retryFailedBtn"
+                onClick={retryFailedTransfer}
+              >
+                {text.retryFailedTracks}
+              </button>
+            )}
           </div>
 
           <div className="transferResultSummary">
