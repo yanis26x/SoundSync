@@ -1984,6 +1984,7 @@ if (
                 getPlaylistName={getPlaylistName}
                 getTrackLabel={getTrackLabel}
                 onStartTransfer={startNewTransferFlow}
+                onRetryFailedTransfer={retryFailedTransfer}
               />
 
               <WhySoundSync

@@ -1,4 +1,6 @@
+import { useState } from "react";
 import "./Starting.css";
+import TransferDetailsModal from "./TransferDetailsModal";
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
 
@@ -16,7 +18,7 @@ const platformLogoMap = {
   apple: "/logo/mini/Apple-Music-mini.png",
 };
 
-const defaultCoverImage = "/SoundSync/SoundSyncLogo.png";
+const defaultCoverImage = "/ichigo/blueSkyHappy.jpg";
 
 const getPlatformLogo = (platform, fallbackName) => {
   if (platform?.logo) return platform.logo;
@@ -43,7 +45,9 @@ function Starting({
   getPlaylistName,
   getTrackLabel,
   onStartTransfer,
+  onRetryFailedTransfer,
 }) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
   const noTransfer = !hasActivity;
@@ -57,7 +61,7 @@ function Starting({
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
       : hasResult
         ? transferResult.playlistName || "Last playlist"
-        : "No transfer yet";
+        : "No transfer";
   const sourceName = transferResult?.sourceName || sourcePlatform?.name || "Source";
   const destinationName = transferResult?.destinationName || destinationPlatform?.name || "Destination";
   const sourceLogo = getPlatformLogo(sourcePlatform, sourceName);
@@ -78,7 +82,11 @@ function Starting({
   const addedTracks = transferResult?.added || [];
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
-  const selectedTrackCount = getCount(selectedSourceTracks);
+  const hasFailedTracks = failedTracks.length > 0;
+  const transferTrackCount = getCount(addedTracks) + getCount(failedTracks) + getCount(alreadyTracks);
+  const titleStatus = hasResult
+    ? `${transferTrackCount} ${transferTrackCount === 1 ? "Track" : "Tracks"}`
+    : "0 Tracks";
   const queuedTracks = selectedSourceTracks.map((track) =>
     sourcePlatform && getTrackLabel
       ? getTrackLabel(sourcePlatform.id, track)
@@ -108,7 +116,10 @@ function Starting({
       <div className="startingCards" aria-label="SoundSync start and transfer status">
         <article className="startingCard startingActivityCard">
           <section className="information" aria-label="Transfer information">
-            <h2>{playlistName}</h2>
+            <div className="startingTitleRow">
+              <h2>{playlistName}</h2>
+              <span>{titleStatus}</span>
+            </div>
             {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 
             <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
@@ -125,26 +136,48 @@ function Starting({
               )}
             </span>
 
-            <div className="startingStats">
-              <span>{getCount(addedTracks)} added</span>
-              <span>{getCount(failedTracks)} failed</span>
-              <span>{getCount(alreadyTracks)} already</span>
-            </div>
-
-            <dl className="informationDetails">
-              <div>
-                <dt>Source</dt>
-                <dd>{sourceName}</dd>
+            <dl className={`informationDetails ${hasResult ? "hasTransferResult" : ""}`}>
+              <div className="informationDetailAdded">
+                <dt>Added</dt>
+                <dd>{getCount(addedTracks)}</dd>
               </div>
-              <div>
-                <dt>Destination</dt>
-                <dd>{destinationName}</dd>
+              <div className="informationDetailFailed">
+                <dt>Failed</dt>
+                <dd>{getCount(failedTracks)}</dd>
               </div>
-              <div>
-                <dt>Tracks</dt>
-                <dd>{hasResult ? getCount(addedTracks) + getCount(failedTracks) + getCount(alreadyTracks) : selectedTrackCount}</dd>
+              <div className="informationDetailAlready">
+                <dt>Already</dt>
+                <dd>{getCount(alreadyTracks)}</dd>
               </div>
             </dl>
+
+            <div className="startingActions">
+              <button
+                type="button"
+                className="startingStartBtn"
+                onClick={onStartTransfer}
+              >
+                <span className="startingStartDot" aria-hidden="true"></span>
+                <span>START</span>
+              </button>
+              <button
+                type="button"
+                className="startingStartBtn startingDetailsBtn"
+                onClick={() => setIsDetailsOpen(true)}
+              >
+                <span>DETAILS</span>
+              </button>
+              {hasFailedTracks && (
+                <button
+                  type="button"
+                  className="startingStartBtn startingRetryBtn"
+                  onClick={onRetryFailedTransfer}
+                  disabled={transferLoading}
+                >
+                  <span>RETRY</span>
+                </button>
+              )}
+            </div>
 
             <div className="startingTicker" aria-label="Transfer activity preview">
               {noTransfer ? (
@@ -161,20 +194,15 @@ function Starting({
 
           <div className="coverPreview" aria-hidden="true">
             <img src={coverImage} alt="" />
-            <div className="startingActions">
-              <button
-                type="button"
-                className="startingStartBtn"
-                onClick={onStartTransfer}
-              >
-                <span className="startingStartDot" aria-hidden="true"></span>
-                <span>START</span>
-              </button>
-
-            </div>
           </div>
         </article>
       </div>
+
+      <TransferDetailsModal
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
+        transferResult={transferResult}
+      />
     </section>
   );
 }
