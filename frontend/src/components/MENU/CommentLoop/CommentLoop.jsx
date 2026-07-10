@@ -2,11 +2,6 @@ import { useEffect, useState } from "react";
 import "./CommentLoop.css";
 
 const messages = [
-    {
-    image: "/SoundSync/SoundSyncLogoNoBG.png",
-    title: "SoundSync",
-    type: "logo",
-  },
   {
     href: "https://www.instagram.com/yanis26x",
     image: "/utils/yanis26xPFP.jpg",

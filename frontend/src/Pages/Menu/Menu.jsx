@@ -6,6 +6,8 @@ import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
 import Starting from "../../components/MENU/Starting/Starting";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import Socials from "../../components/MENU/Socials/Socials";
+import MusicPlayerMenu from "../../components/MENU/MusicPlayerMenu/MusicPlayerMenu";
+import ImageLogoMenu from "../../components/MENU/ImageLogoMenu/ImageLogoMenu";
 import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
 import FirstVisitMikuModal from "../../components/TOUTLESPAGES/FirstVisitMikuModal/FirstVisitMikuModal";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
@@ -1981,7 +1983,11 @@ if (
                 text={text.homeBannerText}
               />
 
+              <MusicPlayerMenu />
+
               <Socials />
+
+              <ImageLogoMenu />
             </div>
           </div>
         )}

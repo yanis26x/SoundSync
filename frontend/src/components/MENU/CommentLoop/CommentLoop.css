@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
 
-  overflow: hidden;
+
 
 
 
@@ -25,9 +25,10 @@
   background-position: center;
   background-repeat: no-repeat;
 
-  opacity: .28;
+  opacity: 1;
   filter:
-    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 44%, transparent));
+    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 70%, transparent))
+    drop-shadow(0 10px 18px rgba(0,0,0,.36));
 
   pointer-events: none;
 }
@@ -169,7 +170,6 @@
   border-radius: 50%;
   object-fit: cover;
 
-  border: 2px solid color-mix(in srgb, var(--accent) 42%, white);
 
   box-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 28%, transparent),
@@ -264,8 +264,8 @@
 
 @keyframes commentLogoEnter {
   0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.78);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12);
   }
 
   55% {

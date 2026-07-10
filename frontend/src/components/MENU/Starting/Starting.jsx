@@ -1,3 +1,4 @@
+import CommentLoop from "../CommentLoop/CommentLoop";
 import "./Starting.css";
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
@@ -88,12 +89,17 @@ function Starting({
             aria-hidden="true"
           />
 
+          <div className="startingCommentLoop">
+            <CommentLoop />
+          </div>
+
           <button
             type="button"
             className="startingStartBtn"
             onClick={onStartTransfer}
           >
-            Start
+            <span className="startingStartDot" aria-hidden="true"></span>
+            <span>Start</span>
           </button>
         </article>
 

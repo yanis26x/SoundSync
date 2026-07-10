@@ -1,0 +1,29 @@
+.imageLogoMenuSection {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  margin: 18px auto 0;
+  padding: 0 32px 18px;
+  display: flex;
+  justify-content: center;
+  animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.imageLogoMenuImg {
+  width: min(100%, 720px);
+  max-height: 320px;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 18px 34px rgba(0, 0, 0, 0.46))
+    drop-shadow(0 0 22px color-mix(in srgb, var(--accent) 26%, transparent));
+}
+
+@media (max-width: 650px) {
+  .imageLogoMenuSection {
+    padding: 0 18px 16px;
+  }
+
+  .imageLogoMenuImg {
+    max-height: 240px;
+  }
+}
