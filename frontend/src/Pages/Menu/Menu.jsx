@@ -261,7 +261,15 @@ function Menu() {
     setSelectedSourcePlaylistId("");
     setTrackSelectionMode("all");
     setSelectedTrackKeys([]);
+    setDestinationMode("new");
+    setDestinationPlaylistId("");
+    setNewPlaylistName("");
     setTransferStarted(false);
+    setTransferLoading(false);
+    setTransferStatus("");
+    setTransferResult(null);
+    setTransferError("");
+    setSimulationTransferMeta(null);
   };
 
   const navigateToPage = (page, path) => {

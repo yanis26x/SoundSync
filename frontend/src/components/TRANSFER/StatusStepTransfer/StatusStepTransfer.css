@@ -1,0 +1,167 @@
+.statusStepTransfer {
+  --route-logo-size: 46px;
+  --route-gap: 14px;
+  --route-arrow-size: 34px;
+  --status-item-height: 62px;
+
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  padding: 7px;
+  border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.28));
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 16% 8%, rgba(255,255,255,.28), transparent 28%),
+    radial-gradient(circle at 88% 92%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 38%),
+    linear-gradient(135deg, rgba(12,12,14,.9), rgba(22,22,26,.66));
+  box-shadow:
+    0 16px 34px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.16);
+  backdrop-filter: blur(14px);
+}
+
+/* Route */
+.statusStepTransfer .platformRouteIndicator {
+  flex: 0 0 auto;
+  min-height: var(--status-item-height);
+  min-width: 178px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--route-gap);
+
+  padding: 8px 14px;
+
+  border-radius: 16px;
+
+}
+
+.statusStepTransfer .platformRouteIndicator img {
+  width: var(--route-logo-size);
+  height: var(--route-logo-size);
+  display: block;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,.2))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 24%, transparent));
+}
+
+.statusStepTransfer .platformRoutePlaceholder {
+  width: var(--route-logo-size);
+  height: var(--route-logo-size);
+  display: inline-grid;
+  place-items: center;
+
+  border-radius: 999px;
+  color: rgba(255,255,255,.92);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 1000;
+}
+
+.statusStepTransfer .platformRouteIndicator span {
+  color: #000;
+  font-size: var(--route-arrow-size);
+  line-height: 1;
+  font-weight: 1000;
+  text-shadow:
+    0 0 8px rgba(255,255,255,.82),
+    0 0 14px color-mix(in srgb, var(--accent) 36%, transparent);
+}
+
+/* Step */
+.statusStepTransfer .statusStep {
+  flex: 0 0 auto;
+  min-height: var(--status-item-height);
+  min-width: 10px;
+  display: inline-grid;
+  grid-template-columns: 0 auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 8px 6px;
+
+  border-radius: 16px;
+
+}
+
+.statusStepTransfer .statusStepText {
+  grid-column: 2;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 1000;
+  white-space: nowrap;
+}
+
+.statusStepTransfer .statusStepResetBtn {
+  grid-column: 3;
+  min-height: 26px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  background: rgba(0,0,0,.26);
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 1000;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.statusStepTransfer .statusStepResetBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.38);
+  background: color-mix(in srgb, var(--accent) 28%, rgba(0,0,0,.28));
+}
+
+.statusStepTransfer .statusStepResetBtn:active {
+  transform: scale(.98);
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .statusStepTransfer {
+    --route-logo-size: 38px;
+    --route-gap: 10px;
+    --route-arrow-size: 28px;
+    --status-item-height: 56px;
+
+    left: 12px;
+    right: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 22px;
+  }
+
+  .statusStepTransfer .platformRouteIndicator {
+    min-width: 154px;
+  }
+
+  .statusStepTransfer .statusStep {
+    min-width: 182px;
+  }
+
+  .statusStepTransfer .statusStepText {
+    font-size: 15px;
+  }
+
+  .statusStepTransfer .statusStepResetBtn {
+    min-height: 24px;
+    font-size: 10px;
+  }
+}
