@@ -90,7 +90,7 @@ function CustomModal({
   ];
 
   const notificationStyleOptions = [
-    { value: "classic", label: "White" },
+    { value: "classic", label: "Black" },
     { value: "theme", label: "Theme" },
   ];
 

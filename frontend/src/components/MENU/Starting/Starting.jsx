@@ -165,7 +165,7 @@ function Starting({
                 className="startingStartBtn startingDetailsBtn"
                 onClick={() => setIsDetailsOpen(true)}
               >
-                <span>DETAILS</span>
+                <span>+ DETAILS</span>
               </button>
               {hasFailedTracks && (
                 <button
@@ -174,7 +174,7 @@ function Starting({
                   onClick={onRetryFailedTransfer}
                   disabled={transferLoading}
                 >
-                  <span>RETRY</span>
+                  <span>↩ RETRY</span>
                 </button>
               )}
             </div>

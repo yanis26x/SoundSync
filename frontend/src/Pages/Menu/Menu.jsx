@@ -203,6 +203,14 @@ function Menu() {
     }
   });
   const transferAbortControllerRef = useRef(null);
+  const transferDoneToastEffectsRef = useRef({
+    audioTimeout: null,
+    closeTimeout: null,
+    removeTimeout: null,
+    removeAfterManualCloseTimeout: null,
+    notificationAudio: null,
+    closeAudio: null,
+  });
   const [platformOrder, setPlatformOrder] = useState(() => {
     const savedOrder = localStorage.getItem("platform_order");
 
@@ -496,8 +504,34 @@ function Menu() {
     return () => window.removeEventListener("popstate", syncCurrentPageWithPath);
   }, []);
 
+  const clearTransferDoneToastEffects = useCallback(() => {
+    const effects = transferDoneToastEffectsRef.current;
+
+    if (effects.audioTimeout) window.clearTimeout(effects.audioTimeout);
+    if (effects.closeTimeout) window.clearTimeout(effects.closeTimeout);
+    if (effects.removeTimeout) window.clearTimeout(effects.removeTimeout);
+    if (effects.removeAfterManualCloseTimeout) window.clearTimeout(effects.removeAfterManualCloseTimeout);
+
+    effects.notificationAudio?.pause();
+    effects.closeAudio?.pause();
+
+    if (effects.notificationAudio) effects.notificationAudio.currentTime = 0;
+    if (effects.closeAudio) effects.closeAudio.currentTime = 0;
+
+    transferDoneToastEffectsRef.current = {
+      audioTimeout: null,
+      closeTimeout: null,
+      removeTimeout: null,
+      removeAfterManualCloseTimeout: null,
+      notificationAudio: null,
+      closeAudio: null,
+    };
+  }, []);
+
   useEffect(() => {
     if (!transferResult) return;
+
+    clearTransferDoneToastEffects();
 
     setTransferDoneToast({
       id: Date.now(),
@@ -508,7 +542,9 @@ function Menu() {
 
     const notificationSound = notificationSounds[soundSettings.notificationSound];
     const notificationAudio = notificationSound ? new Audio(notificationSound) : null;
-    const closeAudio = notificationSound ? new Audio(transferToastCloseSound) : null;
+    const closeAudio = new Audio(transferToastCloseSound);
+    transferDoneToastEffectsRef.current.notificationAudio = notificationAudio;
+    transferDoneToastEffectsRef.current.closeAudio = closeAudio;
 
     if (notificationAudio) {
       notificationAudio.volume = 0.45;
@@ -519,14 +555,14 @@ function Menu() {
       closeAudio.volume = 0.5;
     }
 
-    const audioTimeout = window.setTimeout(() => {
+    transferDoneToastEffectsRef.current.audioTimeout = window.setTimeout(() => {
       if (!notificationAudio) return;
 
       notificationAudio.pause();
       notificationAudio.currentTime = 0;
     }, 5200);
 
-    const closeTimeout = window.setTimeout(() => {
+    transferDoneToastEffectsRef.current.closeTimeout = window.setTimeout(() => {
       if (closeAudio) {
         closeAudio.currentTime = 0;
         closeAudio.play().catch(() => {});
@@ -537,18 +573,38 @@ function Menu() {
       );
     }, 8400);
 
-    const removeTimeout = window.setTimeout(() => {
+    transferDoneToastEffectsRef.current.removeTimeout = window.setTimeout(() => {
       setTransferDoneToast(null);
     }, 9000);
 
-    return () => {
-      window.clearTimeout(audioTimeout);
-      window.clearTimeout(closeTimeout);
-      window.clearTimeout(removeTimeout);
-      notificationAudio?.pause();
-      closeAudio?.pause();
-    };
-  }, [soundSettings.notificationSound, transferResult]);
+    return clearTransferDoneToastEffects;
+  }, [clearTransferDoneToastEffects, soundSettings.notificationSound, transferResult]);
+
+  const closeTransferDoneToast = useCallback((toastId = null) => {
+    clearTransferDoneToastEffects();
+
+    const closeAudio = new Audio(transferToastCloseSound);
+    closeAudio.volume = 0.5;
+    transferDoneToastEffectsRef.current.closeAudio = closeAudio;
+    closeAudio.play().catch(() => {});
+
+    setTransferDoneToast((currentToast) => {
+      if (!currentToast || currentToast.isClosing) return currentToast;
+      if (toastId && currentToast.id !== toastId) return currentToast;
+
+      return { ...currentToast, isClosing: true };
+    });
+
+    transferDoneToastEffectsRef.current.removeAfterManualCloseTimeout = window.setTimeout(() => {
+      setTransferDoneToast((currentToast) => {
+        if (!currentToast) return currentToast;
+        if (toastId && currentToast.id !== toastId) return currentToast;
+
+        return null;
+      });
+      clearTransferDoneToastEffects();
+    }, 620);
+  }, [clearTransferDoneToastEffects]);
 
   useEffect(() => {
     localStorage.setItem("sound_sync_custom_settings", JSON.stringify(soundSettings));
@@ -1702,6 +1758,7 @@ if (
     const clickedButton = event.target.closest("button");
 
     if (!clickedButton || clickedButton.disabled) return;
+    if (clickedButton.closest(".transferDoneToastClose")) return;
     if (clickedButton.closest(".personalMusicControls")) return;
     if (clickedButton.closest(".customSoundPreview")) return;
     if (clickedButton.closest(".customPreviewNotificationBtn")) return;
@@ -1725,10 +1782,13 @@ if (
   };
 
   const previewNotification = () => {
+    clearTransferDoneToastEffects();
+
     const previewId = Date.now();
     const notificationSound = notificationSounds[soundSettings.notificationSound];
 
     const previewAudio = notificationSound ? new Audio(notificationSound) : null;
+    transferDoneToastEffectsRef.current.notificationAudio = previewAudio;
 
     if (previewAudio) {
       previewAudio.volume = 0.45;
@@ -1745,7 +1805,7 @@ if (
       isClosing: false,
     });
 
-    window.setTimeout(() => {
+    transferDoneToastEffectsRef.current.audioTimeout = window.setTimeout(() => {
       if (previewAudio) {
         previewAudio.pause();
         previewAudio.currentTime = 0;
@@ -1756,10 +1816,11 @@ if (
       );
     }, 3200);
 
-    window.setTimeout(() => {
+    transferDoneToastEffectsRef.current.removeTimeout = window.setTimeout(() => {
       setTransferDoneToast((currentToast) =>
         currentToast?.id === previewId ? null : currentToast
       );
+      clearTransferDoneToastEffects();
     }, 3800);
   };
 
@@ -1777,6 +1838,7 @@ if (
           added={transferDoneToast.added}
           failed={transferDoneToast.failed}
           showStats={transferDoneToast.showStats !== false}
+          onClose={() => closeTransferDoneToast(transferDoneToast.id)}
         />
       )}
 

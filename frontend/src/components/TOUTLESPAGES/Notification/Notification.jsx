@@ -8,6 +8,7 @@ function Notification({
   added,
   failed,
   showStats = true,
+  onClose,
 }) {
   return (
     <div
@@ -40,6 +41,15 @@ function Notification({
             : `${title}. ${message}.`}
         </p>
       </div>
+
+      <button
+        type="button"
+        className="transferDoneToastClose"
+        onClick={onClose}
+        aria-label="Close notification"
+      >
+        X
+      </button>
     </div>
   );
 }
