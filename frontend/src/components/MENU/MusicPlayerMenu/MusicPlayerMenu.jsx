@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import "./MusicPlayerMenu.css";
 
 const tracks = [
+    {
+    title: "Kate",
+    src: new URL("../../../../SOUND/music/Kate.mp3", import.meta.url).href,
+    image: new URL("../../../../IMAGE/utils/vampire.jpeg", import.meta.url).href,
+  },
   {
     title: "Milshake Confetti",
     src: new URL("../../../../SOUND/music/milshake-confetti.mp3", import.meta.url).href,
     image: new URL("../../../../IMAGE/ichigo/confetti.jpg", import.meta.url).href,
   },
-  {
-    title: "Hehe Swamp",
-    src: new URL("../../../../SOUND/music/hehe-swamp.mp3", import.meta.url).href,
-    image: new URL("../../../../IMAGE/wallpaper/soraMusic.jpg", import.meta.url).href,
-  },
+
 ];
 
 function MusicPlayerMenu() {
@@ -73,9 +74,9 @@ function MusicPlayerMenu() {
             type="button"
             className="musicPlayerBtn"
             onClick={togglePlay}
-            aria-label={isPlaying ? "Pause" : "Play"}
+            aria-label={isPlaying ? "▐▐" : "▶"}
           >
-            {isPlaying ? "Pause" : "Play"}
+            {isPlaying ? "▐▐" : "▶"}
           </button>
 
           <button
