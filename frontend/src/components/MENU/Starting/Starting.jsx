@@ -1,4 +1,3 @@
-import CommentLoop from "../CommentLoop/CommentLoop";
 import "./Starting.css";
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
@@ -16,6 +15,8 @@ const platformLogoMap = {
   youtube: "/logo/mini/Youtube-mini.svg",
   apple: "/logo/mini/Apple-Music-mini.png",
 };
+
+const defaultCoverImage = "/SoundSync/SoundSyncLogo.png";
 
 const getPlatformLogo = (platform, fallbackName) => {
   if (platform?.logo) return platform.logo;
@@ -42,11 +43,15 @@ function Starting({
   getPlaylistName,
   getTrackLabel,
   onStartTransfer,
-  onRetryFailed,
 }) {
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
-  const activityStateTone = transferLoading ? "active" : "inactive";
+  const noTransfer = !hasActivity;
+  const transferStateLabel = transferLoading
+    ? "Transfer running"
+    : hasResult
+      ? "Last transfer"
+      : "No transfer";
   const playlistName =
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
@@ -60,6 +65,7 @@ function Starting({
   const playlistImage =
     transferResult?.playlistImage ||
     (sourcePlatform && selectedSourcePlaylist && getPlaylistName ? null : "");
+  const coverImage = playlistImage || defaultCoverImage;
   const transferDate = transferResult?.transferredAt
     ? new Intl.DateTimeFormat(undefined, {
       month: "short",
@@ -72,6 +78,7 @@ function Starting({
   const addedTracks = transferResult?.added || [];
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
+  const selectedTrackCount = getCount(selectedSourceTracks);
   const queuedTracks = selectedSourceTracks.map((track) =>
     sourcePlatform && getTrackLabel
       ? getTrackLabel(sourcePlatform.id, track)
@@ -99,81 +106,72 @@ function Starting({
       </header>
 
       <div className="startingCards" aria-label="SoundSync start and transfer status">
-        <article className="startingCard startingStartCard">
-          <img
-            className="startingLogoMark"
-            src="/SoundSync/SoundSyncLogoNoBG.png"
-            alt=""
-            aria-hidden="true"
-          />
-
-          <div className="startingCommentLoop">
-            <CommentLoop />
-          </div>
-
-          <button
-            type="button"
-            className="startingStartBtn"
-            onClick={onStartTransfer}
-          >
-            <span className="startingStartDot" aria-hidden="true"></span>
-            <span>Start</span>
-          </button>
-        </article>
-
         <article className="startingCard startingActivityCard">
-          {playlistImage && (
-            <img
-              className="startingPlaylistArt"
-              src={playlistImage}
-              alt=""
-              aria-hidden="true"
-            />
-          )}
+          <section className="information" aria-label="Transfer information">
+            <h2>{playlistName}</h2>
+            {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 
-          <p className={`startingCardKicker ${activityStateTone}`}>
-            <span className="startingActivityDot" aria-hidden="true"></span>
-            {transferLoading ? "Transfer running" : hasResult ? "Last transfer" : "Activity"}
-          </p>
+            <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
+              {sourceLogo ? (
+                <img src={sourceLogo} alt={sourceName} />
+              ) : (
+                <span>{sourceName}</span>
+              )}
+              <span aria-hidden="true">→</span>
+              {destinationLogo ? (
+                <img src={destinationLogo} alt={destinationName} />
+              ) : (
+                <span>{destinationName}</span>
+              )}
+            </span>
 
-          <h2>{playlistName}</h2>
-          <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
-            {sourceLogo ? (
-              <img src={sourceLogo} alt={sourceName} />
-            ) : (
-              <span>{sourceName}</span>
-            )}
-            <span aria-hidden="true">→</span>
-            {destinationLogo ? (
-              <img src={destinationLogo} alt={destinationName} />
-            ) : (
-              <span>{destinationName}</span>
-            )}
-          </span>
-          {transferDate && <span className="startingTransferDate">{transferDate}</span>}
+            <div className="startingStats">
+              <span>{getCount(addedTracks)} added</span>
+              <span>{getCount(failedTracks)} failed</span>
+              <span>{getCount(alreadyTracks)} already</span>
+            </div>
 
-          <div className="startingTicker" aria-label="Transfer activity preview">
-            <ul>
-              {tickerItems.map((item, index) => (
-                <li key={`starting-activity-${item}-${index}`}>{item}</li>
-              ))}
-            </ul>
-          </div>
+            <dl className="informationDetails">
+              <div>
+                <dt>Source</dt>
+                <dd>{sourceName}</dd>
+              </div>
+              <div>
+                <dt>Destination</dt>
+                <dd>{destinationName}</dd>
+              </div>
+              <div>
+                <dt>Tracks</dt>
+                <dd>{hasResult ? getCount(addedTracks) + getCount(failedTracks) + getCount(alreadyTracks) : selectedTrackCount}</dd>
+              </div>
+            </dl>
 
-          <div className="startingStats">
-            <span>{getCount(addedTracks)} added</span>
-            <span>{getCount(failedTracks)} failed</span>
-            <span>{getCount(alreadyTracks)} already</span>
-            {failedTracks.length > 0 && (
+            <div className="startingTicker" aria-label="Transfer activity preview">
+              {noTransfer ? (
+                <p className="startingTickerEmpty">No transfer yet. Press START to begin.</p>
+              ) : (
+                <ul>
+                  {tickerItems.map((item, index) => (
+                    <li key={`starting-activity-${item}-${index}`}>{item}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </section>
+
+          <div className="coverPreview" aria-hidden="true">
+            <img src={coverImage} alt="" />
+            <div className="startingActions">
               <button
                 type="button"
-                className="startingRetryBtn"
-                onClick={onRetryFailed}
-                disabled={transferLoading}
+                className="startingStartBtn"
+                onClick={onStartTransfer}
               >
-                ↻
+                <span className="startingStartDot" aria-hidden="true"></span>
+                <span>START</span>
               </button>
-            )}
+
+            </div>
           </div>
         </article>
       </div>

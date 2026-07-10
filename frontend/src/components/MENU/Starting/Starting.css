@@ -3,7 +3,7 @@
   z-index: 5;
   width: 100%;
   margin: 0 auto 22px;
-  padding: 24px 32px 10px;
+  padding: 22px 32px 10px;
   text-align: left;
   animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
 }
@@ -37,88 +37,57 @@
 
 .startingCards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
   width: 100%;
+  max-width: 1120px;
   margin: 0;
 }
 
 .startingCard {
   position: relative;
   overflow: hidden;
-  min-height: 242px;
-  border: 10px solid rgba(0, 0, 0, 0.92);
-  border-radius: 22px;
-  background: #05050500;
+  min-height: 270px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
   transform-origin: center bottom;
   animation: menuCardCartoonIn .92s cubic-bezier(.2, 1.35, .34, 1) both;
-
 }
 
 .startingCard:nth-child(1) {
-  animation-delay: .12s;
-}
-
-.startingCard:nth-child(2) {
-  animation-delay: .22s;
-}
-
-.startingStartCard {
-  display: grid;
-  place-items: end center;
-  padding: 20px;
-  background: #05050500;
-}
-
-.startingLogoMark {
-  position: absolute;
-  inset: 10px;
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
-  object-fit: contain;
-  opacity: 100;
-
-  pointer-events: none;
-}
-
-.startingCommentLoop {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 4;
-  width: 420px;
-  height: 220px;
-  transform: translate(-50%, -62%) scale(.96);
-  transform-origin: center;
+  animation-delay: .16s;
 }
 
 .startingStartBtn {
   position: relative;
   z-index: 20;
   width: auto;
-  min-width: 156px;
-  height: 50px;
-  margin: 0 0 8px;
-  padding: 0 26px;
-  border: 4px solid rgba(0, 0, 0, 0);
+  min-width: 136px;
+  height: 46px;
+  margin: 0;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
-  background: #050505;
+  background:
+   black;
   color: #fff;
   font: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 1000;
-  letter-spacing: 0.8px;
+  letter-spacing: 0;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 24px rgba(0, 0, 0, 0.32),
+    0 0 18px color-mix(in srgb, var(--accent) 22%, transparent);
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
-    border-width 0.22s ease;
+    border-color 0.22s ease;
 }
 
 .startingStartDot {
@@ -131,28 +100,31 @@
 }
 
 .startingStartBtn:hover {
-  transform: translateY(-4px) scale(1.05);
-  border-width: 6px;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.32);
   box-shadow:
-    0 0 28px color-mix(in srgb, var(--accent) 58%, transparent),
+    0 0 28px color-mix(in srgb, var(--accent) 42%, transparent),
     0 18px 30px rgba(0, 0, 0, 0.44),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .startingActivityCard {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 24px 22px;
+  --starting-panel-height: 190px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 24px;
+  padding: 24px;
   text-align: left;
-  background: #000000;
-  /* background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 28%),
-    radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 34%),
-    radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.12), transparent 28%),
-    linear-gradient(145deg, rgba(4, 4, 4, 0.98), color-mix(in srgb, var(--accent) 60%, #050505) 62%, #020202); */
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 92% 18%, color-mix(in srgb, var(--accent) 54%, transparent), transparent 32%),
+    radial-gradient(circle at 78% 100%, rgba(255, 255, 255, 0.1), transparent 30%),
+    linear-gradient(135deg, rgba(12, 12, 14, 0.98), rgba(30, 30, 34, 0.88) 48%, #050505);
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .startingActivityCard::before {
@@ -165,7 +137,7 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
   background-size: 28px 28px;
   opacity: 0.28;
-  mask-image: linear-gradient(135deg, #000, transparent 78%);
+  mask-image: linear-gradient(135deg, #000, transparent 86%);
   pointer-events: none;
 }
 
@@ -184,75 +156,82 @@
   z-index: 1;
 }
 
-.startingPlaylistArt {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 0;
-  width: 104px;
-  height: 104px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 14px;
-  object-fit: cover;
-  opacity: 0.34;
-  filter: saturate(1.12) contrast(1.06);
+.information {
+  min-height: var(--starting-panel-height);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 18px;
+  border: 10px solid rgb(0, 0, 0);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.coverPreview {
+  position: relative;
+  width: var(--starting-panel-height);
+  min-height: var(--starting-panel-height);
+  aspect-ratio: 1;
+  align-self: stretch;
+  border: 10px solid rgba(0, 0, 0, 0.96);
+  border-radius: 18px;
+  background: #050505;
+  overflow: hidden;
   box-shadow:
-    0 18px 30px rgba(0, 0, 0, 0.34),
+    0 18px 30px rgba(0, 0, 0, 0.42),
     0 0 22px color-mix(in srgb, var(--accent) 24%, transparent);
 }
 
-.startingCardKicker,
-.startingActivityCard h2,
-.startingRoute {
-  margin: 0;
+.coverPreview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  pointer-events: none;
 }
 
-.startingCardKicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.startingActivityDot {
-  width: 9px;
-  height: 9px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: #ff3030;
-  box-shadow: 0 0 10px rgba(255, 48, 48, 0.72);
-}
-
-.startingCardKicker.active .startingActivityDot {
-  background: #35ff58;
-  box-shadow: 0 0 10px rgba(53, 255, 88, 0.78);
+.coverPreview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: saturate(1.12) contrast(1.06);
 }
 
 .startingActivityCard h2 {
-  max-width: 100%;
+  grid-column: 1;
+  margin: 0;
+  max-width: 760px;
   color: #fff;
-  font-size: clamp(24px, 4vw, 34px);
   font-weight: 1000;
-  line-height: 1;
+  line-height: 0.98;
   overflow-wrap: anywhere;
+  text-shadow: 0 12px 28px rgba(0, 0, 0, 0.48);
 }
 
 .startingRoute {
+  grid-column: 1;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  width: fit-content;
+  max-width: 100%;
+  gap: 10px;
+  padding: 9px 12px;
+
+  border-radius: 999px;
+
   color: rgba(255, 255, 255, 0.9);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
   line-height: 1.3;
+  margin: 0;
 }
 
 .startingRoute img {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
   border-radius: 50%;
   object-fit: contain;
@@ -261,17 +240,23 @@
 }
 
 .startingTransferDate {
+  grid-column: 1;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 850;
   line-height: 1.2;
 }
 
 .startingTicker {
+  grid-column: 1;
+  grid-row: auto;
   width: 100%;
-  max-height: 54px;
+  height: 58px;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.26);
 }
 
 .startingTicker ul {
@@ -283,27 +268,93 @@
 
 .startingTicker li {
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 12px;
+  color: rgb(255, 255, 255);
+  font-size: 11px;
   font-weight: 850;
-  line-height: 1.45;
+  line-height: 1.55;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.startingTickerEmpty {
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+
+  color: rgb(255, 255, 255);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: center;
+}
+
 .startingStats {
+  grid-column: 1;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   max-width: 100%;
 }
 
-.startingStats span,
-.startingRetryBtn {
+.informationDetails {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.informationDetails div {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.informationDetails dt {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.informationDetails dd {
+  overflow: hidden;
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 950;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.startingActions {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0 18px;
+  pointer-events: none;
+}
+
+.startingActions .startingStartBtn {
+  align-self: center;
+  pointer-events: auto;
+}
+
+.startingStats span {
   padding: 6px 8px;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 950;
   line-height: 1;
   white-space: nowrap;
@@ -315,30 +366,6 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 14px color-mix(in srgb, var(--accent) 16%, transparent);
-}
-
-.startingRetryBtn {
-  min-height: 0;
-  border: 1px solid rgba(255, 0, 0, 0.946);
-  background: rgba(255, 0, 0, 0.14);
-  color: #f33f3f;
-  cursor: pointer;
-  font: inherit;
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    border-color 0.18s ease;
-}
-
-.startingRetryBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(255, 128, 128, 0.68);
-  background: rgba(255, 104, 104, 0.22);
-}
-
-.startingRetryBtn:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
 }
 
 @keyframes startingTickerScroll {
@@ -359,19 +386,52 @@
   }
 
   .startingCards {
-    grid-template-columns: 1fr;
     width: 100%;
   }
 
   .startingCard {
-    min-height: 236px;
-    border-width: 7px;
+    min-height: 0;
     border-radius: 20px;
   }
 
-  .startingPlaylistArt {
-    width: 82px;
-    height: 82px;
-    opacity: 0.25;
+  .startingActivityCard {
+    --starting-panel-height: min(320px, calc(100vw - 72px));
+
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .information,
+  .coverPreview,
+  .startingActions {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .information {
+    min-height: auto;
+  }
+
+  .coverPreview {
+    width: 100%;
+    min-height: 0;
+    align-self: stretch;
+    justify-self: stretch;
+    aspect-ratio: 1;
+    border-width: 8px;
+  }
+
+  .startingTicker {
+    height: 52px;
+  }
+
+  .startingStats {
+    flex-wrap: wrap;
+  }
+
+  .informationDetails {
+    grid-template-columns: 1fr;
   }
 }
