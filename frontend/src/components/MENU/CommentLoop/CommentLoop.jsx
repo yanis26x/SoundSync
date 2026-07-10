@@ -56,11 +56,8 @@ function CommentLoop() {
           />
         </div>
       ) : (
-        <a
+        <div
           className={`commentProfileCard ${isLeaving ? "leaving" : "entering"}`}
-          href={activeMessage.href}
-          target="_blank"
-          rel="noreferrer"
           key={activeMessage.title}
         >
           <div className="commentProfileWrapper">
@@ -77,7 +74,7 @@ function CommentLoop() {
             <strong>{activeMessage.title}</strong>
             <span>{activeMessage.subtitle}</span>
           </div>
-        </a>
+        </div>
       )}
     </section>
   );

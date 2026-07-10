@@ -1,3 +1,4 @@
+import JumpingText from "../JumpingText/JumpingText";
 import "./Socials.css";
 
 const socials = [
@@ -32,7 +33,7 @@ function Socials() {
     <section className="socialsSection" aria-labelledby="socialsTitle">
       <div className="socialsHeader">
         <p className="socialsHeaderText">
-          I am allways open to make new friends!! @yanis26x on all socials.
+          <JumpingText text="I am allways open to make new friends!! @yanis26x on all socials." />
         </p>
         <h2 id="socialsTitle">My Socials</h2>
       </div>

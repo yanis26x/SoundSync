@@ -11,6 +11,21 @@ const getFallbackTrackLabel = (track) => {
   return "Untitled track";
 };
 
+const platformLogoMap = {
+  spotify: "/logo/mini/spotify-mini.png",
+  youtube: "/logo/mini/Youtube-mini.svg",
+  apple: "/logo/mini/Apple-Music-mini.png",
+};
+
+const getPlatformLogo = (platform, fallbackName) => {
+  if (platform?.logo) return platform.logo;
+  const normalizedName = fallbackName?.toLowerCase().replace(/\s+/g, "");
+  if (normalizedName?.includes("spotify")) return platformLogoMap.spotify;
+  if (normalizedName?.includes("youtube")) return platformLogoMap.youtube;
+  if (normalizedName?.includes("apple")) return platformLogoMap.apple;
+  return "";
+};
+
 function Starting({
   text,
   transferStarted,
@@ -31,6 +46,7 @@ function Starting({
 }) {
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
+  const activityStateTone = transferLoading ? "active" : "inactive";
   const playlistName =
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
@@ -39,6 +55,8 @@ function Starting({
         : "No transfer yet";
   const sourceName = transferResult?.sourceName || sourcePlatform?.name || "Source";
   const destinationName = transferResult?.destinationName || destinationPlatform?.name || "Destination";
+  const sourceLogo = getPlatformLogo(sourcePlatform, sourceName);
+  const destinationLogo = getPlatformLogo(destinationPlatform, destinationName);
   const playlistImage =
     transferResult?.playlistImage ||
     (sourcePlatform && selectedSourcePlaylist && getPlaylistName ? null : "");
@@ -113,12 +131,25 @@ function Starting({
             />
           )}
 
-          <p className="startingCardKicker">
+          <p className={`startingCardKicker ${activityStateTone}`}>
+            <span className="startingActivityDot" aria-hidden="true"></span>
             {transferLoading ? "Transfer running" : hasResult ? "Last transfer" : "Activity"}
           </p>
 
           <h2>{playlistName}</h2>
-          <span className="startingRoute">{sourceName} → {destinationName}</span>
+          <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
+            {sourceLogo ? (
+              <img src={sourceLogo} alt={sourceName} />
+            ) : (
+              <span>{sourceName}</span>
+            )}
+            <span aria-hidden="true">→</span>
+            {destinationLogo ? (
+              <img src={destinationLogo} alt={destinationName} />
+            ) : (
+              <span>{destinationName}</span>
+            )}
+          </span>
           {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 
           <div className="startingTicker" aria-label="Transfer activity preview">
@@ -133,18 +164,17 @@ function Starting({
             <span>{getCount(addedTracks)} added</span>
             <span>{getCount(failedTracks)} failed</span>
             <span>{getCount(alreadyTracks)} already</span>
+            {failedTracks.length > 0 && (
+              <button
+                type="button"
+                className="startingRetryBtn"
+                onClick={onRetryFailed}
+                disabled={transferLoading}
+              >
+                ↻
+              </button>
+            )}
           </div>
-
-          {failedTracks.length > 0 && (
-            <button
-              type="button"
-              className="startingRetryBtn"
-              onClick={onRetryFailed}
-              disabled={transferLoading}
-            >
-              {text?.retryFailedTracks || "Retry failed tracks"}
-            </button>
-          )}
         </article>
       </div>
     </section>

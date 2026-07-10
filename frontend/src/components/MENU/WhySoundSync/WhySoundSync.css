@@ -31,17 +31,21 @@
   letter-spacing: -1.8px;
 
 
-  animation: textPopIn .8s cubic-bezier(.22,1,.36,1) both;
+  transform-origin: center bottom;
+  animation: textPopIn .92s cubic-bezier(.2, 1.45, .34, 1) both;
 }
 
 .homeInfoHeader p {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   flex: 1 1 auto;
   max-width: 720px;
   margin: 0;
   padding: 10px 14px;
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
-  background: rgb(0, 0, 0);
+  background: transparent;
 
   color: var(--text-color);
   font-size: 15px;
@@ -51,7 +55,15 @@
     0 2px 8px rgba(0, 0, 0, 0.9),
     0 8px 22px rgba(0,0,0,.55);
 
-  animation: textSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
+}
+
+.homeInfoHeader p::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(0, 0, 0);
 }
 
 .homeInfoFeatureGrid {
@@ -75,9 +87,8 @@
     0 16px 32px rgba(0,0,0,.35),
     0 0 22px color-mix(in srgb, var(--accent) 16%, transparent);
 
-  animation:
-    cardRiseIn .9s cubic-bezier(.22,1,.36,1) both,
-    cardBreath 7s ease-in-out infinite;
+  transform-origin: center bottom;
+  animation: menuCardCartoonIn .92s cubic-bezier(.2, 1.35, .34, 1) both;
 
   transition:
     transform .24s ease,
@@ -92,19 +103,19 @@
 
 
 .homeInfoFeatureCard:nth-child(1) {
-  animation-delay: .18s, .18s;
+  animation-delay: .18s;
 }
 
 .homeInfoFeatureCard:nth-child(2) {
-  animation-delay: .28s, .28s;
+  animation-delay: .28s;
 }
 
 .homeInfoFeatureCard:nth-child(3) {
-  animation-delay: .38s, .38s;
+  animation-delay: .38s;
 }
 
 .homeInfoFeatureCard:nth-child(4) {
-  animation-delay: .48s, .48s;
+  animation-delay: .48s;
 }
 
 .homeInfoFeatureCard:nth-child(1)::before {
@@ -295,17 +306,25 @@
 @keyframes textPopIn {
   0% {
     opacity: 0;
-    transform: translateY(38px) scale(.88);
+    transform: translateY(42px) scale(.72, 1.28) rotate(-5deg);
   }
 
-  60% {
+  48% {
     opacity: 1;
-    transform: translateY(-5px) scale(1.04);
+    transform: translateY(-18px) scale(1.14, .82) rotate(3deg);
+  }
+
+  66% {
+    transform: translateY(6px) scale(.94, 1.08) rotate(-1deg);
+  }
+
+  82% {
+    transform: translateY(-5px) scale(1.04, .96) rotate(.5deg);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotate(0);
   }
 }
 

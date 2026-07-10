@@ -49,7 +49,6 @@ body::before {
 
   filter: blur(4px) saturate(1.18) brightness(1.18);
   transform: scale(1.04);
-  animation: breathingBackground 22s ease-in-out infinite;
 
   z-index: -2;
 }

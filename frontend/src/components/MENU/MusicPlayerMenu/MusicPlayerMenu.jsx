@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import JumpingText from "../JumpingText/JumpingText";
 import "./MusicPlayerMenu.css";
 
 const tracks = [
@@ -57,7 +58,7 @@ function MusicPlayerMenu() {
       <div className="musicPlayerHeader">
         <h2>Music Player♫</h2>
         <p className="musicPlayerHeaderText">
-          Listen 2 my music. 4 more, check out my SoundCloud!
+          <JumpingText text="Listen 2 my music. 4 more, check out my SoundCloud!" />
         </p>
       </div>
 

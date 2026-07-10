@@ -75,7 +75,6 @@
 .siteNavbarBtn,
 .siteNavbarMenuBtn {
   margin: 0;
-  border: 1px solid rgba(255,255,255,.14);
   border-radius: 999px;
   background:
     linear-gradient(135deg, #050505, color-mix(in srgb, var(--accent) 18%, #050505));
@@ -93,6 +92,7 @@
 }
 
 .siteNavbarBtn {
+  position: relative;
   min-height: 44px;
   padding: 0 16px;
   display: inline-flex;
@@ -103,6 +103,27 @@
   font-weight: 950;
   line-height: 1;
   white-space: nowrap;
+}
+
+.siteNavbarNotificationBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #050505;
+  border-radius: 999px;
+  background: #ff1f2d;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 1000;
+  line-height: 1;
+  box-shadow: 0 4px 10px rgba(255, 31, 45, 0.42);
+  pointer-events: none;
 }
 
 .siteNavbarSecondaryActions .siteNavbarBtn,
@@ -116,7 +137,7 @@
 .siteNavbarBtn:hover,
 .siteNavbarMenuBtn:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 64%, rgba(255,255,255,.18));
+
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, rgba(255,255,255,.08)), rgba(255,255,255,.04)),
     rgba(0,0,0,.78);
@@ -147,7 +168,6 @@
 
 .siteNavbarStartBtn.isHome {
   min-width: 46px;
-  border-color: rgba(255,255,255,.14);
 }
 
 .siteNavbarMenuBtn {

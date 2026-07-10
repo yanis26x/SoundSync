@@ -125,7 +125,7 @@ function Navbar({
                 {showProfileButton && (
                   <button
                     type="button"
-                    className="siteNavbarBtn"
+                    className="siteNavbarBtn siteNavbarProfileBtn"
                     onClick={onOpenProfile || (() => {
                       window.location.href = "/profil";
                     })}
@@ -137,6 +137,7 @@ function Navbar({
                       style={{ "--icon-url": "url('/logo/icon/profil.png')" }}
                       aria-hidden="true"
                     />
+                    <span className="siteNavbarNotificationBadge" aria-label="1 notification">1</span>
                   </button>
                 )}
 

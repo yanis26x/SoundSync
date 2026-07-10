@@ -27,17 +27,21 @@
   text-shadow:
     0 3px 0 #000,
     0 12px 26px rgba(0, 0, 0, .55);
-  animation: musicPlayerTitleIn .78s cubic-bezier(.16, 1, .3, 1) both;
+  transform-origin: center bottom;
+  animation: musicPlayerTitleIn .92s cubic-bezier(.2, 1.45, .34, 1) both;
 }
 
 .musicPlayerHeaderText {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   flex: 1 1 auto;
   max-width: 720px;
   margin: 0;
   padding: 10px 14px;
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
-  background: rgb(0, 0, 0);
+  background: transparent;
   color: var(--text-color);
   font-size: 15px;
   line-height: 1.45;
@@ -45,7 +49,15 @@
   text-shadow:
     0 2px 8px rgba(0, 0, 0, 0.9),
     0 8px 22px rgba(0,0,0,.55);
-  animation: musicPlayerTextSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
+}
+
+.musicPlayerHeaderText::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(0, 0, 0);
 }
 
 .musicPlayerCard {
@@ -62,6 +74,8 @@
   background: #0505057f;
 
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+  transform-origin: center bottom;
+  animation: menuCardCartoonIn .92s cubic-bezier(.2, 1.35, .34, 1) .22s both;
 }
 
 .musicPlayerCard::before {
@@ -155,14 +169,27 @@
 }
 
 @keyframes musicPlayerTitleIn {
-  from {
+  0% {
     opacity: 0;
-    transform: translateX(-48px);
+    transform: translateX(-52px) translateY(24px) scale(.72, 1.28) rotate(-6deg);
   }
 
-  to {
+  48% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(12px) translateY(-16px) scale(1.14, .82) rotate(4deg);
+  }
+
+  66% {
+    transform: translateX(-5px) translateY(6px) scale(.94, 1.08) rotate(-2deg);
+  }
+
+  82% {
+    transform: translateX(2px) translateY(-4px) scale(1.04, .96) rotate(.6deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1) rotate(0);
   }
 }
 

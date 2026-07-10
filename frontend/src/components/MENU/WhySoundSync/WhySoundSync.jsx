@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import JumpingText from "../JumpingText/JumpingText";
 import "./WhySoundSync.css";
 
 const features = [
@@ -103,7 +104,7 @@ function WhySoundSync({ text }) {
       <div className="homeInfoBannerContent">
         <div className="homeInfoHeader">
           <h2>Why SoundSync?!</h2>
-          <p>{text}</p>
+          <p><JumpingText text={text} /></p>
 
         </div>
 
