@@ -54,7 +54,12 @@ function MusicPlayerMenu() {
 
   return (
     <section className="musicPlayerMenuSection" aria-label="Music player">
-      <h2>Music Player♫</h2>
+      <div className="musicPlayerHeader">
+        <h2>Music Player♫</h2>
+        <p className="musicPlayerHeaderText">
+          Listen 2 my music. 4 more, check out my SoundCloud!
+        </p>
+      </div>
 
       <article className="musicPlayerCard">
         <img

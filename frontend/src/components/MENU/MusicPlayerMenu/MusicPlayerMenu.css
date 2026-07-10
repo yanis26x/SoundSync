@@ -9,7 +9,15 @@
   animation: riseIn 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
 }
 
+.musicPlayerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
 .musicPlayerMenuSection h2 {
+  flex: 0 0 auto;
   margin: 0;
   color: #fff;
   font-size: clamp(24px, 3vw, 38px);
@@ -20,6 +28,24 @@
     0 3px 0 #000,
     0 12px 26px rgba(0, 0, 0, .55);
   animation: musicPlayerTitleIn .78s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.musicPlayerHeaderText {
+  flex: 1 1 auto;
+  max-width: 720px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  background: rgb(0, 0, 0);
+  color: var(--text-color);
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 800;
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.9),
+    0 8px 22px rgba(0,0,0,.55);
+  animation: musicPlayerTextSlideIn .85s cubic-bezier(.22,1,.36,1) .12s both;
 }
 
 .musicPlayerCard {
@@ -33,9 +59,8 @@
   gap: 14px;
   border: 8px solid rgba(0, 0, 0, 0.92);
   border-radius: 20px;
-  background:
-    radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.84));
+  background: #0505057f;
+
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
 }
 
@@ -54,7 +79,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(90deg, rgba(0, 0, 0, .28), rgba(0, 0, 0, .08));
+
   pointer-events: none;
 }
 
@@ -80,7 +105,7 @@
 }
 
 .musicPlayerEyebrow {
-  color: color-mix(in srgb, var(--accent) 82%, white);
+  color: var(--text-color);
   font-size: 11px;
   font-weight: 950;
   line-height: 1;
@@ -141,6 +166,18 @@
   }
 }
 
+@keyframes musicPlayerTextSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @media (max-width: 650px) {
   .musicPlayerMenuSection {
     padding: 0 18px;
@@ -148,6 +185,11 @@
 
   .musicPlayerMenuSection h2 {
     text-align: center;
+  }
+
+  .musicPlayerHeader {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .musicPlayerCard {

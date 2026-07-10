@@ -151,11 +151,12 @@
   gap: 10px;
   padding: 24px 22px;
   text-align: left;
-  background:
+  background: #000000;
+  /* background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 28%),
     radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 34%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.12), transparent 28%),
-    linear-gradient(145deg, rgba(4, 4, 4, 0.98), color-mix(in srgb, var(--accent) 60%, #050505) 62%, #020202);
+    linear-gradient(145deg, rgba(4, 4, 4, 0.98), color-mix(in srgb, var(--accent) 60%, #050505) 62%, #020202); */
 }
 
 .startingActivityCard::before {

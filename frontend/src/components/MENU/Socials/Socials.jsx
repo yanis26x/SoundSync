@@ -30,7 +30,12 @@ const socials = [
 function Socials() {
   return (
     <section className="socialsSection" aria-labelledby="socialsTitle">
-      <h2 id="socialsTitle">My Socials</h2>
+      <div className="socialsHeader">
+        <p className="socialsHeaderText">
+          I am allways open to make new friends!! @yanis26x on all socials.
+        </p>
+        <h2 id="socialsTitle">My Socials</h2>
+      </div>
 
       <div className="socialsGrid">
         {socials.map((social) => (
