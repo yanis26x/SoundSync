@@ -169,8 +169,7 @@
 
 .transferDoneToastHeader span {
   flex: 0 0 auto;
-
-  color: rgba(255,255,255,.54);
+  color: rgb(0, 255, 0);
   font-size: 13px;
   font-weight: 800;
   line-height: 1;
