@@ -347,7 +347,7 @@ body::after {
 .profileAccountMain {
   display: flex;
   align-items: center;
-  gap: 14px;
+
   min-width: 0;
 }
 
@@ -461,22 +461,19 @@ button {
   justify-content: center;
   gap: 12px;
 
-  border: 1px solid var(--border-color);
+
   border-radius: 18px;
 
-  background: var(--accent-soft);
+ background: black;
+ background-color: #000;
   color: var(--text-color);
 
   font-weight: 800;
   font-size: 16px;
   cursor: pointer;
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 
-  box-shadow:
-    0 0 20px var(--accent-soft),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
 
   transition:
     transform 0.25s ease,
@@ -496,12 +493,10 @@ button:hover {
 }
 
 .secondaryBtn {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--border-color);
+  background: rgb(0, 0, 0);
 
-  box-shadow:
-    0 0 16px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  border: none;
+
 }
 
 .secondaryBtn:hover {

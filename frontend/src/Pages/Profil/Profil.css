@@ -153,7 +153,7 @@
 
 .profileAccountMain {
   display: grid;
-  gap: 18px;
+
 }
 
 .profileLogoBox {
@@ -170,6 +170,7 @@
   max-width: 58px;
   max-height: 44px;
   object-fit: contain;
+  
 
 }
 
@@ -225,14 +226,14 @@
 
 .profileAccountStats {
   margin-top: 18px;
-  display: grid;
+  display:flex;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
 .profileAccountStats span {
   min-height: 54px;
-  padding: 10px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -250,12 +251,10 @@
   line-height: 1;
 }
 
-.profileDetailsLoading {
-  display: block;
-  margin-top: 16px;
+.profileAccountStats .profileStatsPlaceholder {
+  min-width: 100%;
   color: rgba(255,255,255,.5);
-  font-size: 12px;
-  font-weight: 850;
+  text-transform: uppercase;
 }
 
 .profileAccountActions {
@@ -273,16 +272,30 @@
   font-weight: 950;
 }
 
+.switchIconBtn {
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.542);
+}
+
+.switchIconBtn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
 .connectBtn {
   grid-column: 1 / -1;
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, rgba(255,255,255,.16));
+  border: 1px solid rgba(255, 255, 255, 0.542);
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 58%, black), rgba(0,0,0,.72));
   color: #fff;
 }
 
 .dangerBtn {
-  border: 1px solid rgba(255, 92, 92, .38);
+  border: 1px solid rgba(255, 255, 255, 0.542);
   background: rgb(244, 1, 1);
   color: #ffffff;
 }

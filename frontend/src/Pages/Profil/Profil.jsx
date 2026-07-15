@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
+import changeProfilIcon from "../../../IMAGE/logo/icon/changeProfil.png";
 import "./Profil.css";
 
 function Profil() {
@@ -333,8 +334,8 @@ function Profil() {
                 <div className="profileAccountText">
                   <h3>{platform.name}</h3>
 
-                  {platform.isConnected && presentation.username && (
-                    <strong className="profileUsername">{presentation.username}</strong>
+                  {platform.isConnected && (
+                    <strong className="profileUsername">{presentation.username || "acc info"}</strong>
                   )}
 
                   <p className={platform.isConnected ? "success" : "offlineText"}>
@@ -342,18 +343,23 @@ function Profil() {
                     {platform.isConnected ? text.online : text.offline}
                   </p>
 
-                  {platform.isConnected && !detailsLoading && details && !details.statsUnavailable && (
+                  {platform.isConnected && (
                     <div className="profileAccountStats">
-                      <span><strong>{details.playlists}</strong> playlists</span>
-                      <span><strong>{details.totalTracks}</strong> tracks</span>
-                      {presentation.extraValue !== undefined && (
+                      {detailsLoading ? (
+                        <span className="profileStatsPlaceholder">Loading account details...</span>
+                      ) : details && !details.statsUnavailable ? (
+                        <>
+                          <span><strong>{details.playlists}</strong> playlists</span>
+                          <span><strong>{details.totalTracks}</strong> tracks</span>
+                        </>
+                      ) : (
+                        <span className="profileStatsPlaceholder">acc info</span>
+                      )}
+
+                      {!detailsLoading && details && !details.statsUnavailable && presentation.extraValue !== undefined && (
                         <span><strong>{Number(presentation.extraValue).toLocaleString()}</strong> {presentation.extraLabel}</span>
                       )}
                     </div>
-                  )}
-
-                  {platform.isConnected && detailsLoading && (
-                    <span className="profileDetailsLoading">Loading account details...</span>
                   )}
                 </div>
               </div>
@@ -361,8 +367,13 @@ function Profil() {
               <div className="profileAccountActions">
                 {platform.isConnected ? (
                   <>
-                    <button className="secondaryBtn compactBtn" onClick={platform.switchAccount}>
-                      {text.switchAccount}
+                    <button
+                      className="secondaryBtn compactBtn switchIconBtn"
+                      onClick={platform.switchAccount}
+                      aria-label={text.switchAccount}
+                      title={text.switchAccount}
+                    >
+                      <img src={changeProfilIcon} alt="" aria-hidden="true" />
                     </button>
 
                     <button className="dangerBtn compactBtn" onClick={platform.logout}>
