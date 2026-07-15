@@ -106,12 +106,307 @@
   animation: setupStepIn .48s cubic-bezier(.22,1,.36,1) both;
 }
 
+.destinationStepContent {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.destinationMain {
+  --destination-picker-height: 394px;
+  --destination-frame-border: 10px solid black;
+  --destination-panel-border: 10px solid black;
+  --start-transfer-border: 10px solid black;
+
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) minmax(280px, 1fr);
+  align-items: stretch;
+  justify-content: center;
+  gap: 16px;
+}
+
+.playlistCoverPicker {
+  width: 100%;
+  max-width: 300px;
+  height: var(--destination-picker-height);
+
+  display: grid;
+  grid-template-rows: 300px minmax(0, 1fr);
+  gap: 6px;
+  justify-items: center;
+
+  animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .08s both;
+}
+
+.playlistCoverFrame {
+  position: relative;
+  width: 100%;
+  height: 300px;
+
+  overflow: hidden;
+
+  border: var(--destination-frame-border);
+  border-radius: 18px;
+
+  background: rgba(0,0,0,.48);
+
+  box-shadow:
+    0 14px 26px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.playlistCoverFrame.isDimmed img {
+  filter: brightness(.34) saturate(.78);
+}
+
+.playlistCoverFrame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.coverOverlayBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+
+  width: 54px;
+  height: 54px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.58);
+  cursor: pointer;
+
+  transform: translate(-50%, -50%);
+
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.coverOverlayBtn:hover {
+  transform: translate(-50%, -52%);
+  border-color: var(--accent);
+  background: rgba(0,0,0,.72);
+
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--accent) 32%, transparent),
+    0 12px 28px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.coverOverlayBtn input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.coverOverlayBtn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.playlistCoverDetails {
+  width: 100%;
+  min-height: 0;
+  padding: 12px;
+
+  display: grid;
+  gap: 10px;
+
+  border: var(--destination-panel-border);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.06)),
+    color-mix(in srgb, var(--accent) 10%, rgba(0,0,0,.58));
+
+  box-shadow:
+    0 14px 26px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.playlistCoverDetails.isWaitingForPlaylist {
+  border-color: var(--accent);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.03)),
+    rgba(0,0,0,.72);
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--accent) 24%, transparent),
+    0 14px 26px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+.transferActionPanel {
+  min-width: 0;
+  height: var(--destination-picker-height);
+  max-height: var(--destination-picker-height);
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.transferActionPanel .setupNextBtn {
+  width: 100%;
+  min-height: 42px;
+}
+
+.futureTransferStats {
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+
+  padding: 12px;
+
+  border: var(--destination-panel-border);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.05)),
+    color-mix(in srgb, var(--accent) 8%, rgba(0,0,0,.58));
+
+  box-shadow:
+    0 14px 26px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.futureTransferStats.isWaitingForPlaylist {
+  opacity: .58;
+  filter: brightness(.62) saturate(.82);
+  background:
+    linear-gradient(135deg, rgba(0,0,0,.78), rgba(0,0,0,.62)),
+    rgba(0,0,0,.72);
+}
+
+.futureSourceSummary {
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.futurePlaylistCover {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.futureSourceSummary p {
+  margin: 0 0 5px;
+
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 950;
+  line-height: 1.15;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.futureSourceSummary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: rgba(255,255,255,.62);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.futureSourceSummary span img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.futureTrackList {
+  min-height: 0;
+  overflow-y: auto;
+
+  display: grid;
+  align-content: start;
+  gap: 6px;
+
+  padding-right: 4px;
+}
+
+.futureTrackList p {
+  margin: 0;
+  padding: 7px 9px;
+
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+
+  color: rgba(255,255,255,.76);
+  background: rgba(255,255,255,.05);
+
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.destinationStepControls {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.startTransferPulse {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+
+  border-radius: 999px;
+
+  background: #27ff6a;
+  box-shadow: 0 0 0 0 rgba(39,255,106,.58);
+
+  animation: startTransferPulse 1.05s ease-in-out infinite;
+}
+
 .tracksStepPanel {
   animation: setupStepIn .5s cubic-bezier(.22,1,.36,1) both;
 }
 
-.transferModeRow button,
-.startTransferBtn {
+.transferModeRow button {
   width: auto;
   margin: 0;
   padding: 9px 14px;
@@ -138,8 +433,7 @@
     opacity .2s ease;
 }
 
-.transferModeRow button:hover,
-.startTransferBtn:hover {
+.transferModeRow button:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
 
@@ -173,15 +467,49 @@
   animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .16s both;
 }
 
+.playlistCoverDetails .destinationInputGroup {
+  max-width: none;
+
+  animation: none;
+}
+
+.playlistCoverDetails .playlistNameInput {
+  padding: 11px 13px;
+  border-radius: 12px;
+}
+
+.playlistNameField {
+  position: relative;
+  width: 100%;
+}
+
+.playlistNameField::after {
+  content: "|";
+  position: absolute;
+  top: 50%;
+  left: min(calc(13px + var(--playlist-name-length, 0ch)), calc(100% - 22px));
+
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+
+  transform: translateY(-50%);
+  animation: playlistNameCaretBlink .9s steps(2, start) infinite;
+  pointer-events: none;
+}
+
 .playlistNameInput {
   width: 100%;
   margin: 0;
   padding: 13px 15px;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, rgba(255,255,255,.14));
+  border: 0;
   border-radius: 15px;
 
-  background: rgba(0,0,0,.58);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.03)),
+    rgba(0,0,0,.5);
   color: var(--text-color);
 
   font: inherit;
@@ -195,7 +523,6 @@
     0 10px 20px rgba(0,0,0,.2);
 
   transition:
-    border-color .2s ease,
     box-shadow .2s ease,
     transform .2s ease;
 }
@@ -206,7 +533,6 @@
 
 .playlistNameInput:focus {
   transform: translateY(-1px);
-  border-color: var(--accent);
 
   box-shadow:
     0 0 20px color-mix(in srgb, var(--accent) 28%, transparent),
@@ -234,6 +560,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
 
   margin-bottom: 10px;
 }
@@ -250,6 +577,16 @@
 
 .trackSelectionHeader span {
   color: color-mix(in srgb, var(--accent) 78%, white);
+}
+
+.trackSelectAllBtn {
+  width: auto;
+  min-height: 32px;
+  margin: 0 0 0 auto;
+  padding: 8px 12px;
+
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .trackModeRow {
@@ -272,7 +609,7 @@
   margin: 0;
   padding: 10px 15px;
 
-  border: 1px solid rgba(255,255,255,.14);
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 999px;
 
   color: rgba(255,255,255,.82);
@@ -361,21 +698,27 @@
   position: relative;
   z-index: 2;
 
+  width: auto;
   margin-top: 2px;
   padding: 11px 20px;
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   overflow: hidden;
 
-  border-color: color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.12));
+  border: var(--start-transfer-border);
+  border-radius: 15px;
 
   color: #fff;
-
   background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--accent) 64%, black),
-      rgba(0,0,0,.78)
-    );
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 34%, #050505), #050505);
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 950;
 
   box-shadow:
     0 0 22px color-mix(in srgb, var(--accent) 28%, transparent),
@@ -383,6 +726,12 @@
     inset 0 1px 0 rgba(255,255,255,.16);
 
   animation: destinationItemIn .62s cubic-bezier(.22,1,.36,1) .28s both;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease,
+    opacity .2s ease;
 }
 
 .startTransferBtn span {
@@ -446,74 +795,92 @@
   overflow: hidden;
 
   width: 100%;
-  max-width: 560px;
+  max-width: 620px;
   margin: 0;
-  padding: 14px 14px 14px 16px;
+  padding: 14px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.16));
-  border-radius: 18px;
+  border: 8px solid #000;
+  border-radius: 22px;
 
   background:
-    linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 38%, transparent),
-    color-mix(in srgb, var(--accent) 12%, rgba(0,0,0,.72));
+    linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.05) 42%, rgba(0,0,0,.1)),
+    color-mix(in srgb, var(--accent) 18%, rgba(0,0,0,.72));
   color: var(--text-color);
 
   box-shadow:
-    0 14px 28px rgba(0,0,0,.28),
-    0 0 26px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.14);
+    0 16px 30px rgba(0,0,0,.34),
+    0 0 24px color-mix(in srgb, var(--accent) 20%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
 }
 
 .transferProgress::before {
   content: "";
   position: absolute;
-  inset: auto 0 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  inset: auto 10px 8px;
+  height: 4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 80%, white), transparent);
   animation: transferProgressSweep 1.55s ease-in-out infinite;
 }
 
 .transferStopBtn {
   flex: 0 0 auto;
-  min-height: 34px;
-  padding: 8px 12px;
+  min-height: 42px;
+  width: auto;
+  margin: 0;
+  padding: 10px 16px;
 
-  border: 1px solid rgba(255, 92, 92, .38);
-  border-radius: 999px;
+  border: 4px solid #000;
+  border-radius: 14px;
 
-  color: #ffb0b0;
-  background: rgba(80,0,0,.4);
+  color: #fff;
+  background:
+    linear-gradient(135deg, #7a0000, #1a0000);
   cursor: pointer;
 
-  font-size: 11px;
-  font-weight: 950;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow:
+    0 10px 20px rgba(0,0,0,.34),
+    0 0 18px rgba(255,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
   transition:
-    transform .18s ease,
-    background .18s ease,
-    border-color .18s ease;
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 .transferStopBtn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 124, 124, .62);
-  background: rgba(105,0,0,.5);
+  transform: translateY(-2px) scale(1.03);
+  background:
+    linear-gradient(135deg, #b00000, #2a0000);
+  box-shadow:
+    0 14px 24px rgba(0,0,0,.4),
+    0 0 24px rgba(255,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 .transferProgressPulse {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
 
   border-radius: 999px;
-  border: 3px solid rgba(255,255,255,.18);
-  border-top-color: var(--accent);
+  border: 4px solid rgba(255,255,255,.2);
+  border-top-color: color-mix(in srgb, var(--accent) 78%, white);
   background: transparent;
-  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 42%, transparent);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 42%, transparent),
+    inset 0 0 8px rgba(255,255,255,.1);
 
   animation: transferSpin .85s linear infinite;
 }
@@ -521,16 +888,16 @@
 .transferProgress strong {
   display: block;
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 1000;
 }
 
 .transferProgress p {
   margin: 2px 0 0;
 
-  color: rgba(255,255,255,.66);
-  font-size: 11px;
-  font-weight: 750;
+  color: rgba(255,255,255,.72);
+  font-size: 12px;
+  font-weight: 800;
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -617,14 +984,24 @@
 .resultStat {
   padding: 14px;
 
-  border: 1px solid rgba(255,255,255,.1);
+  border: 8px solid #000;
   border-radius: 15px;
-
-  background: rgba(0,0,0,.48);
 
   box-shadow:
     0 8px 18px rgba(0,0,0,.18),
     inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.addedStat {
+  background: linear-gradient(135deg, #0f7f38, #063817);
+}
+
+.failedStat {
+  background: linear-gradient(135deg, #b01818, #3d0505);
+}
+
+.alreadyStat {
+  background: linear-gradient(135deg, #b89b16, #4a3900);
 }
 
 .resultStat strong {
@@ -639,22 +1016,22 @@
   display: block;
   margin-top: 6px;
 
-  color: rgba(255,255,255,.58);
+  color: rgba(255,255,255,.8);
   font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;
 }
 
 .addedStat strong {
-  color: #43ff8b;
+  color: #fff;
 }
 
 .failedStat strong {
-  color: #ff6868;
+  color: #fff;
 }
 
 .alreadyStat strong {
-  color: #ffd166;
+  color: #fff;
 }
 
 .transferResultLists {
@@ -788,6 +1165,33 @@
   }
 }
 
+@keyframes startTransferPulse {
+  0%,
+  100% {
+    opacity: .72;
+    transform: scale(.9);
+    box-shadow: 0 0 0 0 rgba(39,255,106,.54);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+    box-shadow: 0 0 0 7px rgba(39,255,106,0);
+  }
+}
+
+@keyframes playlistNameCaretBlink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes transferSpin {
   to {
     transform: rotate(360deg);
@@ -830,6 +1234,25 @@
 @media (max-width: 900px) {
   .destinationSetup {
     padding: 26px 22px;
+  }
+
+  .destinationMain {
+    --destination-picker-height: 394px;
+
+    grid-template-columns: minmax(0, 300px);
+    justify-items: center;
+  }
+
+  .transferActionPanel {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    max-height: none;
+  }
+
+  .futureTransferStats {
+    height: 360px;
+    max-height: 360px;
   }
 
   .transferResultSummary,

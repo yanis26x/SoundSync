@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import PlatformChooser from "../../components/TRANSFER/PlatformChooser/PlatformChooser";
 import PlaylistChooser from "../../components/TRANSFER/PlaylistChooser/PlaylistChooser";
 import StartTransfer from "../../components/TRANSFER/StartTransfer/StartTransfer";
@@ -74,6 +74,13 @@ function Transfer({
   const platformPromptAudioRef = useRef(null);
   const hasPlayedWhereMusicFromSoundRef = useRef(false);
   const hasPlayedWhereToSyncSoundRef = useRef(false);
+  const [tracksStepCompleted, setTracksStepCompleted] = useState(false);
+  const shouldChooseSourcePlatform = selectedPlatforms.length === 0;
+  const shouldChooseDestinationPlatform =
+    Boolean(sourcePlatform && selectedSourcePlaylistId && tracksStepCompleted && !destinationPlatform);
+  const shouldShowPlatformChooser = shouldChooseSourcePlatform || shouldChooseDestinationPlatform;
+  const shouldShowTransferWorkspace =
+    Boolean(sourcePlatform) && !shouldChooseDestinationPlatform;
 
   const stopPlatformPromptAudio = () => {
     if (!platformPromptAudioRef.current) return;
@@ -118,7 +125,7 @@ function Transfer({
   }, [mikuVoiceEnabled, platformOrder.length]);
 
   useEffect(() => {
-    if (platformOrder.length !== 1) {
+    if (!shouldChooseDestinationPlatform) {
       hasPlayedWhereToSyncSoundRef.current = false;
       return;
     }
@@ -132,11 +139,15 @@ function Transfer({
 
     hasPlayedWhereToSyncSoundRef.current = true;
     playPlatformPromptAudio(whereToSyncSound);
-  }, [mikuVoiceEnabled, platformOrder.length]);
+  }, [mikuVoiceEnabled, shouldChooseDestinationPlatform]);
 
   useEffect(() => () => {
     stopPlatformPromptAudio();
   }, []);
+
+  useEffect(() => {
+    setTracksStepCompleted(false);
+  }, [selectedSourcePlaylistId, sourcePlatform?.id]);
 
   const handleAddPlatform = (platformId) => {
     stopPlatformPromptAudio();
@@ -156,19 +167,19 @@ function Transfer({
     audio.play().catch(() => {});
   };
 
-  const currentStep = selectedPlatforms.length === 0
+  const currentStep = !sourcePlatform
     ? 1
-    : selectedPlatforms.length === 1
+    : !selectedSourcePlaylistId
       ? 2
-      : !selectedSourcePlaylistId
+      : !tracksStepCompleted && !destinationPlatform
         ? 3
-        : transferStarted || transferLoading || transferResult
-          ? 5
-          : 4;
+        : !destinationPlatform
+          ? 4
+          : 5;
 
   return (
     <section className="transferPage" onClickCapture={playTransferTouchSound}>
-      {selectedPlatforms.length < 2 && (
+      {shouldShowPlatformChooser && (
         <div className="transferPlatformStage">
           <StatusStepTransfer
             sourcePlatform={sourcePlatform}
@@ -180,7 +191,7 @@ function Transfer({
           <PlatformChooser
             chooseText={chooseText}
             chooseSubText={
-              platformOrder.length === 1
+              shouldChooseDestinationPlatform
                 ? "Where 2 U want 2 sync ur music?!"
                 : "where are the musics you want 2 transfer from?!"
             }
@@ -197,7 +208,7 @@ function Transfer({
         </div>
       )}
 
-      {selectedPlatforms.length === 2 && sourcePlatform && destinationPlatform && (
+      {shouldShowTransferWorkspace && (
         <div className="transferWorkspace">
           <StatusStepTransfer
             sourcePlatform={sourcePlatform}
@@ -219,6 +230,7 @@ function Transfer({
               getPlaylistCount={getPlaylistCount}
               onSelectPlaylist={(playlist) => {
                 setSelectedSourcePlaylistId(playlist.id);
+                setTracksStepCompleted(false);
                 setTransferResult(null);
                 setTransferError("");
                 setTrackSelectionMode("all");
@@ -230,6 +242,7 @@ function Transfer({
             />
           ) : (
             <StartTransfer
+              initialSetupStep={destinationPlatform ? "destination" : "tracks"}
               text={text}
               destinationMode={destinationMode}
               setDestinationMode={setDestinationMode}
@@ -239,6 +252,7 @@ function Transfer({
               setDestinationPlaylistId={setDestinationPlaylistId}
               destinationPlaylists={destinationPlaylists}
               destinationPlatform={destinationPlatform}
+              getPlaylistImage={getPlaylistImage}
               getPlaylistName={getPlaylistName}
               transferError={transferError}
               transferStarted={transferStarted}
@@ -253,6 +267,7 @@ function Transfer({
               trackSelectionMode={trackSelectionMode}
               setTrackSelectionMode={setTrackSelectionMode}
               selectedTrackKeys={selectedTrackKeys}
+              setSelectedTrackKeys={setSelectedTrackKeys}
               toggleSelectedTrack={toggleSelectedTrack}
               getTrackLabel={getTrackLabel}
               startPlaylistTransfer={startPlaylistTransfer}
@@ -262,6 +277,9 @@ function Transfer({
               stopTransfer={stopTransfer}
               transferResult={transferResult}
               mikuVoiceEnabled={mikuVoiceEnabled}
+              onContinueToDestination={
+                destinationPlatform ? undefined : () => setTracksStepCompleted(true)
+              }
             />
           )}
         </div>

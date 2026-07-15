@@ -31,9 +31,25 @@ const platforms = [
   },
   {
     id: "simulation",
-    name: "Simulation",
+    name: "SpotiTube",
     logo: "/utils/miku-onion.webp",
     logoClassName: "simulationLogo",
+    isAvailable: true,
+    isSimulation: true,
+  },
+  {
+    id: "fake",
+    name: "Fake 1",
+    logo: "/logo/mini/Fake.png",
+    logoClassName: "fakeTrackLogo",
+    isAvailable: true,
+    isSimulation: true,
+  },
+  {
+    id: "fake2",
+    name: "Fake 2",
+    logo: "/logo/mini/Fake2.png",
+    logoClassName: "fakeTrackLogo",
     isAvailable: true,
     isSimulation: true,
   },
@@ -56,6 +72,8 @@ function PlatformChooser({
     spotify: accessToken ? () => onAddPlatform("spotify") : onLoginSpotify,
     youtube: youtubeAccessToken ? () => onAddPlatform("youtube") : onLoginYoutube,
     apple: appleMusicUserToken ? () => onAddPlatform("apple") : onLoginAppleMusic,
+    fake: () => onAddPlatform("fake"),
+    fake2: () => onAddPlatform("fake2"),
     simulation: onStartSimulation,
   };
 
@@ -103,21 +121,16 @@ function PlatformChooser({
       <p className="how2Disconnect">
        2 Disconnect or switch your account from a platform, go 2 Profil.
       </p>
-      <p className="platformComingSoon">
-        SoundCloud is displayed for now, selection is coming later.
-      </p>
+
 
       <div className="platformDemoHelp">
         <p>Having trouble?! Check out the Demo video of SoundSync</p>
-        <a
-          className="platformDemoBtn"
+        <a className="platformDemoBtn"
           href="https://bakerskateboards.com/collections/all-boards/products/brand-logo-black-white-deck"
           target="_blank"
-          rel="noreferrer"
-        >
-          Watch demo video
-        </a>
-      </div>
+          rel="noreferrer">
+            Watch demo video</a>
+      </div>      
     </section>
   );
 }

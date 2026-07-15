@@ -265,6 +265,7 @@
 .youtubeBigLogo,
 .appleMusicLogo,
 .soundCloudLogo,
+.fakeTrackLogo,
 .simulationLogo {
   position: relative;
   z-index: 2;
@@ -311,10 +312,22 @@
     drop-shadow(0 0 16px color-mix(in srgb, var(--accent) 24%, transparent));
 }
 
+.fakeTrackLogo {
+  width: 92px;
+  height: 92px;
+  max-height: 92px;
+  border-radius: 22px;
+  object-fit: cover;
+  filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.16))
+    drop-shadow(0 0 16px color-mix(in srgb, var(--accent) 24%, transparent));
+}
+
 .platformChoiceBtn:hover .spotifyBigLogo,
 .platformChoiceBtn:hover .youtubeBigLogo,
 .platformChoiceBtn:hover .appleMusicLogo,
 .platformChoiceBtn:hover .soundCloudLogo,
+.platformChoiceBtn:hover .fakeTrackLogo,
 .platformChoiceBtn:hover .simulationLogo {
   transform: scale(1.06);
   filter:
@@ -444,8 +457,9 @@
   margin-left: auto;
   margin-right: auto;
   border-radius: 18px;
-
-  animation: platformComingSoonFade .75s ease both;
+  border: 1px solid rgba(255, 255, 255, 0.351);
+  background: black;
+  color:white;
 }
 
 .how2Disconnect span {
@@ -482,18 +496,7 @@
   letter-spacing: .1px;
 }
 
-.platformComingSoon {
-  margin-top: -8px;
-  padding: 12px 18px;
 
-
-  color: rgba(255,255,255,.72);
-  text-align: center;
-  font-size: clamp(12px, .95vw, 14px);
-  font-weight: 850;
-  line-height: 1.35;
-
-}
 
 .platformDemoHelp {
   margin-top: 4px;
@@ -528,10 +531,9 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.16));
   border-radius: 999px;
 
-  background: rgb(0, 0, 0);
+  background: rgb(129, 0, 0);
   color: #ffffff;
 
   font-size: 12px;

@@ -118,7 +118,6 @@ function Starting({
           <section className="information" aria-label="Transfer information">
             <div className="startingTitleRow">
               <h2>{playlistName}</h2>
-              <span>{titleStatus}</span>
             </div>
             {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 

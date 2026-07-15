@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./StartTransfer.css";
 
 const whatMusicSound = new URL("../../../../SOUND/Miku/whatMusic.mp3", import.meta.url).href;
 const orWhatSound = new URL("../../../../SOUND/Miku/Orwhat.mp3", import.meta.url).href;
+const defaultPlaylistCover = "/ichigo/blueSkyHappy.jpg";
 
 function StartTransfer({
+  initialSetupStep = "destination",
   text,
   destinationMode,
   setDestinationMode,
@@ -14,6 +16,7 @@ function StartTransfer({
   setDestinationPlaylistId,
   destinationPlaylists,
   destinationPlatform,
+  getPlaylistImage,
   getPlaylistName,
   transferError,
   transferStarted,
@@ -25,9 +28,8 @@ function StartTransfer({
   sourceTracks,
   sourceTracksLoading,
   sourceTracksError,
-  trackSelectionMode,
-  setTrackSelectionMode,
   selectedTrackKeys,
+  setSelectedTrackKeys,
   toggleSelectedTrack,
   getTrackLabel,
   startPlaylistTransfer,
@@ -36,29 +38,113 @@ function StartTransfer({
   stopTransfer,
   transferResult,
   retryFailedTransfer,
+  onContinueToDestination,
   mikuVoiceEnabled = true,
 }) {
-  const [setupStep, setSetupStep] = useState("destination");
+  const [setupStep, setSetupStep] = useState(initialSetupStep);
+  const [customCoverPreview, setCustomCoverPreview] = useState("");
   const hasPlayedOrWhatSoundRef = useRef(false);
   const hasPlayedWhatMusicSoundRef = useRef(false);
+  const initializedTrackSelectionRef = useRef("");
   const sourceTrackKey =
     sourcePlatform && selectedSourcePlaylist
       ? `${sourcePlatform.id}:${selectedSourcePlaylist.id}`
       : "";
   const visibleSourceTracks = sourceTracks;
+  const visibleTrackKeys = useMemo(
+    () => visibleSourceTracks.map((track, index) => `${sourceTrackKey}:${index}`),
+    [sourceTrackKey, visibleSourceTracks]
+  );
   const selectedTrackCount = selectedTrackKeys.filter((trackKey) =>
     trackKey.startsWith(`${sourceTrackKey}:`)
   ).length;
+  const areAllTracksSelected =
+    visibleTrackKeys.length > 0 &&
+    visibleTrackKeys.every((trackKey) => selectedTrackKeys.includes(trackKey));
   const showTransferSetup = !transferStarted;
   const canContinueToTracks =
     destinationMode === "new" || Boolean(destinationPlaylistId);
   const canStartTransfer =
     selectedSourcePlaylist &&
     !transferLoading &&
-    (trackSelectionMode !== "specific" || selectedTrackCount > 0) &&
+    selectedTrackCount > 0 &&
     canContinueToTracks;
   const canRetryFailed =
     Boolean(transferResult?.failed?.length) && !transferLoading;
+  const selectedDestinationPlaylist = destinationPlaylists.find(
+    (playlist) => playlist.id === destinationPlaylistId
+  );
+  const existingPlaylistCover =
+    destinationMode === "existing" && selectedDestinationPlaylist && destinationPlatform
+      ? getPlaylistImage(destinationPlatform.id, selectedDestinationPlaylist)
+      : "";
+  const playlistCoverPreview = existingPlaylistCover || customCoverPreview || defaultPlaylistCover;
+  const sourcePlaylistCover =
+    sourcePlatform && selectedSourcePlaylist
+      ? getPlaylistImage(sourcePlatform.id, selectedSourcePlaylist)
+      : defaultPlaylistCover;
+  const selectedTransferTracks = visibleSourceTracks.filter((track, index) =>
+    selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
+  );
+  const shouldDimCover = destinationMode === "existing" && !selectedDestinationPlaylist;
+
+  useEffect(() => () => {
+    if (customCoverPreview) URL.revokeObjectURL(customCoverPreview);
+  }, [customCoverPreview]);
+
+  useEffect(() => {
+    setSetupStep(initialSetupStep);
+  }, [initialSetupStep]);
+
+  useEffect(() => {
+    initializedTrackSelectionRef.current = "";
+  }, [sourceTrackKey]);
+
+  useEffect(() => {
+    if (!sourceTrackKey || sourceTracksLoading || sourceTracksError || visibleTrackKeys.length === 0) return;
+    if (initializedTrackSelectionRef.current === sourceTrackKey) return;
+
+    setSelectedTrackKeys((currentKeys) => {
+      const currentSourceKeys = currentKeys.filter((trackKey) =>
+        trackKey.startsWith(`${sourceTrackKey}:`)
+      );
+
+      initializedTrackSelectionRef.current = sourceTrackKey;
+
+      if (currentSourceKeys.length > 0) return currentKeys;
+
+      return [
+        ...currentKeys.filter((trackKey) => !trackKey.startsWith(`${sourceTrackKey}:`)),
+        ...visibleTrackKeys,
+      ];
+    });
+  }, [
+    setSelectedTrackKeys,
+    sourceTrackKey,
+    sourceTracksError,
+    sourceTracksLoading,
+    visibleTrackKeys,
+  ]);
+
+  const toggleAllTracks = () => {
+    setSelectedTrackKeys((currentKeys) => {
+      const otherTrackKeys = currentKeys.filter((trackKey) =>
+        !trackKey.startsWith(`${sourceTrackKey}:`)
+      );
+
+      return areAllTracksSelected ? otherTrackKeys : [...otherTrackKeys, ...visibleTrackKeys];
+    });
+  };
+
+  const choosePlaylistCover = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setCustomCoverPreview((currentPreview) => {
+      if (currentPreview) URL.revokeObjectURL(currentPreview);
+      return URL.createObjectURL(file);
+    });
+  };
 
   useEffect(() => {
     if (!showTransferSetup || setupStep !== "tracks") {
@@ -104,126 +190,184 @@ function StartTransfer({
         <>
           {setupStep === "destination" ? (
             <div className="transferSetupStep destinationStepPanel" key="destination-step">
-              <div className="transferModeRow">
-                <button
-                  className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-                  onClick={() => setDestinationMode("new")}
-                >
-                  {text.transferToNew}
-                </button>
+              <div className="destinationStepContent">
+                <div className="destinationStepControls">
+                  <div className="transferModeRow">
+                    <button
+                      className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+                      onClick={() => setDestinationMode("new")}
+                    >
+                      {text.transferToNew}
+                    </button>
 
-                <button
-                  className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-                  onClick={() => setDestinationMode("existing")}
-                >
-                  {text.transferToExisting}
-                </button>
-              </div>
+                    <button
+                      className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+                      onClick={() => setDestinationMode("existing")}
+                    >
+                      {text.transferToExisting}
+                    </button>
+                  </div>
+                </div>
 
-              <div className="destinationInputGroup">
-                {destinationMode === "new" ? (
-                  <input
-                    className="playlistNameInput"
-                    value={newPlaylistName}
-                    onChange={(event) => setNewPlaylistName(event.target.value)}
-                    placeholder={text.playlistName}
-                  />
-                ) : (
-                  <select
-                    className="playlistNameInput"
-                    value={destinationPlaylistId}
-                    onChange={(event) => setDestinationPlaylistId(event.target.value)}
+                <div className="destinationMain">
+                <div className="playlistCoverPicker">
+                  <div className={`playlistCoverFrame${shouldDimCover ? " isDimmed" : ""}`}>
+                    <img src={playlistCoverPreview} alt="" />
+
+                    {destinationMode === "new" && (
+                      <label className="coverOverlayBtn" aria-label="Change cover">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={choosePlaylistCover}
+                        />
+                        <img src="/logo/icon/upload.png" alt="" aria-hidden="true" />
+                      </label>
+                    )}
+                  </div>
+
+                  <div className={`playlistCoverDetails${shouldDimCover ? " isWaitingForPlaylist" : ""}`}>
+                    <div className="destinationInputGroup">
+                      {destinationMode === "new" ? (
+                        <div
+                          className="playlistNameField"
+                          style={{ "--playlist-name-length": `${newPlaylistName.length || text.playlistName.length}ch` }}
+                        >
+                          <input
+                            className="playlistNameInput"
+                            value={newPlaylistName}
+                            onChange={(event) => setNewPlaylistName(event.target.value)}
+                            placeholder={text.playlistName}
+                          />
+                        </div>
+                      ) : (
+                        <select
+                          className="playlistNameInput"
+                          value={destinationPlaylistId}
+                          onChange={(event) => setDestinationPlaylistId(event.target.value)}
+                        >
+                          <option value="">{text.destinationPlaylist}</option>
+                          {destinationPlaylists.map((playlist) => (
+                            <option value={playlist.id} key={playlist.id}>
+                              {getPlaylistName(destinationPlatform.id, playlist)}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+
+                <div className="transferActionPanel">
+                  <button
+                    type="button"
+                    className="startTransferBtn setupNextBtn"
+                    onClick={onContinueToDestination ? () => setSetupStep("tracks") : startPlaylistTransfer}
+                    disabled={onContinueToDestination ? !canContinueToTracks : !canStartTransfer}
                   >
-                    <option value="">{text.destinationPlaylist}</option>
-                    {destinationPlaylists.map((playlist) => (
-                      <option value={playlist.id} key={playlist.id}>
-                        {getPlaylistName(destinationPlatform.id, playlist)}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
+                    {!onContinueToDestination && <span className="startTransferPulse" aria-hidden="true"></span>}
+                    <span>{onContinueToDestination ? "Continue" : text.startTransfer}</span>
+                  </button>
 
-              <button
-                type="button"
-                className="startTransferBtn setupNextBtn"
-                onClick={() => setSetupStep("tracks")}
-                disabled={!canContinueToTracks}
-              >
-                <span>Continue</span>
-              </button>
+                  <section
+                    className={`futureTransferStats${shouldDimCover ? " isWaitingForPlaylist" : ""}`}
+                    aria-label="Future transfer stats"
+                  >
+                    <div className="futureSourceSummary">
+                      <img className="futurePlaylistCover" src={sourcePlaylistCover} alt="" />
+                      <div>
+                        <p>{selectedSourcePlaylist ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist) : "Source playlist"}</p>
+                        <span>
+                          {sourcePlatform?.logo && <img src={sourcePlatform.logo} alt="" aria-hidden="true" />}
+                          {sourcePlatform?.name || "Source"} · {selectedTrackCount} tracks 2 sync
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="futureTrackList">
+                      {selectedTransferTracks.length > 0 ? (
+                        selectedTransferTracks.map((track, index) => (
+                          <p key={`${sourceTrackKey}:future:${index}`}>
+                            {getTrackLabel(sourcePlatform.id, track)}
+                          </p>
+                        ))
+                      ) : (
+                        <p>No tracks selected</p>
+                      )}
+                    </div>
+                  </section>
+                </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="transferSetupStep tracksStepPanel" key="tracks-step">
               <div className="trackSelectionPanel">
                 <div className="trackSelectionHeader">
                   <p>{text.transferTrackChoice}</p>
-                  <span>
-                    {trackSelectionMode === "specific"
-                      ? `${selectedTrackCount}/${sourceTracks.length}`
-                      : `${sourceTracks.length} tracks`}
-                  </span>
-                </div>
-
-                <div className="transferModeRow trackModeRow">
                   <button
                     type="button"
-                    className={trackSelectionMode === "all" ? "selectedMode" : "secondaryBtn"}
-                    onClick={() => setTrackSelectionMode("all")}
+                    className="secondaryBtn trackSelectAllBtn"
+                    onClick={toggleAllTracks}
+                    disabled={sourceTracksLoading || Boolean(sourceTracksError) || visibleTrackKeys.length === 0}
                   >
-                    {text.transferAllTracks}
+                    {areAllTracksSelected ? "Deselect all" : "Select all"}
                   </button>
-
-                  <button
-                    type="button"
-                    className={trackSelectionMode === "specific" ? "selectedMode" : "secondaryBtn"}
-                    onClick={() => setTrackSelectionMode("specific")}
-                  >
-                    {text.transferSpecificTracks}
-                  </button>
+                  <span>{selectedTrackCount}/{sourceTracks.length}</span>
                 </div>
 
-                {trackSelectionMode === "specific" && (
-                  <div className="trackChoiceList">
-                    {sourceTracksLoading && <p>{text.loadingTracks}</p>}
-                    {sourceTracksError && <p className="trackChoiceError">{sourceTracksError}</p>}
-                    {!sourceTracksLoading && !sourceTracksError && visibleSourceTracks.map((track, index) => {
-                      const trackKey = `${sourceTrackKey}:${index}`;
-                      const isSelected = selectedTrackKeys.includes(trackKey);
+                <div className="trackChoiceList">
+                  {sourceTracksLoading && <p>{text.loadingTracks}</p>}
+                  {sourceTracksError && <p className="trackChoiceError">{sourceTracksError}</p>}
+                  {!sourceTracksLoading && !sourceTracksError && visibleSourceTracks.map((track, index) => {
+                    const trackKey = `${sourceTrackKey}:${index}`;
+                    const isSelected = selectedTrackKeys.includes(trackKey);
 
-                      return (
-                        <label className="trackChoiceItem" key={trackKey}>
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => toggleSelectedTrack(trackKey)}
-                          />
-                          <span>{getTrackLabel(sourcePlatform.id, track)}</span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
+                    return (
+                      <label className="trackChoiceItem" key={trackKey}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectedTrack(trackKey)}
+                        />
+                        <span>{getTrackLabel(sourcePlatform.id, track)}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               <p className="transferLimit">{transferLimit}</p>
 
               <div className="setupActionRow">
-                <button
-                  type="button"
-                  className="secondaryBtn setupBackBtn"
-                  onClick={() => setSetupStep("destination")}
-                >
-                  Back
-                </button>
+                {onContinueToDestination ? (
+                  <button
+                    className="startTransferBtn"
+                    onClick={onContinueToDestination}
+                    disabled={selectedTrackCount === 0}
+                  >
+                    <span>Continue</span>
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="secondaryBtn setupBackBtn"
+                      onClick={() => setSetupStep("destination")}
+                    >
+                      Back
+                    </button>
 
-                <button
-                  className="startTransferBtn"
-                  onClick={startPlaylistTransfer}
-                  disabled={!canStartTransfer}
-                >
-                  <span>{text.startTransfer}</span>
-                </button>
+                    <button
+                      className="startTransferBtn"
+                      onClick={startPlaylistTransfer}
+                      disabled={!canStartTransfer}
+                    >
+                      <span>{text.startTransfer}</span>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           )}

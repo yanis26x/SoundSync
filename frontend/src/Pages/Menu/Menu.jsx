@@ -119,6 +119,44 @@ const text = {
 };
 
 const TRANSFER_BATCH_SIZE = 50;
+const fakeTrackPlaylists = [
+  {
+    id: "fake-hits",
+    name: "Fake Track Hits",
+    image: "/ichigo/hug.jpg",
+    tracks: { total: 10 },
+  },
+  {
+    id: "fake-short",
+    name: "Fake Track Shortlist",
+    image: "/ichigo/hug2.jpg",
+    tracks: { total: 2 },
+  },
+];
+const fakeTrackPlaylistTracks = {
+  "fake-hits": [
+    "Neon Cache - Fake Track",
+    "Pixel Hearts - Demo Artist",
+    "Sync Test Baby - Fake Track",
+    "Localhost Love - Demo Artist",
+    "No API Needed - Fake Track",
+    "Playlist Mirage - Fake Track",
+    "Upload Moon - Demo Artist",
+    "Midnight Matcher - Fake Track",
+    "Transfer Arcade - Demo Artist",
+    "Final Fake Song - Fake Track",
+  ],
+  "fake-short": [
+    "Tiny Sync - Fake Track",
+    "Two Track Test - Demo Artist",
+  ],
+};
+const fakePlatformIds = ["fake", "fake2"];
+const isFakePlatform = (platformId) => fakePlatformIds.includes(platformId);
+const fakePlatformLogos = {
+  fake: "/logo/mini/Fake.png",
+  fake2: "/logo/mini/Fake2.png",
+};
 
 function Menu() {
   const [initialConnection] = useState(() => {
@@ -236,6 +274,16 @@ function Menu() {
       name: "Apple Music",
       logo: "/logo/mini/Apple-Music-mini.png",
     },
+    fake: {
+      id: "fake",
+      name: "Fake 1",
+      logo: "/logo/mini/Fake.png",
+    },
+    fake2: {
+      id: "fake2",
+      name: "Fake 2",
+      logo: "/logo/mini/Fake2.png",
+    },
   };
   const selectedPlatforms = platformOrder
     .map((platformId) => platformData[platformId])
@@ -249,6 +297,8 @@ function Menu() {
     spotify: "/logo/mini/spotify-mini.png",
     youtube: "/logo/YouTube-Logo.svg",
     apple: "/logo/appleMusic.png",
+    fake: "/logo/mini/Fake.png",
+    fake2: "/logo/mini/Fake2.png",
   };
   const addPlatformToOrder = (platformId) => {
     setPlatformOrder((currentOrder) => {
@@ -385,6 +435,39 @@ function Menu() {
             {renderTrackPanel("youtube", playlist.id)}
         </div>
       ),
+      };
+    }
+
+    if (isFakePlatform(platformId)) {
+      return {
+        error: "",
+        loading: false,
+        playlists: fakeTrackPlaylists,
+        logout: resetPlatformChoice,
+        logoutLabel: `Reset ${platformData[platformId]?.name || "Fake"}`,
+        renderPlaylist: (playlist) => (
+          <div
+            className="playlistCard"
+            key={playlist.id}
+            style={{
+              "--playlist-image": `url(${playlist.image})`,
+            }}
+          >
+            <div className="playlistCardMain">
+              <img src={playlist.image} alt={playlist.name} />
+
+              <div className="playlistInfo">
+                <h3>{playlist.name}</h3>
+
+                <p>
+                  {playlist.tracks.total} {text.tracks}
+                </p>
+              </div>
+            </div>
+
+            {renderTrackPanel(platformId, playlist.id)}
+          </div>
+        ),
       };
     }
 
@@ -897,6 +980,20 @@ function Menu() {
         [trackKey]: true,
       }));
 
+      if (isFakePlatform(platformId)) {
+        const fakeTracks = fakeTrackPlaylistTracks[playlistId] || [];
+
+        setPlaylistTracks((currentTracks) => ({
+          ...currentTracks,
+          [trackKey]: fakeTracks,
+        }));
+        setTrackLoading((currentLoading) => ({
+          ...currentLoading,
+          [trackKey]: false,
+        }));
+        return;
+      }
+
       try {
         const response = await authorizedRequest(platformId, {
           method: "get",
@@ -958,6 +1055,8 @@ function Menu() {
   };
 
   const getTrackLabel = (platformId, item) => {
+    if (isFakePlatform(platformId)) return item || text.unknownTitle;
+
     if (platformId === "spotify") {
       const track = item.track;
       const artistNames =
@@ -1114,16 +1213,20 @@ function Menu() {
     if (platformId === "spotify") return playlists;
     if (platformId === "youtube") return youtubePlaylists;
     if (platformId === "apple") return applePlaylists;
+    if (isFakePlatform(platformId)) return fakeTrackPlaylists;
     return [];
   };
 
   const getPlaylistName = (platformId, playlist) => {
+    if (isFakePlatform(platformId)) return playlist.name || text.unknownTitle;
     if (platformId === "spotify") return playlist.name;
     if (platformId === "youtube") return playlist.snippet?.title || text.unknownTitle;
     return playlist.attributes?.name || text.unknownTitle;
   };
 
   const getPlaylistImage = (platformId, playlist) => {
+    if (isFakePlatform(platformId)) return playlist.image || fakePlatformLogos[platformId] || "/logo/mini/Fake.png";
+
     if (platformId === "spotify") {
       return playlist.images?.[0]?.url || "https://via.placeholder.com/100";
     }
@@ -1140,6 +1243,7 @@ function Menu() {
   };
 
   const getPlaylistCount = (platformId, playlist) => {
+    if (isFakePlatform(platformId)) return playlist.tracks?.total || 0;
     if (platformId === "spotify") return playlist.tracks?.total || 0;
     if (platformId === "youtube") return playlist.contentDetails?.itemCount || 0;
 
@@ -1232,7 +1336,7 @@ function Menu() {
     };
     const simulationPlaylist = {
       id: "simulation-playlist",
-      name: "Simulation playlist",
+      name: "SpotiTube playlist",
     };
     const simulationTracks = [
       "Synthetic Love - SoundSync",
@@ -1275,15 +1379,15 @@ function Menu() {
       });
 
     try {
-      setTransferStatus("Simulation: loading source tracks...");
+      setTransferStatus("SpotiTube: loading source tracks...");
       await wait(650);
 
       for (const [index, track] of simulationTracks.entries()) {
-        setTransferStatus(`Simulation: matching ${index + 1}/${simulationTracks.length}: ${track}`);
+        setTransferStatus(`SpotiTube: matching ${index + 1}/${simulationTracks.length}: ${track}`);
         await wait(260);
       }
 
-      setTransferStatus("Simulation: adding tracks 1/1");
+      setTransferStatus("SpotiTube: adding tracks 1/1");
       await wait(700);
 
       setTransferStatus(text.transferFinalizing);
@@ -1346,7 +1450,7 @@ function Menu() {
     if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
 
 if (
-  !["spotify", "youtube", "apple"].includes(destinationPlatform.id)
+  !["spotify", "youtube", "apple", ...fakePlatformIds].includes(destinationPlatform.id)
 ) {
   setTransferError(text.unsupportedTransfer);
   return;
@@ -1387,14 +1491,11 @@ if (
       }
       throwIfTransferStopped();
 
-      const tracksToTransfer =
-        trackSelectionMode === "specific"
-          ? tracks.filter((track, index) =>
-            selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
-          )
-          : tracks;
+      const tracksToTransfer = tracks.filter((track, index) =>
+        selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
+      );
 
-      if (trackSelectionMode === "specific" && tracksToTransfer.length === 0) {
+      if (!Array.isArray(retryLabels) && tracksToTransfer.length === 0) {
         throw new Error(text.noSelectedTracks);
       }
 
@@ -1405,6 +1506,41 @@ if (
           .filter(Boolean);
 
       let targetPlaylistId = retryTargetPlaylistId || destinationPlaylistId;
+
+      if (isFakePlatform(sourcePlatform.id) || isFakePlatform(destinationPlatform.id)) {
+        if (!targetPlaylistId && destinationMode === "new") {
+          targetPlaylistId = `${destinationPlatform.id}-created-playlist`;
+        }
+
+        if (!targetPlaylistId) {
+          throw new Error(text.destinationPlaylist);
+        }
+
+        const added = [];
+        const already = [];
+        const failed = [];
+
+        for (const [index, label] of trackLabels.entries()) {
+          throwIfTransferStopped();
+          setTransferStatus(`${destinationPlatform.name}: syncing ${index + 1}/${trackLabels.length}: ${label}`);
+          await new Promise((resolve) => window.setTimeout(resolve, 180));
+          added.push(label);
+        }
+
+        setTransferStatus(text.transferFinalizing);
+        setTransferResult({
+          added,
+          failed,
+          already,
+          playlistName: getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
+          playlistImage: getPlaylistImage(sourcePlatform.id, selectedSourcePlaylist),
+          transferredAt: new Date().toISOString(),
+          sourceName: sourcePlatform.name,
+          destinationName: destinationPlatform.name,
+          targetPlaylistId,
+        });
+        return;
+      }
 
       if (!retryTargetPlaylistId && destinationMode === "new") {
         setTransferStatus(text.transferCreatingPlaylist);
@@ -1745,12 +1881,21 @@ if (
 
   useEffect(() => {
     setSelectedSourcePlaylistId("");
+    setTrackSelectionMode("all");
+    setSelectedTrackKeys([]);
     setDestinationMode("new");
     setNewPlaylistName("");
     setDestinationPlaylistId("");
     setTransferResult(null);
     setTransferError("");
-  }, [sourcePlatform?.id, destinationPlatform?.id]);
+  }, [sourcePlatform?.id]);
+
+  useEffect(() => {
+    setDestinationMode("new");
+    setDestinationPlaylistId("");
+    setTransferResult(null);
+    setTransferError("");
+  }, [destinationPlatform?.id]);
 
   const playMenuButtonSound = (event) => {
     if (currentPage === "transfer") return;
