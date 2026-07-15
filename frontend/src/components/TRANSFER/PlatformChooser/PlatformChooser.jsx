@@ -32,7 +32,7 @@ const platforms = [
   {
     id: "simulation",
     name: "SpotiTube",
-    logo: "/utils/miku-onion.webp",
+    logo: "/logo/mini/SpotiTube.webp",
     logoClassName: "simulationLogo",
     isAvailable: true,
     isSimulation: true,
