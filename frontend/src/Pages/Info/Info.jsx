@@ -5,49 +5,56 @@ import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
 import "../Menu/Menu.css";
 import "./Info.css";
 
-const infoCards = [
+const transferSteps = [
   {
-    title: "Built for playlist chaos",
-    text: "SoundSync keeps your playlists moving between Spotify, YouTube Music, Apple Music, and more without forcing you to rebuild everything by hand.",
-    image: "/IMAGE/SoundSync/logo-SS.png",
-    className: "soundSyncInfoLogo",
+    number: "00",
+    title: "Watch the demo",
+    text: "Start here if you want to see the full transfer flow before trying it yourself.",
+    videoId: "KJiTlvWPyUg",
   },
-
   {
-    title: "From Spotify2YTB to SoundSync",
-    text: "About a year ago, I built a small project called Spotify2YTB. It could transfer playlists from Spotify to YouTube, but the code was messy, slow, and honestly... pretty terrible. I abandoned it for almost a year. Then I came back, deleted everything, started from scratch, redesigned the whole experience, and built what eventually became SoundSync.",
-    image: "/IMAGE/SoundSync/logo-SS.png",
-    className: "soundSyncInfoLogo",
+    number: "01",
+    title: "Start a transfer",
+    text: "Click START, then choose the platform where your playlist already exists.",
   },
-
-
-
   {
-    title: "Made by @yanis26x",
-    text: "I'm Yanis, a 20-year-old developer from Montreal who loves building weird, fun, and useful apps. SoundSync is one of many personal projects I've made, alongside websites, mobile apps, and other experiments. If you like this project, feel free to check out my other work and say hi on social media.",
-    image: "/IMAGE/utils/yanis26xPFP2.jpg",
-    className: "creatorInfoImage",
+    number: "02",
+    title: "Connect your accounts",
+    text: "Log in to Spotify, YouTube, or Apple Music when SoundSync asks for access.",
   },
-
   {
-    title: "Do it with Miku",
-    text: "Miku guides you through every step of the syncing process. I wrote dozens of different voice lines so she doesn't keep repeating the same thing. The goal was to make it feel like she's actually talking to you instead of sounding like a boring assistant.",
-    image: "/IMAGE/utils/miku-onion.webp",
-    className: "mikuInfoImage",
+    number: "03",
+    title: "Pick a playlist",
+    text: "Choose the source playlist you want to sync. SoundSync will load the tracks for you.",
   },
-
   {
-    title: "No subscriptions. No premium.",
-    text: "SoundSync is designed to stay simple. No subscriptions, no paywalls, and no 'upgrade to continue' messages. Just connect your accounts, choose your playlist, and sync.",
-    image: "/IMAGE/SoundSync/logo-SS.png",
-    className: "soundSyncInfoLogo",
+    number: "04",
+    title: "Choose where it goes",
+    text: "Select the destination platform, then choose a new playlist or add to an existing one.",
   },
-
   {
-    title: "More platforms are coming",
-    text: "Spotify, Apple Music, YouTube Music, SoundCloud, Deezer... SoundSync will continue growing over time. Every new platform means more freedom for your playlists.",
-    image: "/IMAGE/SoundSync/logo-SS.png",
-    className: "soundSyncInfoLogo",
+    number: "05",
+    title: "Review and launch",
+    text: "Keep all tracks selected or remove the ones you do not want, then start the transfer.",
+  },
+];
+
+const tips = [
+  {
+    title: "Disconnect a platform",
+    text: "Go to Profil, find the connected platform, then use Disconnect.",
+  },
+  {
+    title: "Change account",
+    text: "Go to Profil and use Switch account on the platform you want to replace.",
+  },
+  {
+    title: "Customize the app",
+    text: "Open Custom from the navbar to change themes, sounds, notifications, voices, and particles.",
+  },
+  {
+    title: "Retry missing songs",
+    text: "If some tracks fail, use Retry failed tracks after the transfer instead of restarting everything.",
   },
 ];
 
@@ -101,35 +108,76 @@ function Info() {
         showThemeButton={false}
       />
 
-      <section className="infoPanel" aria-labelledby="infoTitle">
-        <div className="infoHero">
-          <div>
-            <h1 id="infoTitle">Info</h1>
-            <span>Learn more about SoundSync, the app, and the person behind it.</span>
-          </div>
-        </div>
-
-        <div className="profilInfoSection">
-          <div className="profilInfoHeader">
-            <span>Info</span>
-            <h2>About SoundSync</h2>
+      <section className="infoPanel">
+        <section className="infoSection" aria-labelledby="transferStepsTitle">
+          <div className="infoSectionHeader">
+            <span>Transfer</span>
+            <h2 id="transferStepsTitle">Steps</h2>
           </div>
 
-          <div className="profilInfoGrid">
-            {infoCards.map((card) => (
-              <article className="profilInfoCard" key={card.title}>
-                <div className="profilInfoImageBox">
-                  <img src={card.image} alt="" className={card.className} />
-                </div>
+          <div className="infoStepsGrid">
+            {transferSteps.map((step) => (
+              <article
+                className={`infoStepCard ${step.videoId ? "infoVideoStepCard" : ""}`}
+                key={step.number}
+              >
+                {step.videoId && (
+                  <div className="infoStepVideo">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${step.videoId}`}
+                      title="SoundSync app demo"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                )}
 
                 <div>
-                  <h3>{card.title}</h3>
-                  <p>{card.text}</p>
+                  <span>{step.number}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
                 </div>
               </article>
             ))}
           </div>
-        </div>
+        </section>
+
+        <section className="infoSection" aria-labelledby="tipsTitle">
+          <div className="infoSectionHeader">
+            <span>Tips</span>
+            <h2 id="tipsTitle">Useful things to know</h2>
+          </div>
+
+          <div className="infoTipsGrid">
+            {tips.map((tip) => (
+              <article className="infoTipCard" key={tip.title}>
+                <h3>{tip.title}</h3>
+                <p>{tip.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="infoCreatorSection" aria-labelledby="creatorTitle">
+          <div className="infoCreatorCard">
+            <img src="/IMAGE/utils/yanis26xPFP2.jpg" alt="" />
+            <div>
+              <span>Made by @yanis26x</span>
+              <h2 id="creatorTitle">From Spotify2YTB to SoundSync</h2>
+              <p>
+                About a year ago, I built a small project called Spotify2YTB. It could transfer playlists from Spotify to YouTube, but the code was messy, slow, and honestly... pretty terrible. I abandoned it for almost a year. Then I came back, deleted everything, started from scratch, redesigned the whole experience, and built what eventually became SoundSync.
+              </p>
+              <a
+                href="https://youtu.be/sBKze5G8eKU"
+                target="_blank"
+                rel="noreferrer"
+                className="oldAppDemoBtn"
+              >
+                Watch old app demo
+              </a>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
   );

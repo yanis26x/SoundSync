@@ -498,7 +498,7 @@ function CustomModal({
           <div className="customSoundSettings">
           <div className="customSoundRow">
             <div>
-              <h4>Particles</h4>
+              <h4>Particles ♫</h4>
               <p>Show or hide the floating music notes in the background.</p>
             </div>
 
