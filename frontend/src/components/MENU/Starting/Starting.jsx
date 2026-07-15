@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Starting.css";
+import MusicPlayerMenu from "../MusicPlayerMenu/MusicPlayerMenu";
 import TransferDetailsModal from "./TransferDetailsModal";
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
@@ -191,8 +192,12 @@ function Starting({
             </div>
           </section>
 
-          <div className="coverPreview" aria-hidden="true">
-            <img src={coverImage} alt="" />
+          <div className={`coverPreview ${noTransfer ? "coverPreviewPlayer" : ""}`} aria-hidden={noTransfer ? undefined : "true"}>
+            {noTransfer ? (
+              <MusicPlayerMenu compact />
+            ) : (
+              <img src={coverImage} alt="" />
+            )}
           </div>
         </article>
       </div>

@@ -3,20 +3,22 @@ import JumpingText from "../JumpingText/JumpingText";
 import "./MusicPlayerMenu.css";
 
 const tracks = [
-    {
+  {
     title: "Kate",
-    src: new URL("../../../../SOUND/music/Kate.mp3", import.meta.url).href,
+    artist: "@rachyl",
+    src: new URL("../../../../SOUND/music/kate.mp3", import.meta.url).href,
     image: new URL("../../../../IMAGE/utils/vampire.jpeg", import.meta.url).href,
   },
   {
-    title: "Milshake Confetti",
+    title: "Milshake",
+    artist: "@confetticannons",
     src: new URL("../../../../SOUND/music/milshake-confetti.mp3", import.meta.url).href,
     image: new URL("../../../../IMAGE/ichigo/confetti.jpg", import.meta.url).href,
   },
 
 ];
 
-function MusicPlayerMenu() {
+function MusicPlayerMenu({ compact = false }) {
   const audioRef = useRef(null);
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -54,24 +56,37 @@ function MusicPlayerMenu() {
   };
 
   return (
-    <section className="musicPlayerMenuSection" aria-label="Music player">
-      <div className="musicPlayerHeader">
-        <h2>Music Player♫</h2>
-        <p className="musicPlayerHeaderText">
-          <JumpingText text="Listen 2 my music. 4 more, check out my SoundCloud!" />
-        </p>
-      </div>
+    <section className={`musicPlayerMenuSection ${compact ? "compactMusicPlayer" : ""}`} aria-label="Music player">
+      {!compact && (
+        <div className="musicPlayerHeader">
+          <h2>Music Player♫</h2>
+          <p className="musicPlayerHeaderText">
+            <JumpingText text="Listen 2 my music. 4 more, check out my SoundCloud!" />
+          </p>
+        </div>
+      )}
 
       <article className="musicPlayerCard">
-        <img
-          className="musicPlayerCover"
-          src={currentTrack.image}
-          alt=""
-          aria-hidden="true"
-        />
+
+
+        {compact && (
+          <div className="compactMusicPlayerHeader">
+            <span>SoundSync</span>
+            <strong>Music Player</strong>
+          </div>
+        )}
+
+        {compact && (
+          <img
+            className="compactMusicPlayerThumb"
+            src={currentTrack.image}
+            alt=""
+            aria-hidden="true"
+          />
+        )}
 
         <div className="musicPlayerInfo">
-          <span className="musicPlayerEyebrow">Now playing</span>
+          <span className="musicPlayerEyebrow">{currentTrack.artist}</span>
           <strong>{currentTrack.title}</strong>
         </div>
 
