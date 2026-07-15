@@ -89,7 +89,7 @@ export default function FirstVisitMikuModal() {
 
       <div className="firstVisitMikuContent">
         <img
-          src="/SoundSync/SoundSyncLogo.png"
+          src="/SoundSync/logo-SS.png"
           alt="SoundSync"
           className="firstVisitMikuLogo"
         />

@@ -23,7 +23,7 @@ const socials = [
   {
     title: "GitHub",
     description: "See my projects.",
-    image: "/SoundSync/SoundSyncLogoNoBG2.png",
+    image: "/SoundSync/vertical-SS.png",
     href: "https://github.com/yanis26x",
   },
 ];

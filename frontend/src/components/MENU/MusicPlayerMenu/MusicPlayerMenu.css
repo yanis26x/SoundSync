@@ -206,7 +206,7 @@
   z-index: 0;
   width: auto;
   aspect-ratio: auto;
-  background: url("../../../../IMAGE/SoundSync/SoundSyncLogoNoBG2.png") center / contain no-repeat;
+  background: url("../../../../IMAGE/SoundSync/vertical-SS.png") center / contain no-repeat;
   opacity: 1;
   filter:
     brightness(1.28)

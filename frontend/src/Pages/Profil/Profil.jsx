@@ -300,10 +300,11 @@ function Profil() {
           window.location.href = "/info";
         }}
         transferLabel="Home"
+        activePage="profile"
         showTransferButton={true}
         showInfoButton={true}
-        showProfileButton={false}
-        showThemeButton={false}
+        showProfileButton={true}
+        showThemeButton={true}
       />
 
       <section className="profilPanel">

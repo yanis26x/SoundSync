@@ -3,7 +3,6 @@ import "./CustomModal.css";
 
 const previewSounds = {
   psp: new URL("../../../../../SOUND/sfx/psp.mp3", import.meta.url).href,
-  hello: new URL("../../../../../SOUND/sfx/hello.mp3", import.meta.url).href,
   evilLaugh: new URL("../../../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href,
   oupsP4: new URL("../../../../../SOUND/sfx/oups-P4.wav", import.meta.url).href,
   touchP4: new URL("../../../../../SOUND/sfx/touch-P4.wav", import.meta.url).href,
@@ -84,7 +83,6 @@ function CustomModal({
 
   const notificationSoundOptions = [
     { value: "psp", label: "PSP" },
-    { value: "hello", label: "hello" },
     { value: "evilLaugh", label: "Evil Laugh" },
     { value: "none", label: "Mute", isMute: true },
   ];
@@ -95,7 +93,6 @@ function CustomModal({
   ];
 
   const transferButtonSoundOptions = [
-    { value: "oupsP4", label: "Oups P4" },
     { value: "touchP4", label: "Touch P4" },
     { value: "none", label: "Mute", isMute: true },
   ];
@@ -373,19 +370,18 @@ function CustomModal({
                   </button>
                 </div>
               ))}
-
-              <button
-                type="button"
-                className="customSoundPreview customPreviewNotificationBtn"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onPreviewNotification?.();
-                }}
-                aria-label="Preview notification"
-              >
-                ▶
-              </button>
             </div>
+
+            <button
+              type="button"
+              className="customPreviewNotificationBtn"
+              onClick={(event) => {
+                event.stopPropagation();
+                onPreviewNotification?.();
+              }}
+            >
+              SEE PREVIEW NOTIFICATION
+            </button>
           </div>
         </div>
         )}

@@ -18,6 +18,7 @@ function Navbar({
   isTransferActive = false,
   isTransferLoading = false,
   transferStatus = "",
+  activePage = "",
   showTransferButton = true,
   showInfoButton = true,
   showProfileButton = true,
@@ -51,37 +52,16 @@ function Navbar({
           <span className="siteNavbarSubtitle">Transfer Anywhere, Sync Everthing</span>
         </a>
 
-        {isTransferLoading && (
-          <div className="siteNavbarTransferLoader" role="status" aria-live="polite">
-            <div className="siteNavbarTransferLoaderBars" aria-hidden="true">
-              <i></i>
-              <i></i>
-              <i></i>
-              <i></i>
-              <i></i>
-            </div>
-
-            <div className="siteNavbarTransferLoaderText">
-              <strong>Transfer in progress</strong>
-              <span>{transferStatus || "Preparing your playlist..."}</span>
-            </div>
-
-            <div className="siteNavbarTransferLoaderRail" aria-hidden="true">
-              <span></span>
-            </div>
-          </div>
-        )}
-
         <div className="siteNavbarActions">
           {showTransferButton && (
             <button
               type="button"
-              className="siteNavbarBtn siteNavbarStartBtn isHome"
+              className={`siteNavbarBtn siteNavbarStartBtn isHome${activePage === "home" ? " isActive" : ""}${isTransferActive ? " isTransferActive" : ""}`}
               onClick={onOpenTransfer || (() => {
                 window.location.href = "/transfer";
               })}
-              title={isTransferLoading ? transferStatus : "HOME"}
-              aria-label="HOME"
+              title={isTransferLoading ? transferStatus : normalizedTransferLabel}
+              aria-label={normalizedTransferLabel}
             >
               <span
                 className="siteNavbarBtnImage"
@@ -107,10 +87,15 @@ function Navbar({
                 {showInfoButton && (
                   <button
                     type="button"
-                    className="siteNavbarBtn"
-                    onClick={onOpenInfo || (() => {
-                      window.location.href = "/profil";
-                    })}
+                    className={`siteNavbarBtn${activePage === "info" ? " isActive" : ""}`}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (onOpenInfo) {
+                        onOpenInfo();
+                        return;
+                      }
+                      window.location.href = "/info";
+                    }}
                     title={infoLabel}
                     aria-label={infoLabel}
                   >
@@ -125,10 +110,15 @@ function Navbar({
                 {showProfileButton && (
                   <button
                     type="button"
-                    className="siteNavbarBtn siteNavbarProfileBtn"
-                    onClick={onOpenProfile || (() => {
+                    className={`siteNavbarBtn siteNavbarProfileBtn${activePage === "profile" ? " isActive" : ""}`}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      if (onOpenProfile) {
+                        onOpenProfile();
+                        return;
+                      }
                       window.location.href = "/profil";
-                    })}
+                    }}
                     title={profileLabel}
                     aria-label={profileLabel}
                   >

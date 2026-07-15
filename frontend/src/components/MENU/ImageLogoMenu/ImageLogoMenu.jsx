@@ -5,7 +5,7 @@ function ImageLogoMenu() {
     <section className="imageLogoMenuSection" aria-label="SoundSync logo">
       <img
         className="imageLogoMenuImg"
-        src="/SoundSync/SoundSyncLogo.png"
+        src="/SoundSync/logo-SS.png"
         alt="SoundSync"
       />
     </section>

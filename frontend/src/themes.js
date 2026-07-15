@@ -34,7 +34,7 @@ export const themes = {
   tomo: {
     name: "Tomo",
     description: "Two girls looking at each other and smiling.",
-    background: "/wallpaper/eyesContact.jpg",
+    background: "/ichigo/eyesContact.jpg",
     cardBg: "rgba(0, 0, 0, 0.68)",
     border: "rgb(249, 91, 0)",
     accent: "#fd4907",
@@ -72,15 +72,6 @@ export const themes = {
     end: "#00ffd9",
   }),
 
-  noirOrange: createBlackAccentTheme({
-    name: "Orange",
-    description: "Fond noir avec un léger dégradé orange.",
-    accent: "#ff8800",
-    mid: "#000000",
-    end: "#ff8800",
-    text: "#fff8ef",
-  }),
-
   noirMauve: createBlackAccentTheme({
     name: "Purple",
     description: "Fond noir avec un léger dégradé mauve.",
@@ -90,15 +81,6 @@ export const themes = {
     text: "#fbf5ff",
   }),
 
-  noirSilver: createBlackAccentTheme({
-    name: "Silver",
-    description: "Fond noir avec un léger dégradé silver.",
-    accent: "#ffffff",
-    mid: "#000000",
-    end: "#ffffff",
-    text: "#ffffff",
-  }),
-
   noirRose: createBlackAccentTheme({
     name: "Pink",
     description: "Fond noir avec un léger dégradé rose.",
@@ -106,15 +88,6 @@ export const themes = {
     mid: "#000000",
     end: "#ff0084",
     text: "#fff4fa",
-  }),
-
-  noirRouge: createBlackAccentTheme({
-    name: "Red",
-    description: "Fond noir avec un léger dégradé rouge.",
-    accent: "#ff0000",
-    mid: "#000000",
-    end: "#ff0000",
-    text: "#fff4f4",
   }),
 
 };

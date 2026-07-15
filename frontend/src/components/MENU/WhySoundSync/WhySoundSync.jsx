@@ -21,7 +21,7 @@ const features = [
     description: "Move your playlists across all platforms.",
     link: "",
     alternate: {
-      image: "/wallpaper/eyesContact.jpg",
+      image: "/ichigo/eyesContact.jpg",
       title: "Let's be friends!!",
       description: "If you want 2 contact me, add me on ig @yanis26x.",
       link: "https://www.instagram.com/yanis26x/",

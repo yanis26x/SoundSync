@@ -16,7 +16,6 @@ import Transfer from "../Transfer/Transfer";
 import "./Menu.css";
 
 const transferDoneSound = new URL("../../../SOUND/sfx/psp.mp3", import.meta.url).href;
-const transferDonehello = new URL("../../../SOUND/sfx/hello.mp3", import.meta.url).href;
 const notificationEvilLaughSound = new URL("../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 const transferToastCloseSound = new URL("../../../SOUND/sfx/disapearing-P4.wav", import.meta.url).href;
 const menuTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
@@ -35,7 +34,6 @@ const defaultSoundSettings = {
 
 const notificationSounds = {
   psp: transferDoneSound,
-  hello: transferDonehello,
   evilLaugh: notificationEvilLaughSound,
 };
 
@@ -1398,7 +1396,7 @@ function Menu() {
         failed: failedTracks,
         already: ["Already Synced - Demo Mode"],
         playlistName: simulationPlaylist.name,
-        playlistImage: "/SoundSync/SoundSyncLogoNoBG.png",
+        playlistImage: "/SoundSync/logoNoBG-SS.png",
         transferredAt: new Date().toISOString(),
         sourceName: simulationSourcePlatform.name,
         destinationName: simulationDestinationPlatform.name,
@@ -2011,10 +2009,11 @@ if (
         isTransferActive={transferStarted || transferLoading}
         isTransferLoading={transferLoading}
         transferStatus={transferStatus}
-        showTransferButton={currentPage === "home" || currentPage === "transfer"}
+        activePage={currentPage === "home" ? "home" : ""}
+        showTransferButton={true}
         showInfoButton={true}
         showProfileButton={true}
-        showThemeButton={currentPage !== "transfer"}
+        showThemeButton={true}
       />
 
       {currentPage === "transfer" &&
@@ -2060,7 +2059,7 @@ if (
         {/* <Parental /> */}
         {/* <section className="mainHero">
           <img
-            src="/SoundSync/SoundSyncLogoNoBG.png"
+            src="/SoundSync/logoNoBG-SS.png"
             alt="SoundSync"
             className="mainHeroLogo"
           />

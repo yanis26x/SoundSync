@@ -9,14 +9,14 @@ const infoCards = [
   {
     title: "Built for playlist chaos",
     text: "SoundSync keeps your playlists moving between Spotify, YouTube Music, Apple Music, and more without forcing you to rebuild everything by hand.",
-    image: "/SoundSync/SoundSyncLogo.png",
+    image: "/SoundSync/logo-SS.png",
     className: "soundSyncInfoLogo",
   },
 
   {
     title: "From Spotify2YTB to SoundSync",
     text: "About a year ago, I built a small project called Spotify2YTB. It could transfer playlists from Spotify to YouTube, but the code was messy, slow, and honestly... pretty terrible. I abandoned it for almost a year. Then I came back, deleted everything, started from scratch, redesigned the whole experience, and built what eventually became SoundSync.",
-    image: "/SoundSync/SoundSyncLogo.png",
+    image: "/SoundSync/logo-SS.png",
     className: "soundSyncInfoLogo",
   },
 
@@ -39,14 +39,14 @@ const infoCards = [
   {
     title: "No subscriptions. No premium.",
     text: "SoundSync is designed to stay simple. No subscriptions, no paywalls, and no 'upgrade to continue' messages. Just connect your accounts, choose your playlist, and sync.",
-    image: "/SoundSync/SoundSyncLogo.png",
+    image: "/SoundSync/logo-SS.png",
     className: "soundSyncInfoLogo",
   },
 
   {
     title: "More platforms are coming",
     text: "Spotify, Apple Music, YouTube Music, SoundCloud, Deezer... SoundSync will continue growing over time. Every new platform means more freedom for your playlists.",
-    image: "/SoundSync/SoundSyncLogo.png",
+    image: "/SoundSync/logo-SS.png",
     className: "soundSyncInfoLogo",
   },
 ];
@@ -94,8 +94,9 @@ function Info() {
           window.location.href = "/";
         }}
         transferLabel="Home"
+        activePage="info"
         showTransferButton={true}
-        showInfoButton={false}
+        showInfoButton={true}
         showProfileButton={true}
         showThemeButton={false}
       />
