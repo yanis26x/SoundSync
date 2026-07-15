@@ -5,25 +5,25 @@ const socials = [
   {
     title: "My Website",
     description: "Visit my site.",
-    image: "/wallpaper/soraMusic.jpg",
+    image: "/IMAGE/wallpaper/soraMusic.jpg",
     href: "https://yanis26x.github.io/yanis26x/",
   },
   {
     title: "SoundCloud",
     description: "Listen to my tracks.",
-    image: "/ichigo/confetti.jpg",
+    image: "/IMAGE/ichigo/confetti.jpg",
     href: "https://soundcloud.com/yanis26x",
   },
   {
     title: "Instagram",
     description: "Follow my updates.",
-    image: "/utils/yanis26xPFP2.jpg",
+    image: "/IMAGE/utils/yanis26xPFP2.jpg",
     href: "https://www.instagram.com/yanis26x/",
   },
   {
     title: "GitHub",
     description: "See my projects.",
-    image: "/SoundSync/vertical-SS.png",
+    image: "/IMAGE/SoundSync/vertical-SS.png",
     href: "https://github.com/yanis26x",
   },
 ];

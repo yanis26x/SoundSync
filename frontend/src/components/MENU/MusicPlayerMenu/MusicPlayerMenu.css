@@ -82,7 +82,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url("/SoundSync/Remover.png") center / cover no-repeat;
+  background: url("/IMAGE/SoundSync/Remover.png") center / cover no-repeat;
   opacity: 1;
   pointer-events: none;
 }
@@ -206,7 +206,7 @@
   z-index: 0;
   width: auto;
   aspect-ratio: auto;
-  background: url("../../../../IMAGE/SoundSync/vertical-SS.png") center / contain no-repeat;
+  background: url("../../../../ASSETS/IMAGE/SoundSync/vertical-SS.png") center / contain no-repeat;
   opacity: 1;
   filter:
     brightness(1.28)

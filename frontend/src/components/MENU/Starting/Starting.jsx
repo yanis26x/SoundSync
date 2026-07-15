@@ -14,12 +14,12 @@ const getFallbackTrackLabel = (track) => {
 };
 
 const platformLogoMap = {
-  spotify: "/logo/mini/spotify-mini.png",
-  youtube: "/logo/mini/Youtube-mini.svg",
-  apple: "/logo/mini/Apple-Music-mini.png",
+  spotify: "/IMAGE/logo/mini/spotify-mini.png",
+  youtube: "/IMAGE/logo/mini/Youtube-mini.svg",
+  apple: "/IMAGE/logo/mini/Apple-Music-mini.png",
 };
 
-const defaultCoverImage = "/ichigo/blueSkyHappy.jpg";
+const defaultCoverImage = "/IMAGE/ichigo/blueSkyHappy.jpg";
 
 const getPlatformLogo = (platform, fallbackName) => {
   if (platform?.logo) return platform.logo;

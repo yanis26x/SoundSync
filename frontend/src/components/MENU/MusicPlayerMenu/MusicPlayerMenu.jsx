@@ -6,14 +6,14 @@ const tracks = [
   {
     title: "Kate",
     artist: "@rachyl",
-    src: new URL("../../../../SOUND/music/kate.mp3", import.meta.url).href,
-    image: new URL("../../../../IMAGE/utils/vampire.jpeg", import.meta.url).href,
+    src: new URL("../../../../ASSETS/SOUND/music/kate.mp3", import.meta.url).href,
+    image: new URL("../../../../ASSETS/IMAGE/utils/vampire.jpeg", import.meta.url).href,
   },
   {
     title: "Milshake",
     artist: "@confetticannons",
-    src: new URL("../../../../SOUND/music/milshake-confetti.mp3", import.meta.url).href,
-    image: new URL("../../../../IMAGE/ichigo/confetti.jpg", import.meta.url).href,
+    src: new URL("../../../../ASSETS/SOUND/music/milshake-confetti.mp3", import.meta.url).href,
+    image: new URL("../../../../ASSETS/IMAGE/ichigo/confetti.jpg", import.meta.url).href,
   },
 
 ];

@@ -18,10 +18,13 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Build folders
 dist/
 build/
+dist-ssr/
 
 # Vite
 .vite/
@@ -39,9 +42,17 @@ Thumbs.db
 # JetBrains
 .idea/
 
+# Editor files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Temporary files
 *.tmp
 *.temp
+*.local
 
 # Cache
 .cache/

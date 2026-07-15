@@ -65,7 +65,7 @@ function Navbar({
             >
               <span
                 className="siteNavbarBtnImage"
-                style={{ "--icon-url": "url('/logo/icon/home.png')" }}
+                style={{ "--icon-url": "url('/IMAGE/logo/icon/home.png')" }}
                 aria-hidden="true"
               />
             </button>
@@ -101,7 +101,7 @@ function Navbar({
                   >
                     <span
                       className="siteNavbarBtnImage"
-                      style={{ "--icon-url": "url('/logo/icon/info.png')" }}
+                      style={{ "--icon-url": "url('/IMAGE/logo/icon/info.png')" }}
                       aria-hidden="true"
                     />
                   </button>
@@ -124,7 +124,7 @@ function Navbar({
                   >
                     <span
                       className="siteNavbarBtnImage"
-                      style={{ "--icon-url": "url('/logo/icon/profil.png')" }}
+                      style={{ "--icon-url": "url('/IMAGE/logo/icon/profil.png')" }}
                       aria-hidden="true"
                     />
                     <span className="siteNavbarNotificationBadge" aria-label="1 notification">1</span>
@@ -141,7 +141,7 @@ function Navbar({
                   >
                     <span
                       className="siteNavbarBtnImage"
-                      style={{ "--icon-url": "url('/logo/icon/custom.png')" }}
+                      style={{ "--icon-url": "url('/IMAGE/logo/icon/custom.png')" }}
                       aria-hidden="true"
                     />
                   </button>

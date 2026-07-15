@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import "./CustomModal.css";
 
 const previewSounds = {
-  psp: new URL("../../../../../SOUND/sfx/psp.mp3", import.meta.url).href,
-  evilLaugh: new URL("../../../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href,
-  oupsP4: new URL("../../../../../SOUND/sfx/oups-P4.wav", import.meta.url).href,
-  touchP4: new URL("../../../../../SOUND/sfx/touch-P4.wav", import.meta.url).href,
-  cancelKh: new URL("../../../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href,
-  miku: new URL("../../../../../SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
+  psp: new URL("../../../../../ASSETS/SOUND/sfx/psp.mp3", import.meta.url).href,
+  evilLaugh: new URL("../../../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href,
+  oupsP4: new URL("../../../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href,
+  touchP4: new URL("../../../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href,
+  cancelKh: new URL("../../../../../ASSETS/SOUND/sfx/Cancel-kh.mp3", import.meta.url).href,
+  miku: new URL("../../../../../ASSETS/SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
 };
 
 const defaultSoundSettings = {
@@ -16,6 +16,7 @@ const defaultSoundSettings = {
   transferButtonSound: "touchP4",
   cancelButtonSound: "oupsP4",
   mikuVoiceEnabled: true,
+  voiceCharacter: "miku",
   particlesEnabled: true,
 };
 
@@ -88,8 +89,8 @@ function CustomModal({
   ];
 
   const notificationStyleOptions = [
-    { value: "classic", label: "Black" },
-    { value: "theme", label: "Theme" },
+    { value: "classic", label: "Black", className: "blackNotificationStyleOption" },
+    { value: "theme", label: "Theme", className: "themeNotificationStyleOption" },
   ];
 
   const transferButtonSoundOptions = [
@@ -103,9 +104,27 @@ function CustomModal({
     { value: "none", label: "Mute", isMute: true },
   ];
 
+  const voiceCharacterOptions = [
+    {
+      value: "miku",
+      label: "Hatsune Miku",
+      subtitle: "Miku guide voice",
+      // image: "/IMAGE/utils/miku-onion.webp",
+            image: "/IMAGE/utils/mikuX.webp",
+      previewSound: "miku",
+    },
+    {
+      value: "yuke",
+      label: "Yuke",
+      subtitle: "Uses evilLaugh.mp3",
+      image: "/IMAGE/utils/yuke.jpeg",
+      previewSound: "evilLaugh",
+    },
+  ];
+
   const renderOptionLabel = (option) =>
     option.isMute ? (
-      <img className="customMuteIcon" src="/logo/icon/mute.png" alt="Mute" />
+      <img className="customMuteIcon" src="/IMAGE/logo/icon/mute.png" alt="Mute" />
     ) : (
       <span>{option.label}</span>
     );
@@ -122,34 +141,30 @@ function CustomModal({
     { id: "fx", label: "FX" },
   ];
   const themeEntries = Object.entries(themes);
-  const imageThemes = themeEntries.filter(([, theme]) => theme.background);
-  const colorThemes = themeEntries.filter(([, theme]) => !theme.background);
 
-  const renderThemeOption = ([key, theme], variant = "image") => (
+  const renderThemeOption = ([key, theme]) => (
     <button
       key={key}
-      className={`themeOption ${
-        variant === "color" ? "colorThemeOption" : "imageThemeOption"
-      } ${currentTheme === key ? "selectedTheme" : ""}`}
+      type="button"
+      className={`themeOption ${currentTheme === key ? "selectedTheme" : ""}`}
       onClick={() => {
         setCurrentTheme(key);
       }}
+      aria-pressed={currentTheme === key}
     >
-      <span className="themeSelectedIndicator" aria-hidden="true" />
-
       {theme.background ? (
-        <img src={theme.background} alt={theme.name} />
+        <img className="themeOptionMedia" src={theme.background} alt="" />
       ) : (
         <span
-          className="themeOptionPreview"
+          className="themeOptionMedia themeOptionPreview"
           style={{ background: theme.backgroundColor || theme.cardBg }}
           aria-hidden="true"
         />
       )}
 
-      <div>
-        <h3 style={{ color: theme.accent }}>{theme.name}</h3>
-        {variant === "image" && <p>{theme.description}</p>}
+      <div className="themeOptionFooter">
+        <h3>{theme.name}</h3>
+        <p>{theme.description}</p>
       </div>
     </button>
   );
@@ -161,7 +176,7 @@ function CustomModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="customModalHeader">
-          <h2>Custom</h2>
+          {/* <h2>Custom</h2> */}
 
           <div className="customModalTabs" role="tablist" aria-label="Custom settings">
             {tabs.map((tab) => (
@@ -190,19 +205,9 @@ function CustomModal({
         </div>
 
         {activeTab === "theme" && (
-          <>
-            <h3 className="customModalSectionTitle">Theme</h3>
-
-            <div className="customThemeGroups">
-              <div className="customModalGrid imageThemeGrid">
-                {imageThemes.map((themeEntry) => renderThemeOption(themeEntry))}
-              </div>
-
-              <div className="customModalGrid colorThemeGrid">
-                {colorThemes.map((themeEntry) => renderThemeOption(themeEntry, "color"))}
-              </div>
-            </div>
-          </>
+          <div className="customThemeCards">
+            {themeEntries.map((themeEntry) => renderThemeOption(themeEntry))}
+          </div>
         )}
 
         {activeTab === "sounds" && (
@@ -353,7 +358,7 @@ function CustomModal({
               {notificationStyleOptions.map((option) => (
                 <div
                   key={option.value}
-                  className={`customSoundOption ${
+                  className={`customSoundOption customNotificationStyleOption ${option.className} ${
                     soundSettings.notificationStyle === option.value ? "selectedSoundOption" : ""
                   }`}
                 >
@@ -371,6 +376,31 @@ function CustomModal({
                 </div>
               ))}
             </div>
+          </div>
+
+          <div
+            className={`customSoundRow customNotificationPreviewRow ${
+              soundSettings.notificationStyle === "theme" ? "themeToast" : "classicToast"
+            }`}
+          >
+            <div className="customNotificationPreview">
+              <div className="customNotificationPreviewAvatarWrap">
+                <img
+                  className="customNotificationPreviewAvatar"
+                  src="/IMAGE/utils/yanis26xPFP.jpg"
+                  alt=""
+                />
+                <span className="customNotificationPreviewOnline" aria-hidden="true" />
+              </div>
+
+              <div className="customNotificationPreviewContent">
+                <div className="customNotificationPreviewHeader">
+                  <strong>@yanis26x</strong>
+                  <span>now</span>
+                </div>
+                <p>Preview notification. Your playlist transfer is ready 2 review.</p>
+              </div>
+            </div>
 
             <button
               type="button"
@@ -379,55 +409,88 @@ function CustomModal({
                 event.stopPropagation();
                 onPreviewNotification?.();
               }}
+              aria-label="Play preview notification"
             >
-              SEE PREVIEW NOTIFICATION
+              ▶
             </button>
           </div>
         </div>
         )}
 
         {activeTab === "voice" && (
-          <div className="customSoundSettings">
-          <div className="customSoundRow">
-            <div>
-              <h4>Hatsune Miku</h4>
-              <p>Voice that play to tell you what to do.</p>
-            </div>
-
-            <div className="customSegmentedControl" aria-label="Hatsune Miku voice">
+          <div className="customVoiceCards" aria-label="Voice choice">
+            {voiceCharacterOptions.map((option) => (
               <div
-                className={`customSoundOption ${
-                  soundSettings.mikuVoiceEnabled ? "selectedSoundOption" : ""
+                role="button"
+                tabIndex={0}
+                className={`customVoiceCard ${
+                  soundSettings.mikuVoiceEnabled &&
+                  (soundSettings.voiceCharacter || "miku") === option.value
+                    ? "selectedVoiceCard"
+                    : ""
                 }`}
+                key={option.value}
+                onClick={() => {
+                  updateSoundSetting("voiceCharacter", option.value);
+                  updateSoundSetting("mikuVoiceEnabled", true);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" && event.key !== " ") return;
+                  event.preventDefault();
+                  updateSoundSetting("voiceCharacter", option.value);
+                  updateSoundSetting("mikuVoiceEnabled", true);
+                }}
+                aria-pressed={
+                  soundSettings.mikuVoiceEnabled &&
+                  (soundSettings.voiceCharacter || "miku") === option.value
+                }
               >
-                <button
-                  type="button"
-                  className="customSoundSelect"
-                  onClick={() => updateSoundSetting("mikuVoiceEnabled", true)}
-                  aria-pressed={soundSettings.mikuVoiceEnabled}
-                >
-                  <span>On</span>
-                  {soundSettings.mikuVoiceEnabled && renderSelectedDot()}
-                </button>
-              </div>
+                <img className="customVoiceImage" src={option.image} alt="" />
 
-              <div
-                className={`customSoundOption ${
-                  !soundSettings.mikuVoiceEnabled ? "selectedSoundOption" : ""
-                }`}
-              >
-                <button
-                  type="button"
-                  className="customSoundSelect customIconOnlySelect"
-                  onClick={() => updateSoundSetting("mikuVoiceEnabled", false)}
-                  aria-pressed={!soundSettings.mikuVoiceEnabled}
-                >
-                  <img className="customMuteIcon" src="/logo/icon/mute.png" alt="Mute" />
-                  {!soundSettings.mikuVoiceEnabled && renderSelectedDot()}
-                </button>
+                <div className="customVoiceCardFooter">
+                  <div>
+                    <h4>{option.label}</h4>
+                    <p>{option.subtitle}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="customVoicePlay"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      playPreviewSound(option.previewSound);
+                    }}
+                    aria-label={`Play ${option.label}`}
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <div
+              role="button"
+              tabIndex={0}
+              className={`customVoiceCard ${
+                !soundSettings.mikuVoiceEnabled ? "selectedVoiceCard" : ""
+              }`}
+              onClick={() => updateSoundSetting("mikuVoiceEnabled", false)}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter" && event.key !== " ") return;
+                event.preventDefault();
+                updateSoundSetting("mikuVoiceEnabled", false);
+              }}
+              aria-pressed={!soundSettings.mikuVoiceEnabled}
+            >
+              <img className="customVoiceImage customVoiceMuteImage" src="/IMAGE/logo/icon/mute.png" alt="" />
+
+              <div className="customVoiceCardFooter">
+                <div>
+                  <h4>Mute</h4>
+                  <p>No transfer step voice</p>
+                </div>
               </div>
             </div>
-          </div>
         </div>
         )}
 

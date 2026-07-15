@@ -5,14 +5,26 @@ import StartTransfer from "../../components/TRANSFER/StartTransfer/StartTransfer
 import StatusStepTransfer from "../../components/TRANSFER/StatusStepTransfer/StatusStepTransfer";
 import "./Transfer.css";
 
-const transferTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
-const transferOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
-const whereMusicFromSound = new URL("../../../SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
-const whereToSyncSound = new URL("../../../SOUND/Miku/where2youWant.mp3", import.meta.url).href;
+const transferTouchSound = new URL("../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href;
+const transferOupsSound = new URL("../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const whereMusicFromSound = new URL("../../../ASSETS/SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
+const whereToSyncSound = new URL("../../../ASSETS/SOUND/Miku/where2youWant.mp3", import.meta.url).href;
+const yukeVoiceSound = new URL("../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 
 const transferButtonSounds = {
   touchP4: transferTouchSound,
   oupsP4: transferOupsSound,
+};
+
+const voicePromptSounds = {
+  miku: {
+    source: whereMusicFromSound,
+    destinationPlatform: whereToSyncSound,
+  },
+  yuke: {
+    source: yukeVoiceSound,
+    destinationPlatform: yukeVoiceSound,
+  },
 };
 
 function Transfer({
@@ -70,6 +82,7 @@ function Transfer({
   startSimulationTransfer,
   transferButtonSound = "touchP4",
   mikuVoiceEnabled = true,
+  voiceCharacter = "miku",
 }) {
   const platformPromptAudioRef = useRef(null);
   const hasPlayedWhereMusicFromSoundRef = useRef(false);
@@ -81,6 +94,7 @@ function Transfer({
   const shouldShowPlatformChooser = shouldChooseSourcePlatform || shouldChooseDestinationPlatform;
   const shouldShowTransferWorkspace =
     Boolean(sourcePlatform) && !shouldChooseDestinationPlatform;
+  const selectedVoiceSounds = voicePromptSounds[voiceCharacter] || voicePromptSounds.miku;
 
   const stopPlatformPromptAudio = () => {
     if (!platformPromptAudioRef.current) return;
@@ -121,8 +135,8 @@ function Transfer({
     if (hasPlayedWhereMusicFromSoundRef.current) return;
 
     hasPlayedWhereMusicFromSoundRef.current = true;
-    playPlatformPromptAudio(whereMusicFromSound);
-  }, [mikuVoiceEnabled, platformOrder.length]);
+    playPlatformPromptAudio(selectedVoiceSounds.source);
+  }, [mikuVoiceEnabled, platformOrder.length, selectedVoiceSounds.source]);
 
   useEffect(() => {
     if (!shouldChooseDestinationPlatform) {
@@ -138,8 +152,8 @@ function Transfer({
     if (hasPlayedWhereToSyncSoundRef.current) return;
 
     hasPlayedWhereToSyncSoundRef.current = true;
-    playPlatformPromptAudio(whereToSyncSound);
-  }, [mikuVoiceEnabled, shouldChooseDestinationPlatform]);
+    playPlatformPromptAudio(selectedVoiceSounds.destinationPlatform);
+  }, [mikuVoiceEnabled, selectedVoiceSounds.destinationPlatform, shouldChooseDestinationPlatform]);
 
   useEffect(() => () => {
     stopPlatformPromptAudio();
@@ -277,6 +291,7 @@ function Transfer({
               stopTransfer={stopTransfer}
               transferResult={transferResult}
               mikuVoiceEnabled={mikuVoiceEnabled}
+              voiceCharacter={voiceCharacter}
               onContinueToDestination={
                 destinationPlatform ? undefined : () => setTracksStepCompleted(true)
               }

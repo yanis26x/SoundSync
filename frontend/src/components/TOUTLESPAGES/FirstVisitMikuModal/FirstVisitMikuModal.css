@@ -13,7 +13,7 @@
   inset: -18px;
   background:
     linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, .42)),
-    url("/wallpaper/Miku.jpg") center / cover no-repeat;
+    url("/IMAGE/wallpaper/Miku.jpg") center / cover no-repeat;
   filter: blur(4px);
   transform: scale(1.03);
 }
@@ -113,7 +113,7 @@
   z-index: 4;
   width: min(920px, calc(100vw - 120px));
   min-height: 235px;
-  background: url("../../../../IMAGE/utils/dialogueBox.png") center / 100% 100% no-repeat;
+  background: url("../../../../ASSETS/IMAGE/utils/dialogueBox.png") center / 100% 100% no-repeat;
 }
 
 .firstVisitMikuBubble .texteDialoguePersona {

@@ -3,9 +3,18 @@ import { createPortal } from "react-dom";
 import "./DialoguePersona.css";
 
 const selectPlaylistMikuSound = new URL(
-  "../../../../SOUND/Miku/selectPlaylistMiku.mp3",
+  "../../../../ASSETS/SOUND/Miku/selectPlaylistMiku.mp3",
   import.meta.url
 ).href;
+const yukeVoiceSound = new URL(
+  "../../../../ASSETS/SOUND/sfx/evilLaugh.mp3",
+  import.meta.url
+).href;
+
+const voicePromptSounds = {
+  miku: selectPlaylistMikuSound,
+  yuke: yukeVoiceSound,
+};
 
 // JE N'EST PAS ECRIT CE CODE MOI MEME, IL VIENT DINTENET!!!
 //YANIS26X
@@ -15,6 +24,7 @@ export default function DialoguePersona({
   nom = "@yanis26x",
   texte = "ughhh yea!?",
   mikuVoiceEnabled = true,
+  voiceCharacter = "miku",
 }) {
   const [visible, setVisible] = useState(true);
   const [disparition, setDisparition] = useState(false);
@@ -23,7 +33,7 @@ export default function DialoguePersona({
   useEffect(() => {
     if (!mikuVoiceEnabled) return undefined;
 
-    const audio = new Audio(selectPlaylistMikuSound);
+    const audio = new Audio(voicePromptSounds[voiceCharacter] || selectPlaylistMikuSound);
     audio.volume = 0.55;
     audio.play().catch(() => {});
 
@@ -31,7 +41,7 @@ export default function DialoguePersona({
       audio.pause();
       audio.currentTime = 0;
     };
-  }, [mikuVoiceEnabled]);
+  }, [mikuVoiceEnabled, voiceCharacter]);
 
   useEffect(() => {
     let index = 0;

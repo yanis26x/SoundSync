@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
-import changeProfilIcon from "../../../IMAGE/logo/icon/changeProfil.png";
+import changeProfilIcon from "../../../ASSETS/IMAGE/logo/icon/changeProfil.png";
 import "./Profil.css";
 
 function Profil() {
@@ -227,7 +227,7 @@ function Profil() {
     {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/IMAGE/logo/mini/spotify-mini.png",
       isConnected: Boolean(accessToken),
       login: loginSpotify,
       switchAccount: () => {
@@ -239,7 +239,7 @@ function Profil() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/Youtube-mini.svg",
+      logo: "/IMAGE/logo/mini/Youtube-mini.svg",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -251,7 +251,7 @@ function Profil() {
     {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/mini/Apple-Music-mini.png",
+      logo: "/IMAGE/logo/mini/Apple-Music-mini.png",
       isConnected: Boolean(appleMusicUserToken),
       login: loginAppleMusic,
       switchAccount: async () => {

@@ -34,7 +34,7 @@ export const themes = {
   tomo: {
     name: "Tomo",
     description: "Two girls looking at each other and smiling.",
-    background: "/ichigo/eyesContact.jpg",
+    background: "/IMAGE/ichigo/eyesContact.jpg",
     cardBg: "rgba(0, 0, 0, 0.68)",
     border: "rgb(249, 91, 0)",
     accent: "#fd4907",
@@ -45,7 +45,7 @@ export const themes = {
   // sora: {
   //   name: "Sora",
   //   description: "Sora from Kingdom Hearts feeling the music flowing through his body.",
-  //   background: "/wallpaper/soraMusic.jpg",
+  //   background: "/IMAGE/wallpaper/soraMusic.jpg",
   //   cardBg: "rgba(0, 8, 42, 0.78)",
   //   border: "rgb(0, 42, 255)",
   //   accent: "#002aff",
@@ -56,7 +56,7 @@ export const themes = {
   miku: {
     name: "Hastune Miku",
     description: "Hatsune Miku projetDIVA F - Playstation 3",
-    background: "/wallpaper/Miku.jpg",
+    background: "/IMAGE/wallpaper/Miku.jpg",
     cardBg: "rgba(2, 26, 36, 0.72)",
     border: "rgb(0, 255, 255)",
     accent: "#00ffd9",

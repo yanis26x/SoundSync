@@ -183,7 +183,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  /* background: url("../../../../IMAGE/SoundSync/vertical-SS.png") right 18px center / min(42%, 230px) auto no-repeat; */
+  /* background: url("../../../../ASSETS/IMAGE/SoundSync/vertical-SS.png") right 18px center / min(42%, 230px) auto no-repeat; */
   opacity: 0.70;
   pointer-events: none;
 }

@@ -4,48 +4,48 @@ import "./WhySoundSync.css";
 
 const features = [
   {
-    image: "/ichigo/blueSkyHappy.jpg",
+    image: "/IMAGE/ichigo/blueSkyHappy.jpg",
     title: "Simple & Fast",
     description: "Simple, fast and secure 2 use.",
     link: "",
         alternate: {
-      image: "/wallpaper/soraMusic.jpg",
+      image: "/IMAGE/wallpaper/soraMusic.jpg",
       title: "Want sum more?!",
       description: "Visit my Bl00dy website 4 more!",
       link: "https://yanis26x.github.io/yanis26x/",
     },
   },
   {
-    image: "/ichigo/playingGuitars.jpg",
+    image: "/IMAGE/ichigo/playingGuitars.jpg",
     title: "Transfer Anywhere",
     description: "Move your playlists across all platforms.",
     link: "",
     alternate: {
-      image: "/ichigo/eyesContact.jpg",
+      image: "/IMAGE/ichigo/eyesContact.jpg",
       title: "Let's be friends!!",
       description: "If you want 2 contact me, add me on ig @yanis26x.",
       link: "https://www.instagram.com/yanis26x/",
     },
   },
   {
-    image: "/ichigo/happy.jpg",
+    image: "/IMAGE/ichigo/happy.jpg",
     title: "100% Free",
     description: "Free forever. Just sync your playlists n' enjoy!",
     link: "",
         alternate: {
-      image: "/ichigo/bigSmiles.jpeg",
+      image: "/IMAGE/ichigo/bigSmiles.jpeg",
       title: "Having withdrawal",
       description: "Pick, sync, and keep the music moving. ",
       link: "",
     },
   },
   {
-    image: "/ichigo/hug2.jpg",
+    image: "/IMAGE/ichigo/hug2.jpg",
     title: "4 Music Lovers",
     description: "Made while listening 2 confetti!!",
     link: "",
         alternate: {
-      image: "/ichigo/inClassHappy.jpg",
+      image: "/IMAGE/ichigo/inClassHappy.jpg",
       title: "4 Everyone",
       description: "meant 2 be used by everyone easly.",
       link: "",

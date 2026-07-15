@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import "./FirstVisitMikuModal.css";
 
 const introStorageKey = "sound_sync_miku_intro_seen";
-const introSound = new URL("../../../../SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
+const introSound = new URL("../../../../ASSETS/SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
 const introDuration = 30000;
 const maxSubtitleCharacters = 190;
 const introText = `What's up! Welcome to SoundSync!
@@ -89,7 +89,7 @@ export default function FirstVisitMikuModal() {
 
       <div className="firstVisitMikuContent">
         <img
-          src="/SoundSync/logo-SS.png"
+          src="/IMAGE/SoundSync/logo-SS.png"
           alt="SoundSync"
           className="firstVisitMikuLogo"
         />
@@ -107,14 +107,14 @@ export default function FirstVisitMikuModal() {
             onClick={startIntro}
             aria-label="Play Miku intro"
           >
-            <img src="/utils/miku-onion.webp" alt="Miku" />
+            <img src="/IMAGE/utils/miku-onion.webp" alt="Miku" />
           </button>
         )}
       </div>
 
       {hasStarted && (
         <div className="firstVisitMikuDialogue">
-          <img src="/utils/miku-onion.webp" alt="" aria-hidden="true" />
+          <img src="/IMAGE/utils/miku-onion.webp" alt="" aria-hidden="true" />
 
           <div className="firstVisitMikuBubble">
             <div className="nomDialoguePersona">@yanis26x</div>

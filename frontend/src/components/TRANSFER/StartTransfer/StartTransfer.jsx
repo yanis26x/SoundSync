@@ -1,9 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./StartTransfer.css";
 
-const whatMusicSound = new URL("../../../../SOUND/Miku/whatMusic.mp3", import.meta.url).href;
-const orWhatSound = new URL("../../../../SOUND/Miku/Orwhat.mp3", import.meta.url).href;
-const defaultPlaylistCover = "/ichigo/blueSkyHappy.jpg";
+const whatMusicSound = new URL("../../../../ASSETS/SOUND/Miku/whatMusic.mp3", import.meta.url).href;
+const orWhatSound = new URL("../../../../ASSETS/SOUND/Miku/Orwhat.mp3", import.meta.url).href;
+const yukeVoiceSound = new URL("../../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
+const defaultPlaylistCover = "/IMAGE/ichigo/blueSkyHappy.jpg";
+
+const voicePromptSounds = {
+  miku: {
+    destination: orWhatSound,
+    tracks: whatMusicSound,
+  },
+  yuke: {
+    destination: yukeVoiceSound,
+    tracks: yukeVoiceSound,
+  },
+};
 
 function StartTransfer({
   initialSetupStep = "destination",
@@ -40,6 +52,7 @@ function StartTransfer({
   retryFailedTransfer,
   onContinueToDestination,
   mikuVoiceEnabled = true,
+  voiceCharacter = "miku",
 }) {
   const [setupStep, setSetupStep] = useState(initialSetupStep);
   const [customCoverPreview, setCustomCoverPreview] = useState("");
@@ -87,6 +100,7 @@ function StartTransfer({
     selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
   );
   const shouldDimCover = destinationMode === "existing" && !selectedDestinationPlaylist;
+  const selectedVoiceSounds = voicePromptSounds[voiceCharacter] || voicePromptSounds.miku;
 
   useEffect(() => () => {
     if (customCoverPreview) URL.revokeObjectURL(customCoverPreview);
@@ -156,10 +170,10 @@ function StartTransfer({
 
     hasPlayedWhatMusicSoundRef.current = true;
 
-    const audio = new Audio(whatMusicSound);
+    const audio = new Audio(selectedVoiceSounds.tracks);
     audio.volume = 0.55;
     audio.play().catch(() => {});
-  }, [mikuVoiceEnabled, setupStep, showTransferSetup]);
+  }, [mikuVoiceEnabled, selectedVoiceSounds.tracks, setupStep, showTransferSetup]);
 
   useEffect(() => {
     if (!showTransferSetup || setupStep !== "destination") {
@@ -171,10 +185,10 @@ function StartTransfer({
 
     hasPlayedOrWhatSoundRef.current = true;
 
-    const audio = new Audio(orWhatSound);
+    const audio = new Audio(selectedVoiceSounds.destination);
     audio.volume = 0.55;
     audio.play().catch(() => {});
-  }, [mikuVoiceEnabled, setupStep, showTransferSetup]);
+  }, [mikuVoiceEnabled, selectedVoiceSounds.destination, setupStep, showTransferSetup]);
 
   return (
     <section className="destinationSetup transferFocusPanel">
@@ -221,7 +235,7 @@ function StartTransfer({
                           accept="image/*"
                           onChange={choosePlaylistCover}
                         />
-                        <img src="/logo/icon/upload.png" alt="" aria-hidden="true" />
+                        <img src="/IMAGE/logo/icon/upload.png" alt="" aria-hidden="true" />
                       </label>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 import "./Footer.css";
 
-const turnHerOffSound = new URL("../../../../SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
+const turnHerOffSound = new URL("../../../../ASSETS/SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
 
 export default function Footer() {
   const footerLinks = [
@@ -78,7 +78,7 @@ hello?!</span>
         aria-label="Play Miku sound"
       >
         <img
-          src="/utils/miku-onion.webp"
+          src="/IMAGE/utils/miku-onion.webp"
           alt=""
           aria-hidden="true"
           className="footerMikuOnion"

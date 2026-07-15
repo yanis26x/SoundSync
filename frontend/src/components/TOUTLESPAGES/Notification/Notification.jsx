@@ -19,7 +19,7 @@ function Notification({
       <div className="transferDoneToastAvatarWrap">
         <img
           className="transferDoneToastAvatar"
-          src="/utils/yanis26xPFP.jpg"
+          src="/IMAGE/utils/yanis26xPFP.jpg"
           alt="@yanis26x"
         />
 

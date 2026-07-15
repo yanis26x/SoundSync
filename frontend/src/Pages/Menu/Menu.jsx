@@ -15,13 +15,14 @@ import Notification from "../../components/TOUTLESPAGES/Notification/Notificatio
 import Transfer from "../Transfer/Transfer";
 import "./Menu.css";
 
-const transferDoneSound = new URL("../../../SOUND/sfx/psp.mp3", import.meta.url).href;
-const notificationEvilLaughSound = new URL("../../../SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
-const transferToastCloseSound = new URL("../../../SOUND/sfx/disapearing-P4.wav", import.meta.url).href;
-const menuTouchSound = new URL("../../../SOUND/sfx/touch-P4.wav", import.meta.url).href;
-const menuOupsSound = new URL("../../../SOUND/sfx/oups-P4.wav", import.meta.url).href;
-const menuCancelKhSound = new URL("../../../SOUND/sfx/Cancel-kh.mp3", import.meta.url).href;
-const whereMusicFromSound = new URL("../../../SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
+const transferDoneSound = new URL("../../../ASSETS/SOUND/sfx/psp.mp3", import.meta.url).href;
+const notificationEvilLaughSound = new URL("../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
+const transferToastCloseSound = new URL("../../../ASSETS/SOUND/sfx/disapearing-P4.wav", import.meta.url).href;
+const menuTouchSound = new URL("../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href;
+const menuOupsSound = new URL("../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href;
+const menuCancelKhSound = new URL("../../../ASSETS/SOUND/sfx/Cancel-kh.mp3", import.meta.url).href;
+const whereMusicFromSound = new URL("../../../ASSETS/SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
+const yukeVoiceSound = new URL("../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 
 const defaultSoundSettings = {
   notificationSound: "psp",
@@ -29,12 +30,18 @@ const defaultSoundSettings = {
   transferButtonSound: "touchP4",
   cancelButtonSound: "oupsP4",
   mikuVoiceEnabled: true,
+  voiceCharacter: "miku",
   particlesEnabled: true,
 };
 
 const notificationSounds = {
   psp: transferDoneSound,
   evilLaugh: notificationEvilLaughSound,
+};
+
+const sourcePromptSounds = {
+  miku: whereMusicFromSound,
+  yuke: yukeVoiceSound,
 };
 
 const menuButtonSounds = {
@@ -121,13 +128,13 @@ const fakeTrackPlaylists = [
   {
     id: "fake-hits",
     name: "Fake Track Hits",
-    image: "/ichigo/hug.jpg",
+    image: "/IMAGE/ichigo/hug.jpg",
     tracks: { total: 10 },
   },
   {
     id: "fake-short",
     name: "Fake Track Shortlist",
-    image: "/ichigo/hug2.jpg",
+    image: "/IMAGE/ichigo/hug2.jpg",
     tracks: { total: 2 },
   },
 ];
@@ -152,8 +159,8 @@ const fakeTrackPlaylistTracks = {
 const fakePlatformIds = ["fake", "fake2"];
 const isFakePlatform = (platformId) => fakePlatformIds.includes(platformId);
 const fakePlatformLogos = {
-  fake: "/logo/mini/Fake.png",
-  fake2: "/logo/mini/Fake2.png",
+  fake: "/IMAGE/logo/mini/Fake.png",
+  fake2: "/IMAGE/logo/mini/Fake2.png",
 };
 
 function Menu() {
@@ -260,27 +267,27 @@ function Menu() {
     spotify: accessToken && {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/IMAGE/logo/mini/spotify-mini.png",
     },
     youtube: youtubeAccessToken && {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/Youtube-mini.svg",
+      logo: "/IMAGE/logo/mini/Youtube-mini.svg",
     },
     apple: appleMusicUserToken && {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/mini/Apple-Music-mini.png",
+      logo: "/IMAGE/logo/mini/Apple-Music-mini.png",
     },
     fake: {
       id: "fake",
       name: "Fake 1",
-      logo: "/logo/mini/Fake.png",
+      logo: "/IMAGE/logo/mini/Fake.png",
     },
     fake2: {
       id: "fake2",
       name: "Fake 2",
-      logo: "/logo/mini/Fake2.png",
+      logo: "/IMAGE/logo/mini/Fake2.png",
     },
   };
   const selectedPlatforms = platformOrder
@@ -292,11 +299,11 @@ function Menu() {
     ? text.chooseDestination
     : text.chooseSource;
   const platformDisplayLogos = {
-    spotify: "/logo/mini/spotify-mini.png",
-    youtube: "/logo/YouTube-Logo.svg",
-    apple: "/logo/appleMusic.png",
-    fake: "/logo/mini/Fake.png",
-    fake2: "/logo/mini/Fake2.png",
+    spotify: "/IMAGE/logo/mini/spotify-mini.png",
+    youtube: "/IMAGE/logo/YouTube-Logo.svg",
+    apple: "/IMAGE/logo/appleMusic.png",
+    fake: "/IMAGE/logo/mini/Fake.png",
+    fake2: "/IMAGE/logo/mini/Fake2.png",
   };
   const addPlatformToOrder = (platformId) => {
     setPlatformOrder((currentOrder) => {
@@ -864,7 +871,7 @@ function Menu() {
     {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/IMAGE/logo/mini/spotify-mini.png",
       isConnected: Boolean(accessToken),
       login: loginSpotify,
       switchAccount: () => {
@@ -876,7 +883,7 @@ function Menu() {
     {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/Youtube-mini.svg",
+      logo: "/IMAGE/logo/mini/Youtube-mini.svg",
       isConnected: Boolean(youtubeAccessToken),
       login: loginYoutube,
       switchAccount: () => {
@@ -888,7 +895,7 @@ function Menu() {
     {
       id: "apple",
       name: "Apple Music",
-      logo: "/logo/mini/Apple-Music-mini.png",
+      logo: "/IMAGE/logo/mini/Apple-Music-mini.png",
       isConnected: Boolean(appleMusicUserToken),
       login: loginAppleMusic,
       switchAccount: async () => {
@@ -1223,7 +1230,7 @@ function Menu() {
   };
 
   const getPlaylistImage = (platformId, playlist) => {
-    if (isFakePlatform(platformId)) return playlist.image || fakePlatformLogos[platformId] || "/logo/mini/Fake.png";
+    if (isFakePlatform(platformId)) return playlist.image || fakePlatformLogos[platformId] || "/IMAGE/logo/mini/Fake.png";
 
     if (platformId === "spotify") {
       return playlist.images?.[0]?.url || "https://via.placeholder.com/100";
@@ -1325,12 +1332,12 @@ function Menu() {
     const simulationSourcePlatform = {
       id: "spotify",
       name: "Spotify",
-      logo: "/logo/mini/spotify-mini.png",
+      logo: "/IMAGE/logo/mini/spotify-mini.png",
     };
     const simulationDestinationPlatform = {
       id: "youtube",
       name: "YouTube",
-      logo: "/logo/mini/Youtube-mini.svg",
+      logo: "/IMAGE/logo/mini/Youtube-mini.svg",
     };
     const simulationPlaylist = {
       id: "simulation-playlist",
@@ -1396,7 +1403,7 @@ function Menu() {
         failed: failedTracks,
         already: ["Already Synced - Demo Mode"],
         playlistName: simulationPlaylist.name,
-        playlistImage: "/SoundSync/logoNoBG-SS.png",
+        playlistImage: "/IMAGE/SoundSync/logoNoBG-SS.png",
         transferredAt: new Date().toISOString(),
         sourceName: simulationSourcePlatform.name,
         destinationName: simulationDestinationPlatform.name,
@@ -1424,7 +1431,7 @@ function Menu() {
     }
 
     if (soundSettings.mikuVoiceEnabled) {
-      const audio = new Audio(whereMusicFromSound);
+      const audio = new Audio(sourcePromptSounds[soundSettings.voiceCharacter] || whereMusicFromSound);
       audio.volume = 0.82;
       audio.play().catch(() => {});
       sessionStorage.setItem("sound_sync_source_prompt_played", "true");
@@ -2024,6 +2031,7 @@ if (
           <DialoguePersona
             texte={text.pickPlaylist}
             mikuVoiceEnabled={soundSettings.mikuVoiceEnabled}
+            voiceCharacter={soundSettings.voiceCharacter}
           />
         )}
 
@@ -2045,7 +2053,7 @@ if (
               ×
             </button>
 
-            <img src="/ichigo/hug.jpg" alt="" />
+            <img src="/IMAGE/ichigo/hug.jpg" alt="" />
 
             <div>
               <h2 id="transferBlockedTitle">{text.transferBlockedTitle}</h2>
@@ -2059,7 +2067,7 @@ if (
         {/* <Parental /> */}
         {/* <section className="mainHero">
           <img
-            src="/SoundSync/logoNoBG-SS.png"
+            src="/IMAGE/SoundSync/logoNoBG-SS.png"
             alt="SoundSync"
             className="mainHeroLogo"
           />
@@ -2168,6 +2176,7 @@ if (
             startSimulationTransfer={runSimulationTransfer}
             transferButtonSound={soundSettings.transferButtonSound}
             mikuVoiceEnabled={soundSettings.mikuVoiceEnabled}
+            voiceCharacter={soundSettings.voiceCharacter}
           />
         )}
 
