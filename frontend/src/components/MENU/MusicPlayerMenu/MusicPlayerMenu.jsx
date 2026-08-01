@@ -69,20 +69,16 @@ function MusicPlayerMenu({ compact = false }) {
       <article className="musicPlayerCard">
 
 
-        {compact && (
-          <div className="compactMusicPlayerHeader">
-            <span>SoundSync</span>
-            <strong>Music Player</strong>
-          </div>
-        )}
 
         {compact && (
-          <img
-            className="compactMusicPlayerThumb"
-            src={currentTrack.image}
-            alt=""
-            aria-hidden="true"
-          />
+          <div className="compactMusicPlayerArtwork">
+            <img
+              className="compactMusicPlayerThumb"
+              src={currentTrack.image}
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
         )}
 
         <div className="musicPlayerInfo">

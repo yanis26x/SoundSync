@@ -1,15 +1,30 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .transferDetailsOverlay {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 20000;
+  width: 100vw;
+  height: 100vh;
   display: grid;
   place-items: center;
   padding: 18px;
-  background: rgba(0, 0, 0, 0.66);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(34px) saturate(1.25);
+  -webkit-backdrop-filter: blur(34px) saturate(1.25);
+  overflow: hidden;
+  animation: transferDetailsOverlayIn .24s ease-out both;
 }
 
 .transferDetailsModal {
+  position: relative;
+  z-index: 1;
   width: min(920px, 100%);
   max-height: min(760px, calc(100vh - 36px));
   overflow: hidden;
@@ -22,6 +37,16 @@
   background: rgba(8, 8, 10, 0.96);
   color: #fff;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.52);
+  transform-origin: center bottom;
+  animation: transferDetailsCartoonIn .62s cubic-bezier(.2, 1.42, .34, 1) both;
+}
+
+.transferDetailsOverlay.isClosing {
+  animation: transferDetailsOverlayOut .28s ease-in both;
+}
+
+.transferDetailsOverlay.isClosing .transferDetailsModal {
+  animation: transferDetailsCartoonOut .28s cubic-bezier(.64, -.2, .76, .42) both;
 }
 
 .transferDetailsHeader {
@@ -57,6 +82,54 @@
   font-size: 14px;
   font-weight: 1000;
   cursor: pointer;
+}
+
+.transferDetailsEmptyModal {
+  width: min(760px, 100%);
+  min-height: 280px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: 1fr;
+  align-items: center;
+  gap: 28px;
+}
+
+.transferDetailsEmptyAvatar {
+  width: clamp(150px, 20vw, 220px);
+  height: clamp(150px, 20vw, 220px);
+  border: 10px solid #000;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 18px 36px rgba(0,0,0,.46),
+    0 0 0 1px rgba(255,255,255,.16);
+}
+
+.transferDetailsEmptyText {
+  min-width: 0;
+}
+
+.transferDetailsEmptyText h2 {
+  margin: 0;
+  color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
+  font-size: clamp(34px, 5vw, 58px);
+  font-weight: 400;
+  line-height: .92;
+  text-shadow: 0 8px 22px rgba(0,0,0,.72);
+}
+
+.transferDetailsEmptyText p {
+  max-width: 390px;
+  margin: 12px 0 0;
+  color: rgba(255,255,255,.72);
+  font-family: "Brasil 2014", Impact, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.transferDetailsEmptyModal .transferDetailsClose {
+  align-self: start;
 }
 
 .transferDetailsMeta {
@@ -142,6 +215,87 @@
   margin: 0;
 }
 
+@keyframes transferDetailsOverlayIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0) saturate(1);
+    -webkit-backdrop-filter: blur(0) saturate(1);
+  }
+
+  to {
+    opacity: 1;
+    backdrop-filter: blur(34px) saturate(1.25);
+    -webkit-backdrop-filter: blur(34px) saturate(1.25);
+  }
+}
+
+@keyframes transferDetailsCartoonIn {
+  0% {
+    opacity: 0;
+    transform: translateY(70px) scale(.58, 1.22) rotate(-4deg);
+    filter: blur(10px);
+  }
+
+  48% {
+    opacity: 1;
+    transform: translateY(-18px) scale(1.08, .9) rotate(2.4deg);
+    filter: blur(0);
+  }
+
+  68% {
+    transform: translateY(8px) scale(.96, 1.04) rotate(-1.2deg);
+  }
+
+  84% {
+    transform: translateY(-4px) scale(1.02, .98) rotate(.4deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes transferDetailsOverlayOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(34px) saturate(1.25);
+    -webkit-backdrop-filter: blur(34px) saturate(1.25);
+  }
+
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0) saturate(1);
+    -webkit-backdrop-filter: blur(0) saturate(1);
+  }
+}
+
+@keyframes transferDetailsCartoonOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+    filter: blur(0);
+  }
+
+  38% {
+    transform: translateY(-10px) scale(1.04, .94) rotate(-1deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(56px) scale(.72, 1.16) rotate(3deg);
+    filter: blur(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transferDetailsOverlay,
+  .transferDetailsModal {
+    animation: none;
+  }
+}
+
 @media (max-width: 760px) {
   .transferDetailsModal {
     max-height: calc(100vh - 28px);
@@ -155,5 +309,18 @@
 
   .transferDetailsGroup {
     min-height: 180px;
+  }
+
+  .transferDetailsEmptyModal {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .transferDetailsEmptyModal .transferDetailsClose {
+    position: absolute;
+    top: 14px;
+    right: 14px;
   }
 }

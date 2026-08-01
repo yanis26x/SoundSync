@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .choosePanel {
   position: relative;
   height: auto;
@@ -10,20 +18,22 @@
 
   overflow: hidden;
 
-  border: 1px solid color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.14));
+  border: 1px solid white;
   border-radius: 24px;
 
   background:
-    linear-gradient(90deg, rgba(255,255,255,.08), transparent 32%, rgba(255,255,255,.05)),
-    radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%),
-    radial-gradient(circle at 88% 22%, rgba(255,255,255,.1), transparent 26%),
-    linear-gradient(135deg, rgba(0,0,0,.88), rgba(0,0,0,.58));
+linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(44,123,255,.44) 20%,
+      rgba(0,90,255,.88) 50%,
+      rgba(44,123,255,.44) 80%,
+      rgba(255,255,255,0) 100%);
 
   backdrop-filter: blur(24px) saturate(1.25);
   -webkit-backdrop-filter: blur(24px) saturate(1.25);
 
   box-shadow:
-    0 0 36px color-mix(in srgb, var(--accent) 32%, transparent),
+
     0 18px 42px rgba(0,0,0,.38),
     inset 0 1px 0 rgba(255,255,255,.16);
 
@@ -65,10 +75,11 @@
   margin: 0;
 
   color: #ffffff !important;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(32px, 4.4vw, 52px);
   line-height: .92;
-  font-weight: 1000;
-  letter-spacing: -2.8px;
+  font-weight: 400;
+  letter-spacing: 0;
 
   text-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 32%, transparent),

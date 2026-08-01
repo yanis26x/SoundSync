@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .socialsSection {
   width: 100%;
   margin-top: 30px;
@@ -16,9 +24,10 @@
   flex: 0 0 auto;
   margin: 0;
   color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(32px, 4vw, 54px);
   line-height: .95;
-  font-weight: 1000;
+  font-weight: 400;
   text-align: right;
   text-shadow:
     0 3px 0 #000,
@@ -39,9 +48,10 @@
   border-radius: 14px;
   background: transparent;
   color: var(--text-color);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 15px;
   line-height: 1.45;
-  font-weight: 800;
+  font-weight: 400;
   text-shadow:
     0 2px 8px rgba(0, 0, 0, 0.9),
     0 8px 22px rgba(0,0,0,.55);
@@ -161,9 +171,10 @@
 
 .socialCardText strong {
   color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 24px;
   line-height: .98;
-  font-weight: 1000;
+  font-weight: 400;
   text-shadow:
     0 2px 0 #000,
     0 8px 20px rgba(0, 0, 0, .9);

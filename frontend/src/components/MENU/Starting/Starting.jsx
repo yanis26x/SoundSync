@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import "./Starting.css";
 import MusicPlayerMenu from "../MusicPlayerMenu/MusicPlayerMenu";
+import Stats from "../Stats/Stats";
 import TransferDetailsModal from "./TransferDetailsModal";
 
 const mikuPerfectSound = new URL("../../../../ASSETS/SOUND/Miku/MikuPerfect.wav", import.meta.url).href;
@@ -23,8 +24,6 @@ const platformLogoMap = {
   youtube: "/IMAGE/logo/mini/Youtube-mini.svg",
   apple: "/IMAGE/logo/mini/Apple-Music-mini.png",
 };
-
-const defaultCoverImage = "/IMAGE/ichigo/blueSkyHappy.jpg";
 
 const getPlatformLogo = (platform, fallbackName) => {
   if (platform?.logo) return platform.logo;
@@ -58,25 +57,16 @@ function Starting({
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
   const noTransfer = !hasActivity;
-  const transferStateLabel = transferLoading
-    ? "Transfer running"
-    : hasResult
-      ? "Last transfer"
-      : "No transfer";
   const playlistName =
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
       : hasResult
         ? transferResult.playlistName || "Last playlist"
-        : "No transfer";
+        : "Start a transfer now!!";
   const sourceName = transferResult?.sourceName || sourcePlatform?.name || "Source";
   const destinationName = transferResult?.destinationName || destinationPlatform?.name || "Destination";
   const sourceLogo = getPlatformLogo(sourcePlatform, sourceName);
   const destinationLogo = getPlatformLogo(destinationPlatform, destinationName);
-  const playlistImage =
-    transferResult?.playlistImage ||
-    (sourcePlatform && selectedSourcePlaylist && getPlaylistName ? null : "");
-  const coverImage = playlistImage || defaultCoverImage;
   const transferDate = transferResult?.transferredAt
     ? new Intl.DateTimeFormat(undefined, {
       month: "short",
@@ -90,10 +80,6 @@ function Starting({
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
   const hasFailedTracks = failedTracks.length > 0;
-  const transferTrackCount = getCount(addedTracks) + getCount(failedTracks) + getCount(alreadyTracks);
-  const titleStatus = hasResult
-    ? `${transferTrackCount} ${transferTrackCount === 1 ? "Track" : "Tracks"}`
-    : "0 Tracks";
   const queuedTracks = selectedSourceTracks.map((track) =>
     sourcePlatform && getTrackLabel
       ? getTrackLabel(sourcePlatform.id, track)
@@ -227,12 +213,9 @@ function Starting({
             </div>
           </section>
 
-          <div className={`coverPreview ${noTransfer ? "coverPreviewPlayer" : ""}`} aria-hidden={noTransfer ? undefined : "true"}>
-            {noTransfer ? (
-              <MusicPlayerMenu compact />
-            ) : (
-              <img src={coverImage} alt="" />
-            )}
+          <div className="startingSidePanel">
+            <Stats />
+            <MusicPlayerMenu compact />
           </div>
         </article>
       </div>

@@ -1,4 +1,8 @@
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./TransferDetailsModal.css";
+
+const emptyDetailsAvatar = new URL("../../../../ASSETS/IMAGE/utils/vampire.jpeg", import.meta.url).href;
 
 const resultGroups = [
   { key: "added", label: "Added" },
@@ -7,12 +11,66 @@ const resultGroups = [
 ];
 
 function TransferDetailsModal({ isOpen, onClose, transferResult }) {
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimeoutRef = useRef(null);
+
+  useEffect(() => () => {
+    if (closeTimeoutRef.current) {
+      window.clearTimeout(closeTimeoutRef.current);
+    }
+  }, []);
+
   if (!isOpen) return null;
 
   const hasResult = Boolean(transferResult);
+  const overlayClassName = `transferDetailsOverlay${isClosing ? " isClosing" : ""}`;
 
-  return (
-    <div className="transferDetailsOverlay" role="presentation" onClick={onClose}>
+  const closeWithAnimation = () => {
+    if (isClosing) return;
+    setIsClosing(true);
+
+    closeTimeoutRef.current = window.setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 280);
+  };
+
+  if (!hasResult) {
+    return createPortal(
+      <div className={overlayClassName} role="presentation" onClick={closeWithAnimation}>
+        <section
+          className="transferDetailsModal transferDetailsEmptyModal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="transferDetailsTitle"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <img
+            className="transferDetailsEmptyAvatar"
+            src={emptyDetailsAvatar}
+            alt=""
+            aria-hidden="true"
+          />
+          <div className="transferDetailsEmptyText">
+            <h2 id="transferDetailsTitle">Are u stupid?!</h2>
+            <p>bc it realy seems like you are, you have to start a transfer first... else there's nothing to see here...</p>
+          </div>
+          <button
+            type="button"
+            className="transferDetailsClose"
+            onClick={closeWithAnimation}
+            aria-label="Close transfer details"
+          >
+            X
+          </button>
+        </section>
+      </div>,
+      document.body
+    );
+  }
+
+  return createPortal(
+    <div className={overlayClassName} role="presentation" onClick={closeWithAnimation}>
       <section
         className="transferDetailsModal"
         role="dialog"
@@ -28,7 +86,7 @@ function TransferDetailsModal({ isOpen, onClose, transferResult }) {
           <button
             type="button"
             className="transferDetailsClose"
-            onClick={onClose}
+            onClick={closeWithAnimation}
             aria-label="Close transfer details"
           >
             X
@@ -65,7 +123,8 @@ function TransferDetailsModal({ isOpen, onClose, transferResult }) {
           })}
         </div>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }
 

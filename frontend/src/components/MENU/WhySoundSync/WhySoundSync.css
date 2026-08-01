@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .homeInfoBanner {
   position: relative;
   width: 100%;
@@ -25,10 +33,11 @@
   margin: 0;
 
   color: var(--text-color);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(30px, 3vw, 48px);
   line-height: .95;
-  font-weight: 1000;
-  letter-spacing: -1.8px;
+  font-weight: 400;
+  letter-spacing: 0;
 
 
   transform-origin: center bottom;
@@ -241,9 +250,10 @@
 
 .homeInfoFeatureCard strong {
   color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 20px;
   line-height: 1.05;
-  font-weight: 1000;
+  font-weight: 400;
   transition:
     opacity .32s ease,
     transform .32s ease,

@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .startingSection {
   position: relative;
   z-index: 5;
@@ -17,8 +25,9 @@
 .startingHeader h1 {
   margin: 0;
   color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(34px, 6vw, 58px);
-  font-weight: 1000;
+  font-weight: 400;
   line-height: 0.95;
   letter-spacing: 0;
     text-shadow:
@@ -70,19 +79,20 @@
   margin: 0;
   padding: 11px 28px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.92);
+  border: 2px solid rgb(0, 0, 0);
   border-radius: 2px;
   background:
     linear-gradient(90deg,
       rgba(255,255,255,0) 0%,
-      rgba(44,123,255,.44) 20%,
-      rgba(0,90,255,.88) 50%,
-      rgba(44,123,255,.44) 80%,
+      rgb(0, 0, 0) 20%,
+      rgb(0, 0, 0) 50%,
+      rgb(4, 8, 7) 80%,
       rgba(255,255,255,0) 100%);
   color: #fff;
   font: inherit;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 400;
   letter-spacing: 0;
   text-transform: uppercase;
   text-shadow: 0 0 8px rgba(255,255,255,.7), 0 2px 8px rgba(0,0,0,.8);
@@ -154,15 +164,21 @@
 }
 
 .startingActivityCard {
-  --starting-panel-height: clamp(240px, 27vw, 320px);
+  --starting-panel-height: clamp(210px, 22vw, 260px);
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, var(--starting-panel-height));
-  align-items: stretch;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  align-items: center;
+  gap: 18px;
   padding: 24px;
   text-align: left; 
-   background: var(--card-bg);
+  border: 1px solid rgba(242, 242, 242, 0.781);
+   background: linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(44,123,255,.44) 20%,
+      rgba(0,90,255,.88) 50%,
+      rgba(44,123,255,.44) 80%,
+      rgba(255,255,255,0) 100%);
   backdrop-filter: blur(26px) saturate(1.18);
   -webkit-backdrop-filter: blur(26px) saturate(1.18);
 }
@@ -221,13 +237,12 @@
 
 .coverPreview {
   position: relative;
-  width: var(--starting-panel-height);
-  min-height: var(--starting-panel-height);
-  aspect-ratio: 1;
-  align-self: stretch;
-  border: 15px solid rgb(0, 0, 0);
-  border-radius: 20px;
-  background: #fffbfb;
+  width: 100%;
+  min-height: 132px;
+  align-self: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(0,0,0,.16);
   overflow: hidden;
 
   animation: startingCoverIn .74s cubic-bezier(.16, 1, .3, 1) .46s both;
@@ -250,11 +265,25 @@
 }
 
 .coverPreviewPlayer {
-  background: #000;
+  background: none;
 }
 
 .coverPreviewPlayer img {
   filter: none;
+}
+
+.startingSidePanel {
+  width: 100%;
+  align-self: center;
+  display: grid;
+  gap: 12px;
+}
+
+.startingSidePanel > *,
+.startingSidePanel .musicPlayerMenuSection {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .startingTitleRow {
@@ -273,7 +302,8 @@
   min-width: 0;
   max-width: 760px;
   color: #fff;
-  font-weight: 1000;
+  font-family: "Brasil 2014", Impact, sans-serif;
+  font-weight: 400;
   line-height: 0.98;
   overflow-wrap: anywhere;
   text-shadow: 0 12px 28px rgba(0, 0, 0, 0.48);
@@ -398,27 +428,29 @@
 }
 
 .informationDetails .informationDetailAdded {
-  background: linear-gradient(135deg, #000000, #063817);
+  background: linear-gradient(135deg, #000000, #06ec53);
 }
 
 .informationDetails .informationDetailFailed {
-  background: linear-gradient(135deg, #000000, #3d0505);
+  background: linear-gradient(135deg, #000000, #d80202);
 }
 
 .informationDetails .informationDetailAlready {
-  background: linear-gradient(135deg, #000000, #4a3900);
+  background: linear-gradient(135deg, #000000, #dde403);
 }
 
 .informationDetails dt {
   color: rgba(255, 255, 255, 0.58);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
 }
 
 .informationDetails dt {
   color: rgba(255,255,255,.84);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: 12px;
 }
 
@@ -550,7 +582,7 @@
   }
 
   .startingActivityCard {
-    --starting-panel-height: min(320px, calc(100vw - 72px));
+    --starting-panel-height: auto;
 
     grid-template-columns: 1fr;
     justify-items: stretch;
@@ -560,6 +592,7 @@
 
   .information,
   .coverPreview,
+  .startingSidePanel,
   .startingActions {
     width: 100%;
     max-width: 100%;
@@ -581,11 +614,13 @@
 
   .coverPreview {
     width: 100%;
-    min-height: 0;
-    align-self: stretch;
+    min-height: 132px;
+    align-self: center;
     justify-self: stretch;
-    aspect-ratio: 1;
-    border-width: 8px;
+  }
+
+  .startingSidePanel {
+    justify-self: stretch;
   }
 
   .startingTicker {

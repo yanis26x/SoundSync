@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .destinationSetup {
   position: relative;
   width: 100%;
@@ -70,10 +78,11 @@
   margin: 0;
 
   color: var(--text-color);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(34px, 4vw, 56px);
   line-height: .9;
-  font-weight: 1000;
-  letter-spacing: -2.3px;
+  font-weight: 400;
+  letter-spacing: 0;
 
   text-shadow:
     0 0 18px color-mix(in srgb, var(--accent) 46%, transparent),
