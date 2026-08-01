@@ -7,8 +7,9 @@ import "./Transfer.css";
 
 const transferTouchSound = new URL("../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href;
 const transferOupsSound = new URL("../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href;
-const whereMusicFromSound = new URL("../../../ASSETS/SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
-const whereToSyncSound = new URL("../../../ASSETS/SOUND/Miku/where2youWant.mp3", import.meta.url).href;
+const mikuStep1Sound = new URL("../../../ASSETS/SOUND/Miku/MikuStep1.wav", import.meta.url).href;
+const mikuStep2Sound = new URL("../../../ASSETS/SOUND/Miku/MikuStep2.wav", import.meta.url).href;
+const mikuStep4Sound = new URL("../../../ASSETS/SOUND/Miku/MikuStep4.wav", import.meta.url).href;
 const yukeVoiceSound = new URL("../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 
 const transferButtonSounds = {
@@ -18,11 +19,13 @@ const transferButtonSounds = {
 
 const voicePromptSounds = {
   miku: {
-    source: whereMusicFromSound,
-    destinationPlatform: whereToSyncSound,
+    source: mikuStep1Sound,
+    sourcePlaylist: mikuStep2Sound,
+    destinationPlatform: mikuStep4Sound,
   },
   yuke: {
     source: yukeVoiceSound,
+    sourcePlaylist: yukeVoiceSound,
     destinationPlatform: yukeVoiceSound,
   },
 };
@@ -90,8 +93,9 @@ function Transfer({
   voiceCharacter = "miku",
 }) {
   const platformPromptAudioRef = useRef(null);
-  const hasPlayedWhereMusicFromSoundRef = useRef(false);
-  const hasPlayedWhereToSyncSoundRef = useRef(false);
+  const hasPlayedSourcePlatformSoundRef = useRef(false);
+  const hasPlayedSourcePlaylistSoundRef = useRef(false);
+  const hasPlayedDestinationPlatformSoundRef = useRef(false);
   const [tracksStepCompleted, setTracksStepCompleted] = useState(false);
   const shouldChooseSourcePlatform = selectedPlatforms.length === 0;
   const shouldChooseDestinationPlatform =
@@ -122,7 +126,7 @@ function Transfer({
 
   useEffect(() => {
     if (platformOrder.length !== 0) {
-      hasPlayedWhereMusicFromSoundRef.current = false;
+      hasPlayedSourcePlatformSoundRef.current = false;
       return;
     }
 
@@ -133,19 +137,19 @@ function Transfer({
 
     if (sessionStorage.getItem("sound_sync_source_prompt_played") === "true") {
       sessionStorage.removeItem("sound_sync_source_prompt_played");
-      hasPlayedWhereMusicFromSoundRef.current = true;
+      hasPlayedSourcePlatformSoundRef.current = true;
       return;
     }
 
-    if (hasPlayedWhereMusicFromSoundRef.current) return;
+    if (hasPlayedSourcePlatformSoundRef.current) return;
 
-    hasPlayedWhereMusicFromSoundRef.current = true;
+    hasPlayedSourcePlatformSoundRef.current = true;
     playPlatformPromptAudio(selectedVoiceSounds.source);
   }, [mikuVoiceEnabled, platformOrder.length, selectedVoiceSounds.source]);
 
   useEffect(() => {
-    if (!shouldChooseDestinationPlatform) {
-      hasPlayedWhereToSyncSoundRef.current = false;
+    if (!sourcePlatform || selectedSourcePlaylistId) {
+      hasPlayedSourcePlaylistSoundRef.current = false;
       return;
     }
 
@@ -154,9 +158,26 @@ function Transfer({
       return;
     }
 
-    if (hasPlayedWhereToSyncSoundRef.current) return;
+    if (hasPlayedSourcePlaylistSoundRef.current) return;
 
-    hasPlayedWhereToSyncSoundRef.current = true;
+    hasPlayedSourcePlaylistSoundRef.current = true;
+    playPlatformPromptAudio(selectedVoiceSounds.sourcePlaylist);
+  }, [mikuVoiceEnabled, selectedSourcePlaylistId, selectedVoiceSounds.sourcePlaylist, sourcePlatform]);
+
+  useEffect(() => {
+    if (!shouldChooseDestinationPlatform) {
+      hasPlayedDestinationPlatformSoundRef.current = false;
+      return;
+    }
+
+    if (!mikuVoiceEnabled) {
+      stopPlatformPromptAudio();
+      return;
+    }
+
+    if (hasPlayedDestinationPlatformSoundRef.current) return;
+
+    hasPlayedDestinationPlatformSoundRef.current = true;
     playPlatformPromptAudio(selectedVoiceSounds.destinationPlatform);
   }, [mikuVoiceEnabled, selectedVoiceSounds.destinationPlatform, shouldChooseDestinationPlatform]);
 
@@ -229,12 +250,14 @@ function Transfer({
 
       {shouldShowTransferWorkspace && (
         <div className="transferWorkspace">
-          <StatusStepTransfer
-            sourcePlatform={sourcePlatform}
-            destinationPlatform={destinationPlatform}
-            currentStep={currentStep}
-            onReset={resetPlatformChoice}
-          />
+          {!transferLoading && !transferResult && (
+            <StatusStepTransfer
+              sourcePlatform={sourcePlatform}
+              destinationPlatform={destinationPlatform}
+              currentStep={currentStep}
+              onReset={resetPlatformChoice}
+            />
+          )}
 
           {!selectedSourcePlaylistId ? (
             <PlaylistChooser

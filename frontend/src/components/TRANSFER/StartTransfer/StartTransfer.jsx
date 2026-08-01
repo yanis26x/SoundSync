@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./StartTransfer.css";
 
-const whatMusicSound = new URL("../../../../ASSETS/SOUND/Miku/whatMusic.mp3", import.meta.url).href;
-const orWhatSound = new URL("../../../../ASSETS/SOUND/Miku/Orwhat.mp3", import.meta.url).href;
+const mikuStep3Sound = new URL("../../../../ASSETS/SOUND/Miku/MikuStep3.wav", import.meta.url).href;
+const mikuStep5Sound = new URL("../../../../ASSETS/SOUND/Miku/MikuStep5.wav", import.meta.url).href;
 const yukeVoiceSound = new URL("../../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 const defaultPlaylistCover = "/IMAGE/ichigo/blueSkyHappy.jpg";
 
 const voicePromptSounds = {
   miku: {
-    destination: orWhatSound,
-    tracks: whatMusicSound,
+    destination: mikuStep5Sound,
+    tracks: mikuStep3Sound,
   },
   yuke: {
     destination: yukeVoiceSound,
@@ -214,16 +214,20 @@ function StartTransfer({
   }, [mikuVoiceEnabled, selectedVoiceSounds.destination, setupStep, showTransferSetup]);
 
   return (
-    <section className="destinationSetup transferFocusPanel">
-      <div className="destinationHeader">
-        <h2>
-          {showTransferSetup && setupStep === "destination"
-            ? "How 2 U want 2 sync it?!"
-            : "Witch music 2 U want 2 sync?!"}
-        </h2>
-      </div>
+    <section className={`destinationSetup transferFocusPanel${transferLoading ? " isTransferLoading" : ""}`}>
+      {!transferLoading && (
+        <div className="destinationHeader">
+          <h2>
+            {transferResult
+              ? "Transfer Done !"
+              : showTransferSetup && setupStep === "destination"
+                ? "How 2 U want 2 sync it?!"
+                : "Witch music 2 U want 2 sync?!"}
+          </h2>
+        </div>
+      )}
 
-      {showTransferSetup && (
+      {showTransferSetup && !transferLoading && (
         <>
           {setupStep === "destination" ? (
             <div className="transferSetupStep destinationStepPanel" key="destination-step">
@@ -515,46 +519,9 @@ function StartTransfer({
             </div>
           </div>
 
-          <div className="transferResultLists">
-            <section className="resultListGroup addedGroup">
-              <h4>Added</h4>
-              {transferResult.added.length > 0 ? (
-                <ol>
-                  {transferResult.added.map((track, index) => (
-                    <li key={`added-${track}-${index}`}>{track}</li>
-                  ))}
-                </ol>
-              ) : (
-                <p>None</p>
-              )}
-            </section>
-
-            <section className="resultListGroup failedGroup">
-              <h4>Failed</h4>
-              {transferResult.failed.length > 0 ? (
-                <ol>
-                  {transferResult.failed.map((track, index) => (
-                    <li key={`failed-${track}-${index}`}>{track}</li>
-                  ))}
-                </ol>
-              ) : (
-                <p>None</p>
-              )}
-            </section>
-
-            <section className="resultListGroup alreadyGroup">
-              <h4>Already There</h4>
-              {transferResult.already.length > 0 ? (
-                <ol>
-                  {transferResult.already.map((track, index) => (
-                    <li key={`already-${track}-${index}`}>{track}</li>
-                  ))}
-                </ol>
-              ) : (
-                <p>None</p>
-              )}
-            </section>
-          </div>
+          <p className="transferResultDetailsHint">
+            4 more info about your transfer, click on "+ DETAILS" in the menu
+          </p>
         </div>
       )}
 

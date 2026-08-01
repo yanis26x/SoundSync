@@ -7,7 +7,7 @@ const previewSounds = {
   oupsP4: new URL("../../../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href,
   touchP4: new URL("../../../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href,
   cancelKh: new URL("../../../../../ASSETS/SOUND/sfx/Cancel-kh.mp3", import.meta.url).href,
-  miku: new URL("../../../../../ASSETS/SOUND/Miku/selectPlaylistMiku.mp3", import.meta.url).href,
+  miku: new URL("../../../../../ASSETS/SOUND/Miku/MikuStep1.wav", import.meta.url).href,
 };
 
 const defaultSoundSettings = {

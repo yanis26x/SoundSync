@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./Starting.css";
 import MusicPlayerMenu from "../MusicPlayerMenu/MusicPlayerMenu";
 import TransferDetailsModal from "./TransferDetailsModal";
+
+const mikuPerfectSound = new URL("../../../../ASSETS/SOUND/Miku/MikuPerfect.wav", import.meta.url).href;
+const mikuFailedSound = new URL("../../../../ASSETS/SOUND/Miku/MikuFailed.wav", import.meta.url).href;
+const mikuMmSound = new URL("../../../../ASSETS/SOUND/Miku/MikuMm.wav", import.meta.url).href;
+const mikuOpenSound = new URL("../../../../ASSETS/SOUND/Miku/MikuOpen.wav", import.meta.url).href;
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
 
@@ -49,6 +54,7 @@ function Starting({
   onRetryFailedTransfer,
 }) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const detailsAudioRef = useRef(null);
   const hasResult = Boolean(transferResult);
   const hasActivity = transferStarted || transferLoading || hasResult || transferError;
   const noTransfer = !hasActivity;
@@ -107,6 +113,35 @@ function Starting({
     ...(hasResult ? addedTracks : queuedTracks).slice(0, 6),
   ].filter(Boolean);
 
+  const playDetailsSound = () => {
+    if (detailsAudioRef.current) {
+      detailsAudioRef.current.pause();
+      detailsAudioRef.current.currentTime = 0;
+    }
+
+    const addedCount = getCount(addedTracks);
+    const failedCount = getCount(failedTracks);
+    const alreadyCount = getCount(alreadyTracks);
+    const sound =
+      !hasResult
+        ? mikuMmSound
+        : addedCount > 0 && failedCount === 0 && alreadyCount === 0
+          ? mikuPerfectSound
+          : failedCount > 0 && addedCount === 0 && alreadyCount === 0
+            ? mikuFailedSound
+            : mikuOpenSound;
+
+    const audio = new Audio(sound);
+    audio.volume = 0.72;
+    detailsAudioRef.current = audio;
+    audio.play().catch(() => {});
+  };
+
+  const openDetails = () => {
+    playDetailsSound();
+    setIsDetailsOpen(true);
+  };
+
   return (
     <section className="startingSection">
       <header className="startingHeader">
@@ -163,7 +198,7 @@ function Starting({
               <button
                 type="button"
                 className="startingStartBtn startingDetailsBtn"
-                onClick={() => setIsDetailsOpen(true)}
+                onClick={openDetails}
               >
                 <span>+ DETAILS</span>
               </button>

@@ -8,8 +8,6 @@ import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import Socials from "../../components/MENU/Socials/Socials";
 import MusicPlayerMenu from "../../components/MENU/MusicPlayerMenu/MusicPlayerMenu";
 import ImageLogoMenu from "../../components/MENU/ImageLogoMenu/ImageLogoMenu";
-import DialoguePersona from "../../components/TOUTLESPAGES/dialoguePersona/DialoguePersona";
-import FirstVisitMikuModal from "../../components/TOUTLESPAGES/FirstVisitMikuModal/FirstVisitMikuModal";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
 import Notification from "../../components/TOUTLESPAGES/Notification/Notification";
 import Transfer from "../Transfer/Transfer";
@@ -21,7 +19,8 @@ const transferToastCloseSound = new URL("../../../ASSETS/SOUND/sfx/disapearing-P
 const menuTouchSound = new URL("../../../ASSETS/SOUND/sfx/touch-P4.wav", import.meta.url).href;
 const menuOupsSound = new URL("../../../ASSETS/SOUND/sfx/oups-P4.wav", import.meta.url).href;
 const menuCancelKhSound = new URL("../../../ASSETS/SOUND/sfx/Cancel-kh.mp3", import.meta.url).href;
-const whereMusicFromSound = new URL("../../../ASSETS/SOUND/Miku/WhereMusicFrom-miku.mp3", import.meta.url).href;
+const mikuStep1Sound = new URL("../../../ASSETS/SOUND/Miku/MikuStep1.wav", import.meta.url).href;
+const mikuLoadingSound = new URL("../../../ASSETS/SOUND/Miku/MikuLoading.wav", import.meta.url).href;
 const yukeVoiceSound = new URL("../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 
 const defaultSoundSettings = {
@@ -40,7 +39,7 @@ const notificationSounds = {
 };
 
 const sourcePromptSounds = {
-  miku: whereMusicFromSound,
+  miku: mikuStep1Sound,
   yuke: yukeVoiceSound,
 };
 
@@ -253,6 +252,7 @@ function Menu() {
     }
   });
   const transferAbortControllerRef = useRef(null);
+  const mikuLoadingAudioRef = useRef(null);
   const transferDoneToastEffectsRef = useRef({
     audioTimeout: null,
     closeTimeout: null,
@@ -1376,6 +1376,51 @@ function Menu() {
   const selectedSourceTracksError = selectedSourceTrackKey
     ? trackErrors[selectedSourceTrackKey] || ""
     : "";
+  const isAnyLoading =
+    loading ||
+    youtubeLoading ||
+    appleLoading ||
+    transferLoading ||
+    Object.values(trackLoading).some(Boolean);
+
+  useEffect(() => {
+    const shouldPlayMikuLoading =
+      isAnyLoading &&
+      soundSettings.mikuVoiceEnabled &&
+      (soundSettings.voiceCharacter || "miku") === "miku";
+
+    if (!shouldPlayMikuLoading) {
+      if (mikuLoadingAudioRef.current) {
+        mikuLoadingAudioRef.current.pause();
+        mikuLoadingAudioRef.current.currentTime = 0;
+        mikuLoadingAudioRef.current = null;
+      }
+
+      return;
+    }
+
+    if (mikuLoadingAudioRef.current) return;
+
+    const audio = new Audio(mikuLoadingSound);
+    audio.loop = true;
+    audio.volume = 0.48;
+    mikuLoadingAudioRef.current = audio;
+    audio.play().catch(() => {});
+  }, [
+    isAnyLoading,
+    soundSettings.mikuVoiceEnabled,
+    soundSettings.voiceCharacter,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (!mikuLoadingAudioRef.current) return;
+
+      mikuLoadingAudioRef.current.pause();
+      mikuLoadingAudioRef.current.currentTime = 0;
+      mikuLoadingAudioRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -1532,7 +1577,7 @@ function Menu() {
     }
 
     if (soundSettings.mikuVoiceEnabled) {
-      const audio = new Audio(sourcePromptSounds[soundSettings.voiceCharacter] || whereMusicFromSound);
+      const audio = new Audio(sourcePromptSounds[soundSettings.voiceCharacter] || mikuStep1Sound);
       audio.volume = 0.82;
       audio.play().catch(() => {});
       sessionStorage.setItem("sound_sync_source_prompt_played", "true");
@@ -2208,7 +2253,6 @@ if (
   return (
     <main className="app" onClickCapture={playMenuButtonSound}>
       {soundSettings.particlesEnabled && <MusicParticles />}
-      <FirstVisitMikuModal />
 
       {transferDoneToast && (
         <Notification
@@ -2253,18 +2297,6 @@ if (
         showProfileButton={true}
         showThemeButton={true}
       />
-
-      {currentPage === "transfer" &&
-        selectedPlatforms.length === 2 &&
-        sourcePlatform &&
-        destinationPlatform &&
-        !selectedSourcePlaylistId && (
-          <DialoguePersona
-            texte={text.pickPlaylist}
-            mikuVoiceEnabled={soundSettings.mikuVoiceEnabled}
-            voiceCharacter={soundSettings.voiceCharacter}
-          />
-        )}
 
       {isTransferBlockedModalOpen && (
         <div
