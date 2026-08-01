@@ -2,26 +2,16 @@ const createBlackAccentTheme = ({
   name,
   description,
   accent,
-  mid,
-  end,
   text = "#f2fffd",
 }) => ({
   name,
   description,
   background: "",
   backgroundColor: `
-    radial-gradient(
-      circle at 50% 45%,
-      ${end} 0%,
-      ${mid} 38%,
-      #050505 72%,
-      #000000 100%
-    ),
-    linear-gradient(
-      180deg,
-      #000000 0%,
-      #000000 100%
-    )
+    radial-gradient(ellipse at 50% 114%, color-mix(in srgb, var(--accent) 80%, transparent), transparent 40%),
+    radial-gradient(circle at 16% 22%, color-mix(in srgb, var(--accent) 70%, transparent), transparent 30%),
+    radial-gradient(circle at 88% 28%, color-mix(in srgb, var(--accent) 70%, transparent), transparent 28%),
+    linear-gradient(#000000, #000000)
   `,
   cardBg: "rgba(0, 10, 9, 0.84)",
   border: `${accent}80`,
@@ -42,16 +32,6 @@ export const themes = {
     text: "#fff7ea",
   },
 
-  // sora: {
-  //   name: "Sora",
-  //   description: "Sora from Kingdom Hearts feeling the music flowing through his body.",
-  //   background: "/IMAGE/wallpaper/soraMusic.jpg",
-  //   cardBg: "rgba(0, 8, 42, 0.78)",
-  //   border: "rgb(0, 42, 255)",
-  //   accent: "#002aff",
-  //   accentSoft: "rgba(0, 80, 255, 0.38)",
-  //   text: "#eaf6ff",
-  // },
 
   miku: {
     name: "Hastune Miku",
@@ -64,30 +44,39 @@ export const themes = {
     text: "#f2fdff",
   },
 
-  noir: createBlackAccentTheme({
-    name: "Turquoise",
-    description: "Fond noir avec un léger dégradé turquoise.",
+
+  noirMiku: {
+    name: "Noir Miku",
+    description: "Fond noir avec des lueurs turquoise Miku.",
+    background: "",
+    backgroundColor: `
+      radial-gradient(ellipse at 50% 114%, color-mix(in srgb, #00ffd9 80%, transparent), transparent 40%),
+      radial-gradient(circle at 16% 22%, color-mix(in srgb, #00ffd9 70%, transparent), transparent 30%),
+      radial-gradient(circle at 88% 28%, color-mix(in srgb, #00ffd9 70%, transparent), transparent 28%),
+      linear-gradient(#000000, #000000)
+    `,
+    cardBg: `
+      linear-gradient(145deg, rgba(55, 113, 113, 0.16), transparent 28%),
+      linear-gradient(0deg, rgba(0, 255, 217, 0.36) 0%, rgba(0, 255, 217, 0.16) 18%, rgba(0, 0, 0, 0.94) 48%),
+      rgba(0, 0, 0, 0.94)
+    `,
+    border: "rgba(0, 255, 217, 0.42)",
     accent: "#00ffd9",
-    mid: "#000000",
-    end: "#00ffd9",
-  }),
+    accentSoft: "rgba(0, 255, 217, 0.16)",
+    text: "#f2fdff",
+  },
 
-  noirMauve: createBlackAccentTheme({
-    name: "Purple",
-    description: "Fond noir avec un léger dégradé mauve.",
-    accent: "#8602fa",
-    mid: "#000000",
-    end: "#8602fa",
-    text: "#fbf5ff",
-  }),
-
-  noirRose: createBlackAccentTheme({
-    name: "Pink",
-    description: "Fond noir avec un léger dégradé rose.",
-    accent: "#ff007b",
-    mid: "#000000",
-    end: "#ff0084",
-    text: "#fff4fa",
-  }),
+  noirBleuElectrique: {
+    name: "Electric Blue",
+    description: "Fond noir avec un bleu électrique subtil.",
+    background: "",
+    backgroundColor: "linear-gradient(#000000, #000000)",
+    cardBg: "rgb(13, 0, 255)",
+    border: "rgb(0, 0, 0)",
+    accent: "#0026ff",
+    accentSoft: "rgb(0, 0, 0)",
+    text: "#f2f8ff",
+    
+  },
 
 };

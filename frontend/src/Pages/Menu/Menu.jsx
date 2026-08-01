@@ -108,6 +108,7 @@ const text = {
     transferCheckingDestination: "Checking destination playlist...",
     transferSearchingTrack: "Searching",
     transferAddingTracks: "Adding tracks...",
+    transferReviewingMatches: "Review matches before adding.",
     transferFinalizing: "Finalizing transfer...",
     transferDone: "Transfer done",
     transferDoneNotification: "Transfer finished",
@@ -118,12 +119,16 @@ const text = {
     failedTracks: "tracks not found or failed",
     alreadyTracks: "tracks already in playlist",
     unsupportedTransfer: "Transfer is available for Spotify and YouTube for now.",
-    transferLimit: "Transfers are sent in batches of 50 tracks.",
+    transferLimit: "You can pick up to 200 tracks. Transfers are sent in batches of 50 tracks.",
+    reviewBeforeTransfer: "Verify matches before adding",
+    confirmReviewedTransfer: "Add reviewed tracks",
+    cancelReviewedTransfer: "Back to choices",
     homeBannerTitle: "Why SoundSync?!",
     homeBannerText: "My Apple Music subscription was about 2 expire... so I built SoundSync 2 keep all my playlists that i spent hours making!!",
 };
 
 const TRANSFER_BATCH_SIZE = 50;
+const MAX_TRANSFER_TRACKS = 200;
 const fakeTrackPlaylists = [
   {
     id: "fake-hits",
@@ -226,6 +231,8 @@ function Menu() {
   const [transferStatus, setTransferStatus] = useState("");
   const [transferResult, setTransferResult] = useState(null);
   const [transferError, setTransferError] = useState("");
+  const [reviewBeforeTransfer, setReviewBeforeTransfer] = useState(false);
+  const [transferReview, setTransferReview] = useState(null);
   const [transferDoneToast, setTransferDoneToast] = useState(null);
   const [simulationTransferMeta, setSimulationTransferMeta] = useState(null);
   const [isTransferBlockedModalOpen, setIsTransferBlockedModalOpen] = useState(false);
@@ -332,6 +339,7 @@ function Menu() {
     setTransferStatus("");
     setTransferResult(null);
     setTransferError("");
+    setTransferReview(null);
     setSimulationTransferMeta(null);
   };
 
@@ -1003,6 +1011,9 @@ function Menu() {
         const response = await authorizedRequest(platformId, {
           method: "get",
           url: `http://127.0.0.1:8000/api/${platformId}/playlists/${playlistId}/tracks`,
+          params: {
+            limit: MAX_TRANSFER_TRACKS,
+          },
         });
 
         setPlaylistTracks((currentTracks) => ({
@@ -1101,8 +1112,8 @@ function Menu() {
 
     if (parts.length >= 2) {
       return {
-        artist: parts[0].trim(),
-        title: parts.slice(1).join(" ").trim(),
+        title: parts[0].trim(),
+        artist: parts.slice(1).join(" ").trim(),
       };
     }
 
@@ -1134,6 +1145,95 @@ function Menu() {
     const bestMatch = scoredSongs.sort((a, b) => b.score - a.score)[0];
 
     return bestMatch?.score >= (wantedArtist ? 7 : 6) ? bestMatch.song : null;
+  };
+
+  const getTrackMatchKey = (label) => {
+    const parsed = parseTrackLabel(label);
+    const title = normalizeTrackText(parsed.title);
+    const artist = normalizeTrackText(parsed.artist);
+
+    return `${title} ${artist}`.trim();
+  };
+
+  const scoreTrackLabelMatch = (sourceLabel, destinationLabel) => {
+    const source = parseTrackLabel(sourceLabel);
+    const sourceTitle = normalizeTrackText(source.title);
+    const sourceArtist = normalizeTrackText(source.artist);
+    const destinationText = normalizeTrackText(destinationLabel);
+    const destinationParsed = parseTrackLabel(destinationLabel);
+    const destinationTitle = normalizeTrackText(destinationParsed.title);
+    const destinationArtist = normalizeTrackText(destinationParsed.artist);
+    let score = 0;
+
+    if (!sourceTitle || !destinationText) return 0;
+    if (destinationTitle === sourceTitle || destinationText === sourceTitle) score += 8;
+    if (destinationText.includes(sourceTitle)) score += 7;
+    if (destinationTitle.includes(sourceTitle) || sourceTitle.includes(destinationTitle)) score += 4;
+    if (sourceArtist && destinationText.includes(sourceArtist)) score += 5;
+    if (sourceArtist && destinationArtist.includes(sourceArtist)) score += 4;
+
+    return score;
+  };
+
+  const getExistingDestinationMatch = (sourceLabel, destinationTracks) => {
+    const bestMatch = destinationTracks
+      .map((track) => ({
+        ...track,
+        score: scoreTrackLabelMatch(sourceLabel, track.label),
+      }))
+      .sort((a, b) => b.score - a.score)[0];
+
+    return bestMatch?.score >= 9 ? bestMatch : null;
+  };
+
+  const getYoutubeVideoMatch = (label, videos) => {
+    const parsed = parseTrackLabel(label);
+    const wantedTitle = normalizeTrackText(parsed.title);
+    const wantedArtist = normalizeTrackText(parsed.artist);
+
+    if (!wantedTitle) return null;
+
+    const scoredVideos = videos.map((video) => {
+      const rawTitle = video.snippet?.title || "";
+      const videoTitle = normalizeTrackText(rawTitle);
+      const channelTitle = normalizeTrackText(video.snippet?.channelTitle);
+      const combinedText = normalizeTrackText(`${rawTitle} ${video.snippet?.description || ""}`);
+      let score = 0;
+
+      if (videoTitle === wantedTitle) score += 8;
+      if (videoTitle.includes(wantedTitle)) score += 7;
+      if (wantedTitle.includes(videoTitle)) score += 3;
+      if (wantedArtist && (videoTitle.includes(wantedArtist) || channelTitle.includes(wantedArtist))) score += 5;
+      if (wantedArtist && combinedText.includes(wantedArtist)) score += 2;
+      if (/\b(cover|reaction|tutorial|karaoke|instrumental)\b/i.test(rawTitle)) score -= 4;
+
+      return { video, score };
+    });
+
+    const bestMatch = scoredVideos.sort((a, b) => b.score - a.score)[0];
+
+    return bestMatch?.score >= (wantedArtist ? 8 : 6) ? bestMatch.video : null;
+  };
+
+  const getDestinationTrackIdentity = (platformId, item) => {
+    if (platformId === "spotify") {
+      return {
+        id: item.track?.uri || item.track?.id || "",
+        label: getTrackLabel(platformId, item),
+      };
+    }
+
+    if (platformId === "youtube") {
+      return {
+        id: item.contentDetails?.videoId || item.snippet?.resourceId?.videoId || "",
+        label: getTrackLabel(platformId, item),
+      };
+    }
+
+    return {
+      id: item.id || "",
+      label: getTrackLabel(platformId, item),
+    };
   };
 
   const getPlatformToken = (platformId) => {
@@ -1320,6 +1420,7 @@ function Menu() {
     setTransferStatus("");
     setTransferResult(null);
     setTransferError("");
+    setTransferReview(null);
     setSimulationTransferMeta(null);
   };
 
@@ -1486,6 +1587,9 @@ if (
           method: "get",
           url: `http://127.0.0.1:8000/api/${sourcePlatform.id}/playlists/${selectedSourcePlaylist.id}/tracks`,
           signal: transferAbortController.signal,
+          params: {
+            limit: MAX_TRANSFER_TRACKS,
+          },
         });
 
         tracks = tracksResponse.data.tracks;
@@ -1575,6 +1679,8 @@ if (
       }
 
       let existingDestinationTrackIds = new Set();
+      let existingDestinationTrackLabels = new Map();
+      let existingDestinationTracks = [];
 
       if (destinationMode === "existing") {
         setTransferStatus(text.transferCheckingDestination);
@@ -1584,20 +1690,17 @@ if (
           signal: transferAbortController.signal,
         });
 
+        existingDestinationTracks = destinationTrackResponse.data.tracks
+          .map((item) => getDestinationTrackIdentity(destinationPlatform.id, item))
+          .filter((item) => item.id || item.label);
+
         existingDestinationTrackIds = new Set(
-          destinationTrackResponse.data.tracks
-            .map((item) => {
-              if (destinationPlatform.id === "spotify") {
-                return item.track?.uri || item.track?.id;
-              }
-
-              if (destinationPlatform.id === "youtube") {
-                return item.contentDetails?.videoId || item.snippet?.resourceId?.videoId;
-              }
-
-              return item.id;
-            })
-            .filter(Boolean)
+          existingDestinationTracks.map((item) => item.id).filter(Boolean)
+        );
+        existingDestinationTrackLabels = new Map(
+          existingDestinationTracks
+            .map((item) => [getTrackMatchKey(item.label), item.label])
+            .filter(([matchKey]) => Boolean(matchKey))
         );
       }
 
@@ -1622,6 +1725,13 @@ if (
           failed.push(label);
         }
       };
+      const formatMatchLabel = (sourceLabel, destinationLabel = "") =>
+        destinationLabel ? `${sourceLabel} -> ${destinationLabel}` : sourceLabel;
+      const getAlreadyResultLabel = (sourceLabel, destinationLabel = "") =>
+        formatMatchLabel(
+          sourceLabel,
+          destinationLabel || existingDestinationTrackLabels.get(getTrackMatchKey(sourceLabel)) || ""
+        );
 
       if (destinationPlatform.id === "spotify") {
         const uris = [];
@@ -1630,6 +1740,13 @@ if (
           throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
+            const existingMatch = getExistingDestinationMatch(label, existingDestinationTracks);
+
+            if (existingMatch) {
+              pushTransferResult(getAlreadyResultLabel(label, existingMatch.label), "already");
+              continue;
+            }
+
             const searchResponse = await authorizedRequest("spotify", {
               method: "get",
               url: "http://127.0.0.1:8000/api/spotify/search",
@@ -1640,12 +1757,19 @@ if (
             });
 
             if (searchResponse.data.track?.uri) {
-              if (existingDestinationTrackIds.has(searchResponse.data.track.uri)) {
-                pushTransferResult(label, "already");
+              const destinationLabel = getTrackLabel("spotify", { track: searchResponse.data.track });
+              const matchKey = getTrackMatchKey(destinationLabel);
+
+              if (existingDestinationTrackIds.has(searchResponse.data.track.uri) || existingDestinationTrackLabels.has(matchKey)) {
+                pushTransferResult(
+                  getAlreadyResultLabel(label, existingDestinationTrackLabels.get(matchKey) || destinationLabel),
+                  "already"
+                );
               } else {
                 uris.push(searchResponse.data.track.uri);
                 existingDestinationTrackIds.add(searchResponse.data.track.uri);
-                pushTransferResult(label, "added");
+                existingDestinationTrackLabels.set(matchKey, destinationLabel);
+                pushTransferResult(formatMatchLabel(label, destinationLabel), "added");
               }
             } else {
               pushTransferResult(label, "failed");
@@ -1679,32 +1803,60 @@ if (
           throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
+            const existingMatch = getExistingDestinationMatch(label, existingDestinationTracks);
+
+            if (existingMatch) {
+              pushTransferResult(getAlreadyResultLabel(label, existingMatch.label), "already");
+              continue;
+            }
+
+            const parsedLabel = parseTrackLabel(label);
+            const searchQuery = [parsedLabel.title, parsedLabel.artist].filter(Boolean).join(" ");
             const searchResponse = await authorizedRequest("youtube", {
               method: "get",
               url: "http://127.0.0.1:8000/api/youtube/search",
               signal: transferAbortController.signal,
               params: {
-                q: label,
+                q: searchQuery || label,
+                limit: 10,
               },
             });
-            const videoId = searchResponse.data.item?.id?.videoId;
+            const videoMatch = getYoutubeVideoMatch(label, searchResponse.data.items || []);
+            const videoId = videoMatch?.id?.videoId;
+            const destinationLabel = videoMatch?.snippet?.title || "";
 
             if (!videoId) {
               pushTransferResult(label, "failed");
               continue;
             }
 
-            if (existingDestinationTrackIds.has(videoId)) {
-              pushTransferResult(label, "already");
+            const matchKey = getTrackMatchKey(destinationLabel);
+
+            if (existingDestinationTrackIds.has(videoId) || existingDestinationTrackLabels.has(matchKey)) {
+              pushTransferResult(
+                getAlreadyResultLabel(label, existingDestinationTrackLabels.get(matchKey) || destinationLabel),
+                "already"
+              );
               continue;
             }
 
             existingDestinationTrackIds.add(videoId);
-            youtubeVideos.push({ label, videoId });
+            existingDestinationTrackLabels.set(matchKey, destinationLabel);
+            youtubeVideos.push({ label, videoId, destinationLabel });
           } catch (err) {
             if (axios.isCancel(err)) throw err;
             pushTransferResult(label, "failed");
           }
+        }
+
+        if (reviewBeforeTransfer && youtubeVideos.length > 0) {
+          setTransferReview({
+            matches: youtubeVideos,
+            targetPlaylistId,
+          });
+          setTransferStatus(text.transferReviewingMatches);
+          setTransferLoading(false);
+          return;
         }
 
         for (const [chunkIndex, videoChunk] of chunkItems(youtubeVideos, TRANSFER_BATCH_SIZE).entries()) {
@@ -1723,7 +1875,9 @@ if (
               },
             });
 
-            videoChunk.forEach((video) => pushTransferResult(video.label, "added"));
+            videoChunk.forEach((video) =>
+              pushTransferResult(formatMatchLabel(video.label, video.destinationLabel), "added")
+            );
           } catch (err) {
             if (axios.isCancel(err)) throw err;
             videoChunk.forEach((video) => pushTransferResult(video.label, "failed"));
@@ -1738,6 +1892,13 @@ if (
           throwIfTransferStopped();
           setTransferStatus(`${text.transferSearchingTrack} ${index + 1}/${trackLabels.length}: ${label}`);
           try {
+            const existingMatch = getExistingDestinationMatch(label, existingDestinationTracks);
+
+            if (existingMatch) {
+              pushTransferResult(getAlreadyResultLabel(label, existingMatch.label), "already");
+              continue;
+            }
+
             const searchResponse = await authorizedRequest("apple", {
               method: "get",
               url: "http://127.0.0.1:8000/api/apple/search",
@@ -1754,14 +1915,21 @@ if (
               continue;
             }
 
-            if (existingDestinationTrackIds.has(songId)) {
-              pushTransferResult(label, "already");
+            const destinationLabel = getTrackLabel("apple", appleSong);
+            const matchKey = getTrackMatchKey(destinationLabel);
+
+            if (existingDestinationTrackIds.has(songId) || existingDestinationTrackLabels.has(matchKey)) {
+              pushTransferResult(
+                getAlreadyResultLabel(label, existingDestinationTrackLabels.get(matchKey) || destinationLabel),
+                "already"
+              );
               continue;
             }
 
             songs.push(songId);
             existingDestinationTrackIds.add(songId);
-            pushTransferResult(label, "added");
+            existingDestinationTrackLabels.set(matchKey, destinationLabel);
+            pushTransferResult(formatMatchLabel(label, destinationLabel), "added");
           } catch (err) {
             if (axios.isCancel(err)) throw err;
             pushTransferResult(label, "failed");
@@ -1818,6 +1986,69 @@ if (
       retryLabels: transferResult.failed,
       retryTargetPlaylistId: transferResult.targetPlaylistId,
     });
+  };
+
+  const confirmReviewedTransfer = async (matches) => {
+    if (!transferReview?.targetPlaylistId || transferLoading) return;
+
+    const approvedMatches = matches.filter((match) => match.approved !== false);
+    setTransferStarted(true);
+    setTransferLoading(true);
+    setTransferStatus(text.transferAddingTracks);
+    setTransferError("");
+    setTransferResult(null);
+
+    const transferAbortController = new AbortController();
+    transferAbortControllerRef.current = transferAbortController;
+
+    try {
+      const added = [];
+      const failed = [];
+
+      for (let index = 0; index < approvedMatches.length; index += TRANSFER_BATCH_SIZE) {
+        const videoChunk = approvedMatches.slice(index, index + TRANSFER_BATCH_SIZE);
+        setTransferStatus(
+          `${text.transferAddingTracks} ${Math.floor(index / TRANSFER_BATCH_SIZE) + 1}/${Math.ceil(approvedMatches.length / TRANSFER_BATCH_SIZE)}`
+        );
+
+        try {
+          await authorizedRequest("youtube", {
+            method: "post",
+            url: `http://127.0.0.1:8000/api/youtube/playlists/${transferReview.targetPlaylistId}/tracks`,
+            signal: transferAbortController.signal,
+            data: {
+              videoIds: videoChunk.map((video) => video.videoId),
+            },
+          });
+
+          videoChunk.forEach((video) => added.push(`${video.label} -> ${video.destinationLabel}`));
+        } catch (err) {
+          if (axios.isCancel(err)) throw err;
+          videoChunk.forEach((video) => failed.push(video.label));
+        }
+      }
+
+      setTransferResult({
+        added,
+        failed,
+        already: [],
+        playlistName: getPlaylistName(sourcePlatform.id, selectedSourcePlaylist),
+        playlistImage: getPlaylistImage(sourcePlatform.id, selectedSourcePlaylist),
+        transferredAt: new Date().toISOString(),
+        sourceName: sourcePlatform.name,
+        destinationName: destinationPlatform.name,
+        targetPlaylistId: transferReview.targetPlaylistId,
+      });
+      setTransferReview(null);
+    } catch (err) {
+      setTransferError(axios.isCancel(err) ? text.transferStopped : err.response?.data?.message || err.message || text.trackError);
+    } finally {
+      if (transferAbortControllerRef.current === transferAbortController) {
+        transferAbortControllerRef.current = null;
+      }
+      setTransferLoading(false);
+      setTransferStatus("");
+    }
   };
 
   const renderTrackPanel = (platformId, playlistId) => {
@@ -2168,6 +2399,11 @@ if (
             returnToMenu={() => navigateToPage("home", "/")}
             stopTransfer={stopTransfer}
             transferResult={transferResult}
+            reviewBeforeTransfer={reviewBeforeTransfer}
+            setReviewBeforeTransfer={setReviewBeforeTransfer}
+            transferReview={transferReview}
+            confirmReviewedTransfer={confirmReviewedTransfer}
+            cancelReviewedTransfer={() => setTransferReview(null)}
             addPlatformToOrder={addPlatformToOrder}
             loginSpotify={loginSpotify}
             loginYoutube={loginYoutube}

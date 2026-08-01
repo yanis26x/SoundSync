@@ -74,6 +74,11 @@ function Transfer({
   returnToMenu,
   stopTransfer,
   transferResult,
+  reviewBeforeTransfer,
+  setReviewBeforeTransfer,
+  transferReview,
+  confirmReviewedTransfer,
+  cancelReviewedTransfer,
   addPlatformToOrder,
   loginSpotify,
   loginYoutube,
@@ -290,6 +295,11 @@ function Transfer({
               returnToMenu={returnToMenu}
               stopTransfer={stopTransfer}
               transferResult={transferResult}
+              reviewBeforeTransfer={reviewBeforeTransfer}
+              setReviewBeforeTransfer={setReviewBeforeTransfer}
+              transferReview={transferReview}
+              confirmReviewedTransfer={confirmReviewedTransfer}
+              cancelReviewedTransfer={cancelReviewedTransfer}
               mikuVoiceEnabled={mikuVoiceEnabled}
               voiceCharacter={voiceCharacter}
               onContinueToDestination={

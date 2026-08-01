@@ -331,6 +331,8 @@ app.post("/api/apple/playlists", async (req, res) => {
 app.get("/api/apple/playlists/:playlistId/tracks", async (req, res) => {
   const musicUserToken = req.headers.authorization?.replace("Bearer ", "");
   const { playlistId } = req.params;
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const maxTracks = Math.min(Number.isNaN(requestedLimit) ? 50 : requestedLimit, 200);
 
   if (!musicUserToken) {
     return res.status(401).json({
@@ -341,23 +343,29 @@ app.get("/api/apple/playlists/:playlistId/tracks", async (req, res) => {
 
   try {
     const developerToken = generateAppleDeveloperToken();
+    const tracks = [];
+    let nextUrl = `https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`;
+    let params = { limit: Math.min(maxTracks, 100) };
 
-    const response = await axios.get(
-      `https://api.music.apple.com/v1/me/library/playlists/${playlistId}/tracks`,
-      {
+    while (nextUrl && tracks.length < maxTracks) {
+      const response = await axios.get(nextUrl, {
         headers: {
           Authorization: `Bearer ${developerToken}`,
           "Music-User-Token": musicUserToken,
         },
-        params: {
-          limit: 50,
-        },
-      }
-    );
+        params,
+      });
+
+      tracks.push(...(response.data.data || []));
+      nextUrl = response.data.next
+        ? new URL(response.data.next, "https://api.music.apple.com").toString()
+        : "";
+      params = undefined;
+    }
 
     res.json({
       success: true,
-      tracks: response.data.data,
+      tracks: tracks.slice(0, maxTracks),
     });
   } catch (error) {
     console.error("Erreur musiques Apple Music :", error.response?.data || error.message);
@@ -727,6 +735,8 @@ app.post("/api/youtube/playlists", async (req, res) => {
 app.get("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
   const accessToken = req.headers.authorization?.replace("Bearer ", "");
   const { playlistId } = req.params;
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const maxTracks = Math.min(Number.isNaN(requestedLimit) ? 50 : requestedLimit, 200);
 
   if (!accessToken) {
     return res.status(401).json({
@@ -736,23 +746,29 @@ app.get("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
   }
 
   try {
-    const response = await axios.get(
-      "https://www.googleapis.com/youtube/v3/playlistItems",
-      {
+    const tracks = [];
+    let pageToken = "";
+
+    do {
+      const response = await axios.get("https://www.googleapis.com/youtube/v3/playlistItems", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
           part: "snippet,contentDetails",
           playlistId,
-          maxResults: 50,
+          maxResults: Math.min(50, maxTracks - tracks.length),
+          ...(pageToken ? { pageToken } : {}),
         },
-      }
-    );
+      });
+
+      tracks.push(...(response.data.items || []));
+      pageToken = response.data.nextPageToken || "";
+    } while (pageToken && tracks.length < maxTracks);
 
     res.json({
       success: true,
-      tracks: response.data.items,
+      tracks,
     });
   } catch (error) {
     console.error("Erreur musiques YouTube :", error.response?.data || error.message);
@@ -836,6 +852,8 @@ app.post("/api/youtube/playlists/:playlistId/tracks", async (req, res) => {
 app.get("/api/youtube/search", async (req, res) => {
   const accessToken = req.headers.authorization?.replace("Bearer ", "");
   const { q } = req.query;
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const maxResults = Math.min(Number.isNaN(requestedLimit) ? 5 : requestedLimit, 10);
 
   if (!accessToken) {
     return res.status(401).json({
@@ -860,13 +878,15 @@ app.get("/api/youtube/search", async (req, res) => {
         part: "snippet",
         q,
         type: "video",
-        maxResults: 1,
+        videoCategoryId: "10",
+        maxResults,
       },
     });
 
     res.json({
       success: true,
       item: response.data.items?.[0] || null,
+      items: response.data.items || [],
     });
   } catch (error) {
     console.error("Erreur recherche YouTube :", error.response?.data || error.message);
@@ -952,6 +972,8 @@ app.get("/api/spotify/playlists", async (req, res) => {
 app.get("/api/spotify/playlists/:playlistId/tracks", async (req, res) => {
   const accessToken = req.headers.authorization?.replace("Bearer ", "");
   const { playlistId } = req.params;
+  const requestedLimit = Number.parseInt(req.query.limit, 10);
+  const maxTracks = Math.min(Number.isNaN(requestedLimit) ? 50 : requestedLimit, 200);
 
   if (!accessToken) {
     return res.status(401).json({
@@ -961,21 +983,34 @@ app.get("/api/spotify/playlists/:playlistId/tracks", async (req, res) => {
   }
 
   try {
-    const response = await axios.get(
-      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-      {
+    const tracks = [];
+    let offset = 0;
+    let total = Infinity;
+
+    while (tracks.length < maxTracks && offset < total) {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+        {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          limit: 50,
+          limit: Math.min(50, maxTracks - tracks.length),
+          offset,
         },
       }
-    );
+      );
+
+      tracks.push(...(response.data.items || []));
+      total = response.data.total ?? tracks.length;
+      offset += response.data.items?.length || 0;
+
+      if (!response.data.next || (response.data.items?.length || 0) === 0) break;
+    }
 
     res.json({
       success: true,
-      tracks: response.data.items,
+      tracks,
     });
   } catch (error) {
     console.error("Erreur musiques Spotify :", error.response?.data || error.message);

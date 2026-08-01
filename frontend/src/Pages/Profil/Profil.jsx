@@ -4,6 +4,7 @@ import { themes } from "../../themes";
 import MusicParticles from "../../components/TOUTLESPAGES/Particles/MusicParticles";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
 import changeProfilIcon from "../../../ASSETS/IMAGE/logo/icon/changeProfil.png";
+import evilLaughSound from "../../../ASSETS/SOUND/sfx/evilLaugh.mp3";
 import "./Profil.css";
 
 function Profil() {
@@ -136,6 +137,11 @@ function Profil() {
 
   const loginYoutube = () => {
     window.location.href = "http://127.0.0.1:8000/auth/google";
+  };
+
+  const playEvilLaugh = () => {
+    const audio = new Audio(evilLaughSound);
+    audio.play().catch(() => {});
   };
 
   const loadMusicKit = () =>
@@ -391,6 +397,10 @@ function Profil() {
             );
           })}
         </div>
+
+        <button className="profilePlayMeBtn" type="button" onClick={playEvilLaugh}>
+          FFXV Button style
+        </button>
       </section>
     </main>
   );

@@ -49,6 +49,11 @@ function StartTransfer({
   returnToMenu,
   stopTransfer,
   transferResult,
+  reviewBeforeTransfer,
+  setReviewBeforeTransfer,
+  transferReview,
+  confirmReviewedTransfer,
+  cancelReviewedTransfer,
   retryFailedTransfer,
   onContinueToDestination,
   mikuVoiceEnabled = true,
@@ -56,6 +61,7 @@ function StartTransfer({
 }) {
   const [setupStep, setSetupStep] = useState(initialSetupStep);
   const [customCoverPreview, setCustomCoverPreview] = useState("");
+  const [reviewMatches, setReviewMatches] = useState([]);
   const hasPlayedOrWhatSoundRef = useRef(false);
   const hasPlayedWhatMusicSoundRef = useRef(false);
   const initializedTrackSelectionRef = useRef("");
@@ -101,6 +107,23 @@ function StartTransfer({
   );
   const shouldDimCover = destinationMode === "existing" && !selectedDestinationPlaylist;
   const selectedVoiceSounds = voicePromptSounds[voiceCharacter] || voicePromptSounds.miku;
+
+  useEffect(() => {
+    setReviewMatches(
+      transferReview?.matches?.map((match) => ({
+        ...match,
+        approved: match.approved !== false,
+      })) || []
+    );
+  }, [transferReview]);
+
+  const toggleReviewMatch = (matchIndex) => {
+    setReviewMatches((currentMatches) =>
+      currentMatches.map((match, index) =>
+        index === matchIndex ? { ...match, approved: !match.approved } : match
+      )
+    );
+  };
 
   useEffect(() => () => {
     if (customCoverPreview) URL.revokeObjectURL(customCoverPreview);
@@ -354,6 +377,17 @@ function StartTransfer({
 
               <p className="transferLimit">{transferLimit}</p>
 
+              {destinationPlatform?.id === "youtube" && (
+                <label className="reviewTransferToggle">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(reviewBeforeTransfer)}
+                    onChange={(event) => setReviewBeforeTransfer?.(event.target.checked)}
+                  />
+                  <span>{text.reviewBeforeTransfer}</span>
+                </label>
+              )}
+
               <div className="setupActionRow">
                 {onContinueToDestination ? (
                   <button
@@ -402,6 +436,49 @@ function StartTransfer({
           <button type="button" className="transferStopBtn" onClick={stopTransfer}>
             {text.stopTransfer}
           </button>
+        </div>
+      )}
+
+      {transferReview && !transferLoading && (
+        <div className="transferReview">
+          <div className="transferResultHeader">
+            <h3>{text.transferReviewingMatches}</h3>
+          </div>
+
+          <div className="transferReviewList">
+            {reviewMatches.map((match, index) => (
+              <label className="transferReviewItem" key={`${match.videoId}-${index}`}>
+                <input
+                  type="checkbox"
+                  checked={match.approved !== false}
+                  onChange={() => toggleReviewMatch(index)}
+                />
+                <span>
+                  <strong>{match.label}</strong>
+                  <em>{match.destinationLabel || "No match"}</em>
+                </span>
+              </label>
+            ))}
+          </div>
+
+          <div className="setupActionRow">
+            <button
+              type="button"
+              className="secondaryBtn setupBackBtn"
+              onClick={cancelReviewedTransfer}
+            >
+              {text.cancelReviewedTransfer}
+            </button>
+
+            <button
+              type="button"
+              className="startTransferBtn"
+              onClick={() => confirmReviewedTransfer?.(reviewMatches)}
+              disabled={!reviewMatches.some((match) => match.approved !== false)}
+            >
+              <span>{text.confirmReviewedTransfer}</span>
+            </button>
+          </div>
         </div>
       )}
 
