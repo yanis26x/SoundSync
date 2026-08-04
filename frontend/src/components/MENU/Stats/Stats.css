@@ -43,6 +43,57 @@ black;
   object-fit: cover;
 }
 
+.statsPlaylistTitle {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 2;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  padding: 8px 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 6px;
+  background: rgba(0,0,0,.66);
+  color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
+  font-size: clamp(17px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow:
+    0 3px 0 #000,
+    0 10px 20px rgba(0,0,0,.68);
+  backdrop-filter: blur(10px) saturate(1.12);
+  -webkit-backdrop-filter: blur(10px) saturate(1.12);
+}
+
+.statsPlaylistCount {
+  position: absolute;
+  top: 54px;
+  left: 12px;
+  z-index: 2;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  padding: 7px 9px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 6px;
+  background: rgba(0,0,0,.58);
+  color: color-mix(in srgb, var(--accent) 82%, white);
+  font-size: 12px;
+  font-weight: 950;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 3px 12px rgba(0,0,0,.86);
+  backdrop-filter: blur(10px) saturate(1.12);
+  -webkit-backdrop-filter: blur(10px) saturate(1.12);
+}
+
 .statsCardText {
   position: absolute;
   left: 0;

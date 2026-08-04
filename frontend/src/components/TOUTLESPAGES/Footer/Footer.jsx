@@ -1,6 +1,6 @@
 import "./Footer.css";
 
-const turnHerOffSound = new URL("../../../../ASSETS/SOUND/Miku/Turnheroff.mp3", import.meta.url).href;
+const evilLaughSound = new URL("../../../../ASSETS/SOUND/sfx/evilLaugh.mp3", import.meta.url).href;
 
 export default function Footer() {
   const footerLinks = [
@@ -18,8 +18,8 @@ export default function Footer() {
     },
   ];
 
-  const playTurnHerOffSound = () => {
-    const audio = new Audio(turnHerOffSound);
+  const playEvilLaughSound = () => {
+    const audio = new Audio(evilLaughSound);
     audio.volume = 0.55;
     audio.play().catch(() => {});
   };
@@ -74,8 +74,8 @@ hello?!</span>
       <button
         type="button"
         className="footerMikuOnionBtn"
-        onClick={playTurnHerOffSound}
-        aria-label="Play Miku sound"
+        onClick={playEvilLaughSound}
+        aria-label="Play evil laugh sound"
       >
         <img
           src="/IMAGE/utils/miku-onion.webp"

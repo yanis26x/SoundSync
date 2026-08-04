@@ -168,7 +168,7 @@ function Starting({
           </section>
 
           <div className="startingSidePanel">
-            <Stats hasTransferResult={hasResult} />
+            <Stats hasTransferResult={hasResult} transferResult={transferResult} />
           </div>
         </article>
       </div>
