@@ -1,10 +1,14 @@
-# SoundSync𖤐
+# SoundSync
 
-SoundSync est une application web qui permet de transférer des playlists entre différentes plateformes musicales.
+SoundSync is a web app for transferring playlists between music platforms.
 
----
+![SoundSync menu v1](frontend/ASSETS/IMAGE/utils/menu-v1.png)
 
-## Lancer le projet
+## Demo
+
+A video demo will be available soon on my YouTube channel: `@yanis26x`.
+
+## Run The Project
 
 ### Backend
 
@@ -14,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Backend :
+Backend URL:
 
 ```txt
 http://127.0.0.1:8000
@@ -28,85 +32,70 @@ npm install
 npm run dev
 ```
 
-Frontend :
+Frontend URL:
 
 ```txt
 http://localhost:5173
 ```
 
----
-
 ## Configuration
 
-Créer un fichier `.env` dans le dossier `backend` :
+Create a `.env` file inside the `backend` folder:
 
 ```env
 PORT=8000
 
 # Spotify
-SPOTIFY_CLIENT_ID=ton_client_id
-SPOTIFY_CLIENT_SECRET=ton_client_secret
+SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_client_secret
 SPOTIFY_REDIRECT_URI=http://127.0.0.1:8000/auth/spotify/callback
 
 # Google / YouTube
-GOOGLE_CLIENT_ID=ton_google_client_id
-GOOGLE_CLIENT_SECRET=ton_google_client_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/auth/google/callback
 ```
 
-Ajouter le fichier `AuthKey_3DHGA2M8R9.p8` dans le dossier `backend` :
+For Apple Music support, add your `.p8` MusicKit key file inside the `backend` folder and configure the matching backend values.
 
----
+## Spotify Setup
 
-## Spotify
-
-Dans le Spotify Developer Dashboard, ajouter :
+In the Spotify Developer Dashboard, add this Redirect URI:
 
 ```txt
 http://127.0.0.1:8000/auth/spotify/callback
 ```
 
-comme Redirect URI.
+## YouTube / Google OAuth Setup
 
----
-
-## YouTube / Google OAuth
-
-Dans Google Cloud Console, ajouter :
+In Google Cloud Console, add this authorized redirect URI:
 
 ```txt
 http://127.0.0.1:8000/auth/google/callback
 ```
 
-dans les URI de redirection autorisées.
-
-### Utilisateurs de test
-
-Actuellement, l'application Google est en mode test.
-
-Par défaut, seul :
-
-```txt
-yanis26x@gmail.com
-```
-
-peut se connecter.
-
-Pour ajouter d'autres utilisateurs :
+If your Google app is in testing mode, add your test users here:
 
 ```txt
 Google Cloud Console
-↓
 Google Auth Platform
-↓
 Audience
-↓
-Utilisateurs tests
-↓
-Ajouter des utilisateurs
+Test users
+Add users
 ```
 
-Ajoutez ensuite les adresses Gmail souhaitées.
+## Credits
+
+Developed by `@yanis26x`.
+
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
+
+You may view, share, and modify it as long as you **credit the author (`yanis26x`)** and **do not use it for commercial purposes**.
+
+[Read the full license](https://creativecommons.org/licenses/by-nc/4.0/)
+
 ---
 
-Développé par Yanis26x.
+<p align="center">© 2026 <b>yanis26x</b> · All rights reserved</p>
