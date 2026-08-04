@@ -6,8 +6,8 @@ import Footer from "../../components/TOUTLESPAGES/Footer/Footer";
 import Starting from "../../components/MENU/Starting/Starting";
 import WhySoundSync from "../../components/MENU/WhySoundSync/WhySoundSync";
 import Socials from "../../components/MENU/Socials/Socials";
-import MusicPlayerMenu from "../../components/MENU/MusicPlayerMenu/MusicPlayerMenu";
 import ImageLogoMenu from "../../components/MENU/ImageLogoMenu/ImageLogoMenu";
+import Loading from "../../components/TOUTLESPAGES/Loading/Loading";
 import Navbar from "../../components/TOUTLESPAGES/Navbar/Navbar";
 import Notification from "../../components/TOUTLESPAGES/Notification/Notification";
 import Transfer from "../Transfer/Transfer";
@@ -2263,6 +2263,24 @@ if (
         />
       )}
 
+      <Loading
+        isVisible={transferLoading}
+        status={transferStatus}
+        sourceName={(simulationTransferMeta?.sourcePlatform || sourcePlatform)?.name}
+        destinationName={(simulationTransferMeta?.destinationPlatform || destinationPlatform)?.name}
+        playlistName={
+          simulationTransferMeta?.playlist?.name ||
+          (sourcePlatform && selectedSourcePlaylist
+            ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
+            : "")
+        }
+        totalTracks={
+          trackSelectionMode === "selected"
+            ? selectedTrackKeys.length
+            : selectedSourceTracks.length
+        }
+      />
+
       <Navbar
         themes={themes}
         currentTheme={currentTheme}
@@ -2469,8 +2487,6 @@ if (
               <WhySoundSync
                 text={text.homeBannerText}
               />
-
-              <MusicPlayerMenu />
 
               <Socials />
 

@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import "./Starting.css";
-import MusicPlayerMenu from "../MusicPlayerMenu/MusicPlayerMenu";
 import Stats from "../Stats/Stats";
 import TransferDetailsModal from "./TransferDetailsModal";
 
@@ -173,7 +172,6 @@ function Starting({
 
           <div className="startingSidePanel">
             <Stats />
-            <MusicPlayerMenu compact />
           </div>
         </article>
       </div>

@@ -2,7 +2,8 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 0;
+  min-height: calc(var(--starting-panel-height, 220px) - 18px);
+  height: calc(var(--starting-panel-height, 220px) - 18px);
   padding: 0;
   display: grid;
   place-items: center;
