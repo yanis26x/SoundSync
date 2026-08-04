@@ -319,6 +319,18 @@ function Profil() {
             <h1>{text.profileTitle}</h1>
             <span>{text.profileSubtitle}</span>
           </div>
+
+          <div className="profilContactCard">
+            <p>im allways open 2 make new friends, if u want 2 talk or collaborate, contact @yanis26x on all socials.</p>
+            <a
+              className="profilePlayMeBtn profileContactBtn"
+              href="https://www.instagram.com/yanis26x"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Contact me
+            </a>
+          </div>
         </div>
 
         {appleError && <p className="error profilError">{appleError}</p>}

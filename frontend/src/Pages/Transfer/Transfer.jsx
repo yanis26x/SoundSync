@@ -72,7 +72,6 @@ function Transfer({
   toggleSelectedTrack,
   getTrackLabel,
   startPlaylistTransfer,
-  retryFailedTransfer,
   restartTransferFlow,
   returnToMenu,
   stopTransfer,
@@ -313,7 +312,6 @@ function Transfer({
               toggleSelectedTrack={toggleSelectedTrack}
               getTrackLabel={getTrackLabel}
               startPlaylistTransfer={startPlaylistTransfer}
-              retryFailedTransfer={retryFailedTransfer}
               restartTransferFlow={restartTransferFlow}
               returnToMenu={returnToMenu}
               stopTransfer={stopTransfer}

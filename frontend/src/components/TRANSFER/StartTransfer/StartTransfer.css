@@ -272,64 +272,6 @@
   pointer-events: none;
 }
 
-.coverOverlayBtn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-
-  width: 54px;
-  height: 54px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 999px;
-
-  background: rgba(0,0,0,.58);
-  cursor: pointer;
-
-  transform: translate(-50%, -50%);
-
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.36),
-    inset 0 1px 0 rgba(255,255,255,.16);
-
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease,
-    background .2s ease;
-}
-
-.coverOverlayBtn:hover {
-  transform: translate(-50%, -52%);
-  border-color: var(--accent);
-  background: rgba(0,0,0,.72);
-
-  box-shadow:
-    0 0 20px color-mix(in srgb, var(--accent) 32%, transparent),
-    0 12px 28px rgba(0,0,0,.36),
-    inset 0 1px 0 rgba(255,255,255,.18);
-}
-
-.coverOverlayBtn input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.coverOverlayBtn img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-}
-
 .playlistCoverDetails {
   width: 100%;
   min-height: 0;
@@ -496,15 +438,6 @@ linear-gradient(to bottom, rgba(0,0,0,.52), transparent 35%, rgba(0,0,0,.62)),
   font-size: 11px;
   font-weight: 800;
   line-height: 1.25;
-}
-
-.destinationStepControls {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
 }
 
 .startTransferPulse {
@@ -1346,30 +1279,6 @@ linear-gradient(to bottom, rgba(0,0,0,.52), transparent 35%, rgba(0,0,0,.62)),
   letter-spacing: 0;
 }
 
-.retryFailedBtn {
-  flex: 0 0 auto;
-  min-height: 34px;
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 104, 104, .42);
-  border-radius: 999px;
-  background: rgba(255, 104, 104, .12);
-  color: #ffd0d0;
-  cursor: pointer;
-  font: inherit;
-  font-size: 11px;
-  font-weight: 950;
-  transition:
-    transform .18s ease,
-    background .18s ease,
-    border-color .18s ease;
-}
-
-.retryFailedBtn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255, 128, 128, .68);
-  background: rgba(255, 104, 104, .2);
-}
-
 .transferResultSummary {
   display: grid;
   grid-template-columns: repeat(3, minmax(110px, 1fr));
@@ -1589,18 +1498,6 @@ linear-gradient(to bottom, rgba(0,0,0,.52), transparent 35%, rgba(0,0,0,.62)),
     opacity: 1;
     transform: scale(1.12);
     box-shadow: 0 0 0 7px rgba(39,255,106,0);
-  }
-}
-
-@keyframes playlistNameCaretBlink {
-  0%,
-  45% {
-    opacity: 1;
-  }
-
-  46%,
-  100% {
-    opacity: 0;
   }
 }
 

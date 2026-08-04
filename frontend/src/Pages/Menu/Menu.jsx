@@ -112,7 +112,6 @@ const text = {
     transferDone: "Transfer done",
     transferDoneNotification: "Transfer finished",
     transferDoneNotificationText: "Transfer done, go check!",
-    retryFailedTracks: "Retry failed tracks",
     restartTransfer: "return 2 the menu",
     addedTracks: "tracks added",
     failedTracks: "tracks not found or failed",
@@ -1681,10 +1680,7 @@ function Menu() {
     setTransferStatus(text.transferStopped);
   };
 
-  const startPlaylistTransfer = async ({
-    retryLabels = null,
-    retryTargetPlaylistId = "",
-  } = {}) => {
+  const startPlaylistTransfer = async () => {
     if (!sourcePlatform || !destinationPlatform || !selectedSourcePlaylist) return;
 
 if (
@@ -1737,17 +1733,15 @@ if (
         selectedTrackKeys.includes(`${sourceTrackKey}:${index}`)
       );
 
-      if (!Array.isArray(retryLabels) && tracksToTransfer.length === 0) {
+      if (tracksToTransfer.length === 0) {
         throw new Error(text.noSelectedTracks);
       }
 
-      const trackLabels = Array.isArray(retryLabels)
-        ? retryLabels.filter(Boolean)
-        : tracksToTransfer
-          .map((track) => getTrackLabel(sourcePlatform.id, track))
-          .filter(Boolean);
+      const trackLabels = tracksToTransfer
+        .map((track) => getTrackLabel(sourcePlatform.id, track))
+        .filter(Boolean);
 
-      let targetPlaylistId = retryTargetPlaylistId || destinationPlaylistId;
+      let targetPlaylistId = destinationPlaylistId;
 
       if (isFakePlatform(sourcePlatform.id) || isFakePlatform(destinationPlatform.id)) {
         if (!targetPlaylistId && destinationMode === "new") {
@@ -1806,7 +1800,7 @@ if (
         return;
       }
 
-      if (!retryTargetPlaylistId && destinationMode === "new") {
+      if (destinationMode === "new") {
         setTransferStatus(text.transferCreatingPlaylist);
         const createUrl = `http://127.0.0.1:8000/api/${destinationPlatform.id}/playlists`;
         const playlistTitle =
@@ -2132,15 +2126,6 @@ if (
         setTransferStatus("");
       }
     }
-  };
-
-  const retryFailedTransfer = () => {
-    if (!transferResult?.failed?.length || transferLoading) return;
-
-    startPlaylistTransfer({
-      retryLabels: transferResult.failed,
-      retryTargetPlaylistId: transferResult.targetPlaylistId,
-    });
   };
 
   const confirmReviewedTransfer = async (matches) => {
@@ -2555,7 +2540,6 @@ if (
             toggleSelectedTrack={toggleSelectedTrack}
             getTrackLabel={getTrackLabel}
             startPlaylistTransfer={startPlaylistTransfer}
-            retryFailedTransfer={retryFailedTransfer}
             restartTransferFlow={restartTransferFlow}
             returnToMenu={() => navigateToPage("home", "/")}
             stopTransfer={stopTransfer}
@@ -2596,7 +2580,6 @@ if (
                 getPlaylistName={getPlaylistName}
                 getTrackLabel={getTrackLabel}
                 onStartTransfer={startNewTransferFlow}
-                onRetryFailedTransfer={retryFailedTransfer}
               />
 
               <WhySoundSync

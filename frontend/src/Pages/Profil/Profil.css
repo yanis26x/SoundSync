@@ -21,8 +21,10 @@
   position: relative;
   min-height: 240px;
   padding: clamp(26px, 5vw, 54px);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
   align-items: flex-end;
+  gap: clamp(22px, 4vw, 46px);
   overflow: hidden;
   border: 2px solid #000;
   border-radius: 16px;
@@ -70,6 +72,25 @@
   text-shadow: 0 4px 14px rgba(0,0,0,.72);
 }
 
+.profilContactCard {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: end;
+  gap: 14px;
+  text-align: right;
+}
+
+.profilContactCard p {
+  max-width: 340px;
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.4;
+  text-shadow: 0 4px 16px rgba(0,0,0,.76);
+}
+
 .profilePlayMeBtn {
   position: relative;
   justify-self: center;
@@ -95,6 +116,8 @@
   font-size: 16px;
   font-weight: 900;
   text-shadow: 0 0 8px rgba(255,255,255,.7), 0 2px 8px rgba(0,0,0,.8);
+  text-align: center;
+  text-decoration: none;
 }
 
 .profilePlayMeBtn::before,
@@ -133,6 +156,14 @@
 .profilePlayMeBtn:focus-visible {
   outline: 2px solid rgba(255,255,255,.9);
   outline-offset: 4px;
+}
+
+.profileContactBtn {
+  justify-self: end;
+  width: 210px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profilError {
@@ -458,6 +489,8 @@
   .profilHeader {
     min-height: 220px;
     border-radius: 18px;
+    grid-template-columns: 1fr;
+    align-items: end;
   }
 
   .profilHeader h1 {
@@ -466,6 +499,20 @@
 
   .profilePlayMeBtn {
     width: min(100%, 260px);
+  }
+
+  .profilContactCard {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .profilContactCard p {
+    max-width: none;
+  }
+
+  .profileContactBtn {
+    justify-self: start;
+    width: min(100%, 220px);
   }
 
   .profileAccountStats {
