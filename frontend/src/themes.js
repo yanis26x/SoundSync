@@ -5,7 +5,7 @@ export const themes = {
     background: "/IMAGE/wallpaper/Miku.jpg",
     cardBg: "rgba(2, 26, 36, 0.72)",
     border: "rgb(0, 255, 255)",
-    accent: "#00ffd9",
+    accent: "#00ffcc",
     accentSoft: "rgb(0, 255, 179)",
     text: "#f2fdff",
   },

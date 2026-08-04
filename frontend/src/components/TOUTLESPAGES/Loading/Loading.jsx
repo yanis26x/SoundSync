@@ -32,20 +32,22 @@ function Loading({
   const total = progress.total || totalTracks || 0;
   const current = progress.current || 0;
   const percent = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
+  const progressLabel = total ? `${current || 1}/${total}` : "Preparing";
 
   return (
     <aside className="loadingTransferPanel" role="status" aria-live="polite">
       <div className="loadingTransferTop">
         <span className="loadingTransferSpinner" aria-hidden="true"></span>
         <div className="loadingTransferTitle">
-          <strong>Transfer en cours</strong>
+          <strong>Transfer in progress</strong>
           <span>{sourceName || "Source"} → {destinationName || "Destination"}</span>
         </div>
+        <strong className="loadingTransferPercent">{percent}%</strong>
       </div>
 
       <div className="loadingTransferMeta">
         <span>{playlistName || "Playlist"}</span>
-        <span>{total ? `${current || 1}/${total}` : "Préparation"}</span>
+        <span>{progressLabel}</span>
       </div>
 
       <div className="loadingTransferBar" aria-hidden="true">
@@ -54,7 +56,7 @@ function Loading({
 
       <div className="loadingTransferTrack">
         <span>Now processing</span>
-        <strong>{progress.track || status || "Chargement des musiques..."}</strong>
+        <strong>{progress.track || status || "Loading songs..."}</strong>
       </div>
     </aside>
   );

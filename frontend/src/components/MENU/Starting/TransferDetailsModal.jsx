@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import "./TransferDetailsModal.css";
 
 const emptyDetailsAvatar = new URL("../../../../ASSETS/IMAGE/utils/vampire.jpeg", import.meta.url).href;
+const successDetailsBackground = new URL("../../../../ASSETS/IMAGE/ichigo/blueSkyHappy.jpg", import.meta.url).href;
 
 const resultGroups = [
   { key: "added", label: "Added" },
@@ -24,6 +25,11 @@ function TransferDetailsModal({ isOpen, onClose, transferResult }) {
 
   const hasResult = Boolean(transferResult);
   const overlayClassName = `transferDetailsOverlay${isClosing ? " isClosing" : ""}`;
+  const addedCount = transferResult?.added?.length || 0;
+  const failedCount = transferResult?.failed?.length || 0;
+  const isPositiveResult = addedCount > failedCount;
+  const resultMessage = isPositiveResult ? "succes! it work good !" : "ughhh.....";
+  const modalClassName = `transferDetailsModal ${isPositiveResult ? "isPositiveResult" : "isNegativeResult"}`;
 
   const closeWithAnimation = () => {
     if (isClosing) return;
@@ -72,7 +78,8 @@ function TransferDetailsModal({ isOpen, onClose, transferResult }) {
   return createPortal(
     <div className={overlayClassName} role="presentation" onClick={closeWithAnimation}>
       <section
-        className="transferDetailsModal"
+        className={modalClassName}
+        style={isPositiveResult ? { "--transfer-details-bg": `url(${successDetailsBackground})` } : undefined}
         role="dialog"
         aria-modal="true"
         aria-labelledby="transferDetailsTitle"
@@ -92,6 +99,8 @@ function TransferDetailsModal({ isOpen, onClose, transferResult }) {
             X
           </button>
         </header>
+
+        <p className="transferDetailsResultMessage">{resultMessage}</p>
 
         <div className="transferDetailsMeta">
           <span>{transferResult?.sourceName || "Source"}</span>

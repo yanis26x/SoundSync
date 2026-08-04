@@ -54,13 +54,12 @@ function StartTransfer({
   transferReview,
   confirmReviewedTransfer,
   cancelReviewedTransfer,
-  retryFailedTransfer,
   onContinueToDestination,
   mikuVoiceEnabled = true,
   voiceCharacter = "miku",
 }) {
   const [setupStep, setSetupStep] = useState(initialSetupStep);
-  const [customCoverPreview, setCustomCoverPreview] = useState("");
+  const [hasChosenDestinationMode, setHasChosenDestinationMode] = useState(false);
   const [reviewMatches, setReviewMatches] = useState([]);
   const hasPlayedOrWhatSoundRef = useRef(false);
   const hasPlayedWhatMusicSoundRef = useRef(false);
@@ -83,21 +82,16 @@ function StartTransfer({
   const showTransferSetup = !transferStarted;
   const canContinueToTracks =
     destinationMode === "new" || Boolean(destinationPlaylistId);
+  const canUseDestinationMode =
+    hasChosenDestinationMode && canContinueToTracks;
   const canStartTransfer =
     selectedSourcePlaylist &&
     !transferLoading &&
     selectedTrackCount > 0 &&
-    canContinueToTracks;
-  const canRetryFailed =
-    Boolean(transferResult?.failed?.length) && !transferLoading;
+    canUseDestinationMode;
   const selectedDestinationPlaylist = destinationPlaylists.find(
     (playlist) => playlist.id === destinationPlaylistId
   );
-  const existingPlaylistCover =
-    destinationMode === "existing" && selectedDestinationPlaylist && destinationPlatform
-      ? getPlaylistImage(destinationPlatform.id, selectedDestinationPlaylist)
-      : "";
-  const playlistCoverPreview = existingPlaylistCover || customCoverPreview || defaultPlaylistCover;
   const sourcePlaylistCover =
     sourcePlatform && selectedSourcePlaylist
       ? getPlaylistImage(sourcePlatform.id, selectedSourcePlaylist)
@@ -125,13 +119,15 @@ function StartTransfer({
     );
   };
 
-  useEffect(() => () => {
-    if (customCoverPreview) URL.revokeObjectURL(customCoverPreview);
-  }, [customCoverPreview]);
-
   useEffect(() => {
     setSetupStep(initialSetupStep);
   }, [initialSetupStep]);
+
+  useEffect(() => {
+    if (setupStep === "destination") {
+      setHasChosenDestinationMode(false);
+    }
+  }, [setupStep]);
 
   useEffect(() => {
     initializedTrackSelectionRef.current = "";
@@ -170,16 +166,6 @@ function StartTransfer({
       );
 
       return areAllTracksSelected ? otherTrackKeys : [...otherTrackKeys, ...visibleTrackKeys];
-    });
-  };
-
-  const choosePlaylistCover = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setCustomCoverPreview((currentPreview) => {
-      if (currentPreview) URL.revokeObjectURL(currentPreview);
-      return URL.createObjectURL(file);
     });
   };
 
@@ -232,39 +218,34 @@ function StartTransfer({
           {setupStep === "destination" ? (
             <div className="transferSetupStep destinationStepPanel" key="destination-step">
               <div className="destinationStepContent">
-                <div className="destinationStepControls">
-                  <div className="transferModeRow">
-                    <button
-                      className={destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
-                      onClick={() => setDestinationMode("new")}
-                    >
-                      {text.transferToNew}
-                    </button>
-
-                    <button
-                      className={destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
-                      onClick={() => setDestinationMode("existing")}
-                    >
-                      {text.transferToExisting}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="destinationMain">
+                <div className={`destinationMain${hasChosenDestinationMode ? "" : " isChoosingDestinationMode"}`}>
                 <div className="playlistCoverPicker">
                   <div className={`playlistCoverFrame${shouldDimCover ? " isDimmed" : ""}`}>
-                    <img src={playlistCoverPreview} alt="" />
+                    <p className="playlistCoverChoiceTitle">Witch one ?!</p>
+                    <p className="playlistCoverChoiceHint">Choose where the transfer should save your songs.</p>
+                    <div className="transferModeRow">
+                      <button
+                        className={hasChosenDestinationMode && destinationMode === "new" ? "selectedMode" : "secondaryBtn"}
+                        aria-pressed={hasChosenDestinationMode && destinationMode === "new"}
+                        onClick={() => {
+                          setDestinationMode("new");
+                          setHasChosenDestinationMode(true);
+                        }}
+                      >
+                        {text.transferToNew}
+                      </button>
 
-                    {destinationMode === "new" && (
-                      <label className="coverOverlayBtn" aria-label="Change cover">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={choosePlaylistCover}
-                        />
-                        <img src="/IMAGE/logo/icon/upload.png" alt="" aria-hidden="true" />
-                      </label>
-                    )}
+                      <button
+                        className={hasChosenDestinationMode && destinationMode === "existing" ? "selectedMode" : "secondaryBtn"}
+                        aria-pressed={hasChosenDestinationMode && destinationMode === "existing"}
+                        onClick={() => {
+                          setDestinationMode("existing");
+                          setHasChosenDestinationMode(true);
+                        }}
+                      >
+                        {text.transferToExisting}
+                      </button>
+                    </div>
                   </div>
 
                   <div className={`playlistCoverDetails${shouldDimCover ? " isWaitingForPlaylist" : ""}`}>
@@ -305,7 +286,7 @@ function StartTransfer({
                     type="button"
                     className="startTransferBtn setupNextBtn"
                     onClick={onContinueToDestination ? () => setSetupStep("tracks") : startPlaylistTransfer}
-                    disabled={onContinueToDestination ? !canContinueToTracks : !canStartTransfer}
+                    disabled={onContinueToDestination ? !canUseDestinationMode : !canStartTransfer}
                   >
                     {!onContinueToDestination && <span className="startTransferPulse" aria-hidden="true"></span>}
                     <span>{onContinueToDestination ? "Continue" : text.startTransfer}</span>
@@ -490,16 +471,6 @@ function StartTransfer({
         <div className="transferResult">
           <div className="transferResultHeader">
             <h3>{text.transferDone}</h3>
-
-            {canRetryFailed && (
-              <button
-                type="button"
-                className="retryFailedBtn"
-                onClick={retryFailedTransfer}
-              >
-                {text.retryFailedTracks}
-              </button>
-            )}
           </div>
 
           <div className="transferResultSummary">

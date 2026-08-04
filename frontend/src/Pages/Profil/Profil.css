@@ -2,6 +2,9 @@
   min-height: 100vh;
   padding: 112px 28px 56px;
   color: var(--text-color);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(255, 76, 136, .14), transparent 34%);
   animation: profilePageIn .45s ease both;
 }
 
@@ -15,30 +18,45 @@
 }
 
 .profilHeader {
-  min-height: 260px;
-  padding: clamp(24px, 5vw, 52px);
+  position: relative;
+  min-height: 240px;
+  padding: clamp(26px, 5vw, 54px);
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.16));
-  border-radius: 22px;
+  border: 2px solid #000;
+  border-radius: 16px;
   background:
-    linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.34)),
+    linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.42)),
+    radial-gradient(circle at 80% 10%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 32%),
     var(--bg-image) center / cover;
   box-shadow:
-    0 24px 54px rgba(0,0,0,.34),
-    0 0 34px color-mix(in srgb, var(--accent) 22%, transparent),
-    inset 0 1px 0 rgba(255,255,255,.14);
+    0 26px 58px rgba(0,0,0,.42),
+    0 0 34px color-mix(in srgb, var(--accent) 28%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.profilHeader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.42), transparent 46%),
+    linear-gradient(120deg, transparent 42%, rgba(255,255,255,.1), transparent 58%);
+  pointer-events: none;
 }
 
 .profilHeader h1 {
   margin: 0;
+  color: #fff;
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(48px, 9vw, 104px);
   line-height: .82;
-  font-weight: 1000;
-  letter-spacing: -2px;
+  font-weight: 400;
+  letter-spacing: 0;
   text-shadow:
-    0 0 20px color-mix(in srgb, var(--accent) 50%, transparent),
+    0 5px 0 #000,
+    0 0 22px color-mix(in srgb, var(--accent) 52%, transparent),
     0 8px 24px rgba(0,0,0,.66);
 }
 
@@ -46,9 +64,10 @@
   display: block;
   max-width: 520px;
   margin-top: 16px;
-  color: rgba(255,255,255,.76);
+  color: rgba(255,255,255,.86);
   font-size: 16px;
   font-weight: 850;
+  text-shadow: 0 4px 14px rgba(0,0,0,.72);
 }
 
 .profilePlayMeBtn {
@@ -176,22 +195,22 @@
 .profileAccountList {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .profileAccountCard {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 16px;
+  border: 2px solid rgba(0,0,0,.94);
+  border-radius: 14px;
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
-    rgba(0,0,0,.58);
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 42%),
+    linear-gradient(145deg, rgba(5, 8, 14, .92), rgba(0,0,0,.74));
   backdrop-filter: blur(18px) saturate(1.1);
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
   box-shadow:
-    0 16px 34px rgba(0,0,0,.28),
-    inset 0 1px 0 rgba(255,255,255,.1);
+    0 18px 38px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .profileAccountCard {
@@ -213,22 +232,31 @@
 }
 
 .profileAccountCard.isConnected {
-  border-color: color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,.14));
+  border-color: color-mix(in srgb, var(--accent) 64%, #000);
+  box-shadow:
+    0 18px 38px rgba(0,0,0,.36),
+    0 0 24px color-mix(in srgb, var(--accent) 24%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
 }
 
 .profileAccountMain {
   display: grid;
-
+  gap: 18px;
 }
 
 .profileLogoBox {
-  width: 82px;
-  height: 82px;
+  width: 86px;
+  height: 86px;
   display: grid;
   place-items: center;
-
-  border-radius: 14px;
-
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,.18), transparent 44%),
+    rgba(0,0,0,.38);
+  box-shadow:
+    0 12px 24px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .profileLogoBox img {
@@ -242,9 +270,10 @@
 .profileAccountText h3 {
   margin: 0;
   color: #fff;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1;
   font-weight: 1000;
+  text-shadow: 0 5px 18px rgba(0,0,0,.52);
 }
 
 .profileUsername {
@@ -273,46 +302,49 @@
 }
 
 .success {
-  color: #4dff91;
+  color: #39ff9f;
 }
 
 .success span {
-  background: #4dff91;
-  box-shadow: 0 0 12px rgba(77,255,145,.9);
+  background: #39ff9f;
+  box-shadow: 0 0 14px rgba(57,255,159,.92);
 }
 
 .offlineText {
-  color: rgba(255,255,255,.5);
+  color: rgba(255,196,208,.72);
 }
 
 .offlineText span {
-  background: rgba(255,255,255,.35);
+  background: #ff5d7a;
+  box-shadow: 0 0 12px rgba(255,93,122,.5);
 }
 
 .profileAccountStats {
   margin-top: 18px;
-  display:flex;
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
 .profileAccountStats span {
   min-height: 54px;
-  padding: 15px;
+  padding: 13px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 12px;
-  background: rgba(0,0,0,.28);
-  color: rgba(255,255,255,.66);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+    rgba(0,0,0,.36);
+  color: rgba(255,255,255,.72);
   font-size: 11px;
   font-weight: 850;
 }
 
 .profileAccountStats strong {
-  color: var(--accent);
-  font-size: 20px;
+  color: color-mix(in srgb, var(--accent) 82%, white);
+  font-size: 22px;
   line-height: 1;
 }
 
@@ -332,16 +364,26 @@
   width: 100%;
   margin: 0;
   padding: 11px 12px;
-  border-radius: 12px;
+  border-radius: 4px;
   font-size: 12px;
   font-weight: 950;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.compactBtn:hover {
+  transform: translateY(-1px);
 }
 
 .switchIconBtn {
   min-height: 42px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.542);
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 .switchIconBtn img {
@@ -353,16 +395,25 @@
 
 .connectBtn {
   grid-column: 1 / -1;
-  border: 1px solid rgba(255, 255, 255, 0.542);
+  border: 2px solid #000;
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--accent) 58%, black), rgba(0,0,0,.72));
-  color: #fff;
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 34%, rgba(0,0,0,.96)),
+      color-mix(in srgb, var(--accent) 82%, rgba(0,0,0,.78)),
+      color-mix(in srgb, var(--accent) 28%, rgba(0,0,0,.96))
+    );
+  color: #000;
+  text-shadow: 0 1px 0 rgba(255,255,255,.42);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 32%, transparent);
 }
 
 .dangerBtn {
-  border: 1px solid rgba(255, 255, 255, 0.542);
-  background: rgb(244, 1, 1);
-  color: #ffffff;
+  border: 1px solid rgba(255, 92, 120, .5);
+  background:
+    linear-gradient(135deg, rgba(94, 0, 20, .95), rgba(235, 34, 75, .86));
+  color: #fff;
+  box-shadow: 0 0 16px rgba(235,34,75,.22);
 }
 
 @keyframes profilePageIn {

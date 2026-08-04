@@ -33,7 +33,6 @@ function Starting({
   selectedSourcePlaylist,
   getPlaylistName,
   onStartTransfer,
-  onRetryFailedTransfer,
 }) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const detailsAudioRef = useRef(null);
@@ -60,7 +59,6 @@ function Starting({
   const addedTracks = transferResult?.added || [];
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
-  const hasFailedTracks = failedTracks.length > 0;
 
   const playDetailsSound = () => {
     if (detailsAudioRef.current) {
@@ -122,7 +120,16 @@ function Starting({
               </span>
             </div>
 
-            {hasResult ? (
+            {transferLoading ? (
+              <div className="informationDetails informationDetailsProgress" aria-live="polite">
+                <span>In progress</span>
+                <span className="informationProgressDots" aria-hidden="true">
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                </span>
+              </div>
+            ) : hasResult ? (
               <dl className="informationDetails hasTransferResult">
                 <div className="informationDetailAdded">
                   <dt>Added</dt>
@@ -157,21 +164,11 @@ function Starting({
               >
                 <span>+ DETAILS</span>
               </button>
-              {hasFailedTracks && (
-                <button
-                  type="button"
-                  className="startingStartBtn startingRetryBtn"
-                  onClick={onRetryFailedTransfer}
-                  disabled={transferLoading}
-                >
-                  <span>↩ RETRY</span>
-                </button>
-              )}
             </div>
           </section>
 
           <div className="startingSidePanel">
-            <Stats />
+            <Stats hasTransferResult={hasResult} />
           </div>
         </article>
       </div>

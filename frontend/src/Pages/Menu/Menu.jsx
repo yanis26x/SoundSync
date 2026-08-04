@@ -111,7 +111,7 @@ const text = {
     transferFinalizing: "Finalizing transfer...",
     transferDone: "Transfer done",
     transferDoneNotification: "Transfer finished",
-    transferDoneNotificationText: "Your playlist transfer is ready 2 review.",
+    transferDoneNotificationText: "Transfer done, go check!",
     retryFailedTracks: "Retry failed tracks",
     restartTransfer: "return 2 the menu",
     addedTracks: "tracks added",
@@ -128,20 +128,60 @@ const text = {
 
 const TRANSFER_BATCH_SIZE = 50;
 const MAX_TRANSFER_TRACKS = 200;
-const fakeTrackPlaylists = [
-  {
-    id: "fake-hits",
-    name: "Fake Track Hits",
-    image: "/IMAGE/ichigo/hug.jpg",
-    tracks: { total: 10 },
-  },
-  {
-    id: "fake-short",
-    name: "Fake Track Shortlist",
-    image: "/IMAGE/ichigo/hug2.jpg",
-    tracks: { total: 2 },
-  },
-];
+const fakeTrackPlaylistsByPlatform = {
+  fake: [
+    {
+      id: "fake-hits",
+      name: "Fake Track Hits",
+      image: "/IMAGE/ichigo/hug.jpg",
+      tracks: { total: 10 },
+    },
+    {
+      id: "fake-short",
+      name: "Fake Track Shortlist",
+      image: "/IMAGE/ichigo/hug2.jpg",
+      tracks: { total: 2 },
+    },
+    {
+      id: "fake-error",
+      name: "Fake Error Test",
+      image: "/IMAGE/utils/yuke.jpeg",
+      tracks: { total: 4 },
+    },
+    {
+      id: "fake-nimp",
+      name: "Fake Nimp Mode",
+      image: "/IMAGE/utils/miku-onion.webp",
+      tracks: { total: 7 },
+    },
+  ],
+  fake2: [
+    {
+      id: "fake2-hits",
+      name: "Fake 2 Hyper Hits",
+      image: "/IMAGE/ichigo/bigSmiles.jpeg",
+      tracks: { total: 8 },
+    },
+    {
+      id: "fake2-short",
+      name: "Fake 2 Tiny List",
+      image: "/IMAGE/ichigo/inClassHappy.jpg",
+      tracks: { total: 3 },
+    },
+    {
+      id: "fake2-error",
+      name: "Fake 2 Error Test",
+      image: "/IMAGE/utils/yuke.jpeg",
+      tracks: { total: 5 },
+    },
+    {
+      id: "fake2-nimp",
+      name: "Fake 2 Nimp Mode",
+      image: "/IMAGE/utils/miku-onion.webp",
+      tracks: { total: 9 },
+    },
+  ],
+};
 const fakeTrackPlaylistTracks = {
   "fake-hits": [
     "Neon Cache - Fake Track",
@@ -159,7 +199,57 @@ const fakeTrackPlaylistTracks = {
     "Tiny Sync - Fake Track",
     "Two Track Test - Demo Artist",
   ],
+  "fake-error": [
+    "Broken Mirror - Fake Track",
+    "Server Said Nope - Demo Artist",
+    "Lost Metadata - Fake Track",
+    "Crash Test Love - Demo Artist",
+  ],
+  "fake-nimp": [
+    "Random Button - Fake Track",
+    "Wrong Playlist Energy - Demo Artist",
+    "Duplicate Maybe - Fake Track",
+    "Noisy Matcher - Demo Artist",
+    "Chaos Sync - Fake Track",
+    "Almost Correct - Demo Artist",
+    "Nimp Finale - Fake Track",
+  ],
+  "fake2-hits": [
+    "Second Fake Star - Fake 2",
+    "Mirror Sync - Demo Artist",
+    "Blue Window - Fake 2",
+    "Playlist Runner - Demo Artist",
+    "Fake Two-Step - Fake 2",
+    "Late Night Transfer - Demo Artist",
+    "Cloudless Cache - Fake 2",
+    "Done Button Anthem - Demo Artist",
+  ],
+  "fake2-short": [
+    "Mini Route - Fake 2",
+    "Tiny Transfer - Demo Artist",
+    "Pocket Playlist - Fake 2",
+  ],
+  "fake2-error": [
+    "Fake 2 Broken Start - Demo Artist",
+    "Permission Denied Dream - Fake 2",
+    "Null Result Song - Demo Artist",
+    "Timeout Karaoke - Fake 2",
+    "Bad Match Forever - Demo Artist",
+  ],
+  "fake2-nimp": [
+    "Fake 2 Randomizer - Demo Artist",
+    "Shuffle Bug - Fake 2",
+    "Already There Maybe - Demo Artist",
+    "Wrong Cover Song - Fake 2",
+    "Chaos Queue - Demo Artist",
+    "Half Added Half Gone - Fake 2",
+    "Confused Matcher - Demo Artist",
+    "Nimp Encore - Fake 2",
+    "What Was That - Demo Artist",
+  ],
 };
+const getFakeTrackPlaylists = (platformId) =>
+  fakeTrackPlaylistsByPlatform[platformId] || fakeTrackPlaylistsByPlatform.fake;
 const fakePlatformIds = ["fake", "fake2"];
 const isFakePlatform = (platformId) => fakePlatformIds.includes(platformId);
 const fakePlatformLogos = {
@@ -455,7 +545,7 @@ function Menu() {
       return {
         error: "",
         loading: false,
-        playlists: fakeTrackPlaylists,
+        playlists: getFakeTrackPlaylists(platformId),
         logout: resetPlatformChoice,
         logoutLabel: `Reset ${platformData[platformId]?.name || "Fake"}`,
         renderPlaylist: (playlist) => (
@@ -633,6 +723,7 @@ function Menu() {
       id: Date.now(),
       added: transferResult.added.length,
       failed: transferResult.failed.length,
+      showStats: false,
       isClosing: false,
     });
 
@@ -656,7 +747,7 @@ function Menu() {
 
       notificationAudio.pause();
       notificationAudio.currentTime = 0;
-    }, 5200);
+    }, 2600);
 
     transferDoneToastEffectsRef.current.closeTimeout = window.setTimeout(() => {
       if (closeAudio) {
@@ -667,11 +758,11 @@ function Menu() {
       setTransferDoneToast((currentToast) =>
         currentToast ? { ...currentToast, isClosing: true } : currentToast
       );
-    }, 8400);
+    }, 3500);
 
     transferDoneToastEffectsRef.current.removeTimeout = window.setTimeout(() => {
       setTransferDoneToast(null);
-    }, 9000);
+    }, 4000);
 
     return clearTransferDoneToastEffects;
   }, [clearTransferDoneToastEffects, soundSettings.notificationSound, transferResult]);
@@ -1318,7 +1409,7 @@ function Menu() {
     if (platformId === "spotify") return playlists;
     if (platformId === "youtube") return youtubePlaylists;
     if (platformId === "apple") return applePlaylists;
-    if (isFakePlatform(platformId)) return fakeTrackPlaylists;
+    if (isFakePlatform(platformId)) return getFakeTrackPlaylists(platformId);
     return [];
   };
 
@@ -1609,6 +1700,7 @@ if (
     setTransferError("");
     setTransferResult(null);
     setSimulationTransferMeta(null);
+    navigateToPage("home", "/");
     const transferAbortController = new AbortController();
     transferAbortControllerRef.current = transferAbortController;
     const throwIfTransferStopped = () => {
@@ -1669,11 +1761,33 @@ if (
         const added = [];
         const already = [];
         const failed = [];
+        const fakeScenario = selectedSourcePlaylist.id.includes("error")
+          ? "error"
+          : selectedSourcePlaylist.id.includes("nimp")
+            ? "nimp"
+            : "normal";
 
         for (const [index, label] of trackLabels.entries()) {
           throwIfTransferStopped();
           setTransferStatus(`${destinationPlatform.name}: syncing ${index + 1}/${trackLabels.length}: ${label}`);
           await new Promise((resolve) => window.setTimeout(resolve, 180));
+
+          if (fakeScenario === "error") {
+            failed.push(`${label} (fake error)`);
+            continue;
+          }
+
+          if (fakeScenario === "nimp") {
+            if (index % 3 === 0) {
+              failed.push(`${label} (nimp fail)`);
+            } else if (index % 3 === 1) {
+              already.push(`${label} (already weirdly there)`);
+            } else {
+              added.push(`${label} (somehow added)`);
+            }
+            continue;
+          }
+
           added.push(label);
         }
 
@@ -2038,6 +2152,7 @@ if (
     setTransferStatus(text.transferAddingTracks);
     setTransferError("");
     setTransferResult(null);
+    navigateToPage("home", "/");
 
     const transferAbortController = new AbortController();
     transferAbortControllerRef.current = transferAbortController;
