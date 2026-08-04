@@ -1376,16 +1376,12 @@ function Menu() {
   const selectedSourceTracksError = selectedSourceTrackKey
     ? trackErrors[selectedSourceTrackKey] || ""
     : "";
-  const isAnyLoading =
-    loading ||
-    youtubeLoading ||
-    appleLoading ||
-    transferLoading ||
-    Object.values(trackLoading).some(Boolean);
+  const shouldPlayLoadingVoice =
+    transferLoading || Object.values(trackLoading).some(Boolean);
 
   useEffect(() => {
     const shouldPlayMikuLoading =
-      isAnyLoading &&
+      shouldPlayLoadingVoice &&
       soundSettings.mikuVoiceEnabled &&
       (soundSettings.voiceCharacter || "miku") === "miku";
 
@@ -1407,7 +1403,7 @@ function Menu() {
     mikuLoadingAudioRef.current = audio;
     audio.play().catch(() => {});
   }, [
-    isAnyLoading,
+    shouldPlayLoadingVoice,
     soundSettings.mikuVoiceEnabled,
     soundSettings.voiceCharacter,
   ]);

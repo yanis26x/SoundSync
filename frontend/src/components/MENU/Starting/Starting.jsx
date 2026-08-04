@@ -11,14 +11,6 @@ const mikuOpenSound = new URL("../../../../ASSETS/SOUND/Miku/MikuOpen.wav", impo
 
 const getCount = (items) => (Array.isArray(items) ? items.length : 0);
 
-const getFallbackTrackLabel = (track) => {
-  if (typeof track === "string") return track;
-  if (track?.track?.name) return track.track.name;
-  if (track?.attributes?.name) return track.attributes.name;
-  if (track?.snippet?.title) return track.snippet.title;
-  return "Untitled track";
-};
-
 const platformLogoMap = {
   spotify: "/IMAGE/logo/mini/spotify-mini.png",
   youtube: "/IMAGE/logo/mini/Youtube-mini.svg",
@@ -35,34 +27,24 @@ const getPlatformLogo = (platform, fallbackName) => {
 };
 
 function Starting({
-  text,
-  transferStarted,
   transferLoading,
-  transferStatus,
   transferResult,
-  transferError,
   sourcePlatform,
   destinationPlatform,
   selectedSourcePlaylist,
-  selectedSourceTracks = [],
-  selectedSourceTracksLoading,
-  selectedSourceTracksError,
   getPlaylistName,
-  getTrackLabel,
   onStartTransfer,
   onRetryFailedTransfer,
 }) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const detailsAudioRef = useRef(null);
   const hasResult = Boolean(transferResult);
-  const hasActivity = transferStarted || transferLoading || hasResult || transferError;
-  const noTransfer = !hasActivity;
   const playlistName =
     sourcePlatform && selectedSourcePlaylist && getPlaylistName
       ? getPlaylistName(sourcePlatform.id, selectedSourcePlaylist)
       : hasResult
         ? transferResult.playlistName || "Last playlist"
-        : "Start a transfer now!!";
+        : "What are u waiting 4!?";
   const sourceName = transferResult?.sourceName || sourcePlatform?.name || "Source";
   const destinationName = transferResult?.destinationName || destinationPlatform?.name || "Destination";
   const sourceLogo = getPlatformLogo(sourcePlatform, sourceName);
@@ -80,24 +62,6 @@ function Starting({
   const failedTracks = transferResult?.failed || [];
   const alreadyTracks = transferResult?.already || [];
   const hasFailedTracks = failedTracks.length > 0;
-  const queuedTracks = selectedSourceTracks.map((track) =>
-    sourcePlatform && getTrackLabel
-      ? getTrackLabel(sourcePlatform.id, track)
-      : getFallbackTrackLabel(track)
-  );
-  const tickerItems = [
-    transferLoading
-      ? transferStatus || text?.transferLoading || "Transfer in progress..."
-      : hasResult
-        ? `${getCount(addedTracks)} added · ${getCount(failedTracks)} failed · ${getCount(alreadyTracks)} already`
-        : hasActivity
-          ? "Transfer activity ready."
-          : "Start a transfer to see activity here.",
-    selectedSourceTracksLoading ? "Loading playlist tracks..." : "",
-    selectedSourceTracksError ? `Track error: ${selectedSourceTracksError}` : "",
-    transferError ? `Error: ${transferError}` : "",
-    ...(hasResult ? addedTracks : queuedTracks).slice(0, 6),
-  ].filter(Boolean);
 
   const playDetailsSound = () => {
     if (detailsAudioRef.current) {
@@ -138,39 +102,45 @@ function Starting({
       <div className="startingCards" aria-label="SoundSync start and transfer status">
         <article className="startingCard startingActivityCard">
           <section className="information" aria-label="Transfer information">
-            <div className="startingTitleRow">
-              <h2>{playlistName}</h2>
+            <div className="startingInfoMain">
+              <div className="startingTitleRow">
+                <h2>{playlistName}</h2>
+              </div>
+              {transferDate && <span className="startingTransferDate">{transferDate}</span>}
+
+              <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
+                {sourceLogo ? (
+                  <img src={sourceLogo} alt={sourceName} />
+                ) : (
+                  <span>{sourceName}</span>
+                )}
+                <span aria-hidden="true">→</span>
+                {destinationLogo ? (
+                  <img src={destinationLogo} alt={destinationName} />
+                ) : (
+                  <span>{destinationName}</span>
+                )}
+              </span>
             </div>
-            {transferDate && <span className="startingTransferDate">{transferDate}</span>}
 
-            <span className="startingRoute" aria-label={`${sourceName} to ${destinationName}`}>
-              {sourceLogo ? (
-                <img src={sourceLogo} alt={sourceName} />
-              ) : (
-                <span>{sourceName}</span>
-              )}
-              <span aria-hidden="true">→</span>
-              {destinationLogo ? (
-                <img src={destinationLogo} alt={destinationName} />
-              ) : (
-                <span>{destinationName}</span>
-              )}
-            </span>
-
-            <dl className={`informationDetails ${hasResult ? "hasTransferResult" : ""}`}>
-              <div className="informationDetailAdded">
-                <dt>Added</dt>
-                <dd>{getCount(addedTracks)}</dd>
-              </div>
-              <div className="informationDetailFailed">
-                <dt>Failed</dt>
-                <dd>{getCount(failedTracks)}</dd>
-              </div>
-              <div className="informationDetailAlready">
-                <dt>Already</dt>
-                <dd>{getCount(alreadyTracks)}</dd>
-              </div>
-            </dl>
+            {hasResult ? (
+              <dl className="informationDetails hasTransferResult">
+                <div className="informationDetailAdded">
+                  <dt>Added</dt>
+                  <dd>{getCount(addedTracks)}</dd>
+                </div>
+                <div className="informationDetailFailed">
+                  <dt>Failed</dt>
+                  <dd>{getCount(failedTracks)}</dd>
+                </div>
+                <div className="informationDetailAlready">
+                  <dt>Already</dt>
+                  <dd>{getCount(alreadyTracks)}</dd>
+                </div>
+              </dl>
+            ) : (
+              <p className="informationDetailsEmpty">Start a transfer now!!</p>
+            )}
 
             <div className="startingActions">
               <button
@@ -197,18 +167,6 @@ function Starting({
                 >
                   <span>↩ RETRY</span>
                 </button>
-              )}
-            </div>
-
-            <div className="startingTicker" aria-label="Transfer activity preview">
-              {noTransfer ? (
-                <p className="startingTickerEmpty">No transfer yet. Press START to begin.</p>
-              ) : (
-                <ul>
-                  {tickerItems.map((item, index) => (
-                    <li key={`starting-activity-${item}-${index}`}>{item}</li>
-                  ))}
-                </ul>
               )}
             </div>
           </section>
