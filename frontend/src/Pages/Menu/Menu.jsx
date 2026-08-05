@@ -55,8 +55,8 @@ const cancelButtonSounds = {
 
 const text = {
     subtitle: "Transfer Anywhere, Sync Everthing",
-    chooseSource: "Select the source platform",
-    chooseDestination: "Select the destination",
+    chooseSource: "#1 Select the source platform",
+    chooseDestination: "#4 Select the destination",
     connected: "Connected", 
     disconnect: "Disconnect",
     tracks: "tracks",

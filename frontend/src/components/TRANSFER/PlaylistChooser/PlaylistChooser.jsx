@@ -16,14 +16,11 @@ function PlaylistChooser({
     <section className="playlistPickPanel transferFocusPanel">
       <div className="playlistChooserHeader">
         <div>
-          <p>Choose a playlist</p>
-          <h2>Playlist from</h2>
+          <p>from {sourcePlatform.name}</p>
+          <h2>#2 Choose a playlist</h2>
         </div>
 
-        <img
-          src={sourcePlatformLogo || sourcePlatform.logo}
-          alt={sourcePlatform.name}
-        />
+
       </div>
 
       {platformDetails.error && <p className="error">{platformDetails.error}</p>}

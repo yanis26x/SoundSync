@@ -399,6 +399,7 @@ linear-gradient(90deg,
   font-weight: 1000;
   letter-spacing: .7px;
   text-transform: uppercase;
+    font-family: "Brasil 2014", Impact, sans-serif;
 }
 
 .unavailablePlatformBtn .platformChoiceMeta span {
@@ -467,65 +468,77 @@ linear-gradient(90deg,
   width: min(100%, 980px);
   margin-left: auto;
   margin-right: auto;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.351);
-  background: black;
-  color:white;
-}
-
-.how2Disconnect span {
-  width: 26px;
-  height: 26px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 999px;
-
-  color: #000;
-
-  font-weight: 1000;
-  text-shadow: none;
-}
-
-.how2Disconnect strong {
-  color: #ff3535;
-  font-size: 23px;
-  line-height: 1;
 }
 
 .choosePanel .how2Disconnect {
-  margin-top: 4px;
+  margin-top: 2px;
   margin-bottom: 0;
-  padding: 13px 20px;
+  padding: 11px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  background: rgba(0,0,0,.34);
   color: rgba(255,255,255,.86) !important;
-  text-align: center;
+
   font-size: clamp(13px, 1.05vw, 15px);
   font-weight: 900;
   line-height: 1.35;
-  letter-spacing: .1px;
+  text-align: center;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12),
+    0 10px 24px rgba(0,0,0,.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
+.choosePanel .how2Disconnect::before {
+  content: "!";
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
 
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff3131, #b90020);
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 1;
+
+  box-shadow: 0 0 12px rgba(255,49,49,.34);
+}
 
 .platformDemoHelp {
-  margin-top: 4px;
-  padding: 16px 20px;
+  margin-top: 0;
+  padding: 12px 14px 12px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  border: 1px solid rgba(255,255,255,.13);
+  gap: 16px;
+
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
   background:
-    radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(0,0,0,.62), rgba(0,0,0,.38));
+    linear-gradient(135deg, rgba(0,0,0,.42), rgba(0,28,78,.42)),
+    rgba(0,0,0,.2);
   box-shadow:
-    0 14px 28px rgba(0,0,0,.22),
+    0 12px 26px rgba(0,0,0,.2),
     inset 0 1px 0 rgba(255,255,255,.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .platformDemoHelp p {
+  min-width: 0;
   margin: 0;
   color: rgba(255,255,255,.84);
   font-size: clamp(13px, 1.05vw, 15px);
@@ -534,9 +547,10 @@ linear-gradient(90deg,
 }
 
 .platformDemoBtn {
+  flex: 0 0 auto;
   width: auto;
   margin: 0;
-  padding: 9px 15px;
+  padding: 10px 16px;
 
   display: inline-flex;
   align-items: center;
@@ -544,7 +558,8 @@ linear-gradient(90deg,
 
   border-radius: 999px;
 
-  background: rgb(129, 0, 0);
+  border: 1px solid rgba(255,255,255,.28);
+  background: linear-gradient(135deg, #ff3131, #b90020);
   color: #ffffff;
 
   font-size: 12px;
@@ -554,7 +569,8 @@ linear-gradient(90deg,
   text-transform: uppercase;
 
   box-shadow:
-    0 0 16px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 8px 18px rgba(120,0,20,.34),
+    0 0 14px rgba(255,49,49,.32),
     inset 0 1px 0 rgba(255,255,255,.12);
 
   transition:
@@ -565,9 +581,11 @@ linear-gradient(90deg,
 
 .platformDemoBtn:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 70%, white);
+  border-color: rgba(255,255,255,.55);
+  background: linear-gradient(135deg, #ff4a4a, #d60028);
   box-shadow:
-    0 0 22px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 10px 22px rgba(120,0,20,.38),
+    0 0 18px rgba(255,49,49,.4),
     inset 0 1px 0 rgba(255,255,255,.16);
 }
 
@@ -771,9 +789,18 @@ linear-gradient(90deg,
 
   .how2Disconnect,
   .choosePanel .how2Disconnect {
-    border-radius: 14px;
+    align-items: flex-start;
+    border-radius: 16px;
     padding: 11px 12px;
     font-size: 12px;
+    text-align: left;
+  }
+
+  .choosePanel .how2Disconnect::before {
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    font-size: 11px;
   }
 
   .platformComingSoon {
@@ -787,12 +814,14 @@ linear-gradient(90deg,
     width: 100%;
     margin-top: -2px;
     padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
     gap: 10px;
+    border-radius: 16px;
     text-align: center;
   }
 
   .platformDemoHelp p {
-    flex-basis: 100%;
     font-size: 12px;
   }
 

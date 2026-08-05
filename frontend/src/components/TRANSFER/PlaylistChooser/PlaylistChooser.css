@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Brasil 2014";
+  src: url("../../../../ASSETS/font/Brasil 2014.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .playlistPickPanel {
   position: relative;
   width: 100%;
@@ -55,7 +63,7 @@ linear-gradient(90deg,
 .playlistChooserHeader p {
   margin: 0 0 8px;
 
-  color: color-mix(in srgb, var(--accent) 78%, white);
+color: white;
   font-size: 12px;
   font-weight: 1000;
   letter-spacing: 1.3px;
@@ -66,6 +74,7 @@ linear-gradient(90deg,
   margin: 0;
 
   color: var(--text-color);
+  font-family: "Brasil 2014", Impact, sans-serif;
   font-size: clamp(36px, 4vw, 58px);
   line-height: .88;
   font-weight: 1000;
@@ -267,10 +276,8 @@ linear-gradient(90deg,
 .playlistText {
   position: relative;
   z-index: 1;
-
   width: 100%;
   padding: 46px 15px 15px;
-
   background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.54) 56%, transparent);
 }
 
@@ -283,7 +290,7 @@ linear-gradient(90deg,
 
   overflow: hidden;
 
-  color: #fff;
+  color: #00ffee;
   font-size: 17px;
   line-height: 1.08;
   font-weight: 1000;
@@ -292,6 +299,7 @@ linear-gradient(90deg,
 .playlistText small {
   display: block;
   margin-top: 8px;
+    font-family: "Brasil 2014", Impact, sans-serif;
 
   color: rgba(255,255,255,.72);
   font-size: 12px;

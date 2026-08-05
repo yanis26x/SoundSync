@@ -10,10 +10,10 @@ function Stats({ hasTransferResult, transferResult }) {
     transferredCount +
     (transferResult?.failed?.length || 0) +
     (transferResult?.already?.length || 0);
-  const title = hasTransferResult ? "Transfer Done!" : "Ready 2 Sync?!";
+  const title = hasTransferResult ? "Transfer Done!" : "Sync your playlists anywhere, anytime!";
   const description = hasTransferResult
     ? '4 more info about your transfer, click on "+ DETAILS" in the menu, or start a new one.'
-    : "want sum more? @yanis26x ";
+    : "© 2026 yanis26x · all rights reserved";
 
   return (
     <section className="statsCard homeInfoFeatureCard homeInfoFeatureCardSwap is-disabledLink" aria-label="Stats">

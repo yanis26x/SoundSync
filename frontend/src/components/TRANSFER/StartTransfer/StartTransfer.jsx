@@ -207,8 +207,8 @@ function StartTransfer({
             {transferResult
               ? "Transfer Done !"
               : showTransferSetup && setupStep === "destination"
-                ? "How 2 U want 2 sync it?!"
-                : "Witch music 2 U want 2 sync?!"}
+                ? "#5 How 2 U want 2 sync it?!"
+                : "#3 Witch music 2 U want 2 sync?!"}
           </h2>
         </div>
       )}

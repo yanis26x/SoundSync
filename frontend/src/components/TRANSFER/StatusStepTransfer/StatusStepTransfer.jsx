@@ -14,7 +14,7 @@ function PlatformRouteIndicator({ sourcePlatform, destinationPlatform }) {
       ) : (
         <span className="platformRoutePlaceholder" aria-label="Source not selected">?</span>
       )}
-      <span aria-hidden="true">→</span>
+      <span className="platformRouteArrow" aria-hidden="true">→</span>
       {destinationPlatform ? (
         <img src={destinationPlatform.logo} alt={destinationLabel} />
       ) : (
@@ -24,14 +24,16 @@ function PlatformRouteIndicator({ sourcePlatform, destinationPlatform }) {
   );
 }
 
-function Step({ currentStep, onReset }) {
+function Step({ onReset }) {
   return (
     <div className="statusStep">
-      <span className="statusStepText">{currentStep}/5</span>
-      <button type="button" className="statusStepResetBtn" onClick={onReset}>
-        
-      ↩
-     
+      <button
+        type="button"
+        className="statusStepResetBtn"
+        onClick={onReset}
+        aria-label="Reset platform choice"
+      >
+        ↩
       </button>
     </div>
   );
@@ -40,7 +42,6 @@ function Step({ currentStep, onReset }) {
 function StatusStepTransfer({
   sourcePlatform,
   destinationPlatform,
-  currentStep,
   onReset,
   className = "",
 }) {
@@ -50,7 +51,7 @@ function StatusStepTransfer({
         sourcePlatform={sourcePlatform}
         destinationPlatform={destinationPlatform}
       />
-      <Step currentStep={currentStep} onReset={onReset} />
+      <Step onReset={onReset} />
     </div>
   );
 }
