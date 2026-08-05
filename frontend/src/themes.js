@@ -11,9 +11,9 @@ export const themes = {
   },
 
   noirBleuElectrique: {
-    name: "Electric Blue",
-    description: "Fond noir avec un bleu électrique subtil.",
-    background: "",
+    name: "Sora",
+    description: "Kingdom Hearts - Sora",
+    background: "/IMAGE/wallpaper/soraMusic.jpg",
     backgroundColor: "linear-gradient(#000000, #000000)",
     cardBg: "rgb(13, 0, 255)",
     border: "rgb(0, 0, 0)",

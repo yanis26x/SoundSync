@@ -10,7 +10,7 @@ const transferSteps = [
     number: "00",
     title: "Watch the demo",
     text: "Start here if you want to see the full transfer flow before trying it yourself.",
-    videoId: "KJiTlvWPyUg",
+    videoId: "A1c2WSvRm74",
   },
   {
     number: "01",

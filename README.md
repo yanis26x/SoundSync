@@ -6,7 +6,7 @@ SoundSync is a web app for transferring playlists between music platforms.
 
 ## Demo
 
-A video demo will be available soon on my YouTube channel: `@yanis26x`.
+Watch the SoundSync demo: https://youtu.be/A1c2WSvRm74?si=ts3u_OjmWs4BAy-1
 
 ## Run The Project
 
